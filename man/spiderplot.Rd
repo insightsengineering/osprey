@@ -23,7 +23,7 @@ Descr of this plot
 library(random.cdisc.data)
 
 
-ASL <- radam("ASL", start_with = list(WEIGHT = c(80, 85, 90)))
+ASL <- radam("ASL", start_with = list(WEIGHT = c(80, 85, 90), STUDYID = "A"))
 
 with(ASL, spiderplot(WEIGHT, BAGE, ARM))
 
