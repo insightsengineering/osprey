@@ -1,0 +1,48 @@
+---
+title: "Using Osprey TLGs with teal"
+author: "Adrian Waddell"
+date: "2/1/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Using an osprey outputs with teal
+
+Here is a code to run the `spiderplot` in a teal module:
+
+
+```{r eval=FALSE}
+library(teal)
+library(osprey)
+library(random.cdisc.data)
+
+ASL <- radam("ASL", start_with = list(WEIGHT = c(80, 85, 90), STUDYID = "A"))
+
+x <- teal::init(
+  data = list(ASL = ASL),
+  modules = root_modules(
+    tm_data_table(),
+    module(
+      label = "Spiderplot",
+      ui = function(id) {ns <- NS(id); plotOutput(ns("plot"))},
+      server = function(input, output, session, datasets) {
+        output$plot <- renderPlot({
+          
+          ASL <- datasets$get_data('ASL',  filtered = TRUE, reactive = TRUE)
+          
+          osprey::spiderplot(ASL$BAGE, ASL$WEIGHT, col = ASL$SEX)
+          
+        })
+      },
+      filters = 'ASL'
+    )
+  )
+)
+
+shinyApp(x$ui, x$server)
+
+
+```
