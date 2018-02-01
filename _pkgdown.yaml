@@ -1,0 +1,10 @@
+url: https://pages.github.roche.com/Rpackages/osprey
+
+template:
+  params:
+    bootswatch: cerulean
+
+navbar:
+  right:
+    - icon: fa-github
+      href: https://github.roche.com/Rpackages/osprey
