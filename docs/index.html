@@ -78,14 +78,29 @@
 <p>To quolify to Osprey package, TLG code has to</p>
 <ol>
 <li>Be a function that produces a output</li>
+<li>Have working example</li>
+<li>Use Oxygen for creation of Help</li>
 <li>Have help page</li>
-<li>
-</li>
+<li>Be compatible with pkgdown (should be when points 1-4 are OK)</li>
 </ol>
 </div>
 <div id="instructions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#instructions" class="anchor"></a>Instructions</h3>
+<div id="for-this-to-work-you-need-to-have-access-to-libraries-pkgdown-and-random-cdisc-data" class="section level4">
+<h4 class="hasAnchor">
+<a href="#for-this-to-work-you-need-to-have-access-to-libraries-pkgdown-and-random-cdisc-data" class="anchor"></a>for this to work you need to have access to libraries pkgdown and random.cdisc.data</h4>
+<ol>
+<li>Create branch of Osprey and clone to R-studio</li>
+<li>Develop a function</li>
+<li>Create oxygen comments (ctrl+shift+alt+R or copy from earlier)</li>
+<li>Document (ctrl+shift+D)</li>
+<li>Clean and Rebuild</li>
+<li>Test your function with working example</li>
+<li>Create webpage (in console: pkgdown::build_site())</li>
+<li>When everything works, make pull request.</li>
+</ol>
+</div>
 </div>
 <div id="install-with" class="section level3">
 <h3 class="hasAnchor">
