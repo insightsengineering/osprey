@@ -24,6 +24,10 @@ To quolify to Osprey package, TLG code has to
 7. Create webpage (in console: pkgdown::build_site())
 8. When everything works, make pull request.
 
+###Example plot
+
+https://github.roche.com/Rpackages/osprey/blob/master/R/dummyplot.R
+
 ###Install with
 
 ```r
