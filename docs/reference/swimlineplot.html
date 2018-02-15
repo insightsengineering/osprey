@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • osprey</title>
+<title>Create a swimlineplot — swimlineplot • osprey</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
   </head>
 
   <body>
-    <div class="container template-vignette-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -89,20 +89,65 @@
       
       </header>
 
-      <div class="page-header">
-  <h1>Articles <small>version&nbsp;0.1.0</small></h1>
-</div>
-
-<div class="row">
-  <div class="col-md-9">
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="osprey_teal.html">Using Osprey TLGs with teal</a></li>
-      </ul>
+      <div class="row">
+  <div class="col-md-9 contents">
+    <div class="page-header">
+    <h1>Create a swimlineplot</h1>
     </div>
+
+    
+    <p>Descr of this plot</p>
+    
+
+    <pre class="usage"><span class='fu'>swimlineplot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>col</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>x coordinates</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>y coordinates</p></td>
+    </tr>
+    <tr>
+      <th>col</th>
+      <td><p>color of points</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>ggplot object</p>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
+
+
+<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ASL"</span>, <span class='kw'>start_with</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>WEIGHT</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>80</span>, <span class='fl'>85</span>, <span class='fl'>90</span>), <span class='kw'>STUDYID</span> <span class='kw'>=</span> <span class='st'>"A"</span>))
+
+<span class='fu'>with</span>(<span class='no'>ASL</span>, <span class='fu'>swimlineplot</span>(<span class='no'>WEIGHT</span>, <span class='no'>BAGE</span>, <span class='no'>ARM</span>))</div><div class='img'><img src='swimlineplot-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>swimlineplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>WEIGHT</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>BAGE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>ARM</span>)</div><div class='img'><img src='swimlineplot-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+
+</div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
+    <h2>Author</h2>
+    
+Mika
+
   </div>
 </div>
 
