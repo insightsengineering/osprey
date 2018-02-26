@@ -20,9 +20,9 @@
 #'
 #' ASL <- radam("ASL", start_with = list(WEIGHT = c(80, 85, 90), STUDYID = "A"))
 #'
-#' with(ASL, spiderplot(WEIGHT, BAGE, ARM))
+#' with(ASL, dummyplot(WEIGHT, BAGE, ARM))
 #'
-#' spiderplot(x = ASL$WEIGHT, y = ASL$BAGE, col = ASL$ARM)
+#' dummyplot(x = ASL$WEIGHT, y = ASL$BAGE, col = ASL$ARM)
 #'
 #'
 dummyplot <- function(x, y, col) {
