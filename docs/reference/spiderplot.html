@@ -99,7 +99,7 @@
     <p>Descr of this plot</p>
     
 
-    <pre class="usage"><span class='fu'>spiderplot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>col</span>)</pre>
+    <pre class="usage"><span class='fu'>spiderplot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>group</span>, <span class='no'>color</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -127,10 +127,10 @@
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
 
 
-<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ASL"</span>, <span class='kw'>start_with</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>WEIGHT</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>80</span>, <span class='fl'>85</span>, <span class='fl'>90</span>), <span class='kw'>STUDYID</span> <span class='kw'>=</span> <span class='st'>"A"</span>))
+<span class='no'>ATE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ATE"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span> ,<span class='kw'>start_with</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>CHANGE</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>0</span>, <span class='fl'>80</span>, <span class='fl'>85</span>, <span class='fl'>90</span>), <span class='kw'>STUDYID</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"A"</span>,<span class='st'>"B"</span>)))
 
-<span class='fu'>with</span>(<span class='no'>ASL</span>, <span class='fu'>spiderplot</span>(<span class='no'>WEIGHT</span>, <span class='no'>BAGE</span>, <span class='no'>ARM</span>))</div><div class='img'><img src='spiderplot-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
-<span class='fu'>spiderplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>WEIGHT</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>BAGE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>ARM</span>)</div><div class='img'><img src='spiderplot-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>with</span>(<span class='no'>ATE</span>, <span class='fu'>spiderplot</span>(<span class='no'>AVAL</span>, <span class='no'>CHANGE</span>, <span class='no'>USUBJID</span>, <span class='no'>STUDYID</span>))</div><div class='img'><img src='spiderplot-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='fu'>spiderplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>ATE</span>$<span class='no'>AVAL</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>ATE</span>$<span class='no'>CHANGE</span>, <span class='kw'>group</span><span class='kw'>=</span> <span class='no'>ATE</span>$<span class='no'>USUBJID</span>,<span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>ATE</span>$<span class='no'>STUDYID</span>)</div><div class='img'><img src='spiderplot-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 
 </div></pre>
   </div>

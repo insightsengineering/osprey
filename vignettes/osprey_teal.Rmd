@@ -19,10 +19,11 @@ library(teal)
 library(osprey)
 library(random.cdisc.data)
 
-ASL <- radam("ASL", start_with = list(WEIGHT = c(80, 85, 90), STUDYID = "A"))
+ASL <- radam("ASL", N=10 ,start_with = list(CHANGE = c(0, 80, 85, 90), STUDYID = c("A","B")))
+ATE <- radam("ATE", N=10 ,start_with = list(CHANGE = c(0, 80, 85, 90), STUDYID = c("A","B")))
 
 x <- teal::init(
-  data = list(ASL = ASL),
+  data = list(ASL=ASL, ATE = ATE),
   modules = root_modules(
     tm_data_table(),
     module(
@@ -31,16 +32,19 @@ x <- teal::init(
       server = function(input, output, session, datasets) {
         output$plot <- renderPlot({
           
-          ASL <- datasets$get_data('ASL',  filtered = TRUE, reactive = TRUE)
+          ATE <- datasets$get_data('ATE',  filtered = TRUE, reactive = TRUE)
           
-          osprey::spiderplot(ASL$BAGE, ASL$WEIGHT, col = ASL$SEX)
+          osprey::spiderplot(x = ATE$AVAL, y = ATE$CHANGE, group= ATE$USUBJID,color = ATE$STUDYID)
           
         })
       },
-      filters = 'ASL'
+      filters = 'ATE'
     )
   )
 )
+
+
+
 
 shinyApp(x$ui, x$server)
 

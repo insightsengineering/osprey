@@ -4,7 +4,7 @@
 \alias{spiderplot}
 \title{Create a spiderplot}
 \usage{
-spiderplot(x, y, col)
+spiderplot(x, y, group, color)
 }
 \arguments{
 \item{x}{x coordinates}
@@ -23,11 +23,11 @@ Descr of this plot
 library(random.cdisc.data)
 
 
-ASL <- radam("ASL", start_with = list(WEIGHT = c(80, 85, 90), STUDYID = "A"))
+ATE <- radam("ATE", N=10 ,start_with = list(CHANGE = c(0, 80, 85, 90), STUDYID = c("A","B")))
 
-with(ASL, spiderplot(WEIGHT, BAGE, ARM))
+with(ATE, spiderplot(AVAL, CHANGE, USUBJID, STUDYID))
 
-spiderplot(x = ASL$WEIGHT, y = ASL$BAGE, col = ASL$ARM)
+spiderplot(x = ATE$AVAL, y = ATE$CHANGE, group= ATE$USUBJID,color = ATE$STUDYID)
 
 
 }

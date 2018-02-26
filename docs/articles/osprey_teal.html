@@ -86,10 +86,11 @@
 <span class="kw">library</span>(osprey)
 <span class="kw">library</span>(random.cdisc.data)
 
-ASL &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam">radam</a></span>(<span class="st">"ASL"</span>, <span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">WEIGHT =</span> <span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="st">"A"</span>))
+ASL &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam">radam</a></span>(<span class="st">"ASL"</span>, <span class="dt">N=</span><span class="dv">10</span> ,<span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">CHANGE =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="kw">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>)))
+ATE &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam">radam</a></span>(<span class="st">"ATE"</span>, <span class="dt">N=</span><span class="dv">10</span> ,<span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">CHANGE =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="kw">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>)))
 
 x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/init">init</a></span>(
-  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">ASL =</span> ASL),
+  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">ASL=</span>ASL, <span class="dt">ATE =</span> ATE),
   <span class="dt">modules =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/root_modules">root_modules</a></span>(
     <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/tm_data_table">tm_data_table</a></span>(),
     <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/module">module</a></span>(
@@ -98,16 +99,19 @@ x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><
       <span class="dt">server =</span> <span class="cf">function</span>(input, output, session, datasets) {
         output<span class="op">$</span>plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
           
-          ASL &lt;-<span class="st"> </span>datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="st">'ASL'</span>,  <span class="dt">filtered =</span> <span class="ot">TRUE</span>, <span class="dt">reactive =</span> <span class="ot">TRUE</span>)
+          ATE &lt;-<span class="st"> </span>datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="st">'ATE'</span>,  <span class="dt">filtered =</span> <span class="ot">TRUE</span>, <span class="dt">reactive =</span> <span class="ot">TRUE</span>)
           
-          osprey<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/osprey/topics/spiderplot">spiderplot</a></span>(ASL<span class="op">$</span>BAGE, ASL<span class="op">$</span>WEIGHT, <span class="dt">col =</span> ASL<span class="op">$</span>SEX)
+          osprey<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/osprey/topics/spiderplot">spiderplot</a></span>(<span class="dt">x =</span> ATE<span class="op">$</span>AVAL, <span class="dt">y =</span> ATE<span class="op">$</span>CHANGE, <span class="dt">group=</span> ATE<span class="op">$</span>USUBJID,<span class="dt">color =</span> ATE<span class="op">$</span>STUDYID)
           
         })
       },
-      <span class="dt">filters =</span> <span class="st">'ASL'</span>
+      <span class="dt">filters =</span> <span class="st">'ATE'</span>
     )
   )
 )
+
+
+
 
 <span class="kw">shinyApp</span>(x<span class="op">$</span>ui, x<span class="op">$</span>server)</code></pre></div>
 </div>

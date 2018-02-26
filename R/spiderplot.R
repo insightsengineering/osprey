@@ -18,17 +18,19 @@
 #' library(random.cdisc.data)
 #'
 #'
-#' ASL <- radam("ASL", start_with = list(WEIGHT = c(80, 85, 90), STUDYID = "A"))
+#' ATE <- radam("ATE", N=10 ,start_with = list(CHANGE = c(0, 80, 85, 90), STUDYID = c("A","B")))
 #'
-#' with(ASL, spiderplot(WEIGHT, BAGE, ARM))
+#' with(ATE, spiderplot(AVAL, CHANGE, USUBJID, STUDYID))
 #'
-#' spiderplot(x = ASL$WEIGHT, y = ASL$BAGE, col = ASL$ARM)
+#' spiderplot(x = ATE$AVAL, y = ATE$CHANGE, group= ATE$USUBJID,color = ATE$STUDYID)
 #'
 #'
-spiderplot <- function(x, y, col) {
+spiderplot <- function(x, y, group, color) {
 
-  df <- data.frame(x = x, y = y, col = col)
+  df <- data.frame(x = x, y = y, group = group, color=color)
 
-  df %>%  ggplot() + aes(x, y, color = col) + geom_point()
-
+  df %>%  ggplot() + aes(x, y, group = group, color = color) +
+    geom_point() +
+    geom_line()
 }
+
