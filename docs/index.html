@@ -68,18 +68,29 @@
       
       </header><div class="row">
   <div class="contents col-md-9">
-    <div id="osprey" class="section level2">
+    
+<div id="osprey" class="section level2">
 <h2 class="hasAnchor">
 <a href="#osprey" class="anchor"></a>Osprey</h2>
 
+</div>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="dt">repo =</span> <span class="st">"Rpackages/osprey"</span>, <span class="dt">host =</span> <span class="st">"https://github.roche.com/api/v3"</span>)</code></pre></div>
+</div>
+<div id="development" class="section level2">
+<h2 class="hasAnchor">
+<a href="#development" class="anchor"></a>Development</h2>
+<p>Everyone is welcome to share their R functions in <code>opsrey</code>.</p>
 <div id="requirements" class="section level3">
 <h3 class="hasAnchor">
-<a href="#requirements" class="anchor"></a>Requirements:</h3>
-<p>To quolify to Osprey package, TLG code has to</p>
+<a href="#requirements" class="anchor"></a>Requirements</h3>
+<p>To qualify to <code>osprey</code> package, TLG code has to:</p>
 <ol>
 <li>Be a function that produces a output</li>
 <li>Have working example</li>
-<li>Use Oxygen for creation of Help</li>
+<li>Use <a href="http://r-pkgs.had.co.nz/man.html">roxygen documentation</a> for creation of Help</li>
 <li>Have help page</li>
 <li>Be compatible with pkgdown (should be when points 1-4 are OK)</li>
 </ol>
@@ -87,32 +98,30 @@
 <div id="instructions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#instructions" class="anchor"></a>Instructions</h3>
-<div id="for-this-to-work-you-need-to-have-access-to-libraries-pkgdown-and-random-cdisc-data" class="section level4">
-<h4 class="hasAnchor">
-<a href="#for-this-to-work-you-need-to-have-access-to-libraries-pkgdown-and-random-cdisc-data" class="anchor"></a>for this to work you need to have access to libraries pkgdown and random.cdisc.data</h4>
+<p>For this to work you need to have access to libraries <code>pkgdown</code> and <code>random.cdisc.data</code>. Please start by watching the following video:</p>
+<ul>
+<li><a href="https://streamingmedia.roche.com/media/Adding+TLG+functions+to+the+Osprey+R+package/1_4newkk7i">Add a TLG function to the Osrpey R package</a></li>
+</ul>
+<p>That is, follow the following steps:</p>
 <ol>
-<li>Create branch of Osprey and clone to R-studio</li>
+<li>Clone the opsrey repository</li>
+<li>Create branch</li>
 <li>Develop a function</li>
-<li>Create oxygen comments (ctrl+shift+alt+R or copy from earlier)</li>
+<li>Create roxygen comments (ctrl+shift+alt+R or copy from earlier)</li>
 <li>Document (ctrl+shift+D)</li>
-<li>Clean and Rebuild</li>
+<li>Installand Restart</li>
 <li>Test your function with working example</li>
-<li>Create webpage (in console: pkgdown::build_site())</li>
+<li>Create webpage (in console: <code><a href="http://www.rdocumentation.org/packages/pkgdown/topics/build_site">pkgdown::build_site()</a></code>)</li>
 <li>When everything works, make pull request.</li>
 </ol>
-</div>
 </div>
 <div id="example-plot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#example-plot" class="anchor"></a>Example plot</h3>
 <p><a href="https://github.roche.com/Rpackages/osprey/blob/master/R/dummyplot.R" class="uri">https://github.roche.com/Rpackages/osprey/blob/master/R/dummyplot.R</a></p>
 </div>
-<div id="install-with" class="section level3">
-<h3 class="hasAnchor">
-<a href="#install-with" class="anchor"></a>Install with</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(...)</code></pre></div>
 </div>
-</div>
+
   </div>
 
   <div class="col-md-3" id="sidebar">

@@ -2,5 +2,6 @@
 
 export(dummyplot)
 export(spiderplot)
+export(spiderplot_simple)
 export(swimlineplot)
 export(waterfall)

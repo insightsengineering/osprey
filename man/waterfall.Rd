@@ -6,11 +6,6 @@
 \usage{
 waterfall(x, y)
 }
-\arguments{
-\item{x}{x coordinates}
-
-\item{y}{y coordinates}
-}
 \value{
 a ggplot object
 }
