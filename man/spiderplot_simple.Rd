@@ -4,10 +4,19 @@
 \alias{spiderplot_simple}
 \title{Create a spiderplot_simple}
 \usage{
-spiderplot_simple(anl)
+spiderplot_simple(anl, byvar = USUBJID, days = TUDY, mesValue = PCHG,
+  groupCol = USUBJID, baseday = 0)
 }
 \arguments{
-\item{anl}{Analysis dataset}
+\item{byvar}{Analysis dataset}
+
+\item{days}{Variable with time in days}
+
+\item{mesValue}{Variable with measurement}
+
+\item{groupCol}{Variable to color the individual lines and id in plot}
+
+\item{baseday}{Numeric Value, pts with only smaller values will be cut out}
 }
 \value{
 ggplot object
@@ -19,10 +28,12 @@ Descr of this plot
 library(random.cdisc.data)
 
 
-atr <- radam("ATR", N=10 ,start_with = list(CHANGE = c(0, 80, 85, 90), STUDYID = c("A","B")))
+atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 
 
-spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"))
+spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol=SEX)
+
+
 
 
 }
