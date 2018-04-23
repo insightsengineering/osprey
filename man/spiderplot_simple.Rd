@@ -33,10 +33,7 @@ atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 
 spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol=SEX)
 
-
-
-
 }
 \author{
-Mika
+Mika Maekinen
 }
