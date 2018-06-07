@@ -4,7 +4,10 @@ Title: R package to create TLGs
 Version: 0.1.0
 Authors@R: c(
   person("Mika", "Maekinen", email = "mika.maekinen@roche.com", role = c("aut", "cre")),
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut"))
+  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut")),
+  person("Chendi", "Liao", email = "chendi.liao@roche.com", role = c("aut")),
+  person("Nina", "Qi", email = "qit3@gene.com", role = c("aut")),
+  person("Carolyn", "Zhang", email = "zhang.carolyn@gene.com", role = c("aut"))
   )
 Description: Community effort to collect TLG code and create a catalogue
 License: Copyrigth Roche
