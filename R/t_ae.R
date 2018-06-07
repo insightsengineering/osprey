@@ -67,6 +67,8 @@
 #' library(dplyr)
 #' library(rtables)
 #' library(haven)
+#' library(random.cdisc.data)
+#'
 #' adae = read_sas("/opt/bee/home_nas/zhanc107/osprey/adam/adae.sas7bdat")
 #'
 #' tbl2 <- t_ae(
@@ -87,6 +89,17 @@
 #' )
 #'
 #' tbl3
+#'
+#' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
+#'
+#' tbl4 <- t_ae(
+#'   class = data$AEBODSYS,
+#'   term =  data$AEDECOD,
+#'   id = data$USUBJID,
+#'   col_by = factor(data$ARM)
+#' )
+#'
+#' tbl4
 #'
 #'
 t_ae <- function(class, term, id, col_by, total="All Patients",...) {
