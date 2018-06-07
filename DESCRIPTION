@@ -12,7 +12,8 @@ Encoding: UTF-8
 LazyData: true
 Depends: ggplot2,
   dplyr,
-  tidyr
+  tidyr,
+  rtables
 Suggests: random.cdisc.data
 Additional_repositories: 
   https://github.roche.com/Rpackages/random.cdisc.data
