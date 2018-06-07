@@ -34,7 +34,8 @@
 #' suppressPackageStartupMessages(library(tidyverse))
 #' library(rtables)
 #' library(haven)
-#' adae = read_sas("/opt/bee/home_nas/zhanc107/osprey/adam/adae.sas7bdat")
+#' #adae = read_sas("/opt/bee/home_nas/zhanc107/osprey/adam/adae.sas7bdat")
+#' adae <- read_bce("/opt/BIOSTAT/home_ext2/qit3/cdt70194/go39733/libraries/adae.sas7bdat")
 #'
 #' tbl <- t_ae_oview(
 #'    id = adae$USUBJID,
@@ -119,9 +120,9 @@ t_ae_oview <- function(id, class, term, dthfl, dcsreas, aesdth, aeser, aeacn, ar
 
   #includes serious flag
   df_ser <- data.frame(id = id,
-                           aeser = aeser,
-                           col_by = col_by,
-                           stringsAsFactors = FALSE)
+                       aeser = aeser,
+                       col_by = col_by,
+                       stringsAsFactors = FALSE)
 
   #includes serious flag + action taken flag
   df_serwd <- data.frame(id = id,
@@ -164,23 +165,23 @@ t_ae_oview <- function(id, class, term, dthfl, dcsreas, aesdth, aeser, aeacn, ar
 
   #includes causality flag + action taken flag
   df_relwd <- data.frame(id = id,
-                       aerel = aerel,
-                       aeacn = aeacn,
-                       col_by = col_by,
-                       stringsAsFactors = FALSE)
-
-  #includes analysis causality flag + action taken flag
-  df_reldsm <- data.frame(id = id,
-                         arel = arel,
+                         aerel = aerel,
                          aeacn = aeacn,
                          col_by = col_by,
                          stringsAsFactors = FALSE)
 
+  #includes analysis causality flag + action taken flag
+  df_reldsm <- data.frame(id = id,
+                          arel = arel,
+                          aeacn = aeacn,
+                          col_by = col_by,
+                          stringsAsFactors = FALSE)
+
   #includes toxicity flag
   df_ctc35 <- data.frame(id = id,
-                       aetoxgr = aetoxgr,
-                       col_by = col_by,
-                       stringsAsFactors = FALSE)
+                         aetoxgr = aetoxgr,
+                         col_by = col_by,
+                         stringsAsFactors = FALSE)
 
   # adding All Patients
   if(total != "NONE"){
@@ -220,20 +221,20 @@ t_ae_oview <- function(id, class, term, dthfl, dcsreas, aesdth, aeser, aeacn, ar
   df_reldsm <- na.omit(df_reldsm)
   df_ctc35 <- na.omit(df_ctc35)
 
-  df <- df %>% filter(term != "" & id != "" & col_by != "")
-  df_d <- df_d %>% filter(dthfl != "" & id != "" & col_by != "")
-  df_w <- df_w %>% filter(dcsreas != "" & id != "" & col_by != "")
-  df_fatal <- df_fatal %>% filter(aesdth != "" & id != "" & col_by != "")
-  df_ser <- df_ser %>% filter(aeser != "" & id != "" & col_by != "")
-  df_serwd <- df_serwd %>% filter(aeacn != "" & aeser != "" & id != "" & col_by != "")
-  df_serdsm <- df_serdsm %>% filter(aeacn != "" & aeser != "" & id != "" & col_by != "")
-  df_relser <- df_relser %>% filter(arel != "" & aeser != "" & id != "" & col_by != "")
-  df_wd <- df_wd %>% filter(aeacn != "" & id != "" & col_by != "")
-  df_dsm <- df_dsm %>% filter(aeacn != "" & id != "" & col_by != "")
-  df_rel <- df_rel %>% filter(aerel != "" & id != "" & col_by != "")
-  df_relwd <- df_relwd %>% filter(aeacn != "" & aerel != "" & id != "" & col_by != "")
-  df_reldsm <- df_reldsm %>% filter(aeacn != "" & arel != "" & id != "" & col_by != "")
-  df_ctc35 <- df_ctc35 %>% filter(aetoxgr != "" & id != "" & col_by != "")
+  # df <- df %>% filter(term != "" & id != "" & col_by != "")
+  # df_d <- df_d %>% filter(dthfl != "" & id != "" & col_by != "")
+  # df_w <- df_w %>% filter(dcsreas != "" & id != "" & col_by != "")
+  # df_fatal <- df_fatal %>% filter(aesdth != "" & id != "" & col_by != "")
+  # df_ser <- df_ser %>% filter(aeser != "" & id != "" & col_by != "")
+  # df_serwd <- df_serwd %>% filter(aeacn != "" & aeser != "" & id != "" & col_by != "")
+  # df_serdsm <- df_serdsm %>% filter(aeacn != "" & aeser != "" & id != "" & col_by != "")
+  # df_relser <- df_relser %>% filter(arel != "" & aeser != "" & id != "" & col_by != "")
+  # df_wd <- df_wd %>% filter(aeacn != "" & id != "" & col_by != "")
+  # df_dsm <- df_dsm %>% filter(aeacn != "" & id != "" & col_by != "")
+  # df_rel <- df_rel %>% filter(aerel != "" & id != "" & col_by != "")
+  # df_relwd <- df_relwd %>% filter(aeacn != "" & aerel != "" & id != "" & col_by != "")
+  # df_reldsm <- df_reldsm %>% filter(aeacn != "" & arel != "" & id != "" & col_by != "")
+  # df_ctc35 <- df_ctc35 %>% filter(aetoxgr != "" & id != "" & col_by != "")
 
   dsm <- c("DRUG INTERRUPTED", "DOSE INCREASED", "DOSE REDUCED")
 

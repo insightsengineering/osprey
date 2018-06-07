@@ -69,6 +69,7 @@
 #' library(haven)
 #' library(random.cdisc.data)
 #'
+#'\dontrun{
 #' adae = read_sas("/opt/bee/home_nas/zhanc107/osprey/adam/adae.sas7bdat")
 #'
 #' tbl2 <- t_ae(
@@ -89,6 +90,7 @@
 #' )
 #'
 #' tbl3
+#' }
 #'
 #' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
 #'

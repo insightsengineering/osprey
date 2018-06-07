@@ -51,8 +51,6 @@
 #'              href_line = -0.3,
 #'              show_legend = FALSE)
 #'
-#'
-#'
 g_spiderplot <- function(x_label, y_label, marker_x, marker_y, marker_color = NULL, marker_shape = NULL, line_color, datalabel_txt = NULL, facet_rows = NULL, facet_columns = NULL, vref_line = NULL, href_line = NULL, show_legend = FALSE){
 
   #check length of input parameters
