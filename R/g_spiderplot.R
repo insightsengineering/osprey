@@ -7,8 +7,10 @@
 #' @param marker_y vector of y values
 #' @param marker_color vector defines by what variable points are color coded,
 #' , default here is NULL
+#' @param marker_color_opt vector defines marker color code, default here is NULL
 #' @param marker_shape vector defines by what variable points are shape coded,
 #' , default here is NULL
+#' @param marker_shape_opt vector defines marker shape code, default here is NULL
 #' @param line_color vector defines by what variable plot is color coded
 #' @param datalabel_txt vector defines text at last time point for each line
 #' @param facet_rows vector defines what variable is used to split the
@@ -30,6 +32,7 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
+#' library(plyr)
 #' library(dplyr)
 #'
 #' atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
@@ -37,12 +40,18 @@
 #'
 #' cmp <- max(dat["TUDY"])
 #' lbl <- apply(dat, 1, function(dat){if(dat["TUDY"] == cmp){dat["USUBJID"]}else{""}})
+#' colors <- c("black", "red", "blue", "green", "yellow", "brown")
+#' shapes <- c(0, 1, 2, 3, 4, 5, 6)
+#' map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
+#' map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
 #' g_spiderplot(x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
 #'              marker_x = dat$TUDY,
 #'              marker_y = dat$PCHG,
 #'              marker_color = dat$RACE,
+#'              marker_color_opt = map_marker_color,
 #'              marker_shape = dat$RACE,
+#'              marker_shape_opt = map_marker_shape,
 #'              line_color = dat$USUBJID,
 #'              datalabel_txt = lbl,
 #'              facet_rows = dat$SEX,
@@ -51,7 +60,7 @@
 #'              href_line = -0.3,
 #'              show_legend = FALSE)
 #'
-g_spiderplot <- function(x_label, y_label, marker_x, marker_y, marker_color = NULL, marker_shape = NULL, line_color, datalabel_txt = NULL, facet_rows = NULL, facet_columns = NULL, vref_line = NULL, href_line = NULL, show_legend = FALSE){
+g_spiderplot <- function(x_label, y_label, marker_x, marker_y, marker_color = NULL, marker_color_opt = NULL, marker_shape = NULL, marker_shape_opt = NULL, line_color, datalabel_txt = NULL, facet_rows = NULL, facet_columns = NULL, vref_line = NULL, href_line = NULL, show_legend = FALSE){
 
   #check length of input parameters
   #len_all <- c(length(marker_x), length(marker_y), length(marker_color), length(marker_shape), length(line_color), length(datalabel_txt))
@@ -59,131 +68,19 @@ g_spiderplot <- function(x_label, y_label, marker_x, marker_y, marker_color = NU
   #  stop("Input mismatch - check the length of your input parameters")
 
   #set up data-------
-  if(is.null(facet_rows) && is.null(facet_columns)){
-    if(is.null(marker_color) && is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        l_col = line_color)
-    }
-    else if(!is.null(marker_color) && is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        m_col = marker_color,
-                        l_col = line_color)
-    }
-    else if(is.null(marker_color) && !is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        sh = marker_shape,
-                        l_col = line_color)
-    }
-    else{
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        m_col = marker_color,
-                        sh = marker_shape,
-                        l_col = line_color)
-    }
-
+  dat <- data.frame(day = marker_x, pchg = marker_y, l_col = line_color)
+  if(!is.null(marker_color)){
+    dat$m_col <- marker_color
   }
-  else if(is.null(facet_rows) && !is.null(facet_columns)){
-    if(is.null(marker_color) && is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        l_col = line_color,
-                        f_columns = facet_columns)
-    }
-    else if(!is.null(marker_color) && is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        m_col = marker_color,
-                        l_col = line_color,
-                        f_columns = facet_columns)
-    }
-    else if(is.null(marker_color) && !is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        sh = marker_shape,
-                        l_col = line_color,
-                        f_columns = facet_columns)
-    }
-    else{
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        m_col = marker_color,
-                        sh = marker_shape,
-                        l_col = line_color,
-                        f_columns = facet_columns)
-    }
-
+  if(!is.null(marker_shape)){
+    dat$sh <- marker_shape
   }
-  else if(is.null(facet_columns) && !is.null(facet_rows)){
-    if(is.null(marker_color) && is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        l_col = line_color,
-                        f_rows = facet_rows)
-    }
-    else if(!is.null(marker_color) && is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        m_col = marker_color,
-                        l_col = line_color,
-                        f_rows = facet_rows)
-    }
-    else if(is.null(marker_color) && !is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        sh = marker_shape,
-                        l_col = line_color,
-                        f_rows = facet_rows)
-    }
-    else{
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        m_col = marker_color,
-                        sh = marker_shape,
-                        l_col = line_color,
-                        f_rows = facet_rows)
-    }
-
+  if(!is.null(facet_rows)){
+    dat$f_rows <- facet_rows
   }
-  else{
-    if(is.null(marker_color) && is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        l_col = line_color,
-                        f_rows = facet_rows,
-                        f_columns = facet_columns)
-    }
-    else if(!is.null(marker_color) && is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        m_col = marker_color,
-                        l_col = line_color,
-                        f_rows = facet_rows,
-                        f_columns = facet_columns)
-    }
-    else if(is.null(marker_color) && !is.null(marker_shape)){
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        sh = marker_shape,
-                        l_col = line_color,
-                        f_rows = facet_rows,
-                        f_columns = facet_columns)
-    }
-    else{
-      dat <- data.frame(day = marker_x,
-                        pchg = marker_y,
-                        m_col = marker_color,
-                        sh = marker_shape,
-                        l_col = line_color,
-                        f_rows = facet_rows,
-                        f_columns = facet_columns)
-    }
-
+  if(!is.null(facet_columns)){
+    dat$f_columns <- facet_columns
   }
-
 
   #plot spider plot-----------------
   pl <- ggplot(data = dat, aes(x = dat$day, y = dat$pchg)) +
@@ -193,14 +90,56 @@ g_spiderplot <- function(x_label, y_label, marker_x, marker_y, marker_color = NU
     theme(legend.position="top", legend.title = element_blank())
 
   #marker shape and color------------
+  # if(!is.null(marker_color) && !is.null(marker_shape) && !is.null(marker_color_opt)){
+  #   pl <- pl + geom_point(aes(shape = dat$sh), colour = marker_color_opt, size = 3, show.legend = show_legend)
+  # }
+  # else if(!is.null(marker_color) && !is.null(marker_shape) && is.null(marker_color_opt)){
+  #   pl <- pl + geom_point(aes(color = dat$m_col, shape = dat$sh), size = 3, show.legend = show_legend)
+  # }
+  # else if(!is.null(marker_color) && is.null(marker_shape) && !is.null(marker_color_opt)){
+  #   pl <- pl + geom_point(colour = marker_color_opt, size = 3, show.legend = show_legend)
+  # }
+  # else if(!is.null(marker_color) && is.null(marker_shape) && is.null(marker_color_opt)){
+  #   pl <- pl + geom_point(aes(color = dat$m_col), size = 3, show.legend = show_legend)
+  # }
+  # else if(is.null(marker_color) && !is.null(marker_shape)){
+  #   pl <- pl + geom_point(aes(shape = dat$sh), size = 3, show.legend = show_legend)
+  # }
+
   if(!is.null(marker_color) && !is.null(marker_shape)){
-    pl <- pl + geom_point(aes(color = dat$m_col, shape = dat$sh), size = 3, show.legend = show_legend)
+    if(!is.null(marker_color_opt) && !is.null(marker_shape_opt)){
+      pl <- pl + geom_point(aes(color = dat$m_col, shape = dat$sh), shape = marker_shape_opt, colour = marker_color_opt, size = 3, show.legend = show_legend)
+    }
+    else if(!is.null(marker_color_opt) && is.null(marker_shape_opt)){
+      pl <- pl + geom_point(aes(color = dat$m_col, shape = dat$sh), colour = marker_color_opt, size = 3, show.legend = show_legend)
+    }
+    else if(is.null(marker_color_opt) && !is.null(marker_shape_opt)){
+      pl <- pl + geom_point(aes(color = dat$m_col, shape = dat$sh), shape = marker_shape_opt, size = 3, show.legend = show_legend)
+    }
+    else{
+      pl <- pl + geom_point(aes(color = dat$m_col, shape = dat$sh), size = 3, show.legend = show_legend)
+    }
   }
   else if(!is.null(marker_color) && is.null(marker_shape)){
-    pl <- pl + geom_point(aes(color = dat$m_col), size = 3, show.legend = show_legend)
+    if(!is.null(marker_color_opt)){
+      pl <- pl + geom_point(color = marker_color_opt, size = 3, show.legend = show_legend)
+    }
+    else{
+      pl <- pl + geom_point(aes(color = dat$m_color), size = 3, show.legend = show_legend)
+    }
+
   }
   else if(is.null(marker_color) && !is.null(marker_shape)){
-    pl <- pl + geom_point(aes(shape = dat$sh), size = 3, show.legend = show_legend)
+    if(!is.null(marker_shape_opt)){
+      pl <- pl + geom_point(shape = marker_shape_opt, size = 3, show.legend = show_legend)
+    }
+    else{
+      pl <- pl + geom_point(aes(shape = dat$sh), size = 3, show.legend = show_legend)
+    }
+
+  }
+  else if(is.null(marker_color) && is.null(marker_shape)){
+    pl <- pl + geom_point(size = 3, show.legend = show_legend)
   }
 
   #label at last point---------
