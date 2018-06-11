@@ -39,7 +39,7 @@
 #' dat <- atr %>% filter(PARAMCD == "SUMTGLES")
 #'
 #' cmp <- max(dat["TUDY"])
-#' lbl <- apply(dat, 1, function(dat){if(dat["TUDY"] == cmp){dat["USUBJID"]}else{""}})
+#' lbl <- apply(dat, 1, function(dat){if(dat["TUDY"] == cmp){paste(dat["USUBJID"], "test-length")}else{""}})
 #' colors <- c("black", "red", "blue", "green", "yellow", "brown")
 #' shapes <- c(0, 1, 2, 3, 4, 5, 6)
 #' map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
@@ -60,12 +60,23 @@
 #'              href_line = -0.3,
 #'              show_legend = FALSE)
 #'
-g_spiderplot <- function(x_label, y_label, marker_x, marker_y, marker_color = NULL, marker_color_opt = NULL, marker_shape = NULL, marker_shape_opt = NULL, line_color, datalabel_txt = NULL, facet_rows = NULL, facet_columns = NULL, vref_line = NULL, href_line = NULL, show_legend = FALSE){
-
-  #check length of input parameters
-  #len_all <- c(length(marker_x), length(marker_y), length(marker_color), length(marker_shape), length(line_color), length(datalabel_txt))
-  #if(length(unique(len_all)) > 1)
-  #  stop("Input mismatch - check the length of your input parameters")
+g_spiderplot <- function(x_label,
+                         y_label,
+                         marker_x,
+                         marker_y,
+                         marker_color = NULL,
+                         marker_color_opt = NULL,
+                         marker_shape = NULL,
+                         marker_shape_opt = NULL,
+                         line_color,
+                         datalabel_txt = NULL,
+                         facet_rows = NULL,
+                         facet_columns = NULL,
+                         vref_line = NULL,
+                         href_line = NULL,
+                         show_legend = FALSE,
+                         draw = TRUE,
+                         newpage = TRUE){
 
   #set up data-------
   dat <- data.frame(day = marker_x, pchg = marker_y, l_col = line_color)
@@ -90,22 +101,6 @@ g_spiderplot <- function(x_label, y_label, marker_x, marker_y, marker_color = NU
     theme(legend.position="top", legend.title = element_blank())
 
   #marker shape and color------------
-  # if(!is.null(marker_color) && !is.null(marker_shape) && !is.null(marker_color_opt)){
-  #   pl <- pl + geom_point(aes(shape = dat$sh), colour = marker_color_opt, size = 3, show.legend = show_legend)
-  # }
-  # else if(!is.null(marker_color) && !is.null(marker_shape) && is.null(marker_color_opt)){
-  #   pl <- pl + geom_point(aes(color = dat$m_col, shape = dat$sh), size = 3, show.legend = show_legend)
-  # }
-  # else if(!is.null(marker_color) && is.null(marker_shape) && !is.null(marker_color_opt)){
-  #   pl <- pl + geom_point(colour = marker_color_opt, size = 3, show.legend = show_legend)
-  # }
-  # else if(!is.null(marker_color) && is.null(marker_shape) && is.null(marker_color_opt)){
-  #   pl <- pl + geom_point(aes(color = dat$m_col), size = 3, show.legend = show_legend)
-  # }
-  # else if(is.null(marker_color) && !is.null(marker_shape)){
-  #   pl <- pl + geom_point(aes(shape = dat$sh), size = 3, show.legend = show_legend)
-  # }
-
   if(!is.null(marker_color) && !is.null(marker_shape)){
     if(!is.null(marker_color_opt) && !is.null(marker_shape_opt)){
       pl <- pl + geom_point(aes(color = dat$m_col, shape = dat$sh), shape = marker_shape_opt, colour = marker_color_opt, size = 3, show.legend = show_legend)
@@ -142,9 +137,11 @@ g_spiderplot <- function(x_label, y_label, marker_x, marker_y, marker_color = NU
     pl <- pl + geom_point(size = 3, show.legend = show_legend)
   }
 
-  #label at last point---------
+  #label location---------
   if(!is.null(datalabel_txt)){
-    pl <- pl + geom_text(aes(x = dat$day+2, y =  dat$pchg, label= datalabel_txt), size = 2)
+    datalabel_txt_mod <- gsub(" ", "\n ", datalabel_txt, fixed = TRUE)
+    pl <- pl + geom_text(aes(x = dat$day+4, y =  dat$pchg, label= datalabel_txt_mod), size = 2)
+    pl <- pl + geom_text(aes(x = dat$day+(max(nchar(datalabel_txt_mod))/2), y =  dat$pchg+(max(dat$pchg)/10), label= ""), size = 2)
   }
 
   if(!is.null(href_line)){
