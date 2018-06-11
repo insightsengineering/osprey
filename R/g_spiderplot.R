@@ -120,7 +120,7 @@ g_spiderplot <- function(x_label,
       pl <- pl + geom_point(color = marker_color_opt, size = 3, show.legend = show_legend)
     }
     else{
-      pl <- pl + geom_point(aes(color = dat$m_color), size = 3, show.legend = show_legend)
+      pl <- pl + geom_point(aes(color = dat$m_col), size = 3, show.legend = show_legend)
     }
 
   }
