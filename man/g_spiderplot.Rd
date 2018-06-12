@@ -4,9 +4,10 @@
 \alias{g_spiderplot}
 \title{Create a spiderplot for Early Development Visualization}
 \usage{
-g_spiderplot(x_label, y_label, marker_x, marker_y, marker_color = NULL,
-  marker_color_opt = NULL, marker_shape = NULL, marker_shape_opt = NULL,
-  line_color, datalabel_txt = NULL, facet_rows = NULL,
+g_spiderplot(x_label = "Time (Days)", y_label = "Change (\%) from Baseline",
+  marker_x, marker_y, marker_color = NULL, marker_color_opt = NULL,
+  marker_shape = NULL, marker_shape_opt = NULL, marker_size = 6,
+  line_color_colby = NULL, datalabel_txt = NULL, facet_rows = NULL,
   facet_columns = NULL, vref_line = NULL, href_line = NULL,
   show_legend = FALSE, draw = TRUE, newpage = TRUE)
 }
@@ -29,9 +30,12 @@ g_spiderplot(x_label, y_label, marker_x, marker_y, marker_color = NULL,
 
 \item{marker_shape_opt}{vector defines marker shape code, default here is NULL}
 
-\item{line_color}{vector defines by what variable plot is color coded}
+\item{marker_size}{size of markers in plot}
 
-\item{datalabel_txt}{vector defines text at last time point for each line}
+\item{line_color_colby}{vector defines by what variable plot is color coded}
+
+\item{datalabel_txt}{list defines text (at last time point) and flag for discontinued study
+(per defined variable) - can be list of length 1 or 3}
 
 \item{facet_rows}{vector defines what variable is used to split the
 plot into rows, default here is NULL}
@@ -63,7 +67,7 @@ atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")
 
 cmp <- max(dat["TUDY"])
-lbl <- apply(dat, 1, function(dat){if(dat["TUDY"] == cmp){paste(dat["USUBJID"], "test length")}else{""}})
+lbl <- apply(dat, 1, function(dat){if(dat["TUDY"] == cmp){paste(dat["USUBJID"], "test-length")}else{""}})
 colors <- c("black", "red", "blue", "green", "yellow", "brown")
 shapes <- c(0, 1, 2, 3, 4, 5, 6)
 map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
@@ -72,12 +76,13 @@ g_spiderplot(x_label = "Time (Days)",
              y_label = "Change (\%) from Baseline",
              marker_x = dat$TUDY,
              marker_y = dat$PCHG,
-             marker_color = dat$RACE,
-             marker_color_opt = map_marker_color,
+             marker_color = dat$USUBJID,
+             #marker_color_opt = map_marker_color,
              marker_shape = dat$RACE,
-             marker_shape_opt = map_marker_shape,
-             line_color = dat$USUBJID,
-             datalabel_txt = lbl,
+             #marker_shape_opt = map_marker_shape,
+             marker_size = 5,
+             line_color_colby = dat$USUBJID,
+             datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
              facet_rows = dat$SEX,
              facet_columns = dat$ARM,
              vref_line = c(10, 37),
