@@ -35,7 +35,10 @@ g_spiderplot(x_label = "Time (Days)", y_label = "Change (\%) from Baseline",
 \item{line_color_colby}{vector defines by what variable plot is color coded}
 
 \item{datalabel_txt}{list defines text (at last time point) and flag for discontinued study
-(per defined variable) - can be list of length 1 or 3}
+(per defined variable) - elements must be labeled one/two/three
+one - text annotation next to final data point
+two - vector of ID's
+three - vector of ID's (subset of two) where arrow is desired to indicate discontinued study}
 
 \item{facet_rows}{vector defines what variable is used to split the
 plot into rows, default here is NULL}

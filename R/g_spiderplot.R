@@ -14,7 +14,10 @@
 #' @param marker_shape_opt vector defines marker shape code, default here is NULL
 #' @param line_color_colby vector defines by what variable plot is color coded
 #' @param datalabel_txt list defines text (at last time point) and flag for discontinued study
-#' (per defined variable) - can be list of length 1 or 3
+#' (per defined variable) - elements must be labeled one/two/three
+#' one - text annotation next to final data point
+#' two - vector of ID's
+#' three - vector of ID's (subset of two) where arrow is desired to indicate discontinued study
 #' @param facet_rows vector defines what variable is used to split the
 #' plot into rows, default here is NULL
 #' @param facet_columns vector defines what variable is used to split the
@@ -100,13 +103,13 @@ g_spiderplot <- function(x_label = "Time (Days)",
   if(!is.null(line_color_colby)){
     dat$l_col <- line_color_colby
   }
-  if(!is.null(datalabel_txt)){
+  if(!is.null(datalabel_txt$one)){
     cmp <- max(marker_x)
     #dat_txt <- data.frame(day = marker_x, pchg = marker_y, lbl = datalabel_txt[[1]])
     lbl <- apply(dat, 1, function(dat){if(dat[1] == cmp){dat[3]}else{""}})
     dat$lab <- lbl
   }
-  if(length(datalabel_txt) == 3){
+  if(!is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
     dat$id <- datalabel_txt[[2]]
   }
 
@@ -169,22 +172,19 @@ g_spiderplot <- function(x_label = "Time (Days)",
     #dat_txt <- dat %>% mutate(lbl = if_else(day == cmp, id, ""))
 
     #datalabel_txt_mod <- gsub(" ", "\n ", lbl, fixed = TRUE)
-    pl <- pl + geom_text(data = dat, aes(x = day+3, y =  pchg, label= lab), size = 3)
-    pl <- pl + geom_text(data = dat, aes(x = dat$day+max(nchar(lbl)), y =  dat$pchg+(max(dat$pchg)/10), label= ""), size = 6)
-
+    if(!is.null(datalabel_txt$one)){
+      pl <- pl + geom_text(data = dat, aes(x = day+3, y =  pchg, label= lab), size = 3)
+      pl <- pl + geom_text(data = dat, aes(x = dat$day+max(nchar(lbl)), y =  dat$pchg+(max(dat$pchg)/10), label= ""), size = 6)
+    }
     #pl <- pl + geom_text(data = dat_txt, mapping = aes(x = dat$day+3, y = dat$pchg, label = dat$id), size = 6)
 
-    if(length(datalabel_txt) == 2)
-      stop("Please input a list of length 3 to add arrow for annotation")
-    if(length(datalabel_txt) == 3){
+    if(!is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
       dat_arrow <- dat %>%
         filter(id %in% datalabel_txt[[3]]) %>%
-        filter(day == cmp)
+        #filter(day == cmp)
+        group_by(id) %>%
+        filter(day == max(day))
 
-      #print(dat)
-      #print(dat_arrow)
-
-      #dat_arrow <- apply(dat_arr, 1, function(dat){if(dat["id"] %in% datalabel_txt[[3]]){TRUE}else{FALSE}})
       pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day-7, y = pchg, xend = day-2, yend = pchg), arrow = arrow(length = unit(0.25, "inches")), size = 1, color = "black")
     }
   }
@@ -196,7 +196,6 @@ g_spiderplot <- function(x_label = "Time (Days)",
     pl <- pl + geom_vline(xintercept = vref_line, linetype = "dotted", color = "black")
   }
 
-  print(data.frame(dat$f_rows, dat$f_columns, dat$lab))
   #facets---------------
   if(is.null(facet_rows) && is.null(facet_columns)){
     pl

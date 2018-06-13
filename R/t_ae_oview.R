@@ -33,8 +33,6 @@
 #' library(dplyr)
 #' suppressPackageStartupMessages(library(tidyverse))
 #' library(rtables)
-#' library(haven)
-#' #adae = read_sas("/opt/bee/home_nas/zhanc107/osprey/adam/adae.sas7bdat")
 #' adae <- read_bce("/opt/BIOSTAT/home_ext2/qit3/cdt70194/go39733/libraries/adae.sas7bdat")
 #'
 #' tbl <- t_ae_oview(

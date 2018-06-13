@@ -73,31 +73,8 @@ tbl
 
 library(dplyr)
 library(rtables)
-library(haven)
 library(random.cdisc.data)
 
-\dontrun{
-adae = read_sas("/opt/bee/home_nas/zhanc107/osprey/adam/adae.sas7bdat")
-
-tbl2 <- t_ae(
-  class = adae$AESOC,
-  term =  adae$AEDECOD,
-  id = adae$USUBJID,
-  col_by = factor(adae$ARM),
-  total = "NONE",
-)
-
-tbl2
-
-tbl3 <- t_ae(
-  class = adae$AESOC,
-  term =  adae$AEDECOD,
-  id = adae$USUBJID,
-  col_by = factor(adae$ARM)
-)
-
-tbl3
-}
 
 data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
 
@@ -110,6 +87,16 @@ tbl4 <- t_ae(
 
 tbl4
 
+data <- read_bce("/opt/BIOSTAT/home_ext2/qit3/cdt70194/go39733/libraries/adae.sas7bdat")
+
+tbl5 <- t_ae(
+  class = data$AEBODSYS,
+  term =  data$AEDECOD,
+  id = data$USUBJID,
+  col_by = factor(data$ARM)
+)
+
+tbl5
 
 }
 \author{
