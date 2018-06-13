@@ -15,8 +15,8 @@
 #' @param line_color_colby vector defines by what variable plot is color coded
 #' @param datalabel_txt list defines text (at last time point) and flag for discontinued study
 #' (per defined variable) - elements must be labeled one/two/three
-#' one - text annotation next to final data point
-#' two - vector of ID's
+#' one - text annotation next to final data point (for text annotation)
+#' two - vector of ID's (for discontinued study marker)
 #' three - vector of ID's (subset of two) where arrow is desired to indicate discontinued study
 #' @param facet_rows vector defines what variable is used to split the
 #' plot into rows, default here is NULL
@@ -59,7 +59,8 @@
 #'              #marker_shape_opt = map_marker_shape,
 #'              marker_size = 5,
 #'              line_color_colby = dat$USUBJID,
-#'              datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+#'              #datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+#'              datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
 #'              facet_rows = dat$SEX,
 #'              facet_columns = dat$ARM,
 #'              vref_line = c(10, 37),
@@ -104,13 +105,13 @@ g_spiderplot <- function(x_label = "Time (Days)",
     dat$l_col <- line_color_colby
   }
   if(!is.null(datalabel_txt$one)){
-    cmp <- max(marker_x)
-    #dat_txt <- data.frame(day = marker_x, pchg = marker_y, lbl = datalabel_txt[[1]])
-    lbl <- apply(dat, 1, function(dat){if(dat[1] == cmp){dat[3]}else{""}})
-    dat$lab <- lbl
+    dat$lbl_all <- datalabel_txt$one
+    dat <- dat %>%
+      group_by(lbl_all) %>%
+      mutate(dat, lab = ifelse(day == max(day), as.character(lbl_all), " "))
   }
   if(!is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
-    dat$id <- datalabel_txt[[2]]
+    dat$id <- datalabel_txt$two
   }
 
   #plot spider plot-----------------
@@ -163,25 +164,17 @@ g_spiderplot <- function(x_label = "Time (Days)",
 
   #label at last data point---------
   if(!is.null(datalabel_txt)){
-    # cmp <- max(marker_x)
-    # #dat_txt <- data.frame(day = marker_x, pchg = marker_y, lbl = datalabel_txt[[1]])
-    # lbl <- apply(dat, 1, function(dat){if(dat[1] == cmp){dat[3]}else{""}})
-    # dat$lab <- lbl
-    #print(dat)
-    #print(lbl)
-    #dat_txt <- dat %>% mutate(lbl = if_else(day == cmp, id, ""))
 
     #datalabel_txt_mod <- gsub(" ", "\n ", lbl, fixed = TRUE)
     if(!is.null(datalabel_txt$one)){
-      pl <- pl + geom_text(data = dat, aes(x = day+3, y =  pchg, label= lab), size = 3)
-      pl <- pl + geom_text(data = dat, aes(x = dat$day+max(nchar(lbl)), y =  dat$pchg+(max(dat$pchg)/10), label= ""), size = 6)
+      pl <- pl + geom_text(data = dat, aes(x = day+5, y =  pchg, label= lab), size = 5)
+      pl <- pl + geom_text(data = dat, aes(x = dat$day+max(nchar(lab))+4, y =  dat$pchg+(max(dat$pchg)/10), label= ""), size = 6)
     }
     #pl <- pl + geom_text(data = dat_txt, mapping = aes(x = dat$day+3, y = dat$pchg, label = dat$id), size = 6)
 
     if(!is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
       dat_arrow <- dat %>%
-        filter(id %in% datalabel_txt[[3]]) %>%
-        #filter(day == cmp)
+        filter(id %in% datalabel_txt$three) %>%
         group_by(id) %>%
         filter(day == max(day))
 
