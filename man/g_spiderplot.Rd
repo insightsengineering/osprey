@@ -36,8 +36,8 @@ g_spiderplot(x_label = "Time (Days)", y_label = "Change (\%) from Baseline",
 
 \item{datalabel_txt}{list defines text (at last time point) and flag for discontinued study
 (per defined variable) - elements must be labeled one/two/three
-one - text annotation next to final data point
-two - vector of ID's
+one - text annotation next to final data point (for text annotation)
+two - vector of ID's (for discontinued study marker)
 three - vector of ID's (subset of two) where arrow is desired to indicate discontinued study}
 
 \item{facet_rows}{vector defines what variable is used to split the
@@ -86,6 +86,7 @@ g_spiderplot(x_label = "Time (Days)",
              marker_size = 5,
              line_color_colby = dat$USUBJID,
              datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+             #datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
              facet_rows = dat$SEX,
              facet_columns = dat$ARM,
              vref_line = c(10, 37),
