@@ -3,8 +3,7 @@
 \name{g_swimlane}
 \alias{g_swimlane}
 \alias{g_swimlane}
-\title{Swimlane Plot
-Swimlane bar plot for each id with markers}
+\title{Swimlane bar plot for each id with markers}
 \usage{
 g_swimlane(bar_by, bar_length, sort_by, col_by, marker_by, marker_shape,
   marker_pos, anno_txt, ytick_at, yref_line, xlab, ylab, title)
@@ -15,19 +14,19 @@ g_swimlane(bar_by, bar_length, sort_by, col_by, marker_by, marker_shape,
 \arguments{
 \item{bar_by}{variable to identify each bar. Default is \code{ID}.}
 
-\item{bar_length}{length variable for each bar}
+\item{bar_length}{numeric vector to be plotted as length for each bar}
 
-\item{sort_by}{variable to sort bars}
+\item{sort_by}{vector to sort bars}
 
-\item{col_by}{variable to color bars}
+\item{col_by}{vector to color bars}
 
 \item{marker_by}{variable to order markers}
 
-\item{marker_shape}{variable to specify shape and color for markers}
+\item{marker_shape}{vector to specify shape for markers}
 
-\item{marker_pos}{variable to specify position for markers}
+\item{marker_pos}{numeric vector to specify position for each marker}
 
-\item{anno_txt}{description in the left table}
+\item{anno_txt}{dataframe of variables to be displayed as annotation on the left}
 
 \item{ytick_at}{break interval of y-axis. It takes a numeric vector or \code{NULL}}
 
@@ -37,17 +36,23 @@ g_swimlane(bar_by, bar_length, sort_by, col_by, marker_by, marker_shape,
 
 \item{ylab}{y label}
 
-\item{title}{title}
+\item{title}{String to be displayed as plot title}
 
-\item{bar_by}{variable to identify each bar. Default is \code{ID}.}
+\item{bar_id}{vector of IDs to identify each bar}
+
+\item{marker_id}{vector of IDs to identify markers within each bar. Default is the same as bar_id.}
+
+\item{marker_shape_opt}{aesthetic values to map shape values (named vector to map shape values to each name)}
+
+\item{marker_color}{vector to specify color for markers}
+
+\item{marker_color_opt}{aesthetic values to map shape values (named vector to map shape values to each name)}
 
 \item{bar_length}{length variable for each bar}
 
 \item{sort_by}{variable to sort bars}
 
 \item{col_by}{variable to color bars}
-
-\item{marker_by}{variable to order markers}
 
 \item{marker_shape}{variable to specify shape and color for markers}
 
@@ -71,7 +76,6 @@ plot object
 plot object
 }
 \description{
-Swimlane Plot
 Swimlane bar plot for each id with markers
 
 Swimlane Plot
@@ -80,24 +84,23 @@ Swimlane bar plot for each id with markers
 \examples{
 
 library(random.cdisc.data)
-ASL <- radam("ASL", N=50, start_with = list(TRTDUR = rexp(nrow(ASL), 1/100)))
+library(dplyr)
+ASL <- radam("ASL", N=50, start_with = list(TRTDUR = rexp(50, 1/100)))
 ARS <- radam("ARS", ADSL = ASL,
 start_with = list(
       ADY = rexp(nrow(ASL), 1/80)
    )) \%>\% filter(PARAMCD == "OVRINV")
-ANL <- ASL \%>\% left_join(ARS, by = c("STUDYID", "USUBJID")) \%>\%
+ANL <- ASL \%>\% left_join(ARS, by = c("STUDYID", "USUBJID"))
 # pre-process bar length breaks for treatment duration for longitudinal records
-group_by(USUBJID) \%>\%
-mutate(n = n(), bar_len = TRTDUR/n)
-anno_txt <- ANL[, c("ARMCD", "SEX", "RACE")]
+anno_txt <- ASL[, c("ARMCD", "SEX", "RACE")]
 
-g_swimlane(bar_by = ANL$USUBJID,
-bar_length = ANL$bar_len ,
+g_swimlane(bar_id = ASL$USUBJID,
+bar_length = ASL$bar_len ,
 sort_by = ANL$ARM ,
 col_by = ANL$ARM ,
-marker_by = ANL$STUDYID,
-marker_shape = ANL$AVALC,
+marker_id = ANL$USUBJID,
 marker_pos = ANL$ADY ,
+marker_shape = ANL$AVALC,
 anno_txt = anno_txt,
 yref_line = c(100, 200),
 ytick_at = waiver(),
@@ -133,21 +136,21 @@ mutate(domain = "Discon")
 # combine with ASL to generate a length for each record
 ANL <- ASL \%>\% select(USUBJID, ARMCD, SEX, CADX, TRTDUR) \%>\%
 inner_join(rbind(ARS, ADS), "USUBJID") \%>\%
-# pre-process bar length breaks for treatment duration for longitudinal records
-group_by(USUBJID) \%>\%
-mutate(n = n(), bar_len = TRTDUR/n)
 anno_txt_var <- c("ARMCD", "SEX", "CADX")
 anno_txt <- ANL[, anno_txt_var]
 
-g_swimlane(bar_by = ANL$USUBJID,
-bar_length = ANL$bar_len ,
-sort_by = ANL$ARMCD ,
-col_by = ANL$ARMCD ,
-marker_by = ANL$domain,
-marker_shape = ANL$AVALC,
-marker_pos = ANL$ADY ,
+g_swimlane(bar_id = ASL$USUBJID,
+bar_length = ASL$TRTDUR ,
+sort_by = ASL$ARMCD ,
+col_by = ASL$ARMCD ,
+marker_id = ARS$USUBJID,
+marker_pos = ARS$ADY ,
+marker_shape = ARS$AVALC,
+marker_shape_opt <- c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15),
+marker_color = ARS$AVALC,
+marker_color_opt <- c("CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red"),
 anno_txt = NULL,
-yref_line = c(100, 200, 300),
+yref_line = c(100, 200),
 ytick_at = waiver(),
 xlab = "Patient ID",
 ylab = "Time from First Treatment (Day)",
