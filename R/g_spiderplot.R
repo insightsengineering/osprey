@@ -1,9 +1,7 @@
 #' Create a spiderplot for Early Development Visualization
 #'
 #'
-#' @param marker_x 2 options
-#' 1. for continuous variable: vector of x values
-#' 2. for discrete variable : dataframe with 2 columns,
+#' @param marker_x dataframe with 2 columns,
 #' column 1 is the vector of x values and
 #' column 2 is the vector to group the points together (default
 #' should be defined as USUBJID)
@@ -52,22 +50,20 @@
 #' atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 #' dat <- atr %>% filter(PARAMCD == "SUMTGLES")
 #'
-#' cmp <- max(dat["TUDY"])
-#' lbl <- apply(dat, 1, function(dat){if(dat["TUDY"] == cmp){paste(dat["USUBJID"], "test-length")}else{""}})
 #' colors <- c("black", "red", "blue", "green", "yellow", "brown")
 #' shapes <- c(0, 1, 2, 3, 4, 5, 6)
 #' map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
 #' map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
-#' g_spiderplot(marker_x = data.frame(day = dat$TUDY),
+#' g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
 #'              marker_y = dat$PCHG,
-#'              line_colby = dat$USUBJID,
+#'              line_colby = dat$RACE,
 #'              marker_color = dat$USUBJID,
 #'              #marker_color_opt = map_marker_color,
 #'              marker_shape = dat$RACE,
 #'              #marker_shape_opt = map_marker_shape,
 #'              marker_size = 5,
-#'              datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
-#'              #datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+#'              #datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+#'              datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
 #'              facet_rows = dat$SEX,
 #'              facet_columns = dat$ARM,
 #'              vref_line = c(10, 37),
@@ -80,13 +76,13 @@
 #' dat2 <- dat %>% arrange(TUDY) %>% mutate(day = as.character(TUDY)) %>% as.data.frame()
 #' g_spiderplot(marker_x = data.frame(day = as.factor(dat2$day), groupby = dat2$USUBJID),
 #'              marker_y = dat2$PCHG,
-#'              line_colby = dat2$USUBJID,
+#'              line_colby = dat2$RACE,
 #'              marker_color = dat2$USUBJID,
 #'              #marker_color_opt = map_marker_color,
 #'              marker_shape = dat2$RACE,
 #'              #marker_shape_opt = map_marker_shape,
 #'              marker_size = 5,
-#'              #datalabel_txt = list(one = dat2$USUBJID, two = dat2$USUBJID, three = c("id-2", "id-4", "id-7")),
+#'              datalabel_txt = list(one = dat2$USUBJID, two = dat2$USUBJID, three = c("id-2", "id-4", "id-7")),
 #'              #datalabel_txt = list(two = dat2$USUBJID, three = c("id-2", "id-4", "id-7")),
 #'              facet_rows = dat2$SEX,
 #'              facet_columns = dat2$ARM,
@@ -143,8 +139,8 @@ g_spiderplot <- function(marker_x,
 
     if(ncol(marker_x) == 1){
       dat <- dat %>%
-       group_by(lbl_all) %>%
-       mutate(dat, lab = ifelse(day == max(day), as.character(lbl_all), " "))
+        group_by(lbl_all) %>%
+        mutate(dat, lab = ifelse(day == max(day), as.character(lbl_all), " "))
     }
     else{
       dat <- dat %>%
@@ -159,17 +155,11 @@ g_spiderplot <- function(marker_x,
   dat <- dat %>% as.data.frame()
 
   #plot spider plot-----------------
-  if(ncol(marker_x) == 1){
-    pl <- ggplot(data = dat, aes(x = day, y = pchg)) +
-      xlab(x_label) +
-      ylab(y_label) +
-      theme(legend.position="top", legend.title = element_blank())
-  } else{
-    pl <- ggplot(data = dat, aes(x = day, y = pchg, group = group)) +
-      xlab(x_label) +
-      ylab(y_label) +
-      theme(legend.position="top", legend.title = element_blank())
-  }
+  pl <- ggplot(data = dat, aes(x = day, y = pchg, group = group)) +
+    xlab(x_label) +
+    ylab(y_label) +
+    theme(legend.position="top", legend.title = element_blank())
+
 
   #line color
   if(!is.null(line_colby)){
@@ -210,7 +200,7 @@ g_spiderplot <- function(marker_x,
 
     if(!is.null(datalabel_txt$one) && is.null(datalabel_txt$two) && is.null(datalabel_txt$three)){
       pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.3, size = 5)
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 6)
+      #pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 6)
     } else if(is.null(datalabel_txt$one) && !is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
 
       if(ncol(marker_x) == 1){
@@ -226,14 +216,14 @@ g_spiderplot <- function(marker_x,
       }
 
       if(ncol(marker_x) == 1){
-        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day+3, yend = pchg), arrow = arrow(length = unit(0.1, "inches")), size = 0.4, color = "black")
+        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black")
       } else{
-        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.1, "inches")), size = 0.4, color = "black")
+        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "last", type = "closed"), size = 0.4, color = "black")
       }
       pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 6)
     } else if(!is.null(datalabel_txt$one) && !is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.3, size = 5)
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 6)
+      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.45, size = 5)
+      #pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 6)
 
       if(ncol(marker_x) == 1){
         dat_arrow <- dat %>%
@@ -248,9 +238,9 @@ g_spiderplot <- function(marker_x,
       }
 
       if(ncol(marker_x) == 1){
-        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day+3, yend = pchg), arrow = arrow(length = unit(0.1, "inches")), size = 0.4, color = "black")
+        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black")
       } else{
-        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.1, "inches")), size = 0.4, color = "black")
+        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "last", type = "closed"), size = 0.4, color = "black")
       }
     }
   }
@@ -282,8 +272,15 @@ g_spiderplot <- function(marker_x,
   }
 
   #modify background color
-  pl <- pl + theme_classic()+ theme(strip.background = element_rect(colour = "white", fill = "white"), text = element_text(size = 25))
+  pl <- pl + theme_classic()+ theme(strip.background = element_rect(colour = "white", fill = "white"),
+                                    text = element_text(size = 25),
+                                    axis.text = element_text(color = "black"))
 
+  if(is.numeric(marker_x[, 1])){
+    pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.15)
+  }else{
+    pl <- pl + scale_x_discrete(expand = c(0.15, 0))
+  }
   pl
 
 }

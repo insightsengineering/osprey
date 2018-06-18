@@ -12,9 +12,7 @@ g_spiderplot(marker_x, marker_y, line_colby = NULL, marker_color = NULL,
   show_legend = FALSE, draw = TRUE, newpage = TRUE)
 }
 \arguments{
-\item{marker_x}{2 options
-1. for continuous variable: vector of x values
-2. for discrete variable : dataframe with 2 columns,
+\item{marker_x}{dataframe with 2 columns,
 column 1 is the vector of x values and
 column 2 is the vector to group the points together (default
 should be defined as USUBJID)}
@@ -78,22 +76,20 @@ require(lemon)
 atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")
 
-cmp <- max(dat["TUDY"])
-lbl <- apply(dat, 1, function(dat){if(dat["TUDY"] == cmp){paste(dat["USUBJID"], "test-length")}else{""}})
 colors <- c("black", "red", "blue", "green", "yellow", "brown")
 shapes <- c(0, 1, 2, 3, 4, 5, 6)
 map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
 map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
-g_spiderplot(marker_x = data.frame(day = dat$TUDY),
+g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              marker_y = dat$PCHG,
-             line_colby = dat$USUBJID,
+             line_colby = dat$RACE,
              marker_color = dat$USUBJID,
              #marker_color_opt = map_marker_color,
              marker_shape = dat$RACE,
              #marker_shape_opt = map_marker_shape,
              marker_size = 5,
-             datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
-             #datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+             #datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+             datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
              facet_rows = dat$SEX,
              facet_columns = dat$ARM,
              vref_line = c(10, 37),
@@ -106,13 +102,13 @@ g_spiderplot(marker_x = data.frame(day = dat$TUDY),
 dat2 <- dat \%>\% arrange(TUDY) \%>\% mutate(day = as.character(TUDY)) \%>\% as.data.frame()
 g_spiderplot(marker_x = data.frame(day = as.factor(dat2$day), groupby = dat2$USUBJID),
              marker_y = dat2$PCHG,
-             line_colby = dat2$USUBJID,
+             line_colby = dat2$RACE,
              marker_color = dat2$USUBJID,
              #marker_color_opt = map_marker_color,
              marker_shape = dat2$RACE,
              #marker_shape_opt = map_marker_shape,
              marker_size = 5,
-             #datalabel_txt = list(one = dat2$USUBJID, two = dat2$USUBJID, three = c("id-2", "id-4", "id-7")),
+             datalabel_txt = list(one = dat2$USUBJID, two = dat2$USUBJID, three = c("id-2", "id-4", "id-7")),
              #datalabel_txt = list(two = dat2$USUBJID, three = c("id-2", "id-4", "id-7")),
              facet_rows = dat2$SEX,
              facet_columns = dat2$ARM,
