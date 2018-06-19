@@ -26,7 +26,6 @@
 #' @export
 #'
 #' @examples
-#'
 #' library(random.cdisc.data)
 #' library(dplyr)
 #' ASL <- radam("ASL", N=50, start_with = list(TRTDUR = rexp(50, 1/100)))
@@ -39,16 +38,19 @@
 #' anno_txt <- ASL[, c("ARMCD", "SEX", "RACE")]
 #'
 #' g_swimlane(bar_id = ASL$USUBJID,
-#' bar_length = ASL$bar_len ,
+#' bar_length = ASL$TRTDUR ,
 #' sort_by = ANL$ARM ,
 #' col_by = ANL$ARM ,
 #' marker_id = ANL$USUBJID,
 #' marker_pos = ANL$ADY ,
 #' marker_shape = ANL$AVALC,
+#' marker_shape_opt = c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 4),
+#' marker_color = NULL,
+#' marker_color_opt = NULL,
 #' anno_txt = anno_txt,
 #' yref_line = c(100, 200),
 #' ytick_at = waiver(),
-#' xlab = "Patient ID",
+#' # xlab = "Patient ID",
 #' ylab = "Time from First Treatment (Day)",
 #' title = "Swimlane Plot")
 #'
@@ -65,38 +67,39 @@
 #' left_join(asl, by = "USUBJID") %>%
 #' filter(SAFFL == "Y")
 #'
+#' anno_txt_var <- c("ARMCD", "SEX", "CADX")
+#' anno_txt <- ASL[, anno_txt_var]
+#'
 #' ARS <- ASL %>% select(USUBJID) %>%
 #' left_join(xars %>% filter(grepl("1a", APERIDC2)), "USUBJID") %>%
 #' filter(PARAMCD == "OVRINV") %>%
-#' select(USUBJID, ADY, AVALC) %>%
-#' mutate(domain = "Response")
+#' select(USUBJID, ADY, AVALC)
 #'
 #' ADS <- ASL %>%
 #' filter(DISCSTUD == "Y" | !is.na(STDSSDT)) %>%
 #' select(USUBJID, STDDRS, STDSDY) %>%
-#' rename(ADY = STDSDY, AVALC = STDDRS) %>%
-#' mutate(domain = "Discon")
+#' rename(ADY = STDSDY, AVALC = STDDRS)
 #'
 #' # combine with ASL to generate a length for each record
 #' ANL <- ASL %>% select(USUBJID, ARMCD, SEX, CADX, TRTDUR) %>%
-#' inner_join(rbind(ARS, ADS), "USUBJID") %>%
-#' anno_txt_var <- c("ARMCD", "SEX", "CADX")
-#' anno_txt <- ANL[, anno_txt_var]
+#' inner_join(rbind(ARS, ADS), "USUBJID")
 #'
 #' g_swimlane(bar_id = ASL$USUBJID,
-#' bar_length = ASL$TRTDUR ,
-#' sort_by = ASL$ARMCD ,
-#' col_by = ASL$ARMCD ,
-#' marker_id = ARS$USUBJID,
-#' marker_pos = ARS$ADY ,
-#' marker_shape = ARS$AVALC,
-#' marker_shape_opt <- c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15),
-#' marker_color = ARS$AVALC,
-#' marker_color_opt <- c("CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red"),
-#' anno_txt = NULL,
+#' bar_length = ASL$TRTDUR,
+#' sort_by = ASL$ARMCD,
+#' col_by = ASL$ARMCD,
+#' marker_id = ANL$USUBJID,
+#' marker_pos = ANL$ADY,
+#' marker_shape = ANL$AVALC,
+#' marker_shape_opt <- c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15,
+#' "DEATH" = 8, "LOST TO FOLLOW-UP" = 10, "WITHDRAWAL BY SUBJECT" = 14),
+#' marker_color = ANL$AVALC,
+#' marker_color_opt <- c("CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
+#' "DEATH" = "black", "LOST TO FOLLOW-UP" = "purple", "WITHDRAWAL BY SUBJECT" = "darkred"),
+#' anno_txt = anno_txt,
 #' yref_line = c(100, 200),
 #' ytick_at = waiver(),
-#' xlab = "Patient ID",
+#' # xlab = "Patient ID",
 #' ylab = "Time from First Treatment (Day)",
 #' title = "Swimlane Plot")
 #'
@@ -116,7 +119,7 @@ g_swimlane <- function(bar_id,
                        anno_txt = NULL,
                        yref_line = NULL,
                        ytick_at = waiver(),
-                       xlab,
+                       # xlab,
                        ylab,
                        title
 ) {
@@ -145,6 +148,12 @@ g_swimlane <- function(bar_id,
     bar_data$bar_id = factor(bar_data$bar_id, levels = rev(unique(bar_data$bar_id[order(bar_data$bar_length, decreasing = TRUE)])))
   }
 
+  # labeling
+  # xlabel <- deparse(substitute(bar_id))
+  ylabel <- deparse(substitute(bar_length))
+  # xlab <- if (is.null(xlab)) xlabel else xlab
+  ylab <- if (is.null(ylab)) ylabel else ylab
+
   # plot bar plot first
   p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_length)) +
     geom_bar(stat = "identity", aes(fill = col_by)) +
@@ -153,13 +162,19 @@ g_swimlane <- function(bar_id,
       panel.background = element_blank(),
       panel.grid = element_blank(),
       axis.line = element_line(colour = "black"),
-      axis.title = element_blank(),
       axis.text.y = element_blank()
-    )
+    ) +
+    # xlab(xlab) +
+    ylab(ylab)
 
   if (!is.null(col_by)) {
-    p <- p + guides(fill = guide_legend("Bar Color", order = 1))
+    p <- p + guides(fill = guide_legend("Bar Color", order = 1)) +
+      theme(
+        legend.title = element_text(size = 7),
+        legend.text = element_text(size = 7),
+        legend.key = element_rect(fill = NA))
   }
+
 
   # plot marker
   if (!is.null(marker_pos)) {
@@ -179,27 +194,30 @@ g_swimlane <- function(bar_id,
       p <- p + guides(color = FALSE)
     }
 
-    p <- p +
-      scale_shape_manual(name = "Marker Shape",
-                         breaks = rev(unique(marker_data$marker_shape)),
-                         values = marker_shape_opt) +
-      scale_colour_manual(name = "Marker Color",
-                          breaks = rev(unique(marker_data$marker_color)),
-                          values = marker_color_opt) +
-      theme(
-        legend.title = element_text(size = 7),
-        legend.text = element_text(size = 7),
-        legend.key = element_rect(fill = NA)
-      )
+    if (!is.null(marker_shape_opt)) {
+      p <- p + scale_shape_manual(name = "Marker Shape",
+                                  breaks = marker_data$marker_shape,
+                                  values = marker_shape_opt)
+    } else{
+      p <- p + scale_shape_manual(name = "Marker Shape",
+                                  breaks = marker_data$marker_shape,
+                                  values = c(15:25, 0:14))
+    }
+
+    if (!is.null(marker_color_opt)) {
+      p <- p + scale_color_manual(name = "Marker Color",
+                                  breaks = marker_data$marker_color,
+                                  values = marker_color_opt)
+    } else{
+      p <- p + scale_color_manual(name = "Marker Shape",
+                                  breaks = marker_data$marker_color,
+                                  values = c(1:25))
+    }
+
   }
 
-  if (!is.null(marker_shape)) {
-    p <- p + guides(shape = guide_legend("Marker Shape", order = 2))
-  } else {
-    p <- p + guides(shape = FALSE)
-  }
 
-  # plot reference line
+  # plot reference lines
   if (!is.null(yref_line)) {
     p <- p + geom_hline(yintercept = yref_line, linetype = "dashed", color = "red")
   }
@@ -209,16 +227,6 @@ g_swimlane <- function(bar_id,
     p <- p +
       labs(title = title) +
       theme(plot.title = element_text(face = "bold"))
-  }
-
-  if (!is.null(xlab)) {
-    p <- p +
-      labs(x = xlab)
-  }
-
-  if (!is.null(ylab)) {
-    p <- p +
-      labs(x = ylab)
   }
 
 
