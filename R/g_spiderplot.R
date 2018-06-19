@@ -50,6 +50,9 @@
 #' atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 #' dat <- atr %>% filter(PARAMCD == "SUMTGLES")
 #'
+#' #test changing where annotation marker lies
+#' dat <- dat[-4, ]
+#'
 #' colors <- c("black", "red", "blue", "green", "yellow", "brown")
 #' shapes <- c(0, 1, 2, 3, 4, 5, 6)
 #' map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
@@ -62,8 +65,8 @@
 #'              marker_shape = dat$RACE,
 #'              #marker_shape_opt = map_marker_shape,
 #'              marker_size = 5,
-#'              #datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
-#'              datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+#'              datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-1", "id-4", "id-7")),
+#'              #datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
 #'              facet_rows = dat$SEX,
 #'              facet_columns = dat$ARM,
 #'              vref_line = c(10, 37),
@@ -199,8 +202,7 @@ g_spiderplot <- function(marker_x,
   if(!is.null(datalabel_txt)){
 
     if(!is.null(datalabel_txt$one) && is.null(datalabel_txt$two) && is.null(datalabel_txt$three)){
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.3, size = 5)
-      #pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 6)
+      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.3, size = 4)
     } else if(is.null(datalabel_txt$one) && !is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
 
       if(ncol(marker_x) == 1){
@@ -220,10 +222,9 @@ g_spiderplot <- function(marker_x,
       } else{
         pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "last", type = "closed"), size = 0.4, color = "black")
       }
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 6)
+      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 4)
     } else if(!is.null(datalabel_txt$one) && !is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.45, size = 5)
-      #pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 6)
+      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.45, size = 4)
 
       if(ncol(marker_x) == 1){
         dat_arrow <- dat %>%
@@ -277,15 +278,10 @@ g_spiderplot <- function(marker_x,
                                     axis.text = element_text(color = "black"))
 
   if(is.numeric(marker_x[, 1])){
-    pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.15)
+    pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.3)
   }else{
-    pl <- pl + scale_x_discrete(expand = c(0.15, 0))
+    pl <- pl + scale_x_discrete(expand = c(0.3, 0))
   }
   pl
 
 }
-
-# ggplot(data = dat2, aes(x = day, y = PCHG, group = USUBJID)) +
-#   geom_line(aes(color = USUBJID), show.legend = FALSE) +
-#   geom_point(aes(color = USUBJID, shape = RACE), size = 4, show.legend = FALSE) +
-#   facet_grid(SEX ~ ARM)
