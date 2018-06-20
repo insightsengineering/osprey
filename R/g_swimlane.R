@@ -251,7 +251,6 @@ g_swimlane <- function(bar_id,
                     anno_txt)
   }
 
-  # t <- t[!duplicated(t),]
   # if sort by a variable, reorder bar_id; otherwise sort by bar length
   if (!is.null(sort_by)) {
     t <- t[with(t, order(sort_by, bar_id)), -c(2,3)]
