@@ -12,8 +12,8 @@
 #' @param marker_color_opt aesthetic values to map shape values (named vector to map shape values to each name)
 #' @param anno_txt dataframe of variables to be displayed as annotation on the left
 #' @param yref_line numeric vector to plot reference lines
-#' @param ytick_at break interval of y-axis. It takes a numeric vector or \code{NULL}
-#' @param xlab x label
+#' @param ytick_at break interval of y-axis
+# #' @param xlab x label
 #' @param ylab y label
 #' @param title String to be displayed as plot title
 #'
@@ -38,11 +38,11 @@
 #' anno_txt <- ASL[, c("ARMCD", "SEX", "RACE")]
 #'
 #' g_swimlane(bar_id = ASL$USUBJID,
-#' bar_length = ASL$TRTDUR ,
-#' sort_by = ANL$ARM ,
-#' col_by = ANL$ARM ,
+#' bar_length = ASL$TRTDUR,
+#' sort_by = ANL$ARM,
+#' col_by = ANL$ARM,
 #' marker_id = ANL$USUBJID,
-#' marker_pos = ANL$ADY ,
+#' marker_pos = ANL$ADY,
 #' marker_shape = ANL$AVALC,
 #' marker_shape_opt = c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 4),
 #' marker_color = NULL,
@@ -124,21 +124,31 @@ g_swimlane <- function(bar_id,
                        title
 ) {
 
+  # check data
+  if (!is.null(sort_by)) tern:::check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
+  if (!is.null(col_by)) tern:::check_same_N(bar_id = bar_id, bar_length = bar_length, col_by = col_by)
+
+  if (!is.null(marker_id) & length(which(!marker_id %in% bar_id)) > 0) stop("marker_id ", marker_id[which(!marker_id %in% bar_id)], " is not in bar_id")
+
+  if (!is.null(marker_id) & !is.null(marker_pos)) tern:::check_same_N(marker_id = marker_id, marker_pos = marker_pos)
+  if (!is.null(marker_id) & !is.null(marker_shape)) tern:::check_same_N(marker_id = marker_id, marker_shape = marker_shape)
+  if (!is.null(marker_id) & !is.null(marker_color)) tern:::check_same_N(marker_id = marker_id, marker_color = marker_color)
+
   # data for plot
   bar_data <- data.frame(
     bar_id,
     bar_length,
-    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
-    col_by = if (is.null(col_by)) "x" else to_n(col_by, length(bar_length))
+    sort_by = if (is.null(sort_by)) "x" else tern:::to_n(sort_by, length(bar_length)),
+    col_by = if (is.null(col_by)) "x" else tern:::to_n(col_by, length(bar_length))
     )
 
   #data for marker
   if (is.null(marker_id)) marker_id <- bar_id
   marker_data <- data.frame(
     marker_id,
-    marker_pos = if (is.null(marker_pos)) "x" else to_n(marker_pos, length(marker_id)),
-    marker_shape = if (is.null(marker_shape)) "x" else to_n(marker_shape, length(marker_id)),
-    marker_color = if (is.null(marker_color)) "x" else to_n(marker_color, length(marker_id))
+    marker_pos = if (is.null(marker_pos)) "x" else tern:::to_n(marker_pos, length(marker_id)),
+    marker_shape = if (is.null(marker_shape)) "x" else tern:::to_n(marker_shape, length(marker_id)),
+    marker_color = if (is.null(marker_color)) "x" else tern:::to_n(marker_color, length(marker_id))
     )
 
   # if sort by a variable, reorder bar_id; otherwise sort by bar length
@@ -162,7 +172,8 @@ g_swimlane <- function(bar_id,
       panel.background = element_blank(),
       panel.grid = element_blank(),
       axis.line = element_line(colour = "black"),
-      axis.text.y = element_blank()
+      axis.text.y = element_blank(),
+      axis.title.y = element_blank()
     ) +
     # xlab(xlab) +
     ylab(ylab)
@@ -233,10 +244,10 @@ g_swimlane <- function(bar_id,
   # create annotation as a separate table plot
   if (is.null(anno_txt)) {
     t <- data.frame(bar_id, bar_length,
-                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)))
+                    sort_by = if (is.null(sort_by)) "x" else tern:::to_n(sort_by, length(bar_length)))
   } else {
     t <- data.frame(bar_id, bar_length,
-                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
+                    sort_by = if (is.null(sort_by)) "x" else tern:::to_n(sort_by, length(bar_length)),
                     anno_txt)
   }
 
@@ -248,7 +259,6 @@ g_swimlane <- function(bar_id,
     t <- t[with(t, order(bar_length, bar_id)), -c(2,3)]
   }
 
-  t <- as.data.frame(t)
   colnames(t)[1] <- " "
 
   my_theme <- ttheme_default(
