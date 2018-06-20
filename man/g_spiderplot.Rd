@@ -77,21 +77,26 @@ atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")
 
 #test changing where annotation marker lies
-dat <- dat[-4, ]
+#dat <- dat[-4, ]
 
 colors <- c("black", "red", "blue", "green", "yellow", "brown")
 shapes <- c(0, 1, 2, 3, 4, 5, 6)
-map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
-map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
+#map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
+#map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
 g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              marker_y = dat$PCHG,
              line_colby = dat$RACE,
-             marker_color = dat$USUBJID,
-             #marker_color_opt = map_marker_color,
+             marker_color = dat$RACE,
+             marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
+                                  "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
+                                  "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
              marker_shape = dat$RACE,
-             #marker_shape_opt = map_marker_shape,
+             marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
+                                  "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
+                                  "AMERICAN INDIAN OR ALASKA NATIVE" = 5),
              marker_size = 5,
-             datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-1", "id-4", "id-7")),
+             datalabel_txt = list(one = dat$USUBJID),
+             #datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-1", "id-4", "id-7")),
              #datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
              facet_rows = dat$SEX,
              facet_columns = dat$ARM,
@@ -99,7 +104,7 @@ g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              href_line = -0.3,
              x_label = "Time (Days)",
              y_label = "Change (\%) from Baseline",
-             show_legend = FALSE)
+             show_legend = TRUE)
 
 #test discrete x-axis points
 dat2 <- dat \%>\% arrange(TUDY) \%>\% mutate(day = as.character(TUDY)) \%>\% as.data.frame()

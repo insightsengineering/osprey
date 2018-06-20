@@ -51,21 +51,26 @@
 #' dat <- atr %>% filter(PARAMCD == "SUMTGLES")
 #'
 #' #test changing where annotation marker lies
-#' dat <- dat[-4, ]
+#' #dat <- dat[-4, ]
 #'
 #' colors <- c("black", "red", "blue", "green", "yellow", "brown")
 #' shapes <- c(0, 1, 2, 3, 4, 5, 6)
-#' map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
-#' map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
+#' #map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
+#' #map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
 #' g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
 #'              marker_y = dat$PCHG,
 #'              line_colby = dat$RACE,
-#'              marker_color = dat$USUBJID,
-#'              #marker_color_opt = map_marker_color,
+#'              marker_color = dat$RACE,
+#'              marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
+#'                                   "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
+#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
 #'              marker_shape = dat$RACE,
-#'              #marker_shape_opt = map_marker_shape,
+#'              marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
+#'                                   "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
+#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = 5),
 #'              marker_size = 5,
-#'              datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-1", "id-4", "id-7")),
+#'              datalabel_txt = list(one = dat$USUBJID),
+#'              #datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-1", "id-4", "id-7")),
 #'              #datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
 #'              facet_rows = dat$SEX,
 #'              facet_columns = dat$ARM,
@@ -73,7 +78,7 @@
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
-#'              show_legend = FALSE)
+#'              show_legend = TRUE)
 #'
 #' #test discrete x-axis points
 #' dat2 <- dat %>% arrange(TUDY) %>% mutate(day = as.character(TUDY)) %>% as.data.frame()
@@ -173,27 +178,11 @@ g_spiderplot <- function(marker_x,
 
   #marker shape and color------------
   if(!is.null(marker_color) && !is.null(marker_shape)){
-    if(!is.null(marker_color_opt) && !is.null(marker_shape_opt)){
-      pl <- pl + geom_point(aes(color = m_col, shape = sh), shape = marker_shape_opt, colour = marker_color_opt, size = marker_size, show.legend = show_legend)
-    } else if(!is.null(marker_color_opt) && is.null(marker_shape_opt)){
-      pl <- pl + geom_point(aes(color = m_col, shape = sh), colour = marker_color_opt, size = marker_size, show.legend = show_legend)
-    } else if(is.null(marker_color_opt) && !is.null(marker_shape_opt)){
-      pl <- pl + geom_point(aes(color = m_col, shape = sh), shape = marker_shape_opt, size = marker_size, show.legend = show_legend)
-    } else{
       pl <- pl + geom_point(aes(color = m_col, shape = sh), size = marker_size, show.legend = show_legend)
-    }
   } else if(!is.null(marker_color) && is.null(marker_shape)){
-    if(!is.null(marker_color_opt)){
-      pl <- pl + geom_point(color = marker_color_opt, size = marker_size, show.legend = show_legend)
-    } else{
       pl <- pl + geom_point(aes(color = m_col), size = marker_size, show.legend = show_legend)
-    }
   } else if(is.null(marker_color) && !is.null(marker_shape)){
-    if(!is.null(marker_shape_opt)){
-      pl <- pl + geom_point(shape = marker_shape_opt, size = marker_size, show.legend = show_legend)
-    } else{
       pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
-    }
   } else if(is.null(marker_color) && is.null(marker_shape)){
     pl <- pl + geom_point(size = 3, show.legend = show_legend)
   }
@@ -202,47 +191,24 @@ g_spiderplot <- function(marker_x,
   if(!is.null(datalabel_txt)){
 
     if(!is.null(datalabel_txt$one) && is.null(datalabel_txt$two) && is.null(datalabel_txt$three)){
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.3, size = 4)
+      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.3, size = 4, show.legend = FALSE)
     } else if(is.null(datalabel_txt$one) && !is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
 
-      if(ncol(marker_x) == 1){
-        dat_arrow <- dat %>%
-          filter(id %in% datalabel_txt$three) %>%
-          group_by(id) %>%
-          filter(day == max(day))
-      } else{
-        dat_arrow <- dat %>%
-          filter(id %in% datalabel_txt$three) %>%
-          group_by(id) %>%
-          filter(day == last(day))
-      }
+      dat_arrow <- dat %>%
+        filter(id %in% datalabel_txt$three) %>%
+        group_by(id) %>%
+        filter(day == last(day))
+      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
 
-      if(ncol(marker_x) == 1){
-        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black")
-      } else{
-        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "last", type = "closed"), size = 0.4, color = "black")
-      }
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= ""), hjust = -1, vjust = -3, size = 4)
     } else if(!is.null(datalabel_txt$one) && !is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.45, size = 4)
+      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.45, size = 4, show.legend = FALSE)
 
-      if(ncol(marker_x) == 1){
-        dat_arrow <- dat %>%
-          filter(id %in% datalabel_txt$three) %>%
-          group_by(id) %>%
-          filter(day == max(day))
-      }  else{
-        dat_arrow <- dat %>%
-          filter(id %in% datalabel_txt$three) %>%
-          group_by(id) %>%
-          filter(day == last(day))
-      }
+      dat_arrow <- dat %>%
+        filter(id %in% datalabel_txt$three) %>%
+        group_by(id) %>%
+        filter(day == last(day))
+      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
 
-      if(ncol(marker_x) == 1){
-        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black")
-      } else{
-        pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "last", type = "closed"), size = 0.4, color = "black")
-      }
     }
   }
 
@@ -270,6 +236,21 @@ g_spiderplot <- function(marker_x,
     pl <- pl + facet_rep_grid(f_rows ~.)
   } else{
     pl <- pl + facet_rep_grid(f_rows ~ f_columns)
+  }
+
+  print(dat$m_col)
+  print(unique(dat$m_col))
+
+  #marker and color options
+  if(!is.null(marker_color_opt)){
+    pl <- pl + scale_color_manual(name = "Marker Color",
+                            breaks = dat$m_col,
+                            values = marker_color_opt)
+  }
+  if(!is.null(marker_shape_opt)){
+    pl <- pl + scale_shape_manual(name = "Marker Shape",
+                                  breaks = dat$sh,
+                                  values = marker_shape_opt)
   }
 
   #modify background color
