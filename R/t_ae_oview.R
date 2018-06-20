@@ -112,84 +112,24 @@ t_ae_oview <- function(id,
 
   #includes death flag
   df_d <- data.frame(id = id,
-                     dthfl = dthfl,
+                     dthfl = toupper(dthfl),
                      col_by = col_by,
                      stringsAsFactors = FALSE)
 
   #includes withdrawn flag
   df_w <- data.frame(id = id,
-                     dcsreas = dcsreas,
+                     dcsreas = toupper(dcsreas),
                      col_by = col_by,
                      stringsAsFactors = FALSE)
 
   #includes fatal flag
-  df_fatal <- data.frame(id = id,
-                         aesdth = aesdth,
-                         col_by = col_by,
-                         stringsAsFactors = FALSE)
-
-  #includes serious flag
-  df_ser <- data.frame(id = id,
-                       aeser = aeser,
-                       col_by = col_by,
-                       stringsAsFactors = FALSE)
-
-  #includes serious flag + action taken flag
-  df_serwd <- data.frame(id = id,
-                         aeser = aeser,
-                         aeacn = aeacn,
-                         col_by = col_by,
-                         stringsAsFactors = FALSE)
-
-  #includes serious flag + action taken flag
-  df_serdsm <- data.frame(id = id,
-                          aeser = aeser,
-                          aeacn = aeacn,
-                          col_by = col_by,
-                          stringsAsFactors = FALSE)
-
-  #includes serious flag + related flag
-  df_relser <- data.frame(id = id,
-                          aeser = aeser,
-                          arel = arel,
-                          col_by = col_by,
-                          stringsAsFactors = FALSE)
-
-  #includes action taken flag
-  df_wd <- data.frame(id = id,
-                      aeacn = aeacn,
-                      col_by = col_by,
-                      stringsAsFactors = FALSE)
-
-  #includes action taken flag
-  df_dsm <- data.frame(id = id,
-                       aeacn = aeacn,
-                       col_by = col_by,
-                       stringsAsFactors = FALSE)
-
-  #includes causality flag
-  df_rel <- data.frame(id = id,
-                       aerel = aerel,
-                       col_by = col_by,
-                       stringsAsFactors = FALSE)
-
-  #includes causality flag + action taken flag
-  df_relwd <- data.frame(id = id,
-                         aerel = aerel,
-                         aeacn = aeacn,
-                         col_by = col_by,
-                         stringsAsFactors = FALSE)
-
-  #includes analysis causality flag + action taken flag
-  df_reldsm <- data.frame(id = id,
-                          arel = arel,
-                          aeacn = aeacn,
-                          col_by = col_by,
-                          stringsAsFactors = FALSE)
-
-  #includes toxicity flag
-  df_ctc35 <- data.frame(id = id,
-                         aetoxgr = aetoxgr,
+  df_flags <- data.frame(id = id,
+                         aesdth = toupper(aesdth),
+                         aeser = toupper(aeser),
+                         aeacn = toupper(aeacn),
+                         arel = toupper(arel),
+                         aerel = toupper(aerel),
+                         aetoxgr = toupper(aetoxgr),
                          col_by = col_by,
                          stringsAsFactors = FALSE)
 
@@ -198,17 +138,7 @@ t_ae_oview <- function(id,
     df <- duplicate_with_var(df, id = paste(df$id, "-", total), col_by = total)
     df_d <- duplicate_with_var(df_d, id = paste(df_d$id, "-", total), col_by = total)
     df_w <- duplicate_with_var(df_w, id = paste(df_w$id, "-", total), col_by = total)
-    df_fatal <- duplicate_with_var(df_fatal, id = paste(df_fatal$id, "-", total), col_by = total)
-    df_ser <- duplicate_with_var(df_ser, id = paste(df_ser$id, "-", total), col_by = total)
-    df_serwd <- duplicate_with_var(df_serwd, id = paste(df_serwd$id, "-", total), col_by = total)
-    df_serdsm <- duplicate_with_var(df_serdsm, id = paste(df_serdsm$id, "-", total), col_by = total)
-    df_relser <- duplicate_with_var(df_relser, id = paste(df_relser$id, "-", total), col_by = total)
-    df_wd <- duplicate_with_var(df_wd, id = paste(df_wd$id, "-", total), col_by = total)
-    df_dsm <- duplicate_with_var(df_dsm, id = paste(df_dsm$id, "-", total), col_by = total)
-    df_rel <- duplicate_with_var(df_rel, id = paste(df_rel$id, "-", total), col_by = total)
-    df_relwd <- duplicate_with_var(df_relwd, id = paste(df_relwd$id, "-", total), col_by = total)
-    df_reldsm <- duplicate_with_var(df_reldsm, id = paste(df_reldsm$id, "-", total), col_by = total)
-    df_ctc35 <- duplicate_with_var(df_ctc35, id = paste(df_ctc35$id, "-", total), col_by = total)
+    df_flags <- duplicate_with_var(df_flags, id = paste(df_flags$id, "-", total), col_by = total)
   }
 
 
@@ -219,38 +149,29 @@ t_ae_oview <- function(id,
   df <- na.omit(df)
   df_d <- na.omit(df_d)
   df_w <- na.omit(df_w)
-  df_fatal <- na.omit(df_fatal)
-  df_ser <- na.omit(df_ser)
-  df_serwd <- na.omit(df_serwd)
-  df_serdsm <- na.omit(df_serdsm)
-  df_relser <- na.omit(df_relser)
-  df_wd <- na.omit(df_wd)
-  df_dsm <- na.omit(df_dsm)
-  df_rel <- na.omit(df_rel)
-  df_relwd <- na.omit(df_relwd)
-  df_reldsm <- na.omit(df_reldsm)
-  df_ctc35 <- na.omit(df_ctc35)
+  df_flags <- na.omit(df_flags)
 
   dsm <- c("DRUG INTERRUPTED", "DOSE INCREASED", "DOSE REDUCED")
 
   #convert Y/N or event tag to 1/0
   df_d$dthfl <- factor(if_else(df_d$dthfl == "Y", 1, 0))
   df_w$dcsreas <- factor(if_else(df_w$dcsreas == "ADVERSE EVENT", 1, 0))
-  df_fatal$aesdth <- factor(if_else(df_fatal$aesdth == "Y", 1, 0))
-  df_ser$aeser  <- factor(if_else(df_ser$aeser == "Y", 1, 0))
-  df_serwd$fin <- factor(if_else(df_serwd$aeser == "Y" & df_serwd$aeacn == "DRUG WITHDRAWN", 1, 0))
-  df_serdsm$fin <- factor(if_else(df_serdsm$aeser == "Y" &
-                                    df_serdsm$aeacn %in% dsm, 1, 0))
-  df_relser$fin <- factor(if_else(df_relser$aeser == "Y" &
-                                    df_relser$arel == "Y", 1, 0))
-  df_wd$aeacn  <- factor(if_else(df_wd$aeacn == "DRUG WITHDRAWN", 1, 0))
-  df_dsm$aeacn <- factor(if_else(df_dsm$aeacn %in% dsm, 1, 0))
-  df_rel$aerel <- factor(if_else(df_rel$aerel == "Y", 1, 0))
-  df_relwd$fin <- factor(if_else(df_relwd$aerel == "Y" &
-                                   df_relwd$aeacn == "DRUG WITHDRAWN", 1, 0))
-  df_reldsm$fin <- factor(if_else(df_reldsm$arel == "Y" &
-                                    df_reldsm$aeacn %in% dsm, 1, 0))
-  df_ctc35$aetoxgr <- factor(if_else(df_ctc35$aetoxgr %in% c("3", "4", "5"), 1, 0))
+  df_flags$fatal <- factor(if_else(df_flags$aesdth == "Y", 1, 0))
+  df_flags$ser  <- factor(if_else(df_flags$aeser == "Y", 1, 0))
+  df_flags$serwd <- factor(if_else(df_flags$aeser == "Y" &
+                                     df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
+  df_flags$serdsm <- factor(if_else(df_flags$aeser == "Y" &
+                                    df_flags$aeacn %in% dsm, 1, 0))
+  df_flags$relser <- factor(if_else(df_flags$aeser == "Y" &
+                                    df_flags$arel == "Y", 1, 0))
+  df_flags$wd  <- factor(if_else(df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
+  df_flags$dsm <- factor(if_else(df_flags$aeacn %in% dsm, 1, 0))
+  df_flags$rel <- factor(if_else(df_flags$aerel == "Y", 1, 0))
+  df_flags$relwd <- factor(if_else(df_flags$aerel == "Y" &
+                                   df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
+  df_flags$reldsm <- factor(if_else(df_flags$arel == "Y" &
+                                    df_flags$aeacn %in% dsm, 1, 0))
+  df_flags$ctc35 <- factor(if_else(df_flags$aetoxgr %in% c("3", "4", "5"), 1, 0))
 
   # start tabulating --------------------------------------------------------
   n_cols <- nlevels(col_by)
@@ -310,17 +231,17 @@ t_ae_oview <- function(id,
   })
 
   #Summary table: individual components
-  df_ind <- list("AE with fatal outcome" = df_fatal,
-                 "Serious AE" = df_ser,
-                 "Serious AE leading to withdrawal from treatment" = df_serwd,
-                 "Serious AE leading to dose modification/interruption" = df_serdsm,
-                 "Related Serious AE" = df_relser,
-                 "AE leading to withdrawal from treatment" = df_wd,
-                 "AE leading to dose modification/interruption" = df_dsm,
-                 "Related AE" = df_rel,
-                 "Related AE leading to withdrawal from treatment" = df_relwd,
-                 "Related AE leading to dose modification/interruption" = df_reldsm,
-                 "Grade 3-5 AE" = df_ctc35
+  df_ind <- list("AE with fatal outcome" = df_flags,
+                 "Serious AE" = df_flags,
+                 "Serious AE leading to withdrawal from treatment" = df_flags,
+                 "Serious AE leading to dose modification/interruption" = df_flags,
+                 "Related Serious AE" = df_flags,
+                 "AE leading to withdrawal from treatment" = df_flags,
+                 "AE leading to dose modification/interruption" = df_flags,
+                 "Related AE" = df_flags,
+                 "Related AE leading to withdrawal from treatment" = df_flags,
+                 "Related AE leading to dose modification/interruption" = df_flags,
+                 "Grade 3-5 AE" = df_flags
   )
 
   tbl_ind <- mapply(function(df_i, term, c_col) {
@@ -334,7 +255,7 @@ t_ae_oview <- function(id,
 
 
   },df_ind,  names(df_ind),
-  c("aesdth", "aeser", "fin", "fin", "fin", "aeacn", "aeacn", "aerel", "fin", "fin","aetoxgr"),
+  c("fatal", "ser", "serwd", "serdsm", "relser", "wd", "dsm", "rel", "relwd", "reldsm","ctc35"),
   SIMPLIFY = FALSE)
 
   # put together final table ------------------
