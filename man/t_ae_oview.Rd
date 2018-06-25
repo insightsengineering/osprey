@@ -4,8 +4,9 @@
 \alias{t_ae_oview}
 \title{Create an AE Overview Summary Table (AET01)}
 \usage{
-t_ae_oview(id, class, term, dthfl, dcsreas, aesdth, aeser, aeacn, arel, aerel,
-  aetoxgr, col_by, total = "All Patients")
+t_ae_oview(id, class, term, flags, display_id = c("fatal", "ser", "serwd",
+  "serdsm", "relser", "wd", "dsm", "rel", "relwd", "reldsm", "ctc35"),
+  extra_flag = NULL, col_by, total = "All Patients")
 }
 \arguments{
 \item{id}{unique subject identifier variable. If a particular subject has no
@@ -16,19 +17,16 @@ adverse event then the subject \code{id} should be listed where
 
 \item{term}{preferred term variable.}
 
-\item{dthfl}{subject death flag variable.}
+\item{flags}{dataframe containing all event flags of interest,
+default should include dthfl ,dcsreas, aesdth, aeser, aeacn, arel, aerel,
+atoxgr to match STREAM output (lowercase column names).
+Minimally needs: dthfl and dcsreas}
 
-\item{dcsreas}{reason for discontinuation from study variable.}
+\item{display_id}{vector of strings for which analyses to display
+possible values are: fatal ser serwd serdsm relser wd dsm rel relwd reldsm ctc35}
 
-\item{aesdth}{results in death variable.}
-
-\item{aeser}{serious event variable.}
-
-\item{aeacn}{action taken with study treatment variable.}
-
-\item{arel}{analysis causality variable.}
-
-\item{aerel}{causality variable.}
+\item{extra_flag}{dataframe with flags to be calculated (column name here
+will be the table's row name)}
 
 \item{col_by}{group variable that will be used for a column header. \code{col_by}
 has to be a factor and can not be missing.}
@@ -36,8 +34,6 @@ has to be a factor and can not be missing.}
 \item{total}{character string that will be used as a label for a column with
 pooled total population, default here is "All Patients", if set to "NONE" then
 the "All Patients" column is suppressed.}
-
-\item{atoxgr}{analysis toxicity grade variable.}
 }
 \value{
 \code{rtable} object
@@ -49,43 +45,32 @@ the "All Patients" column is suppressed.}
 library(dplyr)
 suppressPackageStartupMessages(library(tidyverse))
 library(rtables)
-adae <- read_bce("/opt/BIOSTAT/home_ext2/qit3/cdt70194/go39733/libraries/adae.sas7bdat")
 
+adae <- read_bce("/opt/BIOSTAT/home_ext2/qit3/cdt70194/go39733/libraries/adae.sas7bdat")
+flag <- data.frame(dthfl = adae$DTHFL,
+                   dcsreas = adae$DCSREAS,
+                   aesdth = adae$AESDTH,
+                   aeser = adae$AESER,
+                   aeacn = adae$AEACN,
+                   arel = adae$AREL,
+                   aerel = adae$AEREL,
+                   aetoxgr = adae$AETOXGR)
+
+extra <- data.frame(fatal2 = flag$aesdth,
+                   ser2 = flag$aeser)
 tbl <- t_ae_oview(
    id = adae$USUBJID,
    class = adae$AESOC,
    term = adae$AEDECOD,
-   dthfl = adae$DTHFL,
-   dcsreas = adae$DCSREAS,
-   aesdth = adae$AESDTH,
-   aeser = adae$AESER,
-   aeacn = adae$AEACN,
-   arel = adae$AREL,
-   aerel = adae$AEREL,
-   aetoxgr = adae$AETOXGR,
+   flags = flag,
+   display_id = c("fatal", "ser", "serwd", "serdsm", "relser",
+                  "wd", "dsm", "rel", "relwd", "reldsm", "ctc35"),
+   extra_flag = extra,
    col_by = factor(adae$ARM),
    total="All Patients"
 )
 
 tbl
-
-tb2 <- t_ae_oview(
-   id = adae$USUBJID,
-   class = adae$AESOC,
-   term = adae$AEDECOD,
-   dthfl = adae$DTHFL,
-   dcsreas = adae$DCSREAS,
-   aesdth = adae$AESDTH,
-   aeser = adae$AESER,
-   aeacn = adae$AEACN,
-   arel = adae$AREL,
-   aerel = adae$AEREL,
-   aetoxgr = adae$AETOXGR,
-   col_by = factor(adae$ARM),
-   total="NONE"
-)
-
-tb2
 
 
 }

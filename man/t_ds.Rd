@@ -4,14 +4,16 @@
 \alias{t_ds}
 \title{Create a Patient Disposition (DST01) Table}
 \usage{
-t_ds(id, term, col_by, total = "All Patients")
+t_ds(class, term, sub = NULL, id, col_by, total = "All Patients", ...)
 }
 \arguments{
+\item{term}{reason for discontinuation from study.}
+
+\item{sub}{dataframe of additional subsets of terms}
+
 \item{id}{unique subject identifier variable. If a particular subject has no
 adverse event then the subject \code{id} should be listed where
 \code{class} and \code{term} should be set to missing (i.e. \code{NA}).}
-
-\item{term}{reason for discontinuation from study.}
 
 \item{col_by}{group variable that will be used for a column header. \code{col_by}
 has to be a factor and can not be missing.}
@@ -24,24 +26,61 @@ the "All Patients" column is suppressed.}
 \code{rtable} object
 }
 \description{
-\code{t_ae} returns patient disposition according to STREAM format DST01
+\code{t_ds} returns patient disposition according to STREAM format DST01
 }
 \examples{
 # Simple example
-
+library(tibble)
 library(dplyr)
 library(rtables)
-library(random.cdisc.data)
+
+ASL <- tibble(
+  USUBJID = paste0("id-", 1:10),
+  ARM = paste("ARM", LETTERS[rep(c(1,2), c(3,7))])
+)
 
 
-adae <- read.bce("/opt/BIOSTAT/home/bundfuss/stream_um/str_para2/libraries/adae.sas7bdat")
+ae_lookup <- tribble(
+~CLASS,         ~TERM,   ~GRADE,
+"cl A",   "trm A_1/2",        1,
+"cl A",   "trm A_2/2",        2,
+"cl B",   "trm B_1/3",        2,
+"cl B",   "trm B_2/3",        3,
+"cl B",   "trm B_3/3",        1,
+"cl C",   "trm C_1/1",        1
+)
 
-tbl <- t_ds(id = adae$USUBJID,
-            term = adae$DCSREAS,
-            col_by = factor(adae$ARM),
-            total = "All Patients")
+AAE <- cbind(
+  tibble(
+    USUBJID = ASL$USUBJID[c(2,2,2,3,3,4,4,4,4,5,6,6,7,7)]
+  ),
+  ae_lookup[c(1,1,2,6,4,2,2,3,4,2,1,5,4,6),]
+)
+
+ANL <- left_join(ASL, AAE, by = "USUBJID")
+
+tbl <- t_ds(
+  class = ANL$CLASS,
+  term =  ANL$TERM,
+  id = ANL$USUBJID,
+  col_by = factor(ANL$ARM),
+  total = "All Patients",
+)
 
 tbl
+
+tbl2 <- t_ds(
+  class = ANL$CLASS,
+  term =  ANL$TERM,
+  sub = data.frame(GRADE = ANL$GRADE, GRADE2 = ANL$GRADE + 1),
+  id = ANL$USUBJID,
+  col_by = factor(ANL$ARM),
+  total = "All Patients",
+)
+
+tbl2
+
+
 }
 \author{
 Carolyn Zhang

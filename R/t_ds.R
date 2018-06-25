@@ -1,17 +1,17 @@
 #' Create a Patient Disposition (DST01) Table
 #'
-#' \code{t_ae} returns patient disposition according to STREAM format DST01
+#' \code{t_ds} returns patient disposition according to STREAM format DST01
 #'
 #' @param id unique subject identifier variable. If a particular subject has no
 #'   adverse event then the subject \code{id} should be listed where
 #'   \code{class} and \code{term} should be set to missing (i.e. \code{NA}).
 #' @param term reason for discontinuation from study.
+#' @param sub dataframe of additional subsets of terms
 #' @param col_by group variable that will be used for a column header. \code{col_by}
 #'  has to be a factor and can not be missing.
 #' @param total character string that will be used as a label for a column with
 #'  pooled total population, default here is "All Patients", if set to "NONE" then
 #'  the "All Patients" column is suppressed.
-#'
 #'
 #' @return \code{rtable} object
 #'
@@ -21,22 +21,58 @@
 #'
 #' @examples
 #' # Simple example
-#'
+#' library(tibble)
 #' library(dplyr)
 #' library(rtables)
-#' library(random.cdisc.data)
+#'
+#' ASL <- tibble(
+#'   USUBJID = paste0("id-", 1:10),
+#'   ARM = paste("ARM", LETTERS[rep(c(1,2), c(3,7))])
+#' )
 #'
 #'
-#' adae <- read.bce("/opt/BIOSTAT/home/bundfuss/stream_um/str_para2/libraries/adae.sas7bdat")
+#' ae_lookup <- tribble(
+#' ~CLASS,         ~TERM,   ~GRADE,
+#' "cl A",   "trm A_1/2",        1,
+#' "cl A",   "trm A_2/2",        2,
+#' "cl B",   "trm B_1/3",        2,
+#' "cl B",   "trm B_2/3",        3,
+#' "cl B",   "trm B_3/3",        1,
+#' "cl C",   "trm C_1/1",        1
+#' )
 #'
-#' tbl <- t_ds(id = adae$USUBJID,
-#'             term = adae$DCSREAS,
-#'             col_by = factor(adae$ARM),
-#'             total = "All Patients")
+#' AAE <- cbind(
+#'   tibble(
+#'     USUBJID = ASL$USUBJID[c(2,2,2,3,3,4,4,4,4,5,6,6,7,7)]
+#'   ),
+#'   ae_lookup[c(1,1,2,6,4,2,2,3,4,2,1,5,4,6),]
+#' )
+#'
+#' ANL <- left_join(ASL, AAE, by = "USUBJID")
+#'
+#' tbl <- t_ds(
+#'   class = ANL$CLASS,
+#'   term =  ANL$TERM,
+#'   id = ANL$USUBJID,
+#'   col_by = factor(ANL$ARM),
+#'   total = "All Patients",
+#' )
 #'
 #' tbl
-
-t_ds <- function(id, term, col_by, total = "All Patients"){
+#'
+#' tbl2 <- t_ds(
+#'   class = ANL$CLASS,
+#'   term =  ANL$TERM,
+#'   sub = data.frame(GRADE = ANL$GRADE, GRADE2 = ANL$GRADE + 1),
+#'   id = ANL$USUBJID,
+#'   col_by = factor(ANL$ARM),
+#'   total = "All Patients",
+#' )
+#'
+#' tbl2
+#'
+#'
+t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) {
 
   #check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
@@ -44,14 +80,40 @@ t_ds <- function(id, term, col_by, total = "All Patients"){
   if (total %in% levels(col_by))
     stop(paste('col_by can not have', total, 'group.'))
 
+  if (any("- Overall -" %in% term))
+    stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
   if (any("All Patients" %in% col_by))
-    stop("'All Patients' is not a valid col_by, t_ds derives All Patients column")
+    stop("'All Patients' is not a valid col_by, t_ae_oview derives All Patients column")
+
+  if (any(class == "", na.rm = TRUE))
+    stop("empty string is not a valid class, please use NA if data is missing")
+  if (any(term == "", na.rm = TRUE))
+    stop("empty string is not a valid term, please use NA if data is missing")
+
+  #import tern functions
+  duplicate_with_var <- tern:::duplicate_with_var
+  check_col_by <- tern:::check_col_by
+  stack_rtables <- tern:::stack_rtables
+  count_perc_col_N <- tern:::count_perc_col_N
+  indent_table <- tern:::indent_table
 
   #prepare data ------------------------------------
   df <- data.frame(id = id,
+                   class = class,
                    term = term,
+                   temp = term,
                    col_by = col_by,
                    stringsAsFactors = FALSE)
+
+  if(!is.null(sub)){
+    df <- data.frame(id = id,
+                     class = class,
+                     term = term,
+                     sub,
+                     temp = sub[,ncol(sub)],
+                     col_by = col_by,
+                     stringsAsFactors = FALSE)
+  }
 
   # adding All Patients
   if(total != "NONE"){
@@ -61,99 +123,64 @@ t_ds <- function(id, term, col_by, total = "All Patients"){
   # total N for column header
   N <- tapply(df$id, df$col_by, function(x) (sum(!duplicated(x))))
 
-  # need to remove any record that is missing term
+  # need to remove extra records that came from subject level data
   df <- na.omit(df)
-
-  # convert event tag to 1/0
-  df$Compl <- factor(if_else(toupper(df$term) == "", 1, 0))
-  df$Disc <- factor(if_else(toupper(df$term) != "", 1, 0))
-  df$AE_fatal <- factor(if_else(toupper(df$term) == "AE WITH FATAL OUTCOME", 1, 0))
-  df$Death <- factor(if_else(toupper(df$term) == "DEATH", 1, 0))
-  df$Lost <- factor(if_else(toupper(df$term) == "LOST TO FOLLOW-UP", 1, 0))
-  df$Non_comp <- factor(if_else(toupper(df$term) == "NON-COMPLIANCE WITH STUDY DRUG", 1, 0))
-  df$Phys_dec <- factor(if_else(toupper(df$term) == "PHYSICIAN DECISION", 1, 0))
-  df$Progr <- factor(if_else(toupper(df$term) == "PROGRESSIVE DISEASE", 1, 0))
-  df$Prot <- factor(if_else(toupper(df$term) == "PROTOCOL DEVIATION", 1, 0))
-  df$W_pg <- factor(if_else(toupper(df$term) == "WITHDRAWAL BY PARENT/GUARDIAN", 1, 0))
-  df$W_sub <- factor(if_else(toupper(df$term) == "WITHDRAWAL BY SUBJECT", 1, 0))
-
 
   # start tabulating --------------------------------------------------------
   n_cols <- nlevels(col_by)
 
-  #Overview: total num patients that completed/discontinued study
-  df_total_c <- list("Completed study" = df)
-  tbl_overall_c <- lapply(df_total_c, function(df_i) {
+  ###---------NEED TO MOVE TO UTILS-------------utility functions
+  #split class, term, and subterms into lists
+  recursive_split <- function(df, name_in, count, max_count){
+    if(nrow(df) == 0)
+      return()
 
-    t_helper_tabulate(df_id = df_i,
-                      N = N,
-                      checkcol = "Compl",
-                      term = "Completed Study",
-                      remove_dupl = TRUE,
-                      with_percent = TRUE)
+    l_t_comp <-  t_helper_tabulate(df_id = df,
+                                   N = N,
+                                   checkcol = " ",
+                                   term = name_in,
+                                   remove_dupl = TRUE,
+                                   with_percent = TRUE)
 
-  })
-  df_total_d <- list("Discontinued study" = df)
-  tbl_overall_d <- lapply(df_total_d, function(df_i) {
+    if(count == max_count || (!is.null(nrow(split(df, df[,count]))))&& nrow(split(df, df[,count]))==0){
+      df_s <- c(
+        list(name_in = df),
+        split(df, df[,count])
+      )
+      names(df_s) <- c(name_in, names(split(df, df[,count])))
 
-    t_helper_tabulate(df_id = df_i,
-                      N = N,
-                      checkcol = "Disc",
-                      term = "Discontinued study",
-                      remove_dupl = TRUE,
-                      with_percent = TRUE)
+      l_t_terms <- mapply(function(df_i, term) {
+        t_helper_tabulate(df_id = df_i,
+                          N = N,
+                          checkcol = " ",
+                          term = term,
+                          remove_dupl = TRUE,
+                          with_percent = TRUE)
+      },df_s,  names(df_s), SIMPLIFY = FALSE)
+      return(l_t_terms)
+    } else{
+      out <- mapply(recursive_split,
+                    split(df, df[,count]),
+                    names(split(df, df[,count])),
+                    count+1,
+                    max_count)
 
-  })
+      l_out <- list(l_t_comp, out)
+      return(l_out)
+    }
+  }
+  ##############--------------------------------
 
-  #Summary table: individual components
-  df_ind <- list("Adverse event" = df,
-                 "Death" = df,
-                 "Lost to follow-up" = df,
-                 "Non-compliance with study drug" = df,
-                 "Physician decision" = df,
-                 "Progressive disease" = df,
-                 "Protocol Deviation" = df,
-                 "Withdrawal by parent/guardian" = df,
-                 "Withdrawal by subject" = df
-  )
+  # split into lists of lists of subterms
+  l_t_class_terms <- mapply( recursive_split,
+                             df = split(df, df$class),
+                             name_in = names(split(df, df$class)),
+                             count = rep(3, length(split(df, df$class))),
+                             max_count = rep(ncol(df)-1, length(split(df, df$class))),
+                             SIMPLIFY = FALSE)
 
-  tbl_ind <- mapply(function(df_i, term, c_col) {
-
-    t_helper_tabulate(df_id = df_i,
-                      N = N,
-                      checkcol = c_col,
-                      term = term,
-                      remove_dupl = TRUE,
-                      with_percent = TRUE)
-
-
-  },df_ind,  names(df_ind),
-  c("AE_fatal", "Death", "Lost", "Non_comp", "Phys_dec", "Progr", "Prot", "W_pg", "W_sub"),
-  SIMPLIFY = FALSE)
-
-  # put together final table ------------------
-  tbls_overall = list("Completed study" = tbl_overall_c,
-                      "Discontinued study" = tbl_overall_d)
-  tbls_ov <- Map(function(tbls_i) {
-    lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables, lt1)
-  }, tbls_overall)
-
-  tbls_ind <- c(list(" " = tbl_ind))
-  tbls_class <- Map(function(tbls_i, class_i) {
-    lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables, lt1)
-    add_ae_class(indent_table(t2, 1), class_i)
-  }, tbls_ind, names(tbls_ind))
-
-
-  tbl_total <- do.call(stack_rtables, tbls_ov)
-  tbl_cl <- do.call(stack_rtables, tbls_class)
-
-  tbl <- rbind(tbl_total, tbl_cl)
-
-  tbl
+  tbls_all <- remove_Null(l_t_class_terms)
+  tbls_class <- Map(recursive_indent, tbls_all, rep(0, length(tbls_all)))
+  tbl <- do.call(stack_rtables, tbls_class)
+  return(tbl)
 }
-
-
-
