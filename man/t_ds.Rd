@@ -72,13 +72,29 @@ tbl
 tbl2 <- t_ds(
   class = ANL$CLASS,
   term =  ANL$TERM,
-  sub = data.frame(GRADE = ANL$GRADE, GRADE2 = ANL$GRADE + 1),
+  sub = data.frame(GRADE = ANL$GRADE),
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
   total = "All Patients",
 )
 
 tbl2
+
+# test wth Ninas study data
+#asl <- read.bce("/opt/BIOSTAT/prod/s30103j/libraries/asl.sas7bdat")
+asl <- read.bce("/opt/BIOSTAT/home/qit3/cdt70094/s30103j/libraries/aae_b.sas7bdat")
+asl <- asl \%>\% filter(AEREL1 != "" & (AESOC == "INVESTIGATIONS" | AESOC == "CARDIAC DISORDERS"))
+asl <- asl[1:20,]
+tbl3 <- t_ds(
+  class = asl$AESOC,
+  term =  asl$AEREL1,
+  sub = data.frame(AEDECOD = asl$AEDECOD),
+  id = asl$USUBJID,
+  col_by = factor(asl$ARMCD),
+  total = "All Patients",
+)
+
+tbl3
 
 
 }

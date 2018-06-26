@@ -74,63 +74,43 @@ shift_label_table_no_grade <- function(tbl, term) {
   tbl
 }
 
-check_col_by <- function(x, min_num_levels = 2) {
-
-  if (!is(x, "no_by") && !is.factor(x)) stop("col_by needs to be a factor")
-  if (any(is.na(x)) || any(x == '')) stop("col_by can not have any missing data")
-
-  #if (any(table(x)<=0)) stop("data is required for all levels of col_by")
-
-  if (!(min_num_levels == 1 && is(x, "no_by"))) {
-    if (length(levels(x)) < min_num_levels) stop("col_by is required to have at least", min_num_levels, "levels")
-  }
-
-  TRUE
+#adds row name to rtable
+shift_label_table_mod <- function(tbl, term, ind_tbl) {
+  attr(tbl[[1]], "row.name") <- term
+  indent_tabl(tbl, ind_tbl)
+  tbl
 }
 
-#' stack a modified version of a data frame
-#'
-#' essenially rbind(X,modified(X)). this is useful for example when a total
-#' column is needed.
-#'
-#' @param X a data.frame
-#' @param ... key=value pairs, where the key refers to a variable in X and value
-#'   is the valueof the variable in modified(X)
-#'
-#' @noRd
-#'
-#' @examples
-#'
-#' duplicate_with_var(iris, Species = "Total")
-#'
-duplicate_with_var <- function(X, ...) {
-  dots <- list(...)
-  nms <- names(dots)
-  if (is.null(nms) || !all(nms %in% names(X)))
-    stop("not all names in ... are existent or in X")
-  X_copy <- X
-  vl <- var_labels(X)
-  for (var in nms) {
-    X_copy[[var]] <- dots[[var]]
-  }
-  Y <- rbind(X, X_copy)
-  var_labels(Y) <- vl
-  Y
+#remove null elements from list
+remove_Null <- function(x) {
+  x <- Filter(Negate(is.null), x)
+  lapply(x, function(x){ if (is.list(x) && class(x) != "rtable") remove_Null(x) else x})
 }
 
-# checks if there is any case and derives counts (percentage), otherwise 0
-count_perc_col_N <- function(x_cell, N) {
-  N_i <- if (nrow(x_cell) == 0) 0 else N[x_cell$col_by[1]]
-  if (N_i > 0) {
-    length(x_cell$id) * c(1, 1 / N_i) # obtaining the total and getting percentage
-  } else {
-    rcell(0, format = "xx")
+#recursive indent function
+recursive_indent <- function(tbl_l, ind_count){
+  if (class(tbl_l) == "rtable"){
+    in_t <- list(" " = tbl_l)
+    t <- do.call(stack_rtables, in_t)
+    for (i in 1:nrow(t)) {
+      attr(t[[i]], "indent") <- attr(t[[i]], "indent") + ind_count
+    }
+    t
+  } else if(is.list(tbl_l) && class(tbl_l) != "rtable"){
+    odd_ind <- seq(1, length(tbl_l), 2)
+    count <- lapply(tbl_l, function(x){
+      if(class(x) == "rtable")
+        ind_count
+      else
+        ind_count + 1})
+    count <- unlist(count)
+    # #for inner most level remove duplicates
+    # if(max(count) == min(count)){
+    #   tbl_l <- tbl_l[odd_ind]
+    #   count <- count[odd_ind]
+    # }
+    t0 <- Map(recursive_indent, tbl_l, count)
+    tbl <- do.call(stack_rtables, t0)
   }
 }
 
-indent_table <- function(x, n) {
-  for (i in 1:nrow(x)) {
-    attr(x[[i]], "indent") <- attr(x[[i]], "indent") + n
-  }
-  x
-}

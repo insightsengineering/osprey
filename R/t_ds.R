@@ -63,13 +63,29 @@
 #' tbl2 <- t_ds(
 #'   class = ANL$CLASS,
 #'   term =  ANL$TERM,
-#'   sub = data.frame(GRADE = ANL$GRADE, GRADE2 = ANL$GRADE + 1),
+#'   sub = data.frame(GRADE = ANL$GRADE),
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
 #'   total = "All Patients",
 #' )
 #'
 #' tbl2
+#'
+#' # test wth Ninas study data
+#' #asl <- read.bce("/opt/BIOSTAT/prod/s30103j/libraries/asl.sas7bdat")
+#' asl <- read.bce("/opt/BIOSTAT/home/qit3/cdt70094/s30103j/libraries/aae_b.sas7bdat")
+#' asl <- asl %>% filter(AEREL1 != "" & (AESOC == "INVESTIGATIONS" | AESOC == "CARDIAC DISORDERS"))
+#' asl <- asl[1:20,]
+#' tbl3 <- t_ds(
+#'   class = asl$AESOC,
+#'   term =  asl$AEREL1,
+#'   sub = data.frame(AEDECOD = asl$AEDECOD),
+#'   id = asl$USUBJID,
+#'   col_by = factor(asl$ARMCD),
+#'   total = "All Patients",
+#' )
+#'
+#' tbl3
 #'
 #'
 t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) {
@@ -90,18 +106,11 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   if (any(term == "", na.rm = TRUE))
     stop("empty string is not a valid term, please use NA if data is missing")
 
-  #import tern functions
-  duplicate_with_var <- tern:::duplicate_with_var
-  check_col_by <- tern:::check_col_by
-  stack_rtables <- tern:::stack_rtables
-  count_perc_col_N <- tern:::count_perc_col_N
-  indent_table <- tern:::indent_table
-
   #prepare data ------------------------------------
   df <- data.frame(id = id,
                    class = class,
                    term = term,
-                   temp = term,
+                   #temp = term,
                    col_by = col_by,
                    stringsAsFactors = FALSE)
 
@@ -110,7 +119,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                      class = class,
                      term = term,
                      sub,
-                     temp = sub[,ncol(sub)],
+                     # temp = sub[,ncol(sub)],
                      col_by = col_by,
                      stringsAsFactors = FALSE)
   }
@@ -143,11 +152,18 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                                    with_percent = TRUE)
 
     if(count == max_count || (!is.null(nrow(split(df, df[,count]))))&& nrow(split(df, df[,count]))==0){
-      df_s <- c(
-        list(name_in = df),
-        split(df, df[,count])
-      )
-      names(df_s) <- c(name_in, names(split(df, df[,count])))
+      # df_s <- c(
+      #   list(name_in = df),
+      #   split(df, df[,count])
+      # )
+      # names(df_s) <- c(name_in, names(split(df, df[,count])))
+
+      l_t_ov <- t_helper_tabulate(df_id = df,
+                        N = N,
+                        checkcol = " ",
+                        term = name_in,
+                        remove_dupl = TRUE,
+                        with_percent = TRUE)
 
       l_t_terms <- mapply(function(df_i, term) {
         t_helper_tabulate(df_id = df_i,
@@ -156,7 +172,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                           term = term,
                           remove_dupl = TRUE,
                           with_percent = TRUE)
-      },df_s,  names(df_s), SIMPLIFY = FALSE)
+      },split(df, df[,count]),  names(split(df, df[,count])), SIMPLIFY = FALSE)
+      l_t_terms <- list(l_t_ov, l_t_terms)
       return(l_t_terms)
     } else{
       out <- mapply(recursive_split,
