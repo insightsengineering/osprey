@@ -72,6 +72,7 @@ library(random.cdisc.data)
 library(plyr)
 library(dplyr)
 require(lemon)
+library(colorspace)
 
 atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")
@@ -85,8 +86,8 @@ shapes <- c(0, 1, 2, 3, 4, 5, 6)
 #map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
 g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              marker_y = dat$PCHG,
-             #line_colby = dat$USUBJID,
-             marker_color = dat$RACE,
+             line_colby = dat$USUBJID,
+             #marker_color = dat$RACE,
              #marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
              #                     "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),

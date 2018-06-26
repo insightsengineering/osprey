@@ -46,6 +46,7 @@
 #' library(plyr)
 #' library(dplyr)
 #' require(lemon)
+#' library(colorspace)
 #'
 #' atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 #' dat <- atr %>% filter(PARAMCD == "SUMTGLES")
@@ -163,9 +164,10 @@ g_spiderplot <- function(marker_x,
 
   #line color
   if(!is.null(line_colby)){
-    pl <- pl + geom_line(aes(color = l_col), size = 2, alpha = 0.5, show.legend = FALSE)
+    pl <- pl + geom_line(aes(color = l_col), size = 2, alpha = 0.5, show.legend = show_legend)+
+      labs(color = "Color")
   } else{
-    pl <- pl + geom_line(size = 2, alpha = 0.5, show.legend = FALSE)
+    pl <- pl + geom_line(size = 2, alpha = 0.5, show.legend = show_legend)
   }
 
   #marker shape and color------------
@@ -232,12 +234,16 @@ g_spiderplot <- function(marker_x,
 
   #marker and color options
   if(!is.null(marker_color_opt)){
-    pl <- pl + scale_color_manual(name = "Marker Color",
+    #set line color default
+    v <- rainbow_hcl(length(unique(dat$l_col)))
+    names(v) <- unique(dat$l_col)
+
+    pl <- pl + scale_color_manual(name = "Color",
                             breaks = dat$m_col,
-                            values = marker_color_opt)
+                            values = c(v, marker_color_opt))
   }
   if(!is.null(marker_shape_opt)){
-    pl <- pl + scale_shape_manual(name = "Marker Shape",
+    pl <- pl + scale_shape_manual(name = "Shape",
                                   breaks = dat$sh,
                                   values = marker_shape_opt)
   }
@@ -249,7 +255,8 @@ g_spiderplot <- function(marker_x,
                    axis.text = element_text(color = "black"),
                    legend.text=element_text(size=7),
                    legend.title = element_text(size = 9)) +
-             labs(color = "Color", shape = "Shape")
+             labs(color = "Color", shape = "Shape") +
+             guides(color = guide_legend(override.aes = list(size=2)))
 
   if(is.numeric(marker_x[, 1])){
     pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.3)
