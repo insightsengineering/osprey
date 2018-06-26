@@ -59,15 +59,15 @@
 #' #map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
 #' g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
 #'              marker_y = dat$PCHG,
-#'              line_colby = dat$RACE,
+#'              line_colby = dat$USUBJID,
 #'              marker_color = dat$RACE,
-#'              marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
-#'                                   "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
-#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
+#'              #marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
+#'              #                     "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
+#'              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
 #'              marker_shape = dat$RACE,
-#'              marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
-#'                                   "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
-#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = 5),
+#'              #marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
+#'              #                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
+#'              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = 5),
 #'              marker_size = 5,
 #'              datalabel_txt = list(one = dat$USUBJID),
 #'              #datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-1", "id-4", "id-7")),
@@ -84,7 +84,7 @@
 #' dat2 <- dat %>% arrange(TUDY) %>% mutate(day = as.character(TUDY)) %>% as.data.frame()
 #' g_spiderplot(marker_x = data.frame(day = as.factor(dat2$day), groupby = dat2$USUBJID),
 #'              marker_y = dat2$PCHG,
-#'              line_colby = dat2$RACE,
+#'              line_colby = dat2$USUBJID,
 #'              marker_color = dat2$USUBJID,
 #'              #marker_color_opt = map_marker_color,
 #'              marker_shape = dat2$RACE,
@@ -108,7 +108,7 @@ g_spiderplot <- function(marker_x,
                          marker_shape = NULL,
                          marker_shape_opt = NULL,
                          marker_size = 6,
-                         datalabel_txt = NULL,
+                         datalabel_txt = NULL,#USUBJID default
                          facet_rows = NULL,
                          facet_columns = NULL,
                          vref_line = NULL,
@@ -144,17 +144,9 @@ g_spiderplot <- function(marker_x,
   }
   if(!is.null(datalabel_txt$one)){
     dat$lbl_all <- datalabel_txt$one
-
-    if(ncol(marker_x) == 1){
-      dat <- dat %>%
-        group_by(lbl_all) %>%
-        mutate(dat, lab = ifelse(day == max(day), as.character(lbl_all), " "))
-    }
-    else{
-      dat <- dat %>%
-        group_by(lbl_all) %>%
-        mutate(dat, lab = ifelse(day == last(day), as.character(lbl_all), " "))
-    }
+    dat <- dat %>%
+      group_by(lbl_all) %>%
+      mutate(dat, lab = ifelse(day == last(day), as.character(lbl_all), " "))
   }
   if(!is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
     dat$id <- datalabel_txt$two
@@ -238,9 +230,6 @@ g_spiderplot <- function(marker_x,
     pl <- pl + facet_rep_grid(f_rows ~ f_columns)
   }
 
-  print(dat$m_col)
-  print(unique(dat$m_col))
-
   #marker and color options
   if(!is.null(marker_color_opt)){
     pl <- pl + scale_color_manual(name = "Marker Color",
@@ -254,9 +243,13 @@ g_spiderplot <- function(marker_x,
   }
 
   #modify background color
-  pl <- pl + theme_classic()+ theme(strip.background = element_rect(colour = "white", fill = "white"),
-                                    text = element_text(size = 25),
-                                    axis.text = element_text(color = "black"))
+  pl <- pl + theme_classic() +
+             theme(strip.background = element_rect(colour = "white", fill = "white"),
+                   text = element_text(size = 25),
+                   axis.text = element_text(color = "black"),
+                   legend.text=element_text(size=7),
+                   legend.title = element_text(size = 9)) +
+             labs(color = "Color", shape = "Shape")
 
   if(is.numeric(marker_x[, 1])){
     pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.3)
