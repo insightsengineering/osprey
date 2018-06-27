@@ -52,7 +52,7 @@
 #'    term = adae$AEDECOD,
 #'    flags = flag,
 #'    display_id = c("fatal", "ser", "serwd", "serdsm", "relser",
-#'                   "wd", "dsm", "rel", "relwd", "reldsm", "ctc35"),
+#'                   "wd", "dsm", "rel", "relwd", "reldsm"),
 #'    extra_flag = extra,
 #'    col_by = factor(adae$ARM),
 #'    total="All Patients"
@@ -119,6 +119,12 @@ t_ae_oview <- function(id,
     stop("the maximum number of defaualt analyses is 11, please add additional analyses to extra_flag")
   if(any(is.element(colnames(flags), possible_names) == FALSE))
     stop("check that the column names in flags matches the expected input")
+
+  check_input_length = c(nrow(data.frame(id)), nrow(data.frame(class)), nrow(data.frame(term)), nrow(flags))
+  if(length(unique(check_input_length)) > 1)
+    stop("invalid arguments: check that the length of input arguments are identical")
+  if(any(is.na(class)) || any(is.na(term)) || any(is.na(flags)) || any(is.na(id)))
+    stop("invalid arguments: your input has NA")
 
   #prepare data ------------------------------------
   df <- data.frame(class = class,
@@ -211,11 +217,22 @@ t_ae_oview <- function(id,
   },df_patients,  names(df_patients), c(" ", " ", "dthfl", "dcsreas"), SIMPLIFY = FALSE)
 
   #Summary table: individual components
+  term_label <- c("AE with fatal outcome",
+                  "Serious AE",
+                  "Serious AE leading to withdrawal from treatment",
+                  "Serious AE leading to dose modification/interruption",
+                  "Related Serious AE",
+                  "AE leading to withdrawal from treatment",
+                  "AE leading to dose modification/interruption",
+                  "Related AE",
+                  "Related AE leading to withdrawal from treatment",
+                  "Related AE leading to dose modification/interruption",
+                  "Grade 3-5 AE")
   df_ind <- list()
   for(i in 1:length(display_id)){
     df_ind[[i]] = df_flags
   }
-  names(df_ind) = display_id
+  names(df_ind) = term_label[1:length(display_id)]#display_id
 
   tbl_ind <- mapply(function(df_i, term, c_col) {
     t_helper_tabulate(df_id = df_i,

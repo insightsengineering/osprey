@@ -74,7 +74,7 @@
 #' # test wth Ninas study data
 #' #asl <- read.bce("/opt/BIOSTAT/prod/s30103j/libraries/asl.sas7bdat")
 #' asl <- read.bce("/opt/BIOSTAT/home/qit3/cdt70094/s30103j/libraries/aae_b.sas7bdat")
-#' asl <- asl %>% filter(AEREL1 != "" & (AESOC == "INVESTIGATIONS" | AESOC == "CARDIAC DISORDERS"))
+#' asl <- asl %>% filter(AEREL1 != "" & AESOC != "" & AEDECOD != "")# & (AESOC == "INVESTIGATIONS" | AESOC == "CARDIAC DISORDERS"))
 #' asl <- asl[1:20,]
 #' tbl3 <- t_ds(
 #'   class = asl$AESOC,
@@ -106,6 +106,12 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   if (any(term == "", na.rm = TRUE))
     stop("empty string is not a valid term, please use NA if data is missing")
 
+  check_input_length = c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(sub))
+  if(length(unique(check_input_length)) > 1)
+    stop("invalid arguments: check that the length of input arguments are identical")
+  if(any(is.na(class)) || any(is.na(term)))
+    stop("invalid arguments: your input has NA")
+
   #prepare data ------------------------------------
   df <- data.frame(id = id,
                    class = class,
@@ -115,6 +121,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                    stringsAsFactors = FALSE)
 
   if(!is.null(sub)){
+    if(any(is.na(sub)))
+      stop("invalid arguments: your input has NA")
     df <- data.frame(id = id,
                      class = class,
                      term = term,

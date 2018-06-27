@@ -64,7 +64,7 @@ tbl <- t_ae_oview(
    term = adae$AEDECOD,
    flags = flag,
    display_id = c("fatal", "ser", "serwd", "serdsm", "relser",
-                  "wd", "dsm", "rel", "relwd", "reldsm", "ctc35"),
+                  "wd", "dsm", "rel", "relwd", "reldsm"),
    extra_flag = extra,
    col_by = factor(adae$ARM),
    total="All Patients"
