@@ -37,7 +37,7 @@ That is, follow the following steps:
 1. Develop a function
 1. Create roxygen comments (ctrl+shift+alt+R or copy from earlier)
 1. Document (ctrl+shift+D)
-1. Installand Restart
+1. Install and Restart
 1. Test your function with working example
 1. Create webpage (in console: `pkgdown::build_site()`)
 1. When everything works, make pull request.
