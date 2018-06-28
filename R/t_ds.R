@@ -151,8 +151,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   recursive_split <- function(df, name_in, count, max_count){
     if(nrow(df) == 0)
       return()
-    if(name_in == "NA")
-      return()
+    # if(name_in == "NA")
+    #   return()
 
     l_t_comp <-  t_helper_tabulate(df_id = df,
                                    N = N,
@@ -213,9 +213,11 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   index <- numeric(0)
   for(i in seq(1, length(tbl), 2)){
-    if(attr(tbl[[i]], "row.name") == "NA")
-    index <- c(index, i)
+    if(attr(tbl[[i]], "row.name") == "NA"){
+      index <- c(index, i)
+    }
   }
-  tbl <- tbl[-index,]
+  if(length(index) > 0)
+    tbl <- tbl[-index,]
   return(tbl)
 }
