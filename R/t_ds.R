@@ -151,6 +151,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   recursive_split <- function(df, name_in, count, max_count){
     if(nrow(df) == 0)
       return()
+    if(name_in == "NA")
+      return()
 
     l_t_comp <-  t_helper_tabulate(df_id = df,
                                    N = N,
@@ -174,12 +176,13 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                         with_percent = TRUE)
 
       l_t_terms <- mapply(function(df_i, term) {
-        t_helper_tabulate(df_id = df_i,
-                          N = N,
-                          checkcol = " ",
-                          term = term,
-                          remove_dupl = TRUE,
-                          with_percent = TRUE)
+          t_helper_tabulate(df_id = df_i,
+                            N = N,
+                            checkcol = " ",
+                            term = term,
+                            remove_dupl = TRUE,
+                            with_percent = TRUE)
+
       },split(df, df[,count]),  names(split(df, df[,count])), SIMPLIFY = FALSE)
       l_t_terms <- list(l_t_ov, l_t_terms)
       return(l_t_terms)
@@ -207,5 +210,12 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   tbls_all <- remove_Null(l_t_class_terms)
   tbls_class <- Map(recursive_indent, tbls_all, rep(0, length(tbls_all)))
   tbl <- do.call(stack_rtables, tbls_class)
+
+  index <- numeric(0)
+  for(i in seq(1, length(tbl), 2)){
+    if(attr(tbl[[i]], "row.name") == "NA")
+    index <- c(index, i)
+  }
+  tbl <- tbl[-index,]
   return(tbl)
 }
