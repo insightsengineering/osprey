@@ -144,14 +144,26 @@ g_butterfly <- function(category,
     pl <- pl + facet_grid(f_rows ~.)
   }
 
-  pl <- pl + theme_classic() +
-    theme(strip.background = element_rect(colour = "white", fill = "white"),
-          text = element_text(size = 20),
-          axis.text = element_text(color = "black", size = 9),
-          legend.text=element_text(size=9),
-          legend.title = element_text(size = 12),
-          panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
-          strip.text = element_text(size = 5, angle = 90))
+  if(show_legend){
+    pl <- pl + theme_classic() +
+      theme(strip.background = element_rect(colour = "white", fill = "white"),
+            text = element_text(size = 20),
+            axis.text = element_text(color = "black", size = 9),
+            legend.text=element_text(size=9),
+            legend.title = element_text(size = 12),
+            panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
+            strip.text = element_text(size = 5))
+  } else{
+    pl <- pl + theme_classic() +
+      theme(strip.background = element_rect(colour = "white", fill = "white"),
+            text = element_text(size = 20),
+            axis.text = element_text(color = "black", size = 9),
+            legend.text=element_text(size=9),
+            legend.title = element_text(size = 12),
+            panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
+            strip.text = element_text(size = 5),
+            legend.position = "none")
+  }
 
   pl
 
