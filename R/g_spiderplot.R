@@ -37,6 +37,9 @@
 #'
 #' @return ggplot object
 #'
+#' @import lemon
+#' @import colorspace
+#'
 #' @export
 #'
 #' @author Carolyn Zhang
@@ -61,10 +64,10 @@
 #' g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
 #'              marker_y = dat$PCHG,
 #'              line_colby = dat$USUBJID,
-#'              marker_color = dat$RACE,
-#'              marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
-#'                                   "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
-#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
+#'              #marker_color = dat$RACE,
+#'              #marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
+#'              #                     "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
+#'              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
 #'              marker_shape = dat$RACE,
 #'              #marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
 #'              #                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
@@ -148,6 +151,8 @@ g_spiderplot <- function(marker_x,
     dat <- dat %>%
       group_by(lbl_all) %>%
       mutate(dat, lab = ifelse(day == last(day), as.character(lbl_all), " "))
+    print(dat$lab)
+    print(dat$day)
   }
   if(!is.null(datalabel_txt$two) && !is.null(datalabel_txt$three)){
     dat$id <- datalabel_txt$two
@@ -173,9 +178,9 @@ g_spiderplot <- function(marker_x,
   if(!is.null(marker_color) && !is.null(marker_shape)){
     pl <- pl + geom_point(aes(colour = m_col, shape = sh), size = marker_size, show.legend = show_legend)
   } else if(!is.null(marker_color) && is.null(marker_shape)){
-      pl <- pl + geom_point(aes(colour = m_col), size = marker_size, show.legend = show_legend)
+    pl <- pl + geom_point(aes(colour = m_col), size = marker_size, show.legend = show_legend)
   } else if(is.null(marker_color) && !is.null(marker_shape)){
-      pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
+    pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
   } else if(is.null(marker_color) && is.null(marker_shape)){
     pl <- pl + geom_point(size = 3, show.legend = show_legend)
   }
@@ -238,8 +243,8 @@ g_spiderplot <- function(marker_x,
     names(v) <- unique(dat$l_col)
 
     pl <- pl + scale_color_manual(name = "Colour",
-                            breaks = dat$m_col,
-                            values = c(v, marker_color_opt))
+                                  breaks = dat$m_col,
+                                  values = c(v, marker_color_opt))
   }
   if(!is.null(marker_shape_opt)){
     pl <- pl + scale_shape_manual(name = "Shape",
@@ -249,13 +254,13 @@ g_spiderplot <- function(marker_x,
 
   #modify background color
   pl <- pl + theme_classic() +
-             theme(strip.background = element_rect(colour = "white", fill = "white"),
-                   text = element_text(size = 25),
-                   axis.text = element_text(color = "black"),
-                   legend.text=element_text(size=7),
-                   legend.title = element_text(size = 9)) +
-             labs(colour = "Color", shape = "Shape") +
-             guides(color = guide_legend(override.aes = list(size=2)))
+    theme(strip.background = element_rect(colour = "white", fill = "white"),
+          text = element_text(size = 25),
+          axis.text = element_text(color = "black"),
+          legend.text=element_text(size=7),
+          legend.title = element_text(size = 9)) +
+    labs(colour = "Color", shape = "Shape") +
+    guides(color = guide_legend(override.aes = list(size=2)))
 
   if(is.numeric(marker_x[, 1])){
     pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.3)
