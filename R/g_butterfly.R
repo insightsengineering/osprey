@@ -126,7 +126,8 @@ g_butterfly <- function(category,
 
       if(block_count == "# of patients"){
         counts <- dat %>% group_by(id, y, groups, f_rows) %>%
-          filter(bar_color == max(bar_color)) %>%
+          arrange(bar_color) %>%
+          filter(bar_color == last(bar_color)) %>%
           distinct %>% group_by(y, groups, f_rows) %>%
           arrange(y, groups, f_rows) %>%
           tally %>%
@@ -134,7 +135,8 @@ g_butterfly <- function(category,
         in_dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color, f_rows = facet_rows)
         temp <- in_dat %>%
           group_by(id, y, groups, f_rows) %>%
-          filter(bar_color == max(bar_color))%>% distinct %>% as.data.frame()
+          arrange(bar_color) %>%
+          filter(bar_color == last(bar_color))%>% distinct %>% as.data.frame()
         temp <- temp[,-1]
       } else if(block_count == "# of AEs"){
         counts <- dat %>% group_by(y, groups, f_rows) %>% tally %>% as.data.frame()

@@ -44,7 +44,7 @@ library(lemon)
 library(reshape2)
 
 data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
-#data <- data \%>\% filter(AEBODSYS \%in\% c("Vascular disorders", "Surgical and medical procedures"))
+data <- data \%>\% filter(AEBODSYS \%in\% c("Vascular disorders", "Surgical and medical procedures"))
 
 p <- g_butterfly(category = data$AEBODSYS,
             groups = data$SEX,
