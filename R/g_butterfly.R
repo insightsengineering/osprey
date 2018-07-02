@@ -36,7 +36,7 @@
 #'             block_count = "# of patients",
 #'             block_color = data$AETOXGR,
 #'             id = data$USUBJID,
-#'             facet_rows = data$RACE,
+#'             #facet_rows = data$RACE,
 #'             x_label = block_count,
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
@@ -56,89 +56,163 @@ g_butterfly <- function(category,
                         show_legend = TRUE){
 
   #set up data-------
-  if(is.null(facet_rows)){
-    dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color)
+  if(!is.null(block_color)){
+    if(is.null(facet_rows)){
+      dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color)
 
-    if(block_count == "# of patients"){
-      counts <- dat %>% group_by(id, y, groups) %>%
-        filter(bar_color == max(bar_color)) %>%
-        distinct %>% group_by(y, groups) %>%
-        arrange(y, groups) %>%
-        tally %>%
-        as.data.frame()
-      in_dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color)
-      temp <- in_dat %>%
-        group_by(id, y, groups) %>%
-        filter(bar_color == max(bar_color))%>% distinct %>% as.data.frame()
-      temp <- temp[,-1]
-    } else if(block_count == "# of AEs"){
-      counts <- dat %>% group_by(y, groups) %>% tally %>% as.data.frame()
-      temp <- data.frame(id = id, y = category, groups = groups, bar_color = block_color)
-      temp <- temp[,-1]
+      if(block_count == "# of patients"){
+        counts <- dat %>% group_by(id, y, groups) %>%
+          filter(bar_color == max(bar_color)) %>%
+          distinct %>% group_by(y, groups) %>%
+          arrange(y, groups) %>%
+          tally %>%
+          as.data.frame()
+        in_dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color)
+        temp <- in_dat %>%
+          group_by(id, y, groups) %>%
+          filter(bar_color == max(bar_color))%>% distinct %>% as.data.frame()
+        temp <- temp[,-1]
+      } else if(block_count == "# of AEs"){
+        counts <- dat %>% group_by(y, groups) %>% tally %>% as.data.frame()
+        temp <- data.frame(id = id, y = category, groups = groups, bar_color = block_color)
+        temp <- temp[,-1]
+      }
+
+      temp$bar_color <- factor(temp$bar_color)
+      counts <- left_join(counts, temp)
+      max_c <- max(counts$n)
+      counts$n0 <- rep(1, nrow(counts))
+      counts <- counts %>% arrange(desc(bar_color))
+      counts <- ddply(counts, c("y", "groups"), transform, label_ypos=cumsum(n0))
+      counts <- ddply(counts, c("y", "groups", "bar_color"), transform, bar_count=sum(n0))
+      text_ann <- counts %>% arrange(bar_color) %>%
+        group_by(y, groups, bar_color) %>%
+        filter(label_ypos == max(label_ypos))
+      total_text_ann <- text_ann %>% group_by(y, groups) %>% filter(label_ypos == max(label_ypos))
+    } else{
+      dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color, f_rows = facet_rows)
+
+      if(block_count == "# of patients"){
+        counts <- dat %>% group_by(id, y, groups, f_rows) %>%
+          filter(bar_color == max(bar_color)) %>%
+          distinct %>% group_by(y, groups, f_rows) %>%
+          arrange(y, groups, f_rows) %>%
+          tally %>%
+          as.data.frame()
+        in_dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color, f_rows = facet_rows)
+        temp <- in_dat %>%
+          group_by(id, y, groups, f_rows) %>%
+          filter(bar_color == max(bar_color))%>% distinct %>% as.data.frame()
+        temp <- temp[,-1]
+      } else if(block_count == "# of AEs"){
+        counts <- dat %>% group_by(y, groups, f_rows) %>% tally %>% as.data.frame()
+        temp <- data.frame(id = id, y = category, groups = groups, bar_color = block_color, f_rows = facet_rows)
+        temp <- temp[,-1]
+      }
+
+      temp$bar_color <- factor(temp$bar_color)
+      counts <- left_join(counts, temp)
+      max_c <- max(counts$n)
+      counts$n0 <- rep(1, nrow(counts))
+      counts <- counts %>% arrange(desc(bar_color))
+      counts <- ddply(counts, c("y", "groups", "f_rows"), transform, label_ypos=cumsum(n0))
+      counts <- ddply(counts, c("y", "groups", "bar_color", "f_rows"), transform, bar_count=sum(n0))
+      text_ann <- counts %>% arrange(bar_color) %>%
+        group_by(y, groups, bar_color, f_rows) %>%
+        filter(label_ypos == max(label_ypos))
+      total_text_ann <- text_ann %>% group_by(y, groups, f_rows) %>% filter(label_ypos == max(label_ypos))
     }
+  }else{
+    if(is.null(facet_rows)){
+      dat <- data.frame(id = id, y = category, groups = groups)
 
-    temp$bar_color <- factor(temp$bar_color)
+      if(block_count == "# of patients"){
+        counts <- dat %>% group_by(id, y, groups) %>%
+          distinct %>% group_by(y, groups) %>%
+          arrange(y, groups) %>%
+          tally %>%
+          as.data.frame()
+        in_dat <- data.frame(id = id, y = category, groups = groups)
+        temp <- in_dat %>%
+          group_by(id, y, groups) %>%
+          distinct %>% as.data.frame()
+        temp <- temp[,-1]
+      } else if(block_count == "# of AEs"){
+        counts <- dat %>% group_by(y, groups) %>% tally %>% as.data.frame()
+        temp <- data.frame(id = id, y = category, groups = groups)
+        temp <- temp[,-1]
+      }
 
-    counts <- left_join(counts, temp)
-    max_c <- max(counts$n)
-    counts$n0 <- rep(1, nrow(counts))
-    counts <- counts %>% arrange(desc(bar_color))
-    counts <- ddply(counts, c("y", "groups"), transform, label_ypos=cumsum(n0))
-    counts <- ddply(counts, c("y", "groups", "bar_color"), transform, bar_count=sum(n0))
+      counts <- left_join(counts, temp)
+      max_c <- max(counts$n)
+      counts$n0 <- rep(1, nrow(counts))
+      counts <- ddply(counts, c("y", "groups"), transform, label_ypos=cumsum(n0))
+      text_ann <- counts %>%
+        group_by(y, groups) %>%
+        filter(label_ypos == max(label_ypos))
+      total_text_ann <- text_ann %>% group_by(y, groups) %>% filter(label_ypos == max(label_ypos))
+    } else{
+      dat <- data.frame(id = id, y = category, groups = groups, f_rows = facet_rows)
 
-    text_ann <- counts %>% arrange(bar_color) %>%
-                group_by(y, groups, bar_color) %>%
-                filter(label_ypos == max(label_ypos))
-  } else{
-    dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color, f_rows = facet_rows)
+      if(block_count == "# of patients"){
+        counts <- dat %>% group_by(id, y, groups, f_rows) %>%
+          distinct %>% group_by(y, groups, f_rows) %>%
+          arrange(y, groups, f_rows) %>%
+          tally %>%
+          as.data.frame()
+        in_dat <- data.frame(id = id, y = category, groups = groups, f_rows = facet_rows)
+        temp <- in_dat %>%
+          group_by(id, y, groups, f_rows) %>%
+          distinct %>% as.data.frame()
+        temp <- temp[,-1]
+      } else if(block_count == "# of AEs"){
+        counts <- dat %>% group_by(y, groups, f_rows) %>% tally %>% as.data.frame()
+        temp <- data.frame(id = id, y = category, groups = groups, f_rows = facet_rows)
+        temp <- temp[,-1]
+      }
 
-    if(block_count == "# of patients"){
-      counts <- dat %>% group_by(id, y, groups, f_rows) %>%
-        filter(bar_color == max(bar_color)) %>%
-        distinct %>% group_by(y, groups, f_rows) %>%
-        arrange(y, groups, f_rows) %>%
-        tally %>%
-        as.data.frame()
-      in_dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color, f_rows = facet_rows)
-      temp <- in_dat %>%
-        group_by(id, y, groups, f_rows) %>%
-        filter(bar_color == max(bar_color))%>% distinct %>% as.data.frame()
-      temp <- temp[,-1]
-    } else if(block_count == "# of AEs"){
-      counts <- dat %>% group_by(y, groups, f_rows) %>% tally %>% as.data.frame()
-      temp <- data.frame(id = id, y = category, groups = groups, bar_color = block_color, f_rows = facet_rows)
-      temp <- temp[,-1]
+      counts <- left_join(counts, temp)
+      max_c <- max(counts$n)
+      counts$n0 <- rep(1, nrow(counts))
+      counts <- ddply(counts, c("y", "groups", "f_rows"), transform, label_ypos=cumsum(n0))
+      text_ann <- counts %>%
+        group_by(y, groups, f_rows) %>%
+        filter(label_ypos == max(label_ypos))
+      total_text_ann <- text_ann %>% group_by(y, groups, f_rows) %>% filter(label_ypos == max(label_ypos))
     }
-
-    temp$bar_color <- factor(temp$bar_color)
-
-    counts <- left_join(counts, temp)
-    max_c <- max(counts$n)
-    counts$n0 <- rep(1, nrow(counts))
-    counts <- counts %>% arrange(desc(bar_color))
-    counts <- ddply(counts, c("y", "groups", "f_rows"), transform, label_ypos=cumsum(n0))
-    counts <- ddply(counts, c("y", "groups", "bar_color", "f_rows"), transform, bar_count=sum(n0))
-
-    text_ann <- counts %>% arrange(bar_color) %>%
-                group_by(y, groups, bar_color, f_rows) %>%
-                filter(label_ypos == max(label_ypos))
   }
 
   g1 <- unique(as.character(groups))[1]
   g2 <- unique(as.character(groups))[2]
 
   #plot butterfly plot --------------------
-  pl <- ggplot(counts, aes(x=y)) +
-    geom_bar(data=counts[counts$groups==g1,], aes(y=n0, fill=bar_color), stat="identity") +
-    geom_bar(data=counts[counts$groups==g2,], aes(y=-n0, fill=bar_color), stat="identity") +
-    geom_hline(yintercept=0, colour="black", lwd=0.4) +
-    geom_text(data=text_ann[text_ann$groups==g1,], aes(y = label_ypos, label = bar_count), hjust=1) +
-    geom_text(data=text_ann[text_ann$groups==g2,], aes(y = -label_ypos, label = bar_count), hjust=-1) +
-    annotate("text", x = counts$y[nrow(counts)], y = max(counts$label_ypos), label = g1) +
-    annotate("text", x = counts$y[nrow(counts)], y = -max(counts$label_ypos), label = g2) +
-    coord_flip() +
-    scale_y_continuous(labels = abs, limits = (max_c) * c(-1,1)) +
-    labs(x = y_label, y = block_count, fill = legend_label)
+  if(!is.null(block_color)){
+    pl <- ggplot(counts, aes(x=y)) +
+      geom_bar(data=counts[counts$groups==g1,], aes(y=n0, fill=bar_color), stat="identity") +
+      geom_bar(data=counts[counts$groups==g2,], aes(y=-n0, fill=bar_color), stat="identity") +
+      geom_hline(yintercept=0, colour="black", lwd=0.4) +
+      geom_text(data=text_ann[text_ann$groups==g1,], aes(y = label_ypos, label = bar_count), hjust=1) +
+      geom_text(data=text_ann[text_ann$groups==g2,], aes(y = -label_ypos, label = bar_count), hjust=-1) +
+      geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-1) +
+      geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=1) +
+      annotate("text", x = counts$y[nrow(counts)-1], y = max(counts$label_ypos)*1.1, label = g1, size = 8) +
+      annotate("text", x = counts$y[nrow(counts)-1], y = -max(counts$label_ypos)*1.1, label = g2, size = 8) +
+      coord_flip() +
+      scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
+      labs(x = y_label, y = block_count, fill = legend_label)
+  } else {
+    pl <- ggplot(counts, aes(x=y)) +
+      geom_bar(data=counts[counts$groups==g1,], aes(y=n0), stat="identity") +
+      geom_bar(data=counts[counts$groups==g2,], aes(y=-n0), stat="identity") +
+      geom_hline(yintercept=0, colour="black", lwd=0.4) +
+      geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-1) +
+      geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=1) +
+      annotate("text", x = counts$y[nrow(counts)-1], y = max(counts$label_ypos)*1.1, label = g1, size = 8) +
+      annotate("text", x = counts$y[nrow(counts)-1], y = -max(counts$label_ypos)*1.1, label = g2, size = 8) +
+      coord_flip() +
+      scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
+      labs(x = y_label, y = block_count, fill = legend_label)
+  }
 
   if(!is.null(facet_rows)){
     pl <- pl + facet_grid(f_rows ~.)
