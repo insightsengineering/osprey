@@ -106,28 +106,34 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   if (any(term == "", na.rm = TRUE))
     stop("empty string is not a valid term, please use NA if data is missing")
 
-  check_input_length = c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(sub))
+  if(!is.null(sub)){
+    check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)), nrow(sub))
+    check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
+  } else {
+    check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)))
+    check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
+  }
+
   if(length(unique(check_input_length)) > 1)
     stop("invalid arguments: check that the length of input arguments are identical")
-  if(any(is.na(class)) || any(is.na(term)))
-    stop("invalid arguments: your input has NA")
+  if(length(unique(check_input_col)) > 1 || unique(check_input_col) != 1)
+    stop("invalid arguments: check that the inputs have a single column")
+  if(any(check_input_length == 0) || any(check_input_col == 0))
+    stop("invalid arguments: check that inputs are not null")
+
 
   #prepare data ------------------------------------
   df <- data.frame(id = id,
                    class = class,
                    term = term,
-                   #temp = term,
                    col_by = col_by,
                    stringsAsFactors = FALSE)
 
   if(!is.null(sub)){
-    if(any(is.na(sub)))
-      stop("invalid arguments: your input has NA")
     df <- data.frame(id = id,
                      class = class,
                      term = term,
                      sub,
-                     # temp = sub[,ncol(sub)],
                      col_by = col_by,
                      stringsAsFactors = FALSE)
   }
@@ -144,15 +150,12 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   df <- na.omit(df)
 
   # start tabulating --------------------------------------------------------
-  n_cols <- nlevels(col_by)
 
   ###---------NEED TO MOVE TO UTILS-------------utility functions
   #split class, term, and subterms into lists
   recursive_split <- function(df, name_in, count, max_count){
     if(nrow(df) == 0)
       return()
-    # if(name_in == "NA")
-    #   return()
 
     l_t_comp <-  t_helper_tabulate(df_id = df,
                                    N = N,
@@ -162,11 +165,6 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                                    with_percent = TRUE)
 
     if(count == max_count || (!is.null(nrow(split(df, df[,count]))))&& nrow(split(df, df[,count]))==0){
-      # df_s <- c(
-      #   list(name_in = df),
-      #   split(df, df[,count])
-      # )
-      # names(df_s) <- c(name_in, names(split(df, df[,count])))
 
       l_t_ov <- t_helper_tabulate(df_id = df,
                         N = N,
@@ -211,6 +209,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   tbls_class <- Map(recursive_indent, tbls_all, rep(0, length(tbls_all)))
   tbl <- do.call(stack_rtables, tbls_class)
 
+  #remove NA rows
   index <- numeric(0)
   for(i in seq(1, length(tbl), 2)){
     if(attr(tbl[[i]], "row.name") == "NA"){

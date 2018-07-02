@@ -36,10 +36,10 @@ default here is NULL}
 
 \item{datalabel_txt}{list defines text (at last time point) and
 flag for an arrow annotation
-(per defined variable) - elements must be labeled one/two/three
-one - text annotation next to final data point (for text annotation)
-two - vector of ID's (for annotation marker)
-three - vector of ID's (subset of two) where arrow is desired to
+(per defined variable) - elements must be labeled txt_ann/mrkr_all/mrkr_ann
+txt_ann - text annotation next to final data point (for text annotation)
+mrkr_all - vector of ID's (for annotation marker)
+mrkr_ann - vector of ID's (subset of mrkr_all) where arrow is desired to
 indicate any study interim points}
 
 \item{facet_rows}{vector defines what variable is used to split the
@@ -80,10 +80,6 @@ dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")
 #test changing where annotation marker lies
 #dat <- dat[-4, ]
 
-colors <- c("black", "red", "blue", "green", "yellow", "brown")
-shapes <- c(0, 1, 2, 3, 4, 5, 6)
-#map_marker_color <- mapvalues(dat$RACE, from = levels(dat$RACE), to = colors[1:nlevels(dat$RACE)])
-#map_marker_shape <- mapvalues(dat$RACE, from = levels(dat$RACE), to = shapes[1:nlevels(dat$RACE)])
 g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              marker_y = dat$PCHG,
              line_colby = dat$USUBJID,
@@ -96,9 +92,9 @@ g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              #                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = 5),
              marker_size = 5,
-             datalabel_txt = list(one = dat$USUBJID),
-             #datalabel_txt = list(one = dat$USUBJID, two = dat$USUBJID, three = c("id-1", "id-4", "id-7")),
-             #datalabel_txt = list(two = dat$USUBJID, three = c("id-2", "id-4", "id-7")),
+             datalabel_txt = list(txt_ann = dat$USUBJID),
+             #datalabel_txt = list(txt_ann = dat$USUBJID, mrkr_all = dat$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
+             #datalabel_txt = list(mrkr_all = dat$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
              facet_rows = dat$SEX,
              facet_columns = dat$ARM,
              vref_line = c(10, 37),
@@ -117,8 +113,8 @@ g_spiderplot(marker_x = data.frame(day = as.factor(dat2$day), groupby = dat2$USU
              marker_shape = dat2$RACE,
              #marker_shape_opt = map_marker_shape,
              marker_size = 5,
-             datalabel_txt = list(one = dat2$USUBJID, two = dat2$USUBJID, three = c("id-2", "id-4", "id-7")),
-             #datalabel_txt = list(two = dat2$USUBJID, three = c("id-2", "id-4", "id-7")),
+             datalabel_txt = list(txt_ann = dat2$USUBJID, mrkr_all = dat2$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
+             #datalabel_txt = list(mrkr_all = dat2$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
              facet_rows = dat2$SEX,
              facet_columns = dat2$ARM,
              vref_line = c("10", "37"),

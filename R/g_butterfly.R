@@ -3,8 +3,8 @@
 #'
 #' @param category vector of y values
 #' @param groups vector of dichotomization values
-#' @param block_count string - what to count by (ex: # of AE or # of patients)
-#' @param block_color color coding of bar segments
+#' @param block_count string - what to count by (ex: # of AEs or # of patients)
+#' @param block_color vector - color coding of bar segments
 #' @param id unique subject identifier variable.
 #' @param facet_rows vector defines what variable is used to split the
 #' plot into rows, default here is NULL
@@ -29,7 +29,7 @@
 #' library(reshape2)
 #'
 #' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
-#' #data <- data %>% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))
+#' data <- data %>% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))
 #'
 #' p <- g_butterfly(category = data$AEBODSYS,
 #'             groups = data$SEX,
@@ -37,7 +37,7 @@
 #'             block_color = data$AETOXGR,
 #'             id = data$USUBJID,
 #'             #facet_rows = data$RACE,
-#'             x_label = block_count,
+#'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
 #'             show_legend = TRUE)
@@ -55,8 +55,35 @@ g_butterfly <- function(category,
                         legend_label = "AETOXGR",
                         show_legend = TRUE){
 
+  #check validity of input arguments-------------------------
+  check_input_length <- c(nrow(data.frame(category)), nrow(data.frame(groups)), nrow(data.frame(id)))
+  check_input_col <- c(ncol(data.frame(category)), ncol(data.frame(groups)), ncol(data.frame(id)))
+
+  if(length(unique(check_input_length)) > 1)
+    stop("invalid arguments: check that the length of input arguments are identical")
+  if(length(unique(check_input_col)) > 1 || unique(check_input_col) != 1)
+    stop("invalid arguments: check that the inputs have a single column")
+  if(any(check_input_length == 0) || any(check_input_col == 0))
+    stop("invalid arguments: check that inputs are not null")
+  if(length(unique(as.character(groups))) != 2)
+    stop("invalid arguments: groups can only have 2 unique values")
+
+  check_input_class <- c(class(block_count), class(x_label), class(y_label), class(legend_label))
+  if(any(check_input_class != "character"))
+    stop("invalid arguments: check that appropriate parameters are strings")
+
+  all_opt = c("# of patients", "# of AEs")
+  if(!any(block_count %in% all_opt))
+    stop("invalid arguments: please check that block_count input is one of two appropriate terms")
+
   #set up data-------
   if(!is.null(block_color)){
+    if(length(unique(c(nrow(data.frame(block_color)),check_input_length))) > 1)
+      stop("invalid arguments: check that the length of input arguments are identical")
+
+    if(length(unique(c(ncol(data.frame(block_color)),check_input_col))) > 1 || unique(c(ncol(data.frame(block_color)),check_input_col)) != 1)
+      stop("invalid arguments: check that the inputs have a single column")
+
     if(is.null(facet_rows)){
       dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color)
 
@@ -90,6 +117,11 @@ g_butterfly <- function(category,
         filter(label_ypos == max(label_ypos))
       total_text_ann <- text_ann %>% group_by(y, groups) %>% filter(label_ypos == max(label_ypos))
     } else{
+      if(length(unique(c(nrow(data.frame(facet_rows)),check_input_length))) > 1)
+        stop("invalid arguments: check that the length of input arguments are identical")
+      if(length(unique(c(ncol(data.frame(facet_rows)),check_input_col))) > 1 || unique(c(ncol(data.frame(facet_rows)),check_input_col)) != 1)
+        stop("invalid arguments: check that the inputs have a single column")
+
       dat <- data.frame(id = id, y = category, groups = groups, bar_color = block_color, f_rows = facet_rows)
 
       if(block_count == "# of patients"){
@@ -152,6 +184,11 @@ g_butterfly <- function(category,
         filter(label_ypos == max(label_ypos))
       total_text_ann <- text_ann %>% group_by(y, groups) %>% filter(label_ypos == max(label_ypos))
     } else{
+      if(length(unique(c(nrow(data.frame(facet_rows)),check_input_length))) > 1)
+        stop("invalid arguments: check that the length of input arguments are identical")
+      if(length(unique(c(ncol(data.frame(facet_rows)),check_input_col))) > 1 || unique(c(ncol(data.frame(facet_rows)),check_input_col)) != 1)
+        stop("invalid arguments: check that the inputs have a single column")
+
       dat <- data.frame(id = id, y = category, groups = groups, f_rows = facet_rows)
 
       if(block_count == "# of patients"){
@@ -195,8 +232,8 @@ g_butterfly <- function(category,
       geom_text(data=text_ann[text_ann$groups==g2,], aes(y = -label_ypos, label = bar_count), hjust=-1) +
       geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-1) +
       geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=1) +
-      annotate("text", x = counts$y[nrow(counts)-1], y = max(counts$label_ypos)*1.1, label = g1, size = 8) +
-      annotate("text", x = counts$y[nrow(counts)-1], y = -max(counts$label_ypos)*1.1, label = g2, size = 8) +
+      annotate("text", x = if(length(unique(counts$y)) > 2) unique(counts$y)[length(unique(counts$y))-2] else unique(counts$y)[length(unique(counts$y))], y = max(counts$label_ypos)*1.1, label = g1, size = 8) +
+      annotate("text", x = if(length(unique(counts$y)) > 2) unique(counts$y)[length(unique(counts$y))-2] else unique(counts$y)[length(unique(counts$y))], y = -max(counts$label_ypos)*1.1, label = g2, size = 8) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
@@ -207,8 +244,8 @@ g_butterfly <- function(category,
       geom_hline(yintercept=0, colour="black", lwd=0.4) +
       geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-1) +
       geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=1) +
-      annotate("text", x = counts$y[nrow(counts)-1], y = max(counts$label_ypos)*1.1, label = g1, size = 8) +
-      annotate("text", x = counts$y[nrow(counts)-1], y = -max(counts$label_ypos)*1.1, label = g2, size = 8) +
+      annotate("text", x = if(length(unique(counts$y)) > 2) unique(counts$y)[length(unique(counts$y))-2] else unique(counts$y)[length(unique(counts$y))], y = max(counts$label_ypos)*1.1, label = g1, size = 8) +
+      annotate("text", x = if(length(unique(counts$y)) > 2) unique(counts$y)[length(unique(counts$y))-2] else unique(counts$y)[length(unique(counts$y))], y = -max(counts$label_ypos)*1.1, label = g2, size = 8) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)

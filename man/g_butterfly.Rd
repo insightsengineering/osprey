@@ -14,9 +14,9 @@ g_butterfly(category, groups, block_count = "# of patients",
 
 \item{groups}{vector of dichotomization values}
 
-\item{block_count}{string - what to count by (ex: # of AE or # of patients)}
+\item{block_count}{string - what to count by (ex: # of AEs or # of patients)}
 
-\item{block_color}{color coding of bar segments}
+\item{block_color}{vector - color coding of bar segments}
 
 \item{id}{unique subject identifier variable.}
 
@@ -52,7 +52,7 @@ p <- g_butterfly(category = data$AEBODSYS,
             block_color = data$AETOXGR,
             id = data$USUBJID,
             #facet_rows = data$RACE,
-            x_label = block_count,
+            x_label = "# of patients",
             y_label = "AE Derived Terms",
             legend_label = "AETOXGR",
             show_legend = TRUE)

@@ -110,6 +110,16 @@ t_ae <- function(class, term, id, col_by, total="All Patients",...) {
   if (any(term == "", na.rm = TRUE))
     stop("empty string is not a valid term, please use NA if data is missing")
 
+  check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)))
+  check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
+
+  if(length(unique(check_input_length)) > 1)
+    stop("invalid arguments: check that the length of input arguments are identical")
+  if(length(unique(check_input_col)) > 1 || unique(check_input_col) != 1)
+    stop("invalid arguments: check that the inputs have a single column")
+  if(any(check_input_length == 0) || any(check_input_col == 0))
+    stop("invalid arguments: check that inputs are not null")
+
   #prepare data ------------------------------------
   df <- data.frame(class = class,
                    term = term,
@@ -204,13 +214,11 @@ t_ae <- function(class, term, id, col_by, total="All Patients",...) {
     }, numeric(1))
 
     l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
-    #l_t_terms[c(1, setdiff(order(-N_total_any, names(l_t_terms), decreasing = FALSE), 1))]
     l_t_terms <- c(l_t_summary, l_t_terms)
   })#---------------------------end class and term chunk
 
   # now sort tables
   N_total_overall <- vapply(l_t_class_terms, function(tbl) {
-    #tbl[[1]][1, n_cols + 1][1]
     a <- 0
     for(i in c(1:n_cols)){
       a <- a + tbl[[1]][1, i][1]

@@ -81,13 +81,6 @@ t_ae_oview <- function(id,
                        col_by,
                        total="All Patients") {
 
-  #import tern functions
-  duplicate_with_var <- tern:::duplicate_with_var
-  check_col_by <- tern:::check_col_by
-  stack_rtables <- tern:::stack_rtables
-  count_perc_col_N <- tern:::count_perc_col_N
-  indent_table <- tern:::indent_table
-
   #check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
   possible_names = c("dthfl",
@@ -112,19 +105,28 @@ t_ae_oview <- function(id,
   if (any(term == "", na.rm = TRUE))
     stop("empty string is not a valid term, please use NA if data is missing")
   if(is.null(flags$dthfl))
-    stop("need a dthfl column in the flags parameter")
+    stop("invalid arguments: need a dthfl column in the flags parameter")
   if(is.null(flags$dcsreas))
-    stop("need a dcsreas column in the flags parameter")
+    stop("invalid arguments: need a dcsreas column in the flags parameter")
   if(length(display_id) > 11)
-    stop("the maximum number of defaualt analyses is 11, please add additional analyses to extra_flag")
+    stop("invalid arguments: the maximum number of defaualt analyses is 11, please add additional analyses to extra_flag")
   if(any(is.element(colnames(flags), possible_names) == FALSE))
-    stop("check that the column names in flags matches the expected input")
+    stop("invalid arguments: check that the column names in flags matches the expected input")
 
-  check_input_length = c(nrow(data.frame(id)), nrow(data.frame(class)), nrow(data.frame(term)), nrow(flags))
+  if(!is.null(extra_flag)){
+    check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(flags)), nrow(extra_flag))
+    check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)))
+  } else {
+    check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(flags)))
+    check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)))
+  }
+
   if(length(unique(check_input_length)) > 1)
     stop("invalid arguments: check that the length of input arguments are identical")
-  if(any(is.na(class)) || any(is.na(term)) || any(is.na(flags)) || any(is.na(id)))
-    stop("invalid arguments: your input has NA")
+  if(length(unique(check_input_col)) > 1 || unique(check_input_col) != 1)
+    stop("invalid arguments: check that the inputs have a single column")
+  if(any(check_input_length == 0) || any(check_input_col== 0))
+    stop("invalid arguments: check that inputs are not null")
 
   #prepare data ------------------------------------
   df <- data.frame(class = class,
