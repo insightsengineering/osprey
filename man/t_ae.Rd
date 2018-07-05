@@ -4,7 +4,8 @@
 \alias{t_ae}
 \title{Create an Adverse Events (AET02) Table}
 \usage{
-t_ae(class, term, id, col_by, total = "All Patients", ...)
+t_ae(class, term, id, col_by, total = "All Patients", sort_by = "count",
+  ...)
 }
 \arguments{
 \item{class}{system organ class variable.}
@@ -21,6 +22,10 @@ has to be a factor and can not be missing.}
 \item{total}{character string that will be used as a label for a column with
 pooled total population, default here is "All Patients", if set to "NONE" then
 the "All Patients" column is suppressed.}
+
+\item{sort_by}{character string that defines the ordering of the class and term
+variables in the output table,
+options: "alphabetical" or "count", default here is set to "count"}
 }
 \value{
 \code{rtable} object
@@ -82,7 +87,8 @@ tbl4 <- t_ae(
   class = data$AEBODSYS,
   term =  data$AEDECOD,
   id = data$USUBJID,
-  col_by = factor(data$ARM)
+  col_by = factor(data$ARM),
+  sort_by = "alphabetical"
 )
 
 tbl4

@@ -13,7 +13,9 @@
 #' @param total character string that will be used as a label for a column with
 #'  pooled total population, default here is "All Patients", if set to "NONE" then
 #'  the "All Patients" column is suppressed.
-#'
+#' @param sort_by character string that defines the ordering of the class and term
+#' variables in the output table,
+#' options: "alphabetical" or "count", default here is set to "count"
 #'
 #'
 #' @return \code{rtable} object
@@ -76,7 +78,8 @@
 #'   class = data$AEBODSYS,
 #'   term =  data$AEDECOD,
 #'   id = data$USUBJID,
-#'   col_by = factor(data$ARM)
+#'   col_by = factor(data$ARM),
+#'   sort_by = "alphabetical"
 #' )
 #'
 #' tbl4
@@ -92,7 +95,7 @@
 #'
 #' tbl5
 #'
-t_ae <- function(class, term, id, col_by, total="All Patients",...) {
+t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count", ...) {
 
   #check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
@@ -126,6 +129,8 @@ t_ae <- function(class, term, id, col_by, total="All Patients",...) {
                    subjid = id,
                    col_by = col_by,
                    stringsAsFactors = FALSE)
+
+  df <- df %>% arrange(class, term)
 
   # adding All Patients
   if(total != "NONE"){
@@ -199,34 +204,37 @@ t_ae <- function(class, term, id, col_by, total="All Patients",...) {
 
     })
 
-    #l_t_terms <- c(l_t_terms[1], l_t_num_ae, l_t_terms[2:length(l_t_terms)])
     l_t_summary <- c(l_t_terms[1], l_t_num_ae)
     l_t_terms <- c(l_t_terms[2:length(l_t_terms)])
 
-    # sort terms by total
-    N_total_any <- vapply(l_t_terms, function(tbl) {
-      #tbl[1, n_cols + 1][1]
+    if(sort_by == "count"){
+      # sort terms by total
+      N_total_any <- vapply(l_t_terms, function(tbl) {
+        a <- 0
+        for(i in c(1:n_cols)){
+          a <- a + tbl[1, i][1]
+        }
+        a
+      }, numeric(1))
+
+      l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
+    }
+
+    l_t_terms <- c(l_t_summary, l_t_terms)
+  })#---------------------------end class and term chunk
+
+  if(sort_by == "count"){
+    # now sort tables
+    N_total_overall <- vapply(l_t_class_terms, function(tbl) {
       a <- 0
       for(i in c(1:n_cols)){
-        a <- a + tbl[1, i][1]
+        a <- a + tbl[[1]][1, i][1]
       }
       a
     }, numeric(1))
 
-    l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
-    l_t_terms <- c(l_t_summary, l_t_terms)
-  })#---------------------------end class and term chunk
-
-  # now sort tables
-  N_total_overall <- vapply(l_t_class_terms, function(tbl) {
-    a <- 0
-    for(i in c(1:n_cols)){
-      a <- a + tbl[[1]][1, i][1]
-    }
-    a
-  }, numeric(1))
-
-  l_t_class_terms_sorted <- l_t_class_terms[order(-N_total_overall, names(l_t_class_terms), decreasing = FALSE)]
+    l_t_class_terms <- l_t_class_terms[order(-N_total_overall, names(l_t_class_terms), decreasing = FALSE)]
+  }
 
   #Overall: total num patients
   df_patients <- list("Total number of patients with at least one adverse event" = df)
@@ -278,7 +286,7 @@ t_ae <- function(class, term, id, col_by, total="All Patients",...) {
 
   })
 
-  tbls_all <- l_t_class_terms_sorted
+  tbls_all <- l_t_class_terms
 
 
   tbls_overview <- c(
