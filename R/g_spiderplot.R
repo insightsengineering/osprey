@@ -57,10 +57,10 @@
 #' #test changing where annotation marker lies
 #' #dat <- dat[-4, ]
 #'
-#' g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
+#' p <- g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
 #'              marker_y = dat$PCHG,
 #'              line_colby = dat$USUBJID,
-#'              #marker_color = dat$RACE,
+#'              marker_color = dat$RACE,
 #'              #marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
 #'              #                     "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
 #'              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
@@ -78,7 +78,7 @@
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
-#'              show_legend = TRUE)
+#'              show_legend = FALSE)
 #'
 #' #test discrete x-axis points
 #' dat2 <- dat %>% arrange(TUDY) %>% mutate(day = as.character(TUDY)) %>% as.data.frame()
@@ -179,9 +179,9 @@ g_spiderplot <- function(marker_x,
 
   #line color
   if(!is.null(line_colby)){
-    pl <- pl + geom_line(aes(color = l_col), size = 2, alpha = 0.5, show.legend = show_legend)
+    pl <- pl + geom_line(aes(color = l_col), size = 1, alpha = 0.5, show.legend = show_legend)
   } else{
-    pl <- pl + geom_line(size = 2, alpha = 0.5, show.legend = show_legend)
+    pl <- pl + geom_line(size = 1, alpha = 0.5, show.legend = show_legend)
   }
 
   #marker shape and color------------
@@ -261,10 +261,10 @@ g_spiderplot <- function(marker_x,
   #modify background color
   pl <- pl + theme_classic() +
     theme(strip.background = element_rect(colour = "white", fill = "white"),
-          text = element_text(size = 25),
+          text = element_text(size = 16),
           axis.text = element_text(color = "black"),
           legend.text=element_text(size=7),
-          legend.title = element_text(size = 9)) +
+          legend.title = element_text(size = 7)) +
     labs(colour = "Color", shape = "Shape") +
     guides(color = guide_legend(override.aes = list(size=2)))
 

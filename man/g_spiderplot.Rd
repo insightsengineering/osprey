@@ -80,10 +80,10 @@ dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")
 #test changing where annotation marker lies
 #dat <- dat[-4, ]
 
-g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
+p <- g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              marker_y = dat$PCHG,
              line_colby = dat$USUBJID,
-             #marker_color = dat$RACE,
+             marker_color = dat$RACE,
              #marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
              #                     "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
@@ -101,7 +101,7 @@ g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              href_line = -0.3,
              x_label = "Time (Days)",
              y_label = "Change (\%) from Baseline",
-             show_legend = TRUE)
+             show_legend = FALSE)
 
 #test discrete x-axis points
 dat2 <- dat \%>\% arrange(TUDY) \%>\% mutate(day = as.character(TUDY)) \%>\% as.data.frame()
