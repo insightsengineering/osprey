@@ -15,7 +15,10 @@ Encoding: UTF-8
 LazyData: true
 Depends: ggplot2,
   dplyr,
-  tidyr
+  tidyr,
+  rtables,
+  tern
+Imports: tern
 Suggests: random.cdisc.data
 Additional_repositories: 
   https://github.roche.com/Rpackages/random.cdisc.data

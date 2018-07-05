@@ -7,6 +7,18 @@ Package for entry level R-development of TLG:s. Webpage of all the TLG:s in the 
 
 ## Installation
 
+### Stable Release
+
+[Web Manual](https://pages.github.roche.com/Rpackages/osprey/)
+
+```r
+devtools::install_github(repo = "Rpackages/osprey", ref = "release-tag", host = "https://github.roche.com/api/v3")
+```
+
+### Development Version
+
+[Web Manual](https://pages.github.roche.com/Rpackages/osprey/dev/)
+
 ```r
 devtools::install_github(repo = "Rpackages/osprey", host = "https://github.roche.com/api/v3")
 ```

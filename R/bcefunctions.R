@@ -63,6 +63,7 @@ getdata_bce <- function(snapshot, area, x = NULL, load = TRUE) {
 
 
   if (is.null(x)) {
+    path <- gsub(".$", "", path)
     data <- read_bce(path)
   } else {
     data <- lapply(path, read_bce)
@@ -161,6 +162,8 @@ as_pdf <- function(grobs,
 #'   \code{"letter.landscape"} (default)
 #'
 #' @return a pdf file
+#'
+#' @export
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
 #'
