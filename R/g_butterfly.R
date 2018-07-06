@@ -10,12 +10,16 @@
 #' plot into rows, default here is NULL
 #' @param x_label string of text for x axis label, default is block_count
 #' @param y_label string of text for y axis label, default is AE Derived Terms
+#' @param sort_by character string that defines the ordering of the class and term
+#' variables in the output table,
+#' options: "alphabetical" or "count", default here is set to "count"
 #' @param show_legend boolean of whether color coding legend is included,
 #' default here is FALSE
 #'
 #' @return ggplot object
 #'
 #' @import lemon
+#' @import stringr
 #'
 #' @export
 #'
@@ -27,19 +31,22 @@
 #' library(dplyr)
 #' library(lemon)
 #' library(reshape2)
+#' library(grid)
+#' library(stringr)
 #'
 #' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
-#' data <- data %>% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))
+#' #data <- data %>% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))
 #'
 #' p <- g_butterfly(category = data$AEBODSYS,
 #'             groups = data$SEX,
 #'             block_count = "# of patients",
 #'             block_color = data$AETOXGR,
 #'             id = data$USUBJID,
-#'             #facet_rows = data$RACE,
+#'             facet_rows = data$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
+#'             sort_by = "count",
 #'             show_legend = TRUE)
 #' p
 #'
@@ -53,6 +60,7 @@ g_butterfly <- function(category,
                         x_label = block_count,
                         y_label = "AE Derived Terms",
                         legend_label = "AETOXGR",
+                        sort_by = "alphabetical",
                         show_legend = TRUE){
 
   #check validity of input arguments-------------------------
@@ -223,6 +231,23 @@ g_butterfly <- function(category,
     }
   }
 
+  counts$y <- str_wrap(counts$y, width = 30)
+  total_text_ann$y <- str_wrap(total_text_ann$y, width = 30)
+  text_ann$y <- str_wrap(text_ann$y, width = 30)
+
+  if(sort_by == "alphabetical"){
+    counts$y <- factor(counts$y, levels = rev(unique(counts$y[order(counts$y, decreasing = TRUE)])))
+
+  } else if(sort_by == "count"){
+    tot <- counts %>% group_by(y, groups) %>%
+                     filter(label_ypos == last(label_ypos)) %>%
+                     group_by(y) %>%
+                     tally(n) %>%
+                     data.frame
+    counts <- left_join(counts, tot)
+    counts$y <- factor(counts$y, levels = rev(unique(counts$y[order(counts[, ncol(counts)], decreasing = TRUE)])))
+  }
+
   g1 <- unique(as.character(groups))[1]
   g2 <- unique(as.character(groups))[2]
 
@@ -232,12 +257,10 @@ g_butterfly <- function(category,
       geom_bar(data=counts[counts$groups==g1,], aes(y=n0, fill=bar_color), stat="identity") +
       geom_bar(data=counts[counts$groups==g2,], aes(y=-n0, fill=bar_color), stat="identity") +
       geom_hline(yintercept=0, colour="black", lwd=0.4) +
-      geom_text(data=text_ann[text_ann$groups==g1,], aes(y = label_ypos, label = bar_count), hjust=1) +
-      geom_text(data=text_ann[text_ann$groups==g2,], aes(y = -label_ypos, label = bar_count), hjust=-1) +
-      geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-1) +
-      geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=1) +
-      annotate("text", x = if(length(unique(counts$y)) > 2) unique(counts$y)[length(unique(counts$y))-2] else unique(counts$y)[length(unique(counts$y))], y = max(counts$label_ypos)*1.1, label = g1, size = 8) +
-      annotate("text", x = if(length(unique(counts$y)) > 2) unique(counts$y)[length(unique(counts$y))-2] else unique(counts$y)[length(unique(counts$y))], y = -max(counts$label_ypos)*1.1, label = g2, size = 8) +
+      geom_text(data=text_ann[text_ann$groups==g1,], aes(y = label_ypos, label = bar_count), hjust=0.9) +
+      geom_text(data=text_ann[text_ann$groups==g2,], aes(y = -label_ypos, label = bar_count), hjust=-0.9) +
+      geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-0.9) +
+      geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
@@ -246,22 +269,21 @@ g_butterfly <- function(category,
       geom_bar(data=counts[counts$groups==g1,], aes(y=n0), stat="identity") +
       geom_bar(data=counts[counts$groups==g2,], aes(y=-n0), stat="identity") +
       geom_hline(yintercept=0, colour="black", lwd=0.4) +
-      geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-1) +
-      geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=1) +
-      annotate("text", x = if(length(unique(counts$y)) > 2) unique(counts$y)[length(unique(counts$y))-2] else unique(counts$y)[length(unique(counts$y))], y = max(counts$label_ypos)*1.1, label = g1, size = 8) +
-      annotate("text", x = if(length(unique(counts$y)) > 2) unique(counts$y)[length(unique(counts$y))-2] else unique(counts$y)[length(unique(counts$y))], y = -max(counts$label_ypos)*1.1, label = g2, size = 8) +
+      geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-0.9) +
+      geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
   }
 
   if(!is.null(facet_rows)){
-    pl <- pl + facet_grid(f_rows ~.)
+    pl <- pl + facet_wrap(~f_rows, ncol = 1)
   }
 
   if(show_legend){
     pl <- pl + theme_classic() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
+            strip.text.x = element_text(color = "black", size = 9),
             text = element_text(size = 20),
             axis.text = element_text(color = "black", size = 9),
             legend.text=element_text(size=9),
@@ -271,6 +293,7 @@ g_butterfly <- function(category,
   } else{
     pl <- pl + theme_classic() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
+            strip.text.x = element_text(color = "black", size = 9),
             text = element_text(size = 20),
             axis.text = element_text(color = "black", size = 9),
             legend.text=element_text(size=9),
@@ -278,6 +301,16 @@ g_butterfly <- function(category,
             panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
             strip.text = element_text(size = 5),
             legend.position = "none")
+  }
+
+  if(sort_by == "alphabetical"){
+    pl <- pl + scale_x_discrete(limits = rev(levels(factor(counts$y)))) +
+      annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = g1, size = 8) +
+      annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = g2, size = 8)
+  } else if(sort_by == "count"){
+    pl <- pl + scale_x_discrete(limits = levels(factor(counts$y))) +
+      annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = g1, size = 8) +
+      annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = g2, size = 8)
   }
 
   pl

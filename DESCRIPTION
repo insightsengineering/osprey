@@ -13,7 +13,9 @@ LazyData: true
 Depends: ggplot2,
   dplyr,
   tidyr,
-  rtables
+  rtables,
+  lemon,
+  stringr
 Suggests: random.cdisc.data
 Additional_repositories: 
   https://github.roche.com/Rpackages/random.cdisc.data

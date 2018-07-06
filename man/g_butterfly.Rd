@@ -7,7 +7,7 @@
 g_butterfly(category, groups, block_count = "# of patients",
   block_color = NULL, id, facet_rows = NULL, x_label = block_count,
   y_label = "AE Derived Terms", legend_label = "AETOXGR",
-  show_legend = TRUE)
+  sort_by = "alphabetical", show_legend = TRUE)
 }
 \arguments{
 \item{category}{vector of y values}
@@ -27,6 +27,10 @@ plot into rows, default here is NULL}
 
 \item{y_label}{string of text for y axis label, default is AE Derived Terms}
 
+\item{sort_by}{character string that defines the ordering of the class and term
+variables in the output table,
+options: "alphabetical" or "count", default here is set to "count"}
+
 \item{show_legend}{boolean of whether color coding legend is included,
 default here is FALSE}
 }
@@ -42,19 +46,22 @@ library(plyr)
 library(dplyr)
 library(lemon)
 library(reshape2)
+library(grid)
+library(stringr)
 
 data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
-data <- data \%>\% filter(AEBODSYS \%in\% c("Vascular disorders", "Surgical and medical procedures"))
+#data <- data \%>\% filter(AEBODSYS \%in\% c("Vascular disorders", "Surgical and medical procedures"))
 
 p <- g_butterfly(category = data$AEBODSYS,
             groups = data$SEX,
             block_count = "# of patients",
             block_color = data$AETOXGR,
             id = data$USUBJID,
-            #facet_rows = data$RACE,
+            facet_rows = data$RACE,
             x_label = "# of patients",
             y_label = "AE Derived Terms",
             legend_label = "AETOXGR",
+            sort_by = "count",
             show_legend = TRUE)
 p
 
