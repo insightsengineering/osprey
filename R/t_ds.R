@@ -129,6 +129,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                    col_by = col_by,
                    stringsAsFactors = FALSE)
 
+  df <- df %>% arrange(class, term)
+
   if(!is.null(sub)){
     df <- data.frame(id = id,
                      class = class,
@@ -136,6 +138,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                      sub,
                      col_by = col_by,
                      stringsAsFactors = FALSE)
+    df <- df %>% arrange(class, term)
   }
 
   # adding All Patients
