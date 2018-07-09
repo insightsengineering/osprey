@@ -125,30 +125,30 @@ g_swimlane <- function(bar_id,
 ) {
 
   # check data
-  if (!is.null(sort_by)) tern:::check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
-  if (!is.null(col_by)) tern:::check_same_N(bar_id = bar_id, bar_length = bar_length, col_by = col_by)
+  if (!is.null(sort_by)) check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
+  if (!is.null(col_by)) check_same_N(bar_id = bar_id, bar_length = bar_length, col_by = col_by)
 
   if (!is.null(marker_id) & length(which(!marker_id %in% bar_id)) > 0) stop("marker_id ", marker_id[which(!marker_id %in% bar_id)], " is not in bar_id")
 
-  if (!is.null(marker_id) & !is.null(marker_pos)) tern:::check_same_N(marker_id = marker_id, marker_pos = marker_pos)
-  if (!is.null(marker_id) & !is.null(marker_shape)) tern:::check_same_N(marker_id = marker_id, marker_shape = marker_shape)
-  if (!is.null(marker_id) & !is.null(marker_color)) tern:::check_same_N(marker_id = marker_id, marker_color = marker_color)
+  if (!is.null(marker_id) & !is.null(marker_pos)) check_same_N(marker_id = marker_id, marker_pos = marker_pos)
+  if (!is.null(marker_id) & !is.null(marker_shape)) check_same_N(marker_id = marker_id, marker_shape = marker_shape)
+  if (!is.null(marker_id) & !is.null(marker_color)) check_same_N(marker_id = marker_id, marker_color = marker_color)
 
   # data for plot
   bar_data <- data.frame(
     bar_id,
     bar_length,
-    sort_by = if (is.null(sort_by)) "x" else tern:::to_n(sort_by, length(bar_length)),
-    col_by = if (is.null(col_by)) "x" else tern:::to_n(col_by, length(bar_length))
+    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
+    col_by = if (is.null(col_by)) "x" else to_n(col_by, length(bar_length))
     )
 
   #data for marker
   if (is.null(marker_id)) marker_id <- bar_id
   marker_data <- data.frame(
     marker_id,
-    marker_pos = if (is.null(marker_pos)) "x" else tern:::to_n(marker_pos, length(marker_id)),
-    marker_shape = if (is.null(marker_shape)) "x" else tern:::to_n(marker_shape, length(marker_id)),
-    marker_color = if (is.null(marker_color)) "x" else tern:::to_n(marker_color, length(marker_id))
+    marker_pos = if (is.null(marker_pos)) "x" else to_n(marker_pos, length(marker_id)),
+    marker_shape = if (is.null(marker_shape)) "x" else to_n(marker_shape, length(marker_id)),
+    marker_color = if (is.null(marker_color)) "x" else to_n(marker_color, length(marker_id))
     )
 
   # if sort by a variable, reorder bar_id; otherwise sort by bar length
@@ -247,10 +247,10 @@ g_swimlane <- function(bar_id,
   # create annotation as a separate table plot
   if (is.null(anno_txt)) {
     t <- data.frame(bar_id, bar_length,
-                    sort_by = if (is.null(sort_by)) "x" else tern:::to_n(sort_by, length(bar_length)))
+                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)))
   } else {
     t <- data.frame(bar_id, bar_length,
-                    sort_by = if (is.null(sort_by)) "x" else tern:::to_n(sort_by, length(bar_length)),
+                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
                     anno_txt)
   }
 

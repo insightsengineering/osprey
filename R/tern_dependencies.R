@@ -5,3 +5,5 @@ stack_rtables <- tern:::stack_rtables
 count_perc_col_N <- tern:::count_perc_col_N
 indent_table <- tern:::indent_table
 add_ae_class <- tern:::add_ae_class
+check_same_N <- tern:::check_same_N
+to_n <- tern:::to_n
