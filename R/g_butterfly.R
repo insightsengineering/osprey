@@ -262,7 +262,7 @@ g_butterfly <- function(category,
       geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-0.9) +
       geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=0.9) +
       coord_flip() +
-      scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
+      scale_y_continuous(labels = abs, limits = (max_c*1.4) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
   } else {
     pl <- ggplot(counts, aes(x=y)) +
@@ -272,7 +272,7 @@ g_butterfly <- function(category,
       geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-0.9) +
       geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=0.9) +
       coord_flip() +
-      scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
+      scale_y_continuous(labels = abs, limits = (max_c*1.4) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
   }
 
@@ -304,13 +304,24 @@ g_butterfly <- function(category,
   }
 
   if(sort_by == "alphabetical"){
-    pl <- pl + scale_x_discrete(limits = rev(levels(factor(counts$y)))) +
-      annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = g1, size = 8) +
-      annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = g2, size = 8)
+    pl <- pl + scale_x_discrete(limits = rev(levels(factor(counts$y))))
+
+    if(nchar(g1) < 6 || nchar(g2) < 6){
+      pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
+                 annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
+    } else {
+      pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[3] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
+        annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[3] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
+    }
   } else if(sort_by == "count"){
-    pl <- pl + scale_x_discrete(limits = levels(factor(counts$y))) +
-      annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = g1, size = 8) +
-      annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = g2, size = 8)
+    pl <- pl + scale_x_discrete(limits = levels(factor(counts$y)))
+    if(nchar(g1) < 6 || nchar(g2) < 6){
+      pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
+        annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
+    } else {
+      pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[length(levels(unique(counts$y)))-2] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
+        annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[length(levels(unique(counts$y)))-2] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
+    }
   }
 
   pl
