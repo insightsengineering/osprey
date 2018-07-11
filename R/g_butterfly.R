@@ -37,18 +37,17 @@
 #' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
 #' #data <- data %>% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))
 #'
-#' p <- g_butterfly(category = data$AEBODSYS,
+#' g_butterfly(category = data$AEBODSYS,
 #'             groups = data$SEX,
 #'             block_count = "# of patients",
 #'             block_color = data$AETOXGR,
 #'             id = data$USUBJID,
-#'             facet_rows = data$RACE,
+#'             #facet_rows = data$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
 #'             sort_by = "count",
 #'             show_legend = TRUE)
-#' p
 #'
 
 g_butterfly <- function(category,
@@ -289,6 +288,7 @@ g_butterfly <- function(category,
             legend.text=element_text(size=9),
             legend.title = element_text(size = 12),
             panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
+            plot.margin=unit(c(1.5,1,1,1),"cm"),
             strip.text = element_text(size = 5))
   } else{
     pl <- pl + theme_classic() +
@@ -300,31 +300,42 @@ g_butterfly <- function(category,
             legend.title = element_text(size = 12),
             panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
             strip.text = element_text(size = 5),
+            plot.margin=unit(c(1.5,1,1,1),"cm"),
             legend.position = "none")
   }
 
   if(sort_by == "alphabetical"){
     pl <- pl + scale_x_discrete(limits = rev(levels(factor(counts$y))))
 
-    if(nchar(g1) < 6 || nchar(g2) < 6){
-      pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
-                 annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
-    } else {
-      pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[3] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
-        annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[3] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
-    }
+    # if(nchar(g1) < 6 || nchar(g2) < 6){
+    #   pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
+    #              annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
+    # } else {
+    #   pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[3] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
+    #     annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[3] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
+    # }
   } else if(sort_by == "count"){
     pl <- pl + scale_x_discrete(limits = levels(factor(counts$y)))
-    if(nchar(g1) < 6 || nchar(g2) < 6){
-      pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
-        annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
-    } else {
-      pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[length(levels(unique(counts$y)))-2] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
-        annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[length(levels(unique(counts$y)))-2] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
-    }
+    # if(nchar(g1) < 6 || nchar(g2) < 6){
+    #   pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
+    #     annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
+    # } else {
+    #   pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[length(levels(unique(counts$y)))-2] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
+    #     annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[length(levels(unique(counts$y)))-2] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
+    # }
   }
 
-  pl
+  sizing <- dev.size("cm")
+  print(sizing)
+
+  print(pl)
+
+  grid.text(str_wrap(g1, width = 20), x = unit(sizing[1]-4.5, "cm"), y = unit(sizing[2] -1, "cm"), gp=gpar(fontsize=9))
+  grid.text(str_wrap(g2, width = 20), x = unit(((sizing[1]-4.5)/2) - 1.5, "cm"), y = unit(sizing[2] - 1, "cm"), gp=gpar(fontsize=9))
+
+  pl2 <- grid.grab()
+  grid.newpage()
+  grid.draw(pl2)
 
 }
 

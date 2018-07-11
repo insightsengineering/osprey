@@ -52,18 +52,17 @@ library(stringr)
 data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
 #data <- data \%>\% filter(AEBODSYS \%in\% c("Vascular disorders", "Surgical and medical procedures"))
 
-p <- g_butterfly(category = data$AEBODSYS,
+g_butterfly(category = data$AEBODSYS,
             groups = data$SEX,
             block_count = "# of patients",
             block_color = data$AETOXGR,
             id = data$USUBJID,
-            facet_rows = data$RACE,
+            #facet_rows = data$RACE,
             x_label = "# of patients",
             y_label = "AE Derived Terms",
             legend_label = "AETOXGR",
             sort_by = "count",
             show_legend = TRUE)
-p
 
 }
 \author{
