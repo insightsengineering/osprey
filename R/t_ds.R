@@ -101,11 +101,6 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   if (any("All Patients" %in% col_by))
     stop("'All Patients' is not a valid col_by, t_ae_oview derives All Patients column")
 
-  if (any(class == "", na.rm = TRUE))
-    stop("empty string is not a valid class, please use NA if data is missing")
-  if (any(term == "", na.rm = TRUE))
-    stop("empty string is not a valid term, please use NA if data is missing")
-
   if(!is.null(sub)){
     check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)), nrow(sub))
     check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
@@ -140,6 +135,9 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                      stringsAsFactors = FALSE)
     df <- df %>% arrange(class, term)
   }
+
+  df <- df %>% mutate(class = ifelse(class == "", NA, class),
+                      term = ifelse(term == "", NA, term))
 
   # adding All Patients
   if(total != "NONE"){

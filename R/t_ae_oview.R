@@ -100,10 +100,6 @@ t_ae_oview <- function(id,
   if (any("All Patients" %in% col_by))
     stop("'All Patients' is not a valid col_by, t_ae_oview derives All Patients column")
 
-  if (any(class == "", na.rm = TRUE))
-    stop("empty string is not a valid class, please use NA if data is missing")
-  if (any(term == "", na.rm = TRUE))
-    stop("empty string is not a valid term, please use NA if data is missing")
   if(is.null(flags$dthfl))
     stop("invalid arguments: need a dthfl column in the flags parameter")
   if(is.null(flags$dcsreas))
@@ -149,6 +145,9 @@ t_ae_oview <- function(id,
                                  extra_flag,
                                  stringsAsFactors = FALSE)
   }
+
+  df <- df %>% mutate(class = ifelse(class == "", NA, class),
+                      term = ifelse(term == "", NA, term))
 
   # adding All Patients
   if(total != "NONE"){

@@ -79,6 +79,7 @@
 #'   term =  data$AEDECOD,
 #'   id = data$USUBJID,
 #'   col_by = factor(data$ARM),
+#'   total = "None",
 #'   sort_by = "alphabetical"
 #' )
 #'
@@ -108,11 +109,6 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
   if (any("All Patients" %in% col_by))
     stop("'All Patients' is not a valid col_by, t_ae_oview derives All Patients column")
 
-  if (any(class == "", na.rm = TRUE))
-    stop("empty string is not a valid class, please use NA if data is missing")
-  if (any(term == "", na.rm = TRUE))
-    stop("empty string is not a valid term, please use NA if data is missing")
-
   check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)))
   check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
 
@@ -132,6 +128,9 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
 
   df <- df %>% arrange(class, term)
 
+  df <- df %>% mutate(class = ifelse(class == "", NA, class),
+                      term = ifelse(term == "", NA, term))
+
   # adding All Patients
   if(total != "NONE"){
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
@@ -143,7 +142,6 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
   # need to remove extra records that came from subject level data
   # when left join was done. also any record that is missing class or term
   df <- na.omit(df)
-  df <- df %>% filter(class != "" & term != "" & id != "" & col_by != "")
 
   # start tabulating --------------------------------------------------------
   n_cols <- nlevels(col_by)

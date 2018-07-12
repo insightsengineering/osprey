@@ -130,9 +130,6 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   if (any("- Overall -" %in% term)) stop("'- Overall -' is not a valid term, t_ae_ctc_v2 reserves it for derivation")
   if (any("All Patients" %in% col_by)) stop("'All Patients' is not a valid col_by, t_ae_ctc_v2 derives All Patients column")
 
-  if (any(class == "", na.rm = TRUE)) stop("empty string is not a valid class, please use NA if data is missing")
-  if (any(term == "", na.rm = TRUE)) stop("empty string is not a valid term, please use NA if data is missing")
-
   # data prep ---------------------------------------------------------------
   df <- data.frame(class = class,
                    term = term,
@@ -141,6 +138,9 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
                    col_by = col_by,
                    stringsAsFactors = FALSE)
   df <- df %>% arrange(class, term)
+
+  df <- df %>% mutate(class = ifelse(class == "", NA, class),
+                      term = ifelse(term == "", NA, term))
 
   if(total != "NONE"){
     # adding All Patients
