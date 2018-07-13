@@ -35,7 +35,9 @@ ifgen_char <- function(t, tx, tp = NULL, fx, fp = NULL) {
 #####------ ADSL - Subject Level Analysis Dataset -------#####
 # Assuming study design: 3 arms, 12 cycles Q1W, EoT 4 weeks after last cycle
 
-N <- 30
+set.seed(12345)
+
+N <- 50
 
 ADSL <- tibble(
   SUBJID  = paste("id", sprintf(paste0("%0",nchar(N),"d"), seq_len(N)), sep = "-"),
@@ -80,8 +82,8 @@ ADSL <- tibble(
 
 #####------ ADAE - Adverse Event Analysis Dataset ------#####
 
-#meddra <- haven::read_sas("C:/Users/liaoc10/Desktop/meddra_full_hierarchy.sas7bdat")
-meddra <- read_bce("/opt/BIOSTAT/prod/acp/libraries/meddra_full_hierarchy.sas7bdat")
+#meddra <- haven::read_sas("C:/Users/liaoc10/Desktop/meddra_hierarchy.sas7bdat")
+meddra <- read_bce("/opt/BIOSTAT/prod/acp/libraries/meddra_hierarchy.sas7bdat")
 
 meddra <- meddra %>%
   filter(MEDDRA_VERSION == "21.0") %>%
@@ -337,7 +339,7 @@ match_label <- function(target, source) {
 
 
 #Attach labels to variables
-ADSL <- ADSL %>%
+rADSL <- ADSL %>%
   var_relabel(
     STUDYID = "Study Identifier",
     SUBJID  = "Subject Identifier for the Study",
@@ -368,7 +370,7 @@ ADSL <- ADSL %>%
   )
 
 
-ADAE <- ADAE %>% match_label(ADSL) %>%
+rADAE <- ADAE %>% match_label(rADSL) %>%
   var_relabel(
     AEDECOD  = "Dictionary Derived Term",
     AEPTCD   = "Dictionary Derived Term Code",
@@ -390,7 +392,7 @@ ADAE <- ADAE %>% match_label(ADSL) %>%
     ATOXGR   = "Analysis Toxicity Grade"
   )
 
-ADTR <- ADTR %>% match_label(ADSL) %>%
+rADTR <- ADTR %>% match_label(rADSL) %>%
   var_relabel(
     PARAM   = "Parameter Description",
     PARAMCD = "Parameter Code",
@@ -412,20 +414,23 @@ ADTR <- ADTR %>% match_label(ADSL) %>%
   )
 
 
-ADTTE <- ADTTE %>%
-  match_label(ADTR) %>%
+rADTTE <- ADTTE %>%
+  match_label(rADTR) %>%
   var_relabel(
     EVNTDESC = "Event Description",
     CNSR     = "Censoring Status Value(1=cens, 0=evt)"
   )
 
-ADRS <- ADRS %>% match_label(ADTR)
+rADRS <- ADRS %>% match_label(rADTR)
+
+
+rm(ADSL, ADAE, ADRS, ADTTE, ADTR)
 
 
 #Exporting dummy data
 devtools::use_data(meddra)
-devtools::use_data(ADSL)
-devtools::use_data(ADAE)
-devtools::use_data(ADTTE)
-devtools::use_data(ADRS)
-devtools::use_data(ADTR)
+devtools::use_data(rADSL)
+devtools::use_data(rADAE)
+devtools::use_data(rADTTE)
+devtools::use_data(rADRS)
+devtools::use_data(rADTR)
