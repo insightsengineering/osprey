@@ -88,6 +88,7 @@ tbl4 <- t_ae(
   term =  data$AEDECOD,
   id = data$USUBJID,
   col_by = factor(data$ARM),
+  total = "None",
   sort_by = "alphabetical"
 )
 

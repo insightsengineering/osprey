@@ -32,6 +32,7 @@
 #' library(lemon)
 #' library(reshape2)
 #' library(grid)
+#' library(gtable)
 #' library(stringr)
 #'
 #' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
@@ -42,7 +43,7 @@
 #'             block_count = "# of patients",
 #'             block_color = data$AETOXGR,
 #'             id = data$USUBJID,
-#'             #facet_rows = data$RACE,
+#'             facet_rows = data$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
@@ -283,10 +284,11 @@ g_butterfly <- function(category,
     pl <- pl + theme_classic() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
             strip.text.x = element_text(color = "black", size = 9),
-            text = element_text(size = 20),
+            title  = element_text(size = 9),
+            axis.title = element_text(size = 20),
             axis.text = element_text(color = "black", size = 9),
             legend.text=element_text(size=9),
-            legend.title = element_text(size = 12),
+            legend.title = element_text(size = 9),
             panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
             plot.margin=unit(c(1.5,1,1,1),"cm"),
             strip.text = element_text(size = 5))
@@ -294,10 +296,11 @@ g_butterfly <- function(category,
     pl <- pl + theme_classic() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
             strip.text.x = element_text(color = "black", size = 9),
-            text = element_text(size = 20),
+            title  = element_text(size = 9),
+            axis.title = element_text(size = 20),
             axis.text = element_text(color = "black", size = 9),
             legend.text=element_text(size=9),
-            legend.title = element_text(size = 12),
+            legend.title = element_text(size = 9),
             panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
             strip.text = element_text(size = 5),
             plot.margin=unit(c(1.5,1,1,1),"cm"),
@@ -306,36 +309,17 @@ g_butterfly <- function(category,
 
   if(sort_by == "alphabetical"){
     pl <- pl + scale_x_discrete(limits = rev(levels(factor(counts$y))))
-
-    # if(nchar(g1) < 6 || nchar(g2) < 6){
-    #   pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
-    #              annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[2] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
-    # } else {
-    #   pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[3] else levels(unique(counts$y))[1], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
-    #     annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[3] else levels(unique(counts$y))[1], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
-    # }
   } else if(sort_by == "count"){
     pl <- pl + scale_x_discrete(limits = levels(factor(counts$y)))
-    # if(nchar(g1) < 6 || nchar(g2) < 6){
-    #   pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
-    #     annotate("text", x = if(length(unique(counts$y)) > 1) levels(unique(counts$y))[length(levels(unique(counts$y)))-1] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
-    # } else {
-    #   pl <- pl + annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[length(levels(unique(counts$y)))-2] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = max(counts$label_ypos)*1.2, label = str_wrap(g1, width = 10), size = 4) +
-    #     annotate("text", x = if(length(unique(counts$y)) > 2) levels(unique(counts$y))[length(levels(unique(counts$y)))-2] else levels(unique(counts$y))[length(levels(unique(counts$y)))], y = -max(counts$label_ypos)*1.2, label = str_wrap(g2, width = 10), size = 4)
-    # }
   }
 
-  sizing <- dev.size("cm")
-  print(sizing)
+  pl <- pl + labs(title = str_wrap(g1, width = 30))
+  g <- ggplotGrob(pl)
+  title_style <- g$grobs[[8]]$gp
 
-  print(pl)
-
-  grid.text(str_wrap(g1, width = 20), x = unit(sizing[1]-4.5, "cm"), y = unit(sizing[2] -1, "cm"), gp=gpar(fontsize=9))
-  grid.text(str_wrap(g2, width = 20), x = unit(((sizing[1]-4.5)/2) - 1.5, "cm"), y = unit(sizing[2] - 1, "cm"), gp=gpar(fontsize=9))
-
-  pl2 <- grid.grab()
-  grid.newpage()
-  grid.draw(pl2)
+  g2 <- gtable_add_grob(g, textGrob(str_wrap(g2, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
+                        t=2, l=4, b=2, r=4, name="right-title")
+  grid.draw(g2)
 
 }
 
