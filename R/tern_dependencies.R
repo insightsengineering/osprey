@@ -7,3 +7,4 @@ indent_table <- tern:::indent_table
 add_ae_class <- tern:::add_ae_class
 check_same_N <- tern:::check_same_N
 to_n <- tern:::to_n
+var_relabel <- tern:::var_relabel

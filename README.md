@@ -7,6 +7,18 @@ Package for entry level R-development of TLG:s. Webpage of all the TLG:s in the 
 
 ## Installation
 
+### Stable Release
+
+[Web Manual](https://pages.github.roche.com/Rpackages/osprey/)
+
+```r
+devtools::install_github(repo = "Rpackages/osprey", ref = "release-tag", host = "https://github.roche.com/api/v3")
+```
+
+### Development Version
+
+[Web Manual](https://pages.github.roche.com/Rpackages/osprey/dev/)
+
 ```r
 devtools::install_github(repo = "Rpackages/osprey", host = "https://github.roche.com/api/v3")
 ```
@@ -37,7 +49,7 @@ That is, follow the following steps:
 1. Develop a function
 1. Create roxygen comments (ctrl+shift+alt+R or copy from earlier)
 1. Document (ctrl+shift+D)
-1. Installand Restart
+1. Install and Restart
 1. Test your function with working example
 1. Create webpage (in console: `pkgdown::build_site()`)
 1. When everything works, make pull request.

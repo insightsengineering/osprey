@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Create a spiderplot_simple — spiderplot_simple" />
+
+<meta property="og:description" content="Descr of this plot" />
+<meta name="twitter:card" content="summary" />
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">osprey</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">osprey</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -82,6 +95,7 @@
   </a>
 </li>
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -89,20 +103,24 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Create a spiderplot_simple</h1>
+    
+    <div class="hidden name"><code>spiderplot_simple.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Descr of this plot</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>spiderplot_simple</span>(<span class='no'>anl</span>, <span class='kw'>byvar</span> <span class='kw'>=</span> <span class='no'>USUBJID</span>, <span class='kw'>days</span> <span class='kw'>=</span> <span class='no'>TUDY</span>, <span class='kw'>mesValue</span> <span class='kw'>=</span> <span class='no'>PCHG</span>,
   <span class='kw'>groupCol</span> <span class='kw'>=</span> <span class='no'>USUBJID</span>, <span class='kw'>baseday</span> <span class='kw'>=</span> <span class='fl'>0</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -138,10 +156,7 @@
 
 <span class='no'>atr</span> <span class='kw'>&lt;-</span> <span class='fu'>left_join</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ATR"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>),<span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ADSL"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("USUBJID", "STUDYID")</span></div><div class='input'>
 
-<span class='fu'>spiderplot_simple</span>(<span class='no'>atr</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter</span>(<span class='no'>PARAMCD</span> <span class='kw'>==</span> <span class='st'>"SUMTGLES"</span>), <span class='kw'>groupCol</span><span class='kw'>=</span><span class='no'>SEX</span>)</div><div class='img'><img src='spiderplot_simple-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
-
-
-
+<span class='fu'>spiderplot_simple</span>(<span class='no'>atr</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter</span>(<span class='no'>PARAMCD</span> <span class='kw'>==</span> <span class='st'>"SUMTGLES"</span>), <span class='kw'>groupCol</span><span class='kw'>=</span><span class='no'>SEX</span>)</div><div class='img'><img src='spiderplot_simple-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -156,14 +171,14 @@
 
     <h2>Author</h2>
     
-Mika
+Mika Maekinen
 
   </div>
 </div>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mika Maekinen, Adrian Waddell.</p>
+  <p>Developed by Mika Maekinen, Adrian Waddell, Chendi Liao, Nina Qi, Carolyn Zhang.</p>
 </div>
 
 <div class="pkgdown">
@@ -173,5 +188,8 @@ Mika
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+
