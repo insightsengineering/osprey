@@ -17,6 +17,8 @@ Depends: ggplot2,
   dplyr,
   tidyr,
   rtables,
+  lemon,
+  stringr,
   tern
 Imports: tern
 Suggests: random.cdisc.data
