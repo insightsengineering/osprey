@@ -71,6 +71,18 @@
 #'
 #' tbl2
 #'
+#' data("rADSL")
+#' ASL <- rADSL
+#'
+#' tbl3 <- t_ds(
+#'    class = ASL$EOSSTT,
+#'    term = ASL$DCSREAS,
+#'    id = ASL$USUBJID,
+#'    col_by = factor(ASL$ARM),
+#'    total = "ALL Patients"
+#' )
+#'
+#' tbl3
 #'
 #'
 t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) {
@@ -121,8 +133,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
     df <- df %>% arrange(class, term)
   }
 
-  df <- df %>% mutate(class = ifelse(class == "", NA, class),
-                      term = ifelse(term == "", NA, term))
+  df <- df %>% mutate(class = ifelse(class == "", "None", as.character(class)),
+                      term = ifelse(term == "", "None", as.character(term)))
 
   # adding All Patients
   if(total != "NONE"){
@@ -131,9 +143,6 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   # total N for column header
   N <- tapply(df$id, df$col_by, function(x) (sum(!duplicated(x))))
-
-  # need to remove extra records that came from subject level data
-  df <- na.omit(df)
 
   # start tabulating --------------------------------------------------------
 
@@ -198,7 +207,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   #remove NA rows
   index <- numeric(0)
   for(i in seq(1, length(tbl), 2)){
-    if(attr(tbl[[i]], "row.name") == "NA"){
+    if(attr(tbl[[i]], "row.name") == "None"){
       index <- c(index, i)
     }
   }

@@ -71,7 +71,6 @@ Create a spiderplot for Early Development Visualization
 library(random.cdisc.data)
 library(plyr)
 library(dplyr)
-require(lemon)
 
 atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")

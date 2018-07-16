@@ -80,6 +80,18 @@ tbl2 <- t_ds(
 
 tbl2
 
+data("rADSL")
+ASL <- rADSL
+
+tbl3 <- t_ds(
+   class = ASL$EOSSTT,
+   term = ASL$DCSREAS,
+   id = ASL$USUBJID,
+   col_by = factor(ASL$ARM),
+   total = "ALL Patients"
+)
+
+tbl3
 
 
 }
