@@ -46,7 +46,9 @@ library(dplyr)
 suppressPackageStartupMessages(library(tidyverse))
 library(rtables)
 
-adae <- read_bce("/opt/BIOSTAT/home_ext2/qit3/cdt70194/go39733/libraries/adae.sas7bdat")
+load(file = "data/rADAE.rda")
+
+adae <- rADAE
 flag <- data.frame(dthfl = adae$DTHFL,
                    dcsreas = adae$DCSREAS,
                    aesdth = adae$AESDTH,

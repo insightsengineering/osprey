@@ -18,7 +18,6 @@
 #'
 #' @return ggplot object
 #'
-#' @import lemon
 #' @import stringr
 #'
 #' @export
@@ -29,7 +28,6 @@
 #' library(random.cdisc.data)
 #' library(plyr)
 #' library(dplyr)
-#' library(lemon)
 #' library(reshape2)
 #' library(grid)
 #' library(gtable)

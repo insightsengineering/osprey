@@ -83,7 +83,7 @@ library(random.cdisc.data)
 
 data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
 
-tbl4 <- t_ae(
+tbl2 <- t_ae(
   class = data$AEBODSYS,
   term =  data$AEDECOD,
   id = data$USUBJID,
@@ -92,18 +92,8 @@ tbl4 <- t_ae(
   sort_by = "alphabetical"
 )
 
-tbl4
+tbl2
 
-data <- read_bce("/opt/BIOSTAT/home_ext2/qit3/cdt70194/go39733/libraries/adae.sas7bdat")
-
-tbl5 <- t_ae(
-  class = data$AEBODSYS,
-  term =  data$AEDECOD,
-  id = data$USUBJID,
-  col_by = factor(data$ARM)
-)
-
-tbl5
 
 }
 \author{

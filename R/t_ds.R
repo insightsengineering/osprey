@@ -71,21 +71,6 @@
 #'
 #' tbl2
 #'
-#' # test wth Ninas study data
-#' #asl <- read.bce("/opt/BIOSTAT/prod/s30103j/libraries/asl.sas7bdat")
-#' asl <- read.bce("/opt/BIOSTAT/home/qit3/cdt70094/s30103j/libraries/aae_b.sas7bdat")
-#' asl <- asl %>% filter(AEREL1 != "" & AESOC != "" & AEDECOD != "")# & (AESOC == "INVESTIGATIONS" | AESOC == "CARDIAC DISORDERS"))
-#' asl <- asl[1:20,]
-#' tbl3 <- t_ds(
-#'   class = asl$AESOC,
-#'   term =  asl$AEREL1,
-#'   sub = data.frame(AEDECOD = asl$AEDECOD),
-#'   id = asl$USUBJID,
-#'   col_by = factor(asl$ARMCD),
-#'   total = "All Patients",
-#' )
-#'
-#' tbl3
 #'
 #'
 t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) {

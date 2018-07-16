@@ -44,7 +44,6 @@ Create a butterfly plot for Early Development Visualization
 library(random.cdisc.data)
 library(plyr)
 library(dplyr)
-library(lemon)
 library(reshape2)
 library(grid)
 library(gtable)
