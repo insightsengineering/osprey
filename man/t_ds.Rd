@@ -80,6 +80,8 @@ tbl2 <- t_ds(
 
 tbl2
 
+# simple example using osprey dummy dataset
+
 data("rADSL")
 ASL <- rADSL
 
