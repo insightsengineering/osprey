@@ -19,6 +19,10 @@
 #' @param show_legend boolean of whether color coding legend is included,
 #' default here is \code{FALSE}
 #'
+#'
+#' @details this is an equivalent of the STREAM output \code{str_abc}
+#'   (\url{man}{http://<stream-url>})
+#'
 #' @return ggplot object
 #'
 #' @import lemon
@@ -37,7 +41,6 @@
 #' AAE <- radam("AAE", N=10)
 #'
 #' data <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
-#'
 #'
 #' g_butterfly(category = data$AEBODSYS,
 #'             groups = data$SEX,
