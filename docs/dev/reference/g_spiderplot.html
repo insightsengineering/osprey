@@ -220,8 +220,13 @@ default here is FALSE</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
-<span class='fu'>library</span>(<span class='no'>plyr</span>)
-<span class='fu'>library</span>(<span class='no'>dplyr</span>)
+<span class='fu'>library</span>(<span class='no'>plyr</span>)</div><div class='output co'>#&gt; <span class='message'>------------------------------------------------------------------------------</span></div><div class='output co'>#&gt; <span class='message'>You have loaded plyr after dplyr - this is likely to cause problems.</span>
+#&gt; <span class='message'>If you need functions from both plyr and dplyr, please load plyr first, then dplyr:</span>
+#&gt; <span class='message'>library(plyr); library(dplyr)</span></div><div class='output co'>#&gt; <span class='message'>------------------------------------------------------------------------------</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘plyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:dplyr’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    arrange, count, desc, failwith, id, mutate, rename, summarise,</span>
+#&gt; <span class='message'>    summarize</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
 <span class='fu'>require</span>(<span class='no'>lemon</span>)
 <span class='fu'>library</span>(<span class='no'>colorspace</span>)
 
@@ -254,7 +259,7 @@ default here is FALSE</p></td>
              <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='co'>#test discrete x-axis points</span>
-<span class='no'>dat2</span> <span class='kw'>&lt;-</span> <span class='no'>dat</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/plyr/topics/arrange'>arrange</a></span>(<span class='no'>TUDY</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/plyr/topics/mutate'>mutate</a></span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='fu'>as.character</span>(<span class='no'>TUDY</span>)) <span class='kw'>%&gt;%</span> <span class='fu'>as.data.frame</span>()
+<span class='no'>dat2</span> <span class='kw'>&lt;-</span> <span class='no'>dat</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>TUDY</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='fu'>as.character</span>(<span class='no'>TUDY</span>)) <span class='kw'>%&gt;%</span> <span class='fu'>as.data.frame</span>()
 <span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='fu'>as.factor</span>(<span class='no'>dat2</span>$<span class='no'>day</span>), <span class='kw'>groupby</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>USUBJID</span>),
              <span class='kw'>marker_y</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>PCHG</span>,
              <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>USUBJID</span>,

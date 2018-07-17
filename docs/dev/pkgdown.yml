@@ -4,6 +4,6 @@ pkgdown_sha: ~
 articles:
   osprey_teal: osprey_teal.html
 urls:
-  reference: https://pages.github.roche.com/Rpackages/osprey/reference
-  article: https://pages.github.roche.com/Rpackages/osprey/articles
+  reference: https://pages.github.roche.com/Rpackages/osprey/dev//reference
+  article: https://pages.github.roche.com/Rpackages/osprey/dev//articles
 

@@ -1,4 +1,4 @@
-url: https://pages.github.roche.com/Rpackages/osprey
+url: https://pages.github.roche.com/Rpackages/osprey/dev/
 
 template:
   params:
@@ -12,3 +12,21 @@ navbar:
   right:
     - icon: fa-github
       href: https://github.roche.com/Rpackages/osprey
+
+
+reference:
+  - title: Graphs
+    desc: Graphs
+    contents:
+      - starts_with("g_")
+  - title: Tables
+    desc: some useful tables
+    contents:
+      - starts_with("t_")
+  - title: Remaining
+    desc: some useful functions
+    contents:
+      - as_pdf
+      - getdata_bce
+      - grobs2pdf
+

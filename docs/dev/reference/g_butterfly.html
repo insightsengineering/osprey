@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a butterfly plot for Early Development Visualization — g_butterfly • osprey</title>
+<title>Bbutterfly Plot — g_butterfly • osprey</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Create a butterfly plot for Early Development Visualization — g_butterfly" />
+<meta property="og:title" content="Bbutterfly Plot — g_butterfly" />
 
-<meta property="og:description" content="Create a butterfly plot for Early Development Visualization" />
+<meta property="og:description" content="The butterfly plot is often used in Early Development (ED) and shows ..." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -109,14 +109,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a butterfly plot for Early Development Visualization</h1>
+    <h1>Bbutterfly Plot</h1>
     
     <div class="hidden name"><code>g_butterfly.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a butterfly plot for Early Development Visualization</p>
+    <p>The butterfly plot is often used in Early Development (ED) and shows ...</p>
     
     </div>
 
@@ -151,7 +151,7 @@
     <tr>
       <th>facet_rows</th>
       <td><p>vector defines what variable is used to split the
-plot into rows, default here is NULL</p></td>
+plot into rows, default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>x_label</th>
@@ -170,7 +170,7 @@ options: "alphabetical" or "count", default here is set to "count"</p></td>
     <tr>
       <th>show_legend</th>
       <td><p>boolean of whether color coding legend is included,
-default here is FALSE</p></td>
+default here is <code>FALSE</code></p></td>
     </tr>
     </table>
     
@@ -181,22 +181,13 @@ default here is FALSE</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
-<span class='fu'>library</span>(<span class='no'>plyr</span>)</div><div class='output co'>#&gt; <span class='message'>------------------------------------------------------------------------------</span></div><div class='output co'>#&gt; <span class='message'>You have loaded plyr after dplyr - this is likely to cause problems.</span>
-#&gt; <span class='message'>If you need functions from both plyr and dplyr, please load plyr first, then dplyr:</span>
-#&gt; <span class='message'>library(plyr); library(dplyr)</span></div><div class='output co'>#&gt; <span class='message'>------------------------------------------------------------------------------</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘plyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:dplyr’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    arrange, count, desc, failwith, id, mutate, rename, summarise,</span>
-#&gt; <span class='message'>    summarize</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
-<span class='fu'>library</span>(<span class='no'>lemon</span>)
-<span class='fu'>library</span>(<span class='no'>reshape2</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘reshape2’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:tidyr’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    smiths</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>grid</span>)
-<span class='fu'>library</span>(<span class='no'>gtable</span>)
-<span class='fu'>library</span>(<span class='no'>stringr</span>)
+<span class='fu'>library</span>(<span class='no'>dplyr</span>)
 
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"AAE"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>),<span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ADSL"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("STUDYID", "USUBJID")</span></div><div class='input'><span class='co'>#data &lt;- data %&gt;% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))</span>
+<span class='no'>ADSL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ADSL"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>)
+<span class='no'>AAE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"AAE"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>)
+
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></span>(<span class='no'>AAE</span>, <span class='no'>ADSL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span>))
+
 
 <span class='fu'>g_butterfly</span>(<span class='kw'>category</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>AEBODSYS</span>,
             <span class='kw'>groups</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>SEX</span>,

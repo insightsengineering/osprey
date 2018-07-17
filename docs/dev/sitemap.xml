@@ -1,54 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/index.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//index.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/as_pdf.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/as_pdf.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/g_butterfly.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/g_butterfly.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/g_spiderplot.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/g_spiderplot.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/g_swimlane.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/g_swimlane.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/getdata_bce.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/getdata_bce.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/grobs2pdf.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/grobs2pdf.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/spiderplot.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/spiderplot_simple.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/spiderplot_simple.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/t_ae.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/swimlineplot.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/t_ae_ctc_v2.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/t_ae.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/t_ae_oview.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/t_ae_ctc_v2.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/t_ds.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/t_ae_oview.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/t_max_grade_per_id.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/t_ds.html</loc>
-  </url>
-  <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/t_max_grade_per_id.html</loc>
-  </url>
-  <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/reference/waterfall.html</loc>
-  </url>
-  <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/articles/osprey_teal.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//articles/osprey_teal.html</loc>
   </url>
 </urlset>

@@ -112,7 +112,7 @@ x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw">i
           
           ATE &lt;-<span class="st"> </span>datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="st">'ATE'</span>,  <span class="dt">filtered =</span> <span class="ot">TRUE</span>, <span class="dt">reactive =</span> <span class="ot">TRUE</span>)
           
-          osprey<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/osprey/topics/spiderplot">spiderplot</a></span>(<span class="dt">x =</span> ATE<span class="op">$</span>AVAL, <span class="dt">y =</span> ATE<span class="op">$</span>CHANGE, <span class="dt">group=</span> ATE<span class="op">$</span>USUBJID,<span class="dt">color =</span> ATE<span class="op">$</span>STUDYID)
+          osprey<span class="op">::</span><span class="kw">spiderplot</span>(<span class="dt">x =</span> ATE<span class="op">$</span>AVAL, <span class="dt">y =</span> ATE<span class="op">$</span>CHANGE, <span class="dt">group=</span> ATE<span class="op">$</span>USUBJID,<span class="dt">color =</span> ATE<span class="op">$</span>STUDYID)
           
         })
       },
