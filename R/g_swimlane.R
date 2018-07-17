@@ -5,17 +5,16 @@
 #' @param sort_by vector to sort bars
 #' @param col_by vector to color bars
 #' @param marker_id vector of IDs to identify markers within each bar. Default is the same as bar_id.
-#' @param marker_pos numeric vector to specify position for each marker
+#' @param marker_pos numeric vector to specify position for each marker point
 #' @param marker_shape vector to specify shape for markers
 #' @param marker_shape_opt aesthetic values to map shape values (named vector to map shape values to each name)
 #' @param marker_color vector to specify color for markers
 #' @param marker_color_opt aesthetic values to map shape values (named vector to map shape values to each name)
-#' @param anno_txt dataframe of variables to be displayed as annotation on the left
+#' @param anno_txt dataframe of subject-level variables to be displayed as annotation on the left
 #' @param yref_line numeric vector to plot reference lines
-#' @param ytick_at break interval of y-axis
-# #' @param xlab x label
-#' @param ylab y label
-#' @param title String to be displayed as plot title
+#' @param ytick_at optional break interval of bar length axis
+#' @param ylab label for bar length
+#' @param title string to be displayed as plot title
 #'
 #' @author qit3
 #'
@@ -51,7 +50,6 @@
 #' anno_txt = anno_txt,
 #' yref_line = c(100, 200),
 #' ytick_at = waiver(),
-#' # xlab = "Patient ID",
 #' ylab = "Time from First Treatment (Day)",
 #' title = "Swimlane Plot")
 #'
@@ -116,7 +114,6 @@ g_swimlane <- function(bar_id,
                        anno_txt = NULL,
                        yref_line = NULL,
                        ytick_at = waiver(),
-                       # xlab,
                        ylab,
                        title
 ) {
@@ -170,7 +167,6 @@ g_swimlane <- function(bar_id,
       axis.text.y = element_blank(),
       axis.title.y = element_blank()
     ) +
-    # xlab(xlab) +
     ylab(ylab)
 
   if (is.null(col_by)) {
