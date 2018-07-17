@@ -13,13 +13,16 @@ Description: Community effort to collect TLG code and create a catalogue
 License: Copyrigth Roche
 Encoding: UTF-8
 LazyData: true
-Depends: ggplot2,
+Depends:
+  ggplot2,
   dplyr,
   tidyr,
   rtables,
   stringr,
   tern
-Imports: tern
+Imports: 
+   tern,
+   plyr
 Suggests: random.cdisc.data
 Additional_repositories: 
   https://github.roche.com/Rpackages/random.cdisc.data

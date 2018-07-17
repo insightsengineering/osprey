@@ -1,4 +1,7 @@
-#' Create a butterfly plot for Early Development Visualization
+#' Butterfly Plot
+#'
+#'
+#' The butterfly plot is often used in Early Development (ED) and shows ...
 #'
 #'
 #' @param category vector of y values
@@ -7,18 +10,23 @@
 #' @param block_color vector - color coding of bar segments
 #' @param id unique subject identifier variable.
 #' @param facet_rows vector defines what variable is used to split the
-#' plot into rows, default here is NULL
+#' plot into rows, default here is \code{NULL}
 #' @param x_label string of text for x axis label, default is block_count
 #' @param y_label string of text for y axis label, default is AE Derived Terms
 #' @param sort_by character string that defines the ordering of the class and term
 #' variables in the output table,
 #' options: "alphabetical" or "count", default here is set to "count"
 #' @param show_legend boolean of whether color coding legend is included,
-#' default here is FALSE
+#' default here is \code{FALSE}
+#'
+#'
+#' @details this is an equivalent of the STREAM output \code{str_abc}
+#'   (\url{man}{http://<stream-url>})
 #'
 #' @return ggplot object
 #'
 #' @import stringr
+#' @importFrom plyr ddply
 #'
 #' @export
 #'
@@ -26,15 +34,12 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' library(plyr)
 #' library(dplyr)
-#' library(reshape2)
-#' library(grid)
-#' library(gtable)
-#' library(stringr)
 #'
-#' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
-#' #data <- data %>% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))
+#' ADSL <- radam("ADSL", N=10)
+#' AAE <- radam("AAE", N=10)
+#'
+#' data <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
 #'
 #' g_butterfly(category = data$AEBODSYS,
 #'             groups = data$SEX,
