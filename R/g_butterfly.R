@@ -46,7 +46,6 @@
 #'             block_count = "# of patients",
 #'             block_color = data$AETOXGR,
 #'             id = data$USUBJID,
-#'             facet_rows = data$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
@@ -119,7 +118,7 @@ g_butterfly <- function(category,
       }
 
       temp$bar_color <- factor(temp$bar_color)
-      counts <- left_join(counts, temp)
+      counts <- left_join(counts, temp, by = c("y", "groups"))
       max_c <- max(counts$n)
       counts$n0 <- rep(1, nrow(counts))
       counts <- counts %>% arrange(desc(bar_color))

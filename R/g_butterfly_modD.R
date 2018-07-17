@@ -30,24 +30,20 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' library(plyr)
 #' library(dplyr)
-#' library(reshape2)
-#' library(grid)
-#' library(gtable)
-#' library(stringr)
 #'
-#' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
-#' data <- data %>% mutate(flag1 = ifelse(SEX == "F", 1, 0)) %>% mutate(flag2 = ifelse(ARM == "ARM A", 1, 0))
-#' #data <- data %>% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))
+#' AAE <- radam("AAE", N=10)
+#' ADSL <- radam("ADSL", N=10)
+#' ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
+#' ANL <- ANL %>% mutate(flag1 = ifelse(SEX == "F", 1, 0)) %>% mutate(flag2 = ifelse(ARM == "ARM A", 1, 0))
 #'
-#' g_butterfly_modD(category = data$AEBODSYS,
-#'             groups = data.frame(flag1 = data$flag1, flag2 = data$flag2),
+#' g_butterfly_modD(category = ANL$AEBODSYS,
+#'             groups = data.frame(flag1 = ANL$flag1, flag2 = ANL$flag2),
 #'             group_names = c("flag1", "flag2"),
 #'             block_count = "# of patients",
-#'             block_color = data$AETOXGR,
-#'             id = data$USUBJID,
-#'             facet_rows = data$RACE,
+#'             block_color = ANL$AETOXGR,
+#'             id = ANL$USUBJID,
+#'             facet_rows = ANL$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
