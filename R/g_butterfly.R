@@ -311,11 +311,11 @@ g_butterfly <- function(category,
     pl <- pl + scale_x_discrete(limits = levels(factor(counts$y)))
   }
 
-  pl <- pl + labs(title = str_wrap(g1, width = 30))
+  pl <- pl + labs(title = str_wrap(g2, width = 30))
   g <- ggplotGrob(pl)
   title_style <- g$grobs[[8]]$gp
 
-  g2 <- gtable_add_grob(g, textGrob(str_wrap(g2, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
+  g2 <- gtable_add_grob(g, textGrob(str_wrap(g1, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
                         t=2, l=4, b=2, r=4, name="right-title")
   grid.draw(g2)
 
