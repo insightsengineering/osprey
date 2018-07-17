@@ -70,6 +70,7 @@ ADSL <- tibble(
                            tx = c("Adverse Event", "Death", "Progressive Disease",
                                   "Symptomatic Deterioation", "Withdrawal by Subject", "Physician Decision"),
                            tp = c(.2, .2, .2, .2, .1, .1), fx = ""),
+  DCSREASP    = ifelse(DCSREAS != "", paste(DCSREAS, "Reason", sample(1:5, N, replace=T)), ""),
   DCSREAS_GRP = ifelse(DCSREAS == "", "", ifelse(DCSREAS %in% c("Adverse Event", "Death"), "Safety", "Non-Safety")),
   DTHFL       = ifelse(DCSREAS == "Death", "Y",
                        ifgen_char(EOSSTT != "Ongoing", tx = c("Y", "N"), tp = c(.2, .8), fx = "N")),
@@ -91,7 +92,10 @@ meddra <- meddra %>%
   rename(AEDECOD = PT_NAME, AEPTCD = PT_CODE,
          AESOC = SOC_NAME, AESOCCD = SOC_CODE,
          AEHLGT = HLGT_NAME, AEHLGTCD = HLGT_CODE,
-         AEHLT = HLT_NAME, AEHLTCD = HLT_CODE)
+         AEHLT = HLT_NAME, AEHLTCD = HLT_CODE) %>%
+  mutate(AEBODSYS = AESOC,
+         AEBDSYCD = AESOCCD,
+         AETERM   = toupper(AEDECOD))
 
 ADAE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
   nae <- sample(1:10, 1)
@@ -380,6 +384,9 @@ rADAE <- ADAE %>% match_label(rADSL) %>%
     AEHLGTCD = "High Level Group Term Code",
     AEHLT    = "High Level Term",
     AEHLTCD  = "High Level Term Code",
+    AEBODSYS = "Body System or Organ Class",
+    AEBDSYCD = "Body System or Organ Class Code",
+    AETERM   = "Reported Term for the Adverse Event",
     AESEQ    = "Sequence Number",
     AEREL    = "Causality",
     AESER    = "Serious Event",
