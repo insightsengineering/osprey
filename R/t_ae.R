@@ -17,6 +17,9 @@
 #' variables in the output table,
 #' options: "alphabetical" or "count", default here is set to "count"
 #'
+#' @details this is an equivalent of the STREAM output \code{str_abc}
+#'   (\url{man}{http://<stream-url>})
+#'
 #'
 #' @return \code{rtable} object
 #'

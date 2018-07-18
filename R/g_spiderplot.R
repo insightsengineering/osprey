@@ -1,20 +1,23 @@
-#' Create a spiderplot for Early Development Visualization
+
+#' Spiderplot
+#'
+#' The spider plot is often used in Early Development (ED) and shows
 #'
 #'
 #' @param marker_x dataframe with 2 columns,
 #' column 1 is the vector of x values and
 #' column 2 is the vector to group the points together (default
-#' should be defined as USUBJID)
+#' should be USUBJID)
 #' @param marker_y vector of y values
 #' @param line_colby vector defines by what variable plot is color coded,
-#' default here is NULL
+#' default here is \code{NULL}
 #' @param marker_color vector defines by what variable points are color coded,
-#' , default here is NULL
-#' @param marker_color_opt vector defines marker color code, default here is NULL
-#' @param marker_size size of markers in plot, default here is NULL
+#' , default here is \code{NULL}
+#' @param marker_color_opt vector defines marker color code, default here is \code{NULL}
+#' @param marker_size size of markers in plot, default here is \code{NULL}
 #' @param marker_shape vector defines by what variable points are shape coded,
-#' , default here is NULL
-#' @param marker_shape_opt vector defines marker shape code, default here is NULL
+#' , default here is \code{NULL}
+#' @param marker_shape_opt vector defines marker shape code, default here is \code{NULL}
 #' @param datalabel_txt list defines text (at last time point) and
 #' flag for an arrow annotation
 #' (per defined variable) - elements must be labeled txt_ann/mrkr_all/mrkr_ann
@@ -23,11 +26,11 @@
 #' mrkr_ann - vector of ID's (subset of mrkr_all) where arrow is desired to
 #' indicate any study interim points
 #' @param facet_rows vector defines what variable is used to split the
-#' plot into rows, default here is NULL
+#' plot into rows, default here is \code{NULL}
 #' @param facet_columns vector defines what variable is used to split the
-#' plot into columns, default here is NULL
+#' plot into columns, default here is \code{NULL}
 #' @param vref_line value defines vertical line overlay
-#' (can be a vector), default here is NULL
+#' (can be a vector), default here is \code{NULL}
 #' @param href_line value defines horizontal line overlay
 #' (can be a vector), default here is NULL
 #' @param x_label string of text for x axis label, default is time
