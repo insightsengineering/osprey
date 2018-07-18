@@ -1,4 +1,9 @@
-#' Create a butterfly plot for Early Development Visualization
+
+#' Butterfly Plot
+#'
+#'
+#' A modification of the deafult butterfly plot in which 2 flags can
+#' be used as the dichotomization variables.
 #'
 #'
 #' @param category vector of y values
@@ -20,22 +25,28 @@
 #' @param show_legend boolean of whether color coding legend is included,
 #' default here is FALSE
 #'
+#' @details there is no equivalent STREAM output
+#'
 #' @return ggplot object
 #'
 #' @import stringr
+#' @importFrom plyr ddply
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
-#' library(random.cdisc.data)
 #' library(dplyr)
 #'
-#' AAE <- radam("AAE", N=10)
-#' ADSL <- radam("ADSL", N=10)
+#' data("rADSL")
+#' data("rADAE")
+#' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM) %>% filter(SEX %in% c("F", "M"))
+#' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
+#'
 #' ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
-#' ANL <- ANL %>% mutate(flag1 = ifelse(SEX == "F", 1, 0)) %>% mutate(flag2 = ifelse(ARM == "ARM A", 1, 0))
+#' ANL <- ANL %>% mutate(flag1 = ifelse(SEX == "F", 1, 0)) %>% mutate(flag2 = ifelse(SEX == "M", 1, 0))
+#' ANL <- na.omit(ANL)
 #'
 #' g_butterfly_modD(category = ANL$AEBODSYS,
 #'             groups = data.frame(flag1 = ANL$flag1, flag2 = ANL$flag2),
@@ -88,7 +99,7 @@ g_butterfly_modD <- function(category,
   #set up data-------
   groups <- data.frame(flag1 = groups[, 1], flag2 = groups[, 2])
 
-  if(length(unique(as.character(groups$flag1))) != 2 || length(unique(as.character(groups$flag2))) != 2)
+  if(length(unique(as.character(groups$flag1))) > 2 || length(unique(as.character(groups$flag2))) > 2)
     stop("invalid arguments: groups can only have 2 unique values")
 
   if(!is.null(block_color)){
@@ -142,8 +153,8 @@ g_butterfly_modD <- function(category,
 
       temp1$bar_color <- factor(temp1$bar_color)
       temp2$bar_color <- factor(temp2$bar_color)
-      counts1 <- left_join(counts1, temp1)
-      counts2 <- left_join(counts2, temp2)
+      counts1 <- left_join(counts1, temp1, by = c("y", "flag1"))
+      counts2 <- left_join(counts2, temp2, by = c("y", "flag2"))
       max_c <- max(c(counts1$n, counts2$n))
 
       counts1$n0 <- rep(1, nrow(counts1))
@@ -213,8 +224,8 @@ g_butterfly_modD <- function(category,
 
       temp1$bar_color <- factor(temp1$bar_color)
       temp2$bar_color <- factor(temp2$bar_color)
-      counts1 <- left_join(counts1, temp1)
-      counts2 <- left_join(counts2, temp2)
+      counts1 <- left_join(counts1, temp1, by = c("y", "flag1"))
+      counts2 <- left_join(counts2, temp2, by = c("y", "flag2"))
       max_c <- max(c(counts1$n, counts2$n))
 
       counts1$n0 <- rep(1, nrow(counts1))
@@ -273,8 +284,8 @@ g_butterfly_modD <- function(category,
         temp2 <- temp2[,-1]
       }
 
-      counts1 <- left_join(counts1, temp1)
-      counts2 <- left_join(counts2, temp2)
+      counts1 <- left_join(counts1, temp1, by = c("y", "flag1"))
+      counts2 <- left_join(counts2, temp2, by = c("y", "flag2"))
       max_c <- max(c(counts1$n, counts2$n))
 
       counts1$n0 <- rep(1, nrow(counts1))
@@ -326,8 +337,8 @@ g_butterfly_modD <- function(category,
         temp2 <- temp2[,-1]
       }
 
-      counts1 <- left_join(counts1, temp1)
-      counts2 <- left_join(counts2, temp2)
+      counts1 <- left_join(counts1, temp1, by = c("y", "flag1"))
+      counts2 <- left_join(counts2, temp2, by = c("y", "flag2"))
       max_c <- max(c(counts1$n, counts2$n))
 
       counts1$n0 <- rep(1, nrow(counts1))
@@ -390,7 +401,7 @@ g_butterfly_modD <- function(category,
       geom_text(data=total_text_ann1, aes(y = label_ypos, label = n), hjust=-0.9) +
       geom_text(data=total_text_ann2, aes(y = -label_ypos, label = n), hjust=0.9) +
       coord_flip() +
-      scale_y_continuous(labels = abs, limits = (max_c*1.4) * c(-1,1)) +
+      scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
   } else {
     pl <- ggplot(NULL, aes(x=y)) +
@@ -400,7 +411,7 @@ g_butterfly_modD <- function(category,
       geom_text(data=total_text_ann1, aes(y = label_ypos, label = n), hjust=-0.9) +
       geom_text(data=total_text_ann2, aes(y = -label_ypos, label = n), hjust=0.9) +
       coord_flip() +
-      scale_y_continuous(labels = abs, limits = (max_c*1.4) * c(-1,1)) +
+      scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
   }
 
@@ -443,7 +454,6 @@ g_butterfly_modD <- function(category,
 
   pl <- pl + labs(title = str_wrap(g2, width = 30))
   g <- ggplotGrob(pl)
-  title_style <- g$grobs[[8]]$gp
 
   g2 <- gtable_add_grob(g, textGrob(str_wrap(g1, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
                         t=2, l=4, b=2, r=4, name="right-title")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_butterfly_modD.R
 \name{g_butterfly_modD}
 \alias{g_butterfly_modD}
-\title{Create a butterfly plot for Early Development Visualization}
+\title{Butterfly Plot}
 \usage{
 g_butterfly_modD(category, groups, group_names = NULL,
   block_count = "# of patients", block_color = NULL, id,
@@ -43,16 +43,23 @@ default here is FALSE}
 ggplot object
 }
 \description{
-Create a butterfly plot for Early Development Visualization
+A modification of the deafult butterfly plot in which 2 flags can
+be used as the dichotomization variables.
+}
+\details{
+there is no equivalent STREAM output
 }
 \examples{
-library(random.cdisc.data)
 library(dplyr)
 
-AAE <- radam("AAE", N=10)
-ADSL <- radam("ADSL", N=10)
+data("rADSL")
+data("rADAE")
+ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM) \%>\% filter(SEX \%in\% c("F", "M"))
+AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
+
 ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
-ANL <- ANL \%>\% mutate(flag1 = ifelse(SEX == "F", 1, 0)) \%>\% mutate(flag2 = ifelse(ARM == "ARM A", 1, 0))
+ANL <- ANL \%>\% mutate(flag1 = ifelse(SEX == "F", 1, 0)) \%>\% mutate(flag2 = ifelse(SEX == "M", 1, 0))
+ANL <- na.omit(ANL)
 
 g_butterfly_modD(category = ANL$AEBODSYS,
             groups = data.frame(flag1 = ANL$flag1, flag2 = ANL$flag2),
@@ -69,5 +76,5 @@ g_butterfly_modD(category = ANL$AEBODSYS,
 
 }
 \author{
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }

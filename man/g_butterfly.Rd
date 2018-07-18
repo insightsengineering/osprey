@@ -25,7 +25,7 @@ plot into rows, default here is \code{NULL}}
 
 \item{x_label}{string of text for x axis label, default is block_count}
 
-\item{y_label}{string of text for y axis label, default is AE Derived Terms}
+\item{y_label}{string of text for y axis label, default is "AE Derived Terms"}
 
 \item{sort_by}{character string that defines the ordering of the class and term
 variables in the output table,
@@ -38,26 +38,31 @@ default here is \code{FALSE}}
 ggplot object
 }
 \description{
-The butterfly plot is often used in Early Development (ED) and shows ...
+The butterfly plot is often used in Early Development (ED) and is an opposed
+barplot that shows instances of AEs or # of patients by category separated by
+a dichotomization variable. Each bar can be color coded according
+to a variable of choice and sorted according to either alphabetical order or the
+maximum count.
 }
 \details{
-this is an equivalent of the STREAM output \code{str_abc}
-  (\url{man}{http://<stream-url>})
+there is no equivalent STREAM output
 }
 \examples{
-library(random.cdisc.data)
 library(dplyr)
 
-ADSL <- radam("ADSL", N=10)
-AAE <- radam("AAE", N=10)
+data("rADSL")
+data("rADAE")
+ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX) \%>\% filter(SEX \%in\% c("F", "M"))
+AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
-data <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
+ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
+ANL <- na.omit(ANL)
 
-g_butterfly(category = data$AEBODSYS,
-            groups = data$SEX,
+g_butterfly(category = ANL$AEBODSYS,
+            groups = ANL$SEX,
             block_count = "# of patients",
-            block_color = data$AETOXGR,
-            id = data$USUBJID,
+            block_color = ANL$AETOXGR,
+            id = ANL$USUBJID,
             x_label = "# of patients",
             y_label = "AE Derived Terms",
             legend_label = "AETOXGR",
@@ -66,5 +71,5 @@ g_butterfly(category = data$AEBODSYS,
 
 }
 \author{
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }
