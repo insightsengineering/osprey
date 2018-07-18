@@ -80,18 +80,17 @@ tbl2 <- t_ds(
 
 tbl2
 
-# test wth Ninas study data
-#asl <- read.bce("/opt/BIOSTAT/prod/s30103j/libraries/asl.sas7bdat")
-asl <- read.bce("/opt/BIOSTAT/home/qit3/cdt70094/s30103j/libraries/aae_b.sas7bdat")
-asl <- asl \%>\% filter(AEREL1 != "" & AESOC != "" & AEDECOD != "")# & (AESOC == "INVESTIGATIONS" | AESOC == "CARDIAC DISORDERS"))
-asl <- asl[1:20,]
+# simple example using osprey dummy dataset
+
+data("rADSL")
+ASL <- rADSL
+
 tbl3 <- t_ds(
-  class = asl$AESOC,
-  term =  asl$AEREL1,
-  sub = data.frame(AEDECOD = asl$AEDECOD),
-  id = asl$USUBJID,
-  col_by = factor(asl$ARMCD),
-  total = "All Patients",
+   class = ASL$EOSSTT,
+   term = ASL$DCSREAS,
+   id = ASL$USUBJID,
+   col_by = factor(ASL$ARM),
+   total = "ALL Patients"
 )
 
 tbl3

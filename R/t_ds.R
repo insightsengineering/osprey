@@ -71,18 +71,17 @@
 #'
 #' tbl2
 #'
-#' # test wth Ninas study data
-#' #asl <- read.bce("/opt/BIOSTAT/prod/s30103j/libraries/asl.sas7bdat")
-#' asl <- read.bce("/opt/BIOSTAT/home/qit3/cdt70094/s30103j/libraries/aae_b.sas7bdat")
-#' asl <- asl %>% filter(AEREL1 != "" & AESOC != "" & AEDECOD != "")# & (AESOC == "INVESTIGATIONS" | AESOC == "CARDIAC DISORDERS"))
-#' asl <- asl[1:20,]
+#'# simple example using osprey dummy dataset
+#'
+#' data("rADSL")
+#' ASL <- rADSL
+#'
 #' tbl3 <- t_ds(
-#'   class = asl$AESOC,
-#'   term =  asl$AEREL1,
-#'   sub = data.frame(AEDECOD = asl$AEDECOD),
-#'   id = asl$USUBJID,
-#'   col_by = factor(asl$ARMCD),
-#'   total = "All Patients",
+#'    class = ASL$EOSSTT,
+#'    term = ASL$DCSREAS,
+#'    id = ASL$USUBJID,
+#'    col_by = factor(ASL$ARM),
+#'    total = "ALL Patients"
 #' )
 #'
 #' tbl3
@@ -136,8 +135,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
     df <- df %>% arrange(class, term)
   }
 
-  df <- df %>% mutate(class = ifelse(class == "", NA, class),
-                      term = ifelse(term == "", NA, term))
+  df <- df %>% mutate(class = ifelse(class == "", "None", as.character(class)),
+                      term = ifelse(term == "", "None", as.character(term)))
 
   # adding All Patients
   if(total != "NONE"){
@@ -146,9 +145,6 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   # total N for column header
   N <- tapply(df$id, df$col_by, function(x) (sum(!duplicated(x))))
-
-  # need to remove extra records that came from subject level data
-  df <- na.omit(df)
 
   # start tabulating --------------------------------------------------------
 
@@ -213,7 +209,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   #remove NA rows
   index <- numeric(0)
   for(i in seq(1, length(tbl), 2)){
-    if(attr(tbl[[i]], "row.name") == "NA"){
+    if(attr(tbl[[i]], "row.name") == "None"){
       index <- c(index, i)
     }
   }

@@ -56,7 +56,7 @@ plot into columns, default here is NULL}
 
 \item{x_label}{string of text for x axis label, default is time}
 
-\item{y_label}{string of text for y axis label, default is % change}
+\item{y_label}{string of text for y axis label, default is \% change}
 
 \item{show_legend}{boolean of whether marker legend is included,
 default here is FALSE}
@@ -71,8 +71,6 @@ Create a spiderplot for Early Development Visualization
 library(random.cdisc.data)
 library(plyr)
 library(dplyr)
-require(lemon)
-library(colorspace)
 
 atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")
@@ -84,9 +82,9 @@ p <- g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
              marker_y = dat$PCHG,
              line_colby = dat$USUBJID,
              marker_color = dat$RACE,
-             #marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
-             #                     "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
-             #                     "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
+             marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
+                                  "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
+                                  "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
              marker_shape = dat$RACE,
              #marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
              #                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,

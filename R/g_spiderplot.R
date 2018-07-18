@@ -31,14 +31,12 @@
 #' @param href_line value defines horizontal line overlay
 #' (can be a vector), default here is NULL
 #' @param x_label string of text for x axis label, default is time
-#' @param y_label string of text for y axis label, default is % change
+#' @param y_label string of text for y axis label, default is \% change
 #' @param show_legend boolean of whether marker legend is included,
 #' default here is FALSE
 #'
 #' @return ggplot object
 #'
-#' @import lemon
-#' @import colorspace
 #'
 #' @export
 #'
@@ -48,8 +46,6 @@
 #' library(random.cdisc.data)
 #' library(plyr)
 #' library(dplyr)
-#' require(lemon)
-#' library(colorspace)
 #'
 #' atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
 #' dat <- atr %>% filter(PARAMCD == "SUMTGLES")
@@ -61,9 +57,9 @@
 #'              marker_y = dat$PCHG,
 #'              line_colby = dat$USUBJID,
 #'              marker_color = dat$RACE,
-#'              #marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
-#'              #                     "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
-#'              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
+#'              marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
+#'                                   "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
+#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
 #'              marker_shape = dat$RACE,
 #'              #marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
 #'              #                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
@@ -235,17 +231,24 @@ g_spiderplot <- function(marker_x,
   if(is.null(facet_rows) && is.null(facet_columns)){
     pl
   } else if(is.null(facet_rows) && !is.null(facet_columns)){
-    pl <- pl + facet_rep_grid(.~ f_columns)
+    pl <- pl + facet_grid(.~ f_columns) # facet_rep_grid(.~ f_columns) - use rep to add in axis lines (require lemon)
   } else if(is.null(facet_columns) && !is.null(facet_rows)){
-    pl <- pl + facet_rep_grid(f_rows ~.)
+    pl <- pl + facet_grid(f_rows ~.)
   } else{
-    pl <- pl + facet_rep_grid(f_rows ~ f_columns)
+    pl <- pl + facet_grid(f_rows ~ f_columns)
+  }
+
+  call_color <- function(len){
+    datCol <- data.frame(color_opt = colors())
+    datCol <- datCol %>% filter(!grepl("white",color_opt)) %>% droplevels
+
+    return(datCol[1:len, 1])
   }
 
   #marker and color options
   if(!is.null(marker_color_opt)){
     #set line color default
-    v <- rainbow_hcl(length(unique(dat$l_col)))
+    v <- call_color(length(unique(dat$l_col)))
     names(v) <- unique(dat$l_col)
 
     pl <- pl + scale_color_manual(name = "Colour",
@@ -259,7 +262,9 @@ g_spiderplot <- function(marker_x,
   }
 
   #modify background color
-  pl <- pl + theme_classic() +
+  pl <- pl + annotate("segment", x=-Inf, xend=Inf, y=-Inf, yend=-Inf)+
+    annotate("segment", x=-Inf, xend=-Inf, y=-Inf, yend=Inf) +
+    theme_classic() +
     theme(strip.background = element_rect(colour = "white", fill = "white"),
           text = element_text(size = 16),
           axis.text = element_text(color = "black"),

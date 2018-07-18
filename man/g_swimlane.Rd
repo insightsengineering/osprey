@@ -20,7 +20,7 @@ g_swimlane(bar_id, bar_length, sort_by = NULL, col_by = NULL,
 
 \item{marker_id}{vector of IDs to identify markers within each bar. Default is the same as bar_id.}
 
-\item{marker_pos}{numeric vector to specify position for each marker}
+\item{marker_pos}{numeric vector to specify position for each marker point}
 
 \item{marker_shape}{vector to specify shape for markers}
 
@@ -30,15 +30,15 @@ g_swimlane(bar_id, bar_length, sort_by = NULL, col_by = NULL,
 
 \item{marker_color_opt}{aesthetic values to map shape values (named vector to map shape values to each name)}
 
-\item{anno_txt}{dataframe of variables to be displayed as annotation on the left}
+\item{anno_txt}{dataframe of subject-level variables to be displayed as annotation on the left}
 
 \item{yref_line}{numeric vector to plot reference lines}
 
-\item{ytick_at}{break interval of y-axis}
+\item{ytick_at}{optional break interval of bar length axis}
 
-\item{ylab}{y label}
+\item{ylab}{label for bar length}
 
-\item{title}{String to be displayed as plot title}
+\item{title}{string to be displayed as plot title}
 }
 \value{
 plot object
@@ -47,6 +47,7 @@ plot object
 Swimlane bar plot for each id with markers
 }
 \examples{
+# Example 1
 library(random.cdisc.data)
 library(dplyr)
 ASL <- radam("ASL", N=50, start_with = list(TRTDUR = rexp(50, 1/100)))
@@ -71,60 +72,55 @@ marker_color_opt = NULL,
 anno_txt = anno_txt,
 yref_line = c(100, 200),
 ytick_at = waiver(),
-# xlab = "Patient ID",
 ylab = "Time from First Treatment (Day)",
 title = "Swimlane Plot")
 
-\\donotrun{
+# Example 2
 library(dplyr)
+load(file = "data/rADSL.rda")
+load(file = "data/rADRS.rda")
+ASL <- rADSL
+ARS <- rADRS
 
-atx <- read.bce("/opt/BIOSTAT/qa/s30103j/libraries/atx.sas7bdat")
-asl <- read.bce("/opt/BIOSTAT/qa/s30103j/libraries/asl.sas7bdat")
-xars <- read.bce("/opt/BIOSTAT/qa/s30103j/libraries/xars.sas7bdat")
-# phase 1A data
-# pre-process ASl and ARS to fit in ANL
-ATX <- atx \%>\% filter(grepl("1a", APERIDC2))
-ASL <- ATX \%>\% select(USUBJID) \%>\%
-left_join(asl, by = "USUBJID") \%>\%
-filter(SAFFL == "Y")
+anno_txt_vars <- c("ARMCD", "SEX", "COUNTRY")
+anno_txt <- ASL[, anno_txt_vars]
 
-anno_txt_var <- c("ARMCD", "SEX", "CADX")
-anno_txt <- ASL[, anno_txt_var]
-
+# markers from ARS
 ARS <- ASL \%>\% select(USUBJID) \%>\%
-left_join(xars \%>\% filter(grepl("1a", APERIDC2)), "USUBJID") \%>\%
+left_join(ARS, "USUBJID") \%>\%
 filter(PARAMCD == "OVRINV") \%>\%
 select(USUBJID, ADY, AVALC)
 
+# markers from ASL - discontinuation
 ADS <- ASL \%>\%
-filter(DISCSTUD == "Y" | !is.na(STDSSDT)) \%>\%
-select(USUBJID, STDDRS, STDSDY) \%>\%
-rename(ADY = STDSDY, AVALC = STDDRS)
+filter(EOSSTT == "Discontinued" | DCSREAS != "") \%>\%
+select(USUBJID, EOSDY, DCSREAS) \%>\%
+rename(ADY = EOSDY, AVALC = DCSREAS)
 
-# combine with ASL to generate a length for each record
-ANL <- ASL \%>\% select(USUBJID, ARMCD, SEX, CADX, TRTDUR) \%>\%
+# combine ARS with ADS records as one data for markers and join with ASL
+ANL <- ASL \%>\%
 inner_join(rbind(ARS, ADS), "USUBJID")
 
 g_swimlane(bar_id = ASL$USUBJID,
-bar_length = ASL$TRTDUR,
+bar_length = ASL$TRTDURD,
 sort_by = ASL$ARMCD,
 col_by = ASL$ARMCD,
 marker_id = ANL$USUBJID,
 marker_pos = ANL$ADY,
 marker_shape = ANL$AVALC,
-marker_shape_opt <- c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15,
-"DEATH" = 8, "LOST TO FOLLOW-UP" = 10, "WITHDRAWAL BY SUBJECT" = 14),
+marker_shape_opt <- c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 0,
+"Adverse Event" = 7, "Death" = 8, "Physician Decision" = 9, "Progressive Disease" = 10,
+"Symptomatic Deterioation" = 11, "Withdrawal by Subject" = 12),
 marker_color = ANL$AVALC,
 marker_color_opt <- c("CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
-"DEATH" = "black", "LOST TO FOLLOW-UP" = "purple", "WITHDRAWAL BY SUBJECT" = "darkred"),
+"NE" = "grey", "Adverse Event" = "orange", "Death" = "black", "Physician Decision" = "navy",
+"Progressive Disease" = "purple", "Symptomatic Deterioation" = "cyan",
+"Withdrawal by Subject" = "darkred"),
 anno_txt = anno_txt,
-yref_line = c(100, 200),
+yref_line = c(50, 100),
 ytick_at = waiver(),
-# xlab = "Patient ID",
 ylab = "Time from First Treatment (Day)",
 title = "Swimlane Plot")
-
-}
 
 }
 \author{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_butterfly.R
 \name{g_butterfly}
 \alias{g_butterfly}
-\title{Create a butterfly plot for Early Development Visualization}
+\title{Butterfly Plot}
 \usage{
 g_butterfly(category, groups, block_count = "# of patients",
   block_color = NULL, id, facet_rows = NULL, x_label = block_count,
@@ -21,7 +21,7 @@ g_butterfly(category, groups, block_count = "# of patients",
 \item{id}{unique subject identifier variable.}
 
 \item{facet_rows}{vector defines what variable is used to split the
-plot into rows, default here is NULL}
+plot into rows, default here is \code{NULL}}
 
 \item{x_label}{string of text for x axis label, default is block_count}
 
@@ -32,33 +32,32 @@ variables in the output table,
 options: "alphabetical" or "count", default here is set to "count"}
 
 \item{show_legend}{boolean of whether color coding legend is included,
-default here is FALSE}
+default here is \code{FALSE}}
 }
 \value{
 ggplot object
 }
 \description{
-Create a butterfly plot for Early Development Visualization
+The butterfly plot is often used in Early Development (ED) and shows ...
+}
+\details{
+this is an equivalent of the STREAM output \code{str_abc}
+  (\url{man}{http://<stream-url>})
 }
 \examples{
 library(random.cdisc.data)
-library(plyr)
 library(dplyr)
-library(lemon)
-library(reshape2)
-library(grid)
-library(gtable)
-library(stringr)
 
-data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
-#data <- data \%>\% filter(AEBODSYS \%in\% c("Vascular disorders", "Surgical and medical procedures"))
+ADSL <- radam("ADSL", N=10)
+AAE <- radam("AAE", N=10)
+
+data <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
 
 g_butterfly(category = data$AEBODSYS,
             groups = data$SEX,
             block_count = "# of patients",
             block_color = data$AETOXGR,
             id = data$USUBJID,
-            facet_rows = data$RACE,
             x_label = "# of patients",
             y_label = "AE Derived Terms",
             legend_label = "AETOXGR",

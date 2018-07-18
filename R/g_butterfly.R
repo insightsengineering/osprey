@@ -1,4 +1,7 @@
-#' Create a butterfly plot for Early Development Visualization
+#' Butterfly Plot
+#'
+#'
+#' The butterfly plot is often used in Early Development (ED) and shows ...
 #'
 #'
 #' @param category vector of y values
@@ -7,19 +10,23 @@
 #' @param block_color vector - color coding of bar segments
 #' @param id unique subject identifier variable.
 #' @param facet_rows vector defines what variable is used to split the
-#' plot into rows, default here is NULL
+#' plot into rows, default here is \code{NULL}
 #' @param x_label string of text for x axis label, default is block_count
 #' @param y_label string of text for y axis label, default is AE Derived Terms
 #' @param sort_by character string that defines the ordering of the class and term
 #' variables in the output table,
 #' options: "alphabetical" or "count", default here is set to "count"
 #' @param show_legend boolean of whether color coding legend is included,
-#' default here is FALSE
+#' default here is \code{FALSE}
+#'
+#'
+#' @details this is an equivalent of the STREAM output \code{str_abc}
+#'   (\url{man}{http://<stream-url>})
 #'
 #' @return ggplot object
 #'
-#' @import lemon
 #' @import stringr
+#' @importFrom plyr ddply
 #'
 #' @export
 #'
@@ -27,23 +34,18 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' library(plyr)
 #' library(dplyr)
-#' library(lemon)
-#' library(reshape2)
-#' library(grid)
-#' library(gtable)
-#' library(stringr)
 #'
-#' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
-#' #data <- data %>% filter(AEBODSYS %in% c("Vascular disorders", "Surgical and medical procedures"))
+#' ADSL <- radam("ADSL", N=10)
+#' AAE <- radam("AAE", N=10)
+#'
+#' data <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
 #'
 #' g_butterfly(category = data$AEBODSYS,
 #'             groups = data$SEX,
 #'             block_count = "# of patients",
 #'             block_color = data$AETOXGR,
 #'             id = data$USUBJID,
-#'             facet_rows = data$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
@@ -116,7 +118,7 @@ g_butterfly <- function(category,
       }
 
       temp$bar_color <- factor(temp$bar_color)
-      counts <- left_join(counts, temp)
+      counts <- left_join(counts, temp, by = c("y", "groups"))
       max_c <- max(counts$n)
       counts$n0 <- rep(1, nrow(counts))
       counts <- counts %>% arrange(desc(bar_color))
@@ -313,11 +315,11 @@ g_butterfly <- function(category,
     pl <- pl + scale_x_discrete(limits = levels(factor(counts$y)))
   }
 
-  pl <- pl + labs(title = str_wrap(g1, width = 30))
+  pl <- pl + labs(title = str_wrap(g2, width = 30))
   g <- ggplotGrob(pl)
   title_style <- g$grobs[[8]]$gp
 
-  g2 <- gtable_add_grob(g, textGrob(str_wrap(g2, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
+  g2 <- gtable_add_grob(g, textGrob(str_wrap(g1, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
                         t=2, l=4, b=2, r=4, name="right-title")
   grid.draw(g2)
 
