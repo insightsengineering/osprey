@@ -1,7 +1,12 @@
+
 #' Butterfly Plot
 #'
 #'
-#' The butterfly plot is often used in Early Development (ED) and shows ...
+#' The butterfly plot is often used in Early Development (ED) and is an opposed
+#' barplot that shows instances of AEs or # of patients by category separated by
+#' a dichotomization variable. Each bar can be color coded according
+#' to a variable of choice and sorted according to either alphabetical order or the
+#' maximum count.
 #'
 #'
 #' @param category vector of y values
@@ -12,7 +17,7 @@
 #' @param facet_rows vector defines what variable is used to split the
 #' plot into rows, default here is \code{NULL}
 #' @param x_label string of text for x axis label, default is block_count
-#' @param y_label string of text for y axis label, default is AE Derived Terms
+#' @param y_label string of text for y axis label, default is "AE Derived Terms"
 #' @param sort_by character string that defines the ordering of the class and term
 #' variables in the output table,
 #' options: "alphabetical" or "count", default here is set to "count"
@@ -20,8 +25,7 @@
 #' default here is \code{FALSE}
 #'
 #'
-#' @details this is an equivalent of the STREAM output \code{str_abc}
-#'   (\url{man}{http://<stream-url>})
+#' @details there is no equivalent STREAM output
 #'
 #' @return ggplot object
 #'
@@ -30,22 +34,24 @@
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
-#' library(random.cdisc.data)
 #' library(dplyr)
 #'
-#' ADSL <- radam("ADSL", N=10)
-#' AAE <- radam("AAE", N=10)
+#' data("rADSL")
+#' data("rADAE")
+#' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX) %>% filter(SEX %in% c("F", "M"))
+#' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 #'
-#' data <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
+#' ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
+#' ANL <- na.omit(ANL)
 #'
-#' g_butterfly(category = data$AEBODSYS,
-#'             groups = data$SEX,
+#' g_butterfly(category = ANL$AEBODSYS,
+#'             groups = ANL$SEX,
 #'             block_count = "# of patients",
-#'             block_color = data$AETOXGR,
-#'             id = data$USUBJID,
+#'             block_color = ANL$AETOXGR,
+#'             id = ANL$USUBJID,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
@@ -157,7 +163,7 @@ g_butterfly <- function(category,
       }
 
       temp$bar_color <- factor(temp$bar_color)
-      counts <- left_join(counts, temp)
+      counts <- left_join(counts, temp, by = c("y", "groups"))
       max_c <- max(counts$n)
       counts$n0 <- rep(1, nrow(counts))
       counts <- counts %>% arrange(desc(bar_color))
@@ -189,7 +195,7 @@ g_butterfly <- function(category,
         temp <- temp[,-1]
       }
 
-      counts <- left_join(counts, temp)
+      counts <- left_join(counts, temp, by = c("y", "groups"))
       max_c <- max(counts$n)
       counts$n0 <- rep(1, nrow(counts))
       counts <- ddply(counts, c("y", "groups"), transform, label_ypos=cumsum(n0))
@@ -222,7 +228,7 @@ g_butterfly <- function(category,
         temp <- temp[,-1]
       }
 
-      counts <- left_join(counts, temp)
+      counts <- left_join(counts, temp, by = c("y", "groups"))
       max_c <- max(counts$n)
       counts$n0 <- rep(1, nrow(counts))
       counts <- ddply(counts, c("y", "groups", "f_rows"), transform, label_ypos=cumsum(n0))
@@ -246,7 +252,7 @@ g_butterfly <- function(category,
                      group_by(y) %>%
                      tally(n) %>%
                      data.frame
-    counts <- left_join(counts, tot)
+    counts <- left_join(counts, tot, by = "y")
     counts$y <- factor(counts$y, levels = rev(unique(counts$y[order(counts[, ncol(counts)], decreasing = TRUE)])))
   }
 
@@ -264,7 +270,7 @@ g_butterfly <- function(category,
       geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-0.9) +
       geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=0.9) +
       coord_flip() +
-      scale_y_continuous(labels = abs, limits = (max_c*1.4) * c(-1,1)) +
+      scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
   } else {
     pl <- ggplot(counts, aes(x=y)) +
@@ -274,7 +280,7 @@ g_butterfly <- function(category,
       geom_text(data=total_text_ann[total_text_ann$groups==g1,], aes(y = label_ypos, label = n), hjust=-0.9) +
       geom_text(data=total_text_ann[total_text_ann$groups==g2,], aes(y = -label_ypos, label = n), hjust=0.9) +
       coord_flip() +
-      scale_y_continuous(labels = abs, limits = (max_c*1.4) * c(-1,1)) +
+      scale_y_continuous(labels = abs, limits = (max_c*1.2) * c(-1,1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
   }
 
@@ -317,7 +323,6 @@ g_butterfly <- function(category,
 
   pl <- pl + labs(title = str_wrap(g2, width = 30))
   g <- ggplotGrob(pl)
-  title_style <- g$grobs[[8]]$gp
 
   g2 <- gtable_add_grob(g, textGrob(str_wrap(g1, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
                         t=2, l=4, b=2, r=4, name="right-title")
