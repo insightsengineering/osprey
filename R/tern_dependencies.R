@@ -8,3 +8,5 @@ add_ae_class <- tern:::add_ae_class
 check_same_N <- tern:::check_same_N
 to_n <- tern:::to_n
 var_relabel <- tern:::var_relabel
+t_max_grade_per_id <- tern:::t_max_grade_per_id
+shift_label_table <- tern:::shift_label_table
