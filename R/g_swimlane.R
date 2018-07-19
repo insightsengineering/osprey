@@ -1,3 +1,4 @@
+
 #' Swimlane Plot
 #'
 #' Swimlane plot is often used in Early Development (ED) and displays individual
@@ -19,7 +20,7 @@
 #' @param ylab label for bar length
 #' @param title string to be displayed as plot title
 #'
-#' @author qit3
+#' @template author_qit3
 #'
 #' @import ggplot2 grid gridExtra gtable
 #'
