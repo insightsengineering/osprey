@@ -1,7 +1,7 @@
-
-#' Create an AE Overview Summary Table (AET01)
+#' AE Overview Summary Table
 #'
-#' \code{t_ae_oview} returns adverse events according to STREAM format AET01
+#' \code{t_ae_oview} returns a summary table of overall AE profile: adverse events, deaths,
+#' and withdrawals by trial treatment. It corresponds to STREAM template AET01.
 #'
 #' @param id unique subject identifier variable. If a particular subject has no
 #'   adverse event then the subject \code{id} should be listed where
@@ -22,6 +22,8 @@
 #'    pooled total population, default here is "All Patients", if set to "NONE" then
 #'    the "All Patients" column is suppressed.
 #'
+#' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
+#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 #'
 #' @return \code{rtable} object
 #'

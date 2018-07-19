@@ -1,7 +1,6 @@
-
-#' Create an Adverse Events (AET02) Table
+#' Adverse Events by System Organ Class and Preferred Term
 #'
-#' \code{t_ae} returns adverse events according to STREAM format AET02
+#' \code{t_ae} returns adverse events summary table that corresponds to STREAM template AET02
 #'
 #' @param class system organ class variable.
 #' @param term preferred term variable.
@@ -17,8 +16,8 @@
 #' variables in the output table,
 #' options: "alphabetical" or "count", default here is set to "count"
 #'
-#' @details this is an equivalent of the STREAM output \code{str_abc}
-#'   (\url{man}{http://<stream-url>})
+#' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet02)}
+#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet02.html})
 #'
 #'
 #' @return \code{rtable} object

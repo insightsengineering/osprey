@@ -1,7 +1,7 @@
-
-#' Spiderplot
+#' Spider Plot
 #'
-#' The spider plot is often used in Early Development (ED) and shows
+#' Spider plot is often used in Early Development (ED) and displays individual
+#' patient plot of an endpoint over time by group
 #'
 #'
 #' @param marker_x dataframe with 2 columns,

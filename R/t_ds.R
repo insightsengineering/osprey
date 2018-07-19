@@ -1,6 +1,6 @@
-#' Create a Patient Disposition (DST01) Table
+#' Patient Disposition Table
 #'
-#' \code{t_ds} returns patient disposition according to STREAM format DST01
+#' \code{t_ds} returns patient disposition table that corresponds to STREAM template DST01
 #'
 #' @param id unique subject identifier variable. If a particular subject has no
 #'   adverse event then the subject \code{id} should be listed where
@@ -13,6 +13,8 @@
 #'  pooled total population, default here is "All Patients", if set to "NONE" then
 #'  the "All Patients" column is suppressed.
 #'
+#' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
+#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 #' @return \code{rtable} object
 #'
 #' @export
