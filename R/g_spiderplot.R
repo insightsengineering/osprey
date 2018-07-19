@@ -37,7 +37,7 @@
 #' @param x_label string of text for x axis label, default is time
 #' @param y_label string of text for y axis label, default is % change
 #' @param show_legend boolean of whether marker legend is included,
-#' default here is FALSE
+#' default here is \code{FALSE}
 #'
 #' @return ggplot object
 #'
