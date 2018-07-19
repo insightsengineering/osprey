@@ -1,7 +1,8 @@
 #' Adverse Events Table by Highest NCI CTCAE Grade
 #'
 #' \code{t_ae_ctc_v2} returns adverse events sorted by highest NCI (National Cancer
-#'  Institute) CTCAE (common terminology criteria for adverse avents) grade.
+#'  Institute) CTCAE (common terminology criteria for adverse avents) grade. It
+#'  corresponds to STREAM template AET01.
 #'
 #' @param class system organ class variable.
 #' @param term preferred term variable.
@@ -46,6 +47,9 @@
 #' \code{grade} category. Use \code{grade_levels} to modify the range of existing
 #' grades. If data does not have any records with \code{grade} 5 and the intent
 #' is to show only grades 1-4 rows then use \code{grade_levels = 1:4}.
+#'
+#' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet04)}
+#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html})
 #'
 #' @export
 #'
