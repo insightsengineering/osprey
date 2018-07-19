@@ -1,3 +1,4 @@
+
 #' Patient Disposition Table
 #'
 #' \code{t_ds} returns patient disposition table that corresponds to STREAM template DST01
@@ -19,13 +20,11 @@
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
 #' # Simple example
-#' library(tibble)
 #' library(dplyr)
-#' library(rtables)
 #'
 #' ASL <- tibble(
 #'   USUBJID = paste0("id-", 1:10),
@@ -57,7 +56,7 @@
 #'   term =  ANL$TERM,
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
-#'   total = "All Patients",
+#'   total = "All Patients"
 #' )
 #'
 #' tbl
@@ -68,7 +67,7 @@
 #'   sub = data.frame(GRADE = ANL$GRADE),
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
-#'   total = "All Patients",
+#'   total = "All Patients"
 #' )
 #'
 #' tbl2
@@ -76,14 +75,14 @@
 #'# simple example using osprey dummy dataset
 #'
 #' data("rADSL")
-#' ASL <- rADSL
+#' ANL <- rADSL
 #'
 #' tbl3 <- t_ds(
-#'    class = ASL$EOSSTT,
-#'    term = ASL$DCSREAS,
-#'    id = ASL$USUBJID,
-#'    col_by = factor(ASL$ARM),
-#'    total = "ALL Patients"
+#'    class = ANL$EOSSTT,
+#'    term = ANL$DCSREAS,
+#'    id = ANL$USUBJID,
+#'    col_by = factor(ANL$ARM),
+#'    total = "All Patients"
 #' )
 #'
 #' tbl3
@@ -139,6 +138,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   df <- df %>% mutate(class = ifelse(class == "", "None", as.character(class)),
                       term = ifelse(term == "", "None", as.character(term)))
+
+  total <- tot_column(total)
 
   # adding All Patients
   if(total != "NONE"){
