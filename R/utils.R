@@ -104,13 +104,14 @@ recursive_indent <- function(tbl_l, ind_count){
       else
         ind_count + 1})
     count <- unlist(count)
-    # #for inner most level remove duplicates
-    # if(max(count) == min(count)){
-    #   tbl_l <- tbl_l[odd_ind]
-    #   count <- count[odd_ind]
-    # }
     t0 <- Map(recursive_indent, tbl_l, count)
     tbl <- do.call(stack_rtables, t0)
   }
+}
+
+#arguments for total in tables (AET01, AET02, DST01)
+tot_column <- function(choice = c("All Patients", "None")){
+  choice <- match.arg(choice)
+  return(choice)
 }
 

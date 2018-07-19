@@ -33,11 +33,13 @@ options: "alphabetical" or "count", default here is set to "count"}
 \description{
 \code{t_ae} returns adverse events according to STREAM format AET02
 }
+\details{
+this is an equivalent of the STREAM output \code{str_aet02}
+  (\url{man}{http://bioportal.roche.com/stream_doc/um/report_outputs_aet01.html})
+}
 \examples{
 # Simple example
-library(tibble)
 library(dplyr)
-library(rtables)
 
 ASL <- tibble(
   USUBJID = paste0("id-", 1:10),
@@ -76,18 +78,17 @@ tbl
 
 # Simple example 2
 
-library(dplyr)
-library(rtables)
-library(random.cdisc.data)
-
-
-data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
+data("rADSL")
+data("rADAE")
+ADSL <- rADSL \%>\% select(USUBJID, STUDYID, ARM)
+AAE <- rADAE \%>\% select(USUBJID, STUDYID, ARM, AEBODSYS, AEDECOD)
+ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
 
 tbl2 <- t_ae(
-  class = data$AEBODSYS,
-  term =  data$AEDECOD,
-  id = data$USUBJID,
-  col_by = factor(data$ARM),
+  class = ANL$AEBODSYS,
+  term =  ANL$AEDECOD,
+  id = ANL$USUBJID,
+  col_by = factor(ANL$ARM),
   total = "None",
   sort_by = "alphabetical"
 )
@@ -97,5 +98,5 @@ tbl2
 
 }
 \author{
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }

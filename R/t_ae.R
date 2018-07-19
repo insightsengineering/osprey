@@ -17,21 +17,19 @@
 #' variables in the output table,
 #' options: "alphabetical" or "count", default here is set to "count"
 #'
-#' @details this is an equivalent of the STREAM output \code{str_abc}
-#'   (\url{man}{http://<stream-url>})
+#' @details this is an equivalent of the STREAM output \code{str_aet02}
+#'   (\url{man}{http://bioportal.roche.com/stream_doc/um/report_outputs_aet01.html})
 #'
 #'
 #' @return \code{rtable} object
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
 #' # Simple example
-#' library(tibble)
 #' library(dplyr)
-#' library(rtables)
 #'
 #' ASL <- tibble(
 #'   USUBJID = paste0("id-", 1:10),
@@ -70,18 +68,17 @@
 #'
 #' # Simple example 2
 #'
-#' library(dplyr)
-#' library(rtables)
-#' library(random.cdisc.data)
-#'
-#'
-#' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
+#' data("rADSL")
+#' data("rADAE")
+#' ADSL <- rADSL %>% select(USUBJID, STUDYID, ARM)
+#' AAE <- rADAE %>% select(USUBJID, STUDYID, ARM, AEBODSYS, AEDECOD)
+#' ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
 #'
 #' tbl2 <- t_ae(
-#'   class = data$AEBODSYS,
-#'   term =  data$AEDECOD,
-#'   id = data$USUBJID,
-#'   col_by = factor(data$ARM),
+#'   class = ANL$AEBODSYS,
+#'   term =  ANL$AEDECOD,
+#'   id = ANL$USUBJID,
+#'   col_by = factor(ANL$ARM),
 #'   total = "None",
 #'   sort_by = "alphabetical"
 #' )
@@ -98,9 +95,9 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
     stop(paste('col_by can not have', total, 'group.'))
 
   if (any("- Overall -" %in% term))
-    stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
+    stop("'- Overall -' is not a valid term, t_ae reserves it for derivation")
   if (any("All Patients" %in% col_by))
-    stop("'All Patients' is not a valid col_by, t_ae_oview derives All Patients column")
+    stop("'All Patients' is not a valid col_by, t_ae derives All Patients column")
 
   check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)))
   check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
@@ -123,6 +120,8 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
 
   df <- df %>% mutate(class = ifelse(class == "", NA, class),
                       term = ifelse(term == "", NA, term))
+
+  total <- tot_column(total)
 
   # adding All Patients
   if(total != "NONE"){
@@ -308,6 +307,3 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
 
   return(tbl)
 }
-
-
-
