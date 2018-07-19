@@ -1,3 +1,4 @@
+
 #' AE Overview Summary Table
 #'
 #' \code{t_ae_oview} returns a summary table of overall AE profile: adverse events, deaths,
@@ -29,36 +30,34 @@
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
 #' library(dplyr)
-#' suppressPackageStartupMessages(library(tidyverse))
-#' library(rtables)
 #'
-#' load(file = "data/rADAE.rda")
+#' data("rADAE")
 #'
-#' adae <- rADAE
-#' flag <- data.frame(dthfl = adae$DTHFL,
-#'                    dcsreas = adae$DCSREAS,
-#'                    aesdth = adae$AESDTH,
-#'                    aeser = adae$AESER,
-#'                    aeacn = adae$AEACN,
-#'                    arel = adae$AREL,
-#'                    aerel = adae$AEREL,
-#'                    aetoxgr = adae$AETOXGR)
+#' ANL <- rADAE
+#' flag <- data.frame(dthfl = ANL$DTHFL,
+#'                    dcsreas = ANL$DCSREAS,
+#'                    aesdth = ANL$AESDTH,
+#'                    aeser = ANL$AESER,
+#'                    aeacn = ANL$AEACN,
+#'                    arel = ANL$AREL,
+#'                    aerel = ANL$AEREL,
+#'                    aetoxgr = ANL$AETOXGR)
 #'
 #'extra <- data.frame(fatal2 = flag$aesdth,
 #'                    ser2 = flag$aeser)
 #' tbl <- t_ae_oview(
-#'    id = adae$USUBJID,
-#'    class = adae$AESOC,
-#'    term = adae$AEDECOD,
+#'    id = ANL$USUBJID,
+#'    class = ANL$AESOC,
+#'    term = ANL$AEDECOD,
 #'    flags = flag,
 #'    display_id = c("fatal", "ser", "serwd", "serdsm", "relser",
 #'                   "wd", "dsm", "rel", "relwd", "reldsm"),
 #'    extra_flag = extra,
-#'    col_by = factor(adae$ARM),
+#'    col_by = factor(ANL$ARM),
 #'    total="All Patients"
 #' )
 #'
@@ -152,6 +151,8 @@ t_ae_oview <- function(id,
 
   df <- df %>% mutate(class = ifelse(class == "", NA, class),
                       term = ifelse(term == "", NA, term))
+
+  total <- tot_column(total)
 
   # adding All Patients
   if(total != "NONE"){

@@ -1,3 +1,4 @@
+
 #' Adverse Events by System Organ Class and Preferred Term
 #'
 #' \code{t_ae} returns adverse events summary table that corresponds to STREAM template AET02
