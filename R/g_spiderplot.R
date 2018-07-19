@@ -1,7 +1,8 @@
+
 #' Spider Plot
 #'
 #' Spider plot is often used in Early Development (ED) and displays individual
-#' patient plot of an endpoint over time by group
+#' patient plot of an endpoint over time by group.
 #'
 #'
 #' @param marker_x dataframe with 2 columns,
@@ -34,51 +35,57 @@
 #' @param href_line value defines horizontal line overlay
 #' (can be a vector), default here is NULL
 #' @param x_label string of text for x axis label, default is time
-#' @param y_label string of text for y axis label, default is \% change
+#' @param y_label string of text for y axis label, default is % change
 #' @param show_legend boolean of whether marker legend is included,
 #' default here is FALSE
 #'
 #' @return ggplot object
 #'
+#' @details there is no equivalent STREAM output
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
-#' library(random.cdisc.data)
-#' library(plyr)
+#' # simple example
 #' library(dplyr)
 #'
-#' atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
-#' dat <- atr %>% filter(PARAMCD == "SUMTGLES")
+#' data("rADSL")
+#' data("rADTR")
+#' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, PCHG, PARAMCD)
+#' ADSL <- rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)
+#' ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
+#' ANL <- ANL %>% filter(PARAMCD == "SLDINV") %>% filter(RACE %in% c("WHITE", "ASIAN")) %>% group_by(USUBJID) %>% arrange(ADY)
+#' ANL <- na.omit(ANL)
+#' ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 #'
-#' #test changing where annotation marker lies
-#' #dat <- dat[-4, ]
 #'
-#' p <- g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
-#'              marker_y = dat$PCHG,
-#'              line_colby = dat$USUBJID,
-#'              marker_color = dat$RACE,
+#' p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
+#'              marker_y = ANL$PCHG,
+#'              line_colby = ANL$USUBJID,
+#'              marker_color = ANL$RACE,
 #'              marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
 #'                                   "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
-#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
-#'              marker_shape = dat$RACE,
-#'              #marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
-#'              #                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
-#'              #                     "AMERICAN INDIAN OR ALASKA NATIVE" = 5),
+#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = "blue", "UNKNOWN" = "black"),
+#'              marker_shape = ANL$RACE,
+#'              marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
+#'                                   "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
+#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = 5, "UNKNOWN" = 6),
 #'              marker_size = 5,
-#'              datalabel_txt = list(txt_ann = dat$USUBJID),
-#'              #datalabel_txt = list(txt_ann = dat$USUBJID, mrkr_all = dat$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
-#'              #datalabel_txt = list(mrkr_all = dat$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
-#'              facet_rows = dat$SEX,
-#'              facet_columns = dat$ARM,
+#'              datalabel_txt = list(txt_ann = ANL$USUBJID),
+#'              #datalabel_txt = list(txt_ann = ANL$USUBJID, mrkr_all = ANL$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
+#'              #datalabel_txt = list(mrkr_all = ANL$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
+#'              facet_rows = ANL$SEX,
+#'              facet_columns = ANL$ARM,
 #'              vref_line = c(10, 37),
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
 #'              show_legend = FALSE)
+#' p
 #'
+#' \dontrun{
 #' #test discrete x-axis points
 #' dat2 <- dat %>% arrange(TUDY) %>% mutate(day = as.character(TUDY)) %>% as.data.frame()
 #' g_spiderplot(marker_x = data.frame(day = as.factor(dat2$day), groupby = dat2$USUBJID),
@@ -98,6 +105,7 @@
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
 #'              show_legend = FALSE)
+#' }
 #'
 g_spiderplot <- function(marker_x,
                          marker_y,
@@ -106,7 +114,7 @@ g_spiderplot <- function(marker_x,
                          marker_color_opt = NULL,
                          marker_shape = NULL,
                          marker_shape_opt = NULL,
-                         marker_size = 6,
+                         marker_size = 3,
                          datalabel_txt = NULL,#USUBJID default
                          facet_rows = NULL,
                          facet_columns = NULL,
@@ -157,9 +165,10 @@ g_spiderplot <- function(marker_x,
   }
   if(!is.null(datalabel_txt$txt_ann)){
     dat$lbl_all <- datalabel_txt$txt_ann
+
     dat <- dat %>%
       group_by(lbl_all) %>%
-      mutate(dat, lab = ifelse(day == last(day), as.character(lbl_all), " "))
+      mutate(lab = ifelse(day == last(day), as.character(lbl_all), " "))
   }
   if(!is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)){
     if(length(unique(c(nrow(datalabel_txt$mrkr_all), check_input_length))) != 1)
