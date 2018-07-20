@@ -36,7 +36,6 @@
 #' library(dplyr)
 #'
 #' data("rADAE")
-#'
 #' ANL <- rADAE
 #' flag <- data.frame(dthfl = ANL$DTHFL,
 #'                    dcsreas = ANL$DCSREAS,
@@ -285,14 +284,17 @@ t_ae_oview <- function(id,
   tbls_ind <- c(list("Total number of patients with at least one" = tbl_ind))
   tbls_class <- Map(function(tbls_i, class_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables, lt1)
+    t2 <- do.call(stack_rtables_condense, lt1)
     add_ae_class(indent_table(t2, 1), class_i)
   }, tbls_ind, names(tbls_ind))
 
-  tbl_total <- do.call(stack_rtables, tbls_ov)
-  tbl_cl <- do.call(stack_rtables, tbls_class)
+  tbl_total <- do.call(stack_rtables_condense, tbls_ov)
+  tbl_cl <- do.call(stack_rtables_condense, tbls_class)
 
-  tbl <- rbind(tbl_total, tbl_cl)
+  header <- attr(tbl_cl, "header")
+  tbl_with_empty_rows <- rtablel(header = header, replicate(1, rrow()))
+
+  tbl <- rbind(tbl_total, tbl_with_empty_rows, tbl_cl)
 
   tbl
 }
