@@ -115,3 +115,28 @@ tot_column <- function(choice = c("All Patients", "None")){
   return(choice)
 }
 
+#' Stack rtables with rbind
+#'
+#' @param ... rtbale objects
+#' @param nrow_pad number of empty rows between tables in \code{...}
+#'
+#' @noRd
+#'
+#'
+stack_rtables_condense <- function(..., nrow_pad = 1) {
+
+  tbls <- Filter(Negate(is.null), list(...))
+
+  if (length(tbls) > 0) {
+    if (!rtables:::are(tbls, "rtable")) stop("not all objects are of type rtable")
+
+    header <- attr(tbls[[1]], "header")
+    Reduce(
+      function(x, y) rbind(x, y),
+      tbls
+    )
+
+  } else {
+    list()
+  }
+}

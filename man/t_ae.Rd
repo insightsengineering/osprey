@@ -2,10 +2,9 @@
 % Please edit documentation in R/t_ae.R
 \name{t_ae}
 \alias{t_ae}
-\title{Create an Adverse Events (AET02) Table}
+\title{Adverse Events by System Organ Class and Preferred Term}
 \usage{
-t_ae(class, term, id, col_by, total = "All Patients", sort_by = "count",
-  ...)
+t_ae(class, term, id, col_by, total = "All Patients", ...)
 }
 \arguments{
 \item{class}{system organ class variable.}
@@ -22,20 +21,16 @@ has to be a factor and can not be missing.}
 \item{total}{character string that will be used as a label for a column with
 pooled total population, default here is "All Patients", if set to "NONE" then
 the "All Patients" column is suppressed.}
-
-\item{sort_by}{character string that defines the ordering of the class and term
-variables in the output table,
-options: "alphabetical" or "count", default here is set to "count"}
 }
 \value{
 \code{rtable} object
 }
 \description{
-\code{t_ae} returns adverse events according to STREAM format AET02
+\code{t_ae} returns adverse events summary table that corresponds to STREAM template AET02
 }
 \details{
-this is an equivalent of the STREAM output \code{str_aet02}
-  (\url{man}{http://bioportal.roche.com/stream_doc/um/report_outputs_aet01.html})
+this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet02)}
+  (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet02.html})
 }
 \examples{
 # Simple example
@@ -71,7 +66,7 @@ tbl <- t_ae(
   term =  ANL$TERM,
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
-  total = "All Patients",
+  total = "All Patients"
 )
 
 tbl
@@ -89,8 +84,7 @@ tbl2 <- t_ae(
   term =  ANL$AEDECOD,
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
-  total = "None",
-  sort_by = "alphabetical"
+  total = "None"
 )
 
 tbl2
