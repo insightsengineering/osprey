@@ -91,7 +91,7 @@ remove_Null <- function(x) {
 recursive_indent <- function(tbl_l, ind_count){
   if (class(tbl_l) == "rtable"){
     in_t <- list(" " = tbl_l)
-    t <- do.call(stack_rtables, in_t)
+    t <- do.call(stack_rtables_condense, in_t)
     for (i in 1:nrow(t)) {
       attr(t[[i]], "indent") <- attr(t[[i]], "indent") + ind_count
     }
@@ -105,7 +105,7 @@ recursive_indent <- function(tbl_l, ind_count){
         ind_count + 1})
     count <- unlist(count)
     t0 <- Map(recursive_indent, tbl_l, count)
-    tbl <- do.call(stack_rtables, t0)
+    tbl <- do.call(stack_rtables_condense, t0)
   }
 }
 
@@ -120,7 +120,6 @@ tot_column <- function(choice = c("All Patients", "None")){
 #' @param ... rtbale objects
 #' @param nrow_pad number of empty rows between tables in \code{...}
 #'
-#' @noRd
 #'
 #'
 stack_rtables_condense <- function(..., nrow_pad = 1) {

@@ -207,11 +207,11 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   tbls_all <- remove_Null(l_t_class_terms)
   tbls_class <- Map(recursive_indent, tbls_all, rep(0, length(tbls_all)))
-  tbl <- do.call(stack_rtables, tbls_class)
+  tbl <- do.call(stack_rtables_condense, tbls_class)
 
   #remove NA rows
   index <- numeric(0)
-  for(i in seq(1, length(tbl), 2)){
+  for(i in seq(1, length(tbl))){
     if(attr(tbl[[i]], "row.name") == "None"){
       index <- c(index, i)
     }
