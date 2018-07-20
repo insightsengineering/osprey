@@ -420,7 +420,7 @@ g_butterfly_modD <- function(category,
   }
 
   if(show_legend){
-    pl <- pl + theme_classic() +
+    pl <- pl + theme_bw() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
             strip.text.x = element_text(color = "black", size = 9),
             title  = element_text(size = 9),
@@ -432,7 +432,7 @@ g_butterfly_modD <- function(category,
             plot.margin=unit(c(1.5,1,1,1),"cm"),
             strip.text = element_text(size = 5))
   } else{
-    pl <- pl + theme_classic() +
+    pl <- pl + theme_bw() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
             strip.text.x = element_text(color = "black", size = 9),
             title  = element_text(size = 9),

@@ -276,7 +276,7 @@ g_spiderplot <- function(marker_x,
   #modify background color
   pl <- pl + annotate("segment", x=-Inf, xend=Inf, y=-Inf, yend=-Inf)+
     annotate("segment", x=-Inf, xend=-Inf, y=-Inf, yend=Inf) +
-    theme_classic() +
+    theme_bw() +
     theme(strip.background = element_rect(colour = "white", fill = "white"),
           text = element_text(size = 16),
           axis.text = element_text(color = "black"),
