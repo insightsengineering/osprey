@@ -83,8 +83,7 @@ tbl2 <- t_ae(
   class = ANL$AEBODSYS,
   term =  ANL$AEDECOD,
   id = ANL$USUBJID,
-  col_by = factor(ANL$ARM),
-  total = "None"
+  col_by = factor(ANL$ARM)
 )
 
 tbl2
