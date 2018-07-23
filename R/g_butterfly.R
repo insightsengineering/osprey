@@ -42,7 +42,7 @@
 #'
 #' data("rADSL")
 #' data("rADAE")
-#' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM) %>% filter(SEX %in% c("F", "M"))
+#' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM, RACE) %>% filter(SEX %in% c("F", "M"))
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 #'
 #' ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
@@ -56,7 +56,7 @@
 #'             block_count = "# of patients",
 #'             block_color = ANL$AETOXGR,
 #'             id = ANL$USUBJID,
-#'             facet_rows = ANL$RACE,
+#'             #facet_rows = ANL$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
@@ -227,8 +227,8 @@ g_butterfly <- function(category,
 
       temp1$bar_color <- factor(temp1$bar_color)
       temp2$bar_color <- factor(temp2$bar_color)
-      counts1 <- left_join(counts1, temp1, by = c("y", "flag1"))
-      counts2 <- left_join(counts2, temp2, by = c("y", "flag2"))
+      counts1 <- left_join(counts1, temp1, by = c("y", "flag1", "f_rows"))
+      counts2 <- left_join(counts2, temp2, by = c("y", "flag2", "f_rows"))
       max_c <- max(c(counts1$n, counts2$n))
 
       counts1$n0 <- rep(1, nrow(counts1))
@@ -340,8 +340,8 @@ g_butterfly <- function(category,
         temp2 <- temp2[,-1]
       }
 
-      counts1 <- left_join(counts1, temp1, by = c("y", "flag1"))
-      counts2 <- left_join(counts2, temp2, by = c("y", "flag2"))
+      counts1 <- left_join(counts1, temp1, by = c("y", "flag1", "f_rows"))
+      counts2 <- left_join(counts2, temp2, by = c("y", "flag2", "f_rows"))
       max_c <- max(c(counts1$n, counts2$n))
 
       counts1$n0 <- rep(1, nrow(counts1))
