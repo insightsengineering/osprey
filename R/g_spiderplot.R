@@ -6,15 +6,12 @@
 #'
 #'
 #' @param marker_x dataframe with 2 columns,
-#' column 1 is the vector of x values and
+#' column 1 is the vector of x values (must be in sorted order) and
 #' column 2 is the vector to group the points together (default
 #' should be USUBJID)
 #' @param marker_y vector of y values
 #' @param line_colby vector defines by what variable plot is color coded,
 #' default here is \code{NULL}
-#' @param marker_color vector defines by what variable points are color coded,
-#' , default here is \code{NULL}
-#' @param marker_color_opt vector defines marker color code, default here is \code{NULL}
 #' @param marker_size size of markers in plot, default here is \code{NULL}
 #' @param marker_shape vector defines by what variable points are shape coded,
 #' , default here is \code{NULL}
@@ -64,10 +61,6 @@
 #' p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
 #'              marker_y = ANL$PCHG,
 #'              line_colby = ANL$USUBJID,
-#'              marker_color = ANL$RACE,
-#'              marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
-#'                                   "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
-#'                                   "AMERICAN INDIAN OR ALASKA NATIVE" = "blue", "UNKNOWN" = "black"),
 #'              marker_shape = ANL$RACE,
 #'              marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
 #'                                   "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
@@ -88,30 +81,10 @@
 #' \dontrun{
 #' #test discrete x-axis points
 #' dat2 <- dat %>% arrange(TUDY) %>% mutate(day = as.character(TUDY)) %>% as.data.frame()
-#' g_spiderplot(marker_x = data.frame(day = as.factor(dat2$day), groupby = dat2$USUBJID),
-#'              marker_y = dat2$PCHG,
-#'              line_colby = dat2$USUBJID,
-#'              marker_color = dat2$USUBJID,
-#'              #marker_color_opt = map_marker_color,
-#'              marker_shape = dat2$RACE,
-#'              #marker_shape_opt = map_marker_shape,
-#'              marker_size = 5,
-#'              datalabel_txt = list(txt_ann = dat2$USUBJID, mrkr_all = dat2$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
-#'              #datalabel_txt = list(mrkr_all = dat2$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
-#'              facet_rows = dat2$SEX,
-#'              facet_columns = dat2$ARM,
-#'              vref_line = c("10", "37"),
-#'              href_line = -0.3,
-#'              x_label = "Time (Days)",
-#'              y_label = "Change (%) from Baseline",
-#'              show_legend = FALSE)
-#' }
-#'
+#'}
 g_spiderplot <- function(marker_x,
                          marker_y,
                          line_colby = NULL,
-                         marker_color = NULL,
-                         marker_color_opt = NULL,
                          marker_shape = NULL,
                          marker_shape_opt = NULL,
                          marker_size = 3,
@@ -138,11 +111,6 @@ g_spiderplot <- function(marker_x,
   #set up data-------
   dat <- data.frame(day = marker_x[, 1], pchg = marker_y, group = marker_x[, 2])
 
-  if(!is.null(marker_color)){
-    if(length(unique(c(nrow(marker_color), check_input_length))) != 1)
-      stop("invalid arguments: check that the length of input arguments are identical")
-    dat$m_col <- marker_color
-  }
   if(!is.null(marker_shape)){
     if(length(unique(c(nrow(marker_shape), check_input_length))) != 1)
       stop("invalid arguments: check that the length of input arguments are identical")
@@ -192,15 +160,11 @@ g_spiderplot <- function(marker_x,
     pl <- pl + geom_line(size = 1, alpha = 0.5, show.legend = show_legend)
   }
 
-  #marker shape and color------------
-  if(!is.null(marker_color) && !is.null(marker_shape)){
-    pl <- pl + geom_point(aes(colour = m_col, shape = sh), size = marker_size, show.legend = show_legend)
-  } else if(!is.null(marker_color) && is.null(marker_shape)){
-    pl <- pl + geom_point(aes(colour = m_col), size = marker_size, show.legend = show_legend)
-  } else if(is.null(marker_color) && !is.null(marker_shape)){
-    pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
-  } else if(is.null(marker_color) && is.null(marker_shape)){
-    pl <- pl + geom_point(size = 3, show.legend = show_legend)
+  #marker color------------
+  if(!is.null(marker_shape)){
+    pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
+  } else if(is.null(marker_shape)){
+    pl <- pl + geom_point(aes(color = l_col), size = 3, show.legend = show_legend)
   }
 
   #label at last data point---------
@@ -257,16 +221,6 @@ g_spiderplot <- function(marker_x,
     return(datCol[1:len, 1])
   }
 
-  #marker and color options
-  if(!is.null(marker_color_opt)){
-    #set line color default
-    v <- call_color(length(unique(dat$l_col)))
-    names(v) <- unique(dat$l_col)
-
-    pl <- pl + scale_color_manual(name = "Colour",
-                                  breaks = dat$m_col,
-                                  values = c(v, marker_color_opt))
-  }
   if(!is.null(marker_shape_opt)){
     pl <- pl + scale_shape_manual(name = "Shape",
                                   breaks = dat$sh,
