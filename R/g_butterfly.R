@@ -2,8 +2,11 @@
 #' Butterfly Plot (version 2.0)
 #'
 #'
-#' A modification of the deafult butterfly plot in which 2 flags can
-#' be used as the dichotomization variables.
+#' The butterfly plot is often used in Early Development (ED) and is an opposed
+#' barplot that shows instances of AEs or # of patients by category separated by
+#' a dichotomization variable. Each bar can be color coded according
+#' to a variable of choice and sorted according to either alphabetical order or the
+#' maximum count.
 #'
 #'
 #' @param category vector of y values
@@ -56,7 +59,7 @@
 #'             block_count = "# of patients",
 #'             block_color = ANL$AETOXGR,
 #'             id = ANL$USUBJID,
-#'             #facet_rows = ANL$RACE,
+#'             facet_rows = ANL$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
@@ -425,26 +428,24 @@ g_butterfly <- function(category,
   if(show_legend){
     pl <- pl + theme_bw() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
-            strip.text.x = element_text(color = "black", size = 9),
+            strip.text.x = element_text(color = "black", size = 14),
             title  = element_text(size = 9),
             axis.title = element_text(size = 20),
             axis.text = element_text(color = "black", size = 9),
             legend.text=element_text(size=9),
             legend.title = element_text(size = 9),
             panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
-            plot.margin=unit(c(1.5,1,1,1),"cm"),
-            strip.text = element_text(size = 5))
+            plot.margin=unit(c(1.5,1,1,1),"cm"))
   } else{
     pl <- pl + theme_bw() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
-            strip.text.x = element_text(color = "black", size = 9),
+            strip.text.x = element_text(color = "black", size = 14),
             title  = element_text(size = 9),
             axis.title = element_text(size = 20),
             axis.text = element_text(color = "black", size = 9),
             legend.text=element_text(size=9),
             legend.title = element_text(size = 9),
             panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
-            strip.text = element_text(size = 5),
             plot.margin=unit(c(1.5,1,1,1),"cm"),
             legend.position = "none")
   }

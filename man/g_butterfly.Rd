@@ -45,8 +45,11 @@ default here is FALSE}
 ggplot object
 }
 \description{
-A modification of the deafult butterfly plot in which 2 flags can
-be used as the dichotomization variables.
+The butterfly plot is often used in Early Development (ED) and is an opposed
+barplot that shows instances of AEs or # of patients by category separated by
+a dichotomization variable. Each bar can be color coded according
+to a variable of choice and sorted according to either alphabetical order or the
+maximum count.
 }
 \details{
 there is no equivalent STREAM output
@@ -56,7 +59,7 @@ library(dplyr)
 
 data("rADSL")
 data("rADAE")
-ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM) \%>\% filter(SEX \%in\% c("F", "M"))
+ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% filter(SEX \%in\% c("F", "M"))
 AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
@@ -64,7 +67,8 @@ ANL <- ANL \%>\% mutate(flag1 = ifelse(SEX == "F", 1, 0)) \%>\% mutate(flag2 = i
 ANL <- na.omit(ANL)
 
 g_butterfly(category = ANL$AEBODSYS,
-            groups = data.frame(flag1 = ANL$flag1, flag2 = ANL$flag2),
+            rightFlag = ANL$flag1,
+            leftFlag = ANL$flag2,
             group_names = c("flag1", "flag2"),
             block_count = "# of patients",
             block_color = ANL$AETOXGR,
