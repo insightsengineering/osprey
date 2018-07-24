@@ -236,7 +236,7 @@ g_spiderplot <- function(marker_x,
           axis.text = element_text(color = "black"),
           legend.text=element_text(size=7),
           legend.title = element_text(size = 7)) +
-    labs(colour = "Color", shape = "Shape") +
+    labs(shape = "Shape") +
     guides(color = guide_legend(override.aes = list(size=2)))
 
   if(is.numeric(marker_x[, 1])){
