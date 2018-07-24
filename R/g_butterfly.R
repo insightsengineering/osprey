@@ -55,11 +55,11 @@
 #' g_butterfly(category = ANL$AEBODSYS,
 #'             rightFlag = ANL$flag1,
 #'             leftFlag = ANL$flag2,
-#'             group_names = c("flag1", "flag2"),
+#'             group_names = c("flag1 Native american and native indian", "flag2"),
 #'             block_count = "# of patients",
 #'             block_color = ANL$AETOXGR,
 #'             id = ANL$USUBJID,
-#'             facet_rows = ANL$RACE,
+#'             #facet_rows = ANL$RACE,
 #'             x_label = "# of patients",
 #'             y_label = "AE Derived Terms",
 #'             legend_label = "AETOXGR",
@@ -435,7 +435,8 @@ g_butterfly <- function(category,
             legend.text=element_text(size=9),
             legend.title = element_text(size = 9),
             panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
-            plot.margin=unit(c(1.5,1,1,1),"cm"))
+            plot.margin=unit(c(1.5,1,1,1),"cm")
+            )
   } else{
     pl <- pl + theme_bw() +
       theme(strip.background = element_rect(colour = "white", fill = "white"),
@@ -456,12 +457,14 @@ g_butterfly <- function(category,
     pl <- pl + scale_x_discrete(limits = rev(unique(tot$y[order(tot[, 2], decreasing = TRUE)])))
   }
 
-  pl <- pl + labs(title = str_wrap(g2, width = 30))
+  #pl <- pl + labs(title = str_wrap(g2, width = 30))
   g <- ggplotGrob(pl)
 
-  g2 <- gtable_add_grob(g, textGrob(str_wrap(g1, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
-                        t=2, l=4, b=2, r=4, name="right-title")
-  grid.draw(g2)
+  g <- gtable_add_grob(g, textGrob(str_wrap(g1, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
+                        t=1.5, l=4, b=3, r=4, name="right-title")
+  g <- gtable_add_grob(g, textGrob(str_wrap(g2, width = 30), x=1, just = "left", hjust=1, gp=gpar(fontsize = 11)),
+                        t=1.5, l=3, b=3, r=3, name="left-title")
+  grid.draw(g)
 
 }
 
