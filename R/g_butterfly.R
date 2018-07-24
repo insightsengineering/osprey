@@ -55,8 +55,8 @@
 #' g_butterfly(category = ANL$AEBODSYS,
 #'             rightFlag = ANL$flag1,
 #'             leftFlag = ANL$flag2,
-#'             group_names = c("flag1 Native american and native indian", "flag2"),
-#'             block_count = "# of patients",
+#'             group_names = c("flag1 F", "flag2 M"),
+#'             block_count = "# of AEs",
 #'             block_color = ANL$AETOXGR,
 #'             id = ANL$USUBJID,
 #'             #facet_rows = ANL$RACE,
@@ -149,8 +149,8 @@ g_butterfly <- function(category,
         temp1 <- temp1[,-1]
         temp2 <- temp2[,-1]
       } else if(block_count == "# of AEs"){
-        counts1 <- dat %>% group_by(y, flag1) %>% tally %>% as.data.frame()
-        counts2 <- dat %>% group_by(y, flag2) %>% tally %>% as.data.frame()
+        counts1 <- dat %>% group_by(y, flag1) %>% tally %>% filter(flag1 == 1) %>% as.data.frame()
+        counts2 <- dat %>% group_by(y, flag2) %>% tally %>% filter(flag2 == 1) %>% as.data.frame()
         temp1 <- data.frame(id = id, y = category, flag1 = groups$flag1, bar_color = block_color)
         temp2 <- data.frame(id = id, y = category, flag2 = groups$flag2, bar_color = block_color)
         temp1 <- temp1[,-1]
@@ -220,8 +220,8 @@ g_butterfly <- function(category,
         temp1 <- temp1[,-1]
         temp2 <- temp2[,-1]
       } else if(block_count == "# of AEs"){
-        counts1 <- dat %>% group_by(y, flag1, f_rows) %>% tally %>% as.data.frame()
-        counts2 <- dat %>% group_by(y, flag2, f_rows) %>% tally %>% as.data.frame()
+        counts1 <- dat %>% group_by(y, flag1, f_rows) %>% tally %>% filter(flag1 == 1) %>% as.data.frame()
+        counts2 <- dat %>% group_by(y, flag2, f_rows) %>% tally %>% filter(flag2 == 1) %>% as.data.frame()
         temp1 <- data.frame(id = id, y = category, flag1 = groups$flag1, bar_color = block_color, f_rows = facet_rows)
         temp2 <- data.frame(id = id, y = category, flag2 = groups$flag2, bar_color = block_color, f_rows = facet_rows)
         temp1 <- temp1[,-1]
@@ -460,10 +460,10 @@ g_butterfly <- function(category,
   #pl <- pl + labs(title = str_wrap(g2, width = 30))
   g <- ggplotGrob(pl)
 
-  g <- gtable_add_grob(g, textGrob(str_wrap(g1, width = 30), x=1, just = "right", hjust=1, gp=gpar(fontsize = 11)),
-                        t=1.5, l=4, b=3, r=4, name="right-title")
-  g <- gtable_add_grob(g, textGrob(str_wrap(g2, width = 30), x=1, just = "left", hjust=1, gp=gpar(fontsize = 11)),
-                        t=1.5, l=3, b=3, r=3, name="left-title")
+  g <- gtable_add_grob(g, grid.text(str_wrap(g1, width = 30), x=1, just = "center", hjust=1, gp=gpar(fontsize = 11)),
+                        t=1.5, l=4, b=3, r=4, name="right-title", clip = "off")
+  g <- gtable_add_grob(g, grid.text(str_wrap(g2, width = 30), x=1, just = "center", hjust=0, gp=gpar(fontsize = 11)),
+                        t=1.5, l=3, b=3, r = 3, name="left-title", clip = "off")
   grid.draw(g)
 
 }
