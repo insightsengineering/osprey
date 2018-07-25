@@ -5,7 +5,7 @@
 \title{Adverse Events Table by Highest NCI CTCAE Grade}
 \usage{
 t_ae_ctc_v2(class, term, id, grade, col_by, total = "All Patients",
-  grade_levels = 1:5, sort_by = "count", ...)
+  grade_levels = 1:5, ...)
 }
 \arguments{
 \item{class}{system organ class variable.}
@@ -28,14 +28,11 @@ the "All Patients" column is suppressed.}
 \item{grade_levels}{ordered values of possible of grades in a form of
 \code{x:y}, default is \code{1:5}. This assures a proper fill in for
 grades, see 'Details'.}
-
-\item{sort_by}{character string that defines the ordering of the class and term
-variables in the output table,
-options: "alphabetical" or "count", default here is set to "count"}
 }
 \description{
 \code{t_ae_ctc_v2} returns adverse events sorted by highest NCI (National Cancer
- Institute) CTCAE (common terminology criteria for adverse avents) grade.
+ Institute) CTCAE (common terminology criteria for adverse avents) grade. It
+ corresponds to STREAM template AET01.
 }
 \details{
 \code{t_ae_ctc_v2} counts patients according to adverse events (AEs) of greatest
@@ -62,6 +59,9 @@ in case there was no AEs reported for particular \code{col_by} and/or
 \code{grade} category. Use \code{grade_levels} to modify the range of existing
 grades. If data does not have any records with \code{grade} 5 and the intent
 is to show only grades 1-4 rows then use \code{grade_levels = 1:4}.
+
+this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet04)}
+  (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html})
 }
 \examples{
 # Simple example
@@ -122,8 +122,7 @@ tbl <- with(ANL,
               grade = AETOXGR,
               col_by = factor(ARM),
               total = "All Patients",
-              grade_levels = 1:5,
-              sort_by = "alphabetical"
+              grade_levels = 1:5
             )
 )
 
@@ -135,5 +134,5 @@ Edgar Manukya
 
 Adrian Waddell
 
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }

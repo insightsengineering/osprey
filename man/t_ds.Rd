@@ -2,7 +2,7 @@
 % Please edit documentation in R/t_ds.R
 \name{t_ds}
 \alias{t_ds}
-\title{Create a Patient Disposition (DST01) Table}
+\title{Patient Disposition Table}
 \usage{
 t_ds(class, term, sub = NULL, id, col_by, total = "All Patients", ...)
 }
@@ -26,13 +26,15 @@ the "All Patients" column is suppressed.}
 \code{rtable} object
 }
 \description{
-\code{t_ds} returns patient disposition according to STREAM format DST01
+\code{t_ds} returns patient disposition table that corresponds to STREAM template DST01
+}
+\details{
+this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
+  (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 }
 \examples{
 # Simple example
-library(tibble)
 library(dplyr)
-library(rtables)
 
 ASL <- tibble(
   USUBJID = paste0("id-", 1:10),
@@ -64,7 +66,7 @@ tbl <- t_ds(
   term =  ANL$TERM,
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
-  total = "All Patients",
+  total = "All Patients"
 )
 
 tbl
@@ -75,7 +77,7 @@ tbl2 <- t_ds(
   sub = data.frame(GRADE = ANL$GRADE),
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
-  total = "All Patients",
+  total = "All Patients"
 )
 
 tbl2
@@ -83,14 +85,14 @@ tbl2
 # simple example using osprey dummy dataset
 
 data("rADSL")
-ASL <- rADSL
+ANL <- rADSL
 
 tbl3 <- t_ds(
-   class = ASL$EOSSTT,
-   term = ASL$DCSREAS,
-   id = ASL$USUBJID,
-   col_by = factor(ASL$ARM),
-   total = "ALL Patients"
+   class = ANL$EOSSTT,
+   term = ANL$DCSREAS,
+   id = ANL$USUBJID,
+   col_by = factor(ANL$ARM),
+   total = "All Patients"
 )
 
 tbl3
@@ -98,5 +100,5 @@ tbl3
 
 }
 \author{
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }

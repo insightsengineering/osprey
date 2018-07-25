@@ -1,3 +1,4 @@
+
 #' Adverse Events Table by Highest NCI CTCAE Grade
 #'
 #' \code{t_ae_ctc_v2} returns adverse events sorted by highest NCI (National Cancer
@@ -18,9 +19,6 @@
 #' @param grade_levels ordered values of possible of grades in a form of
 #'   \code{x:y}, default is \code{1:5}. This assures a proper fill in for
 #'   grades, see 'Details'.
-#' @param sort_by character string that defines the ordering of the class and term
-#' variables in the output table,
-#' options: "alphabetical" or "count", default here is set to "count"
 #'
 #' @details
 #' \code{t_ae_ctc_v2} counts patients according to adverse events (AEs) of greatest
@@ -55,7 +53,7 @@
 #'
 #' @author Edgar Manukya
 #' @author Adrian Waddell
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #'
 #' @examples
@@ -117,14 +115,13 @@
 #'               grade = AETOXGR,
 #'               col_by = factor(ARM),
 #'               total = "All Patients",
-#'               grade_levels = 1:5,
-#'               sort_by = "alphabetical"
+#'               grade_levels = 1:5
 #'             )
 #' )
 #'
 #' tbl
 #'
-t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5, sort_by = "count", ...) {
+t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5, ...) {
 
   # check argument validity and consitency ----------------------------------
   check_col_by(col_by, min_num_levels = 1)
@@ -182,33 +179,32 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
 
     })
 
-    if(sort_by == "count"){
-      # sort terms by total
-      N_total_any <- vapply(l_t_terms, function(tbl) {
-        a <- 0
-        for(i in c(1:n_cols)){
-          a <- a + tbl[1, i][1]
-        }
-        a
-      }, numeric(1))
-
-      l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
-    }
-    l_t_terms
-  })
-
-  if(sort_by == "count"){
-    # now sort tables
-    N_total_overall <- vapply(l_t_class_terms, function(tbl) {
+    # sort terms by total
+    N_total_any <- vapply(l_t_terms, function(tbl) {
       a <- 0
       for(i in c(1:n_cols)){
-        a <- a + tbl[[1]][1, i][1]
+        a <- a + tbl[1, i][1]
       }
       a
     }, numeric(1))
 
-    l_t_class_terms <- l_t_class_terms[order(-N_total_overall, names(l_t_class_terms), decreasing = FALSE)]
-  }
+    l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
+
+    l_t_terms
+  })
+
+
+  # now sort tables
+  N_total_overall <- vapply(l_t_class_terms, function(tbl) {
+    a <- 0
+    for(i in c(1:n_cols)){
+      a <- a + tbl[[1]][1, i][1]
+    }
+    a
+  }, numeric(1))
+
+  l_t_class_terms <- l_t_class_terms[order(-N_total_overall, names(l_t_class_terms), decreasing = FALSE)]
+
 
   tbl_overall <- t_max_grade_per_id(
     grade = df$gradev,
