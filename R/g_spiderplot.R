@@ -75,7 +75,7 @@
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
-#'              show_legend = FALSE)
+#'              show_legend = TRUE)
 #' p
 #'
 #' \dontrun{
@@ -162,9 +162,10 @@ g_spiderplot <- function(marker_x,
 
   #marker color------------
   if(!is.null(marker_shape)){
-    pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
+    pl <- pl + geom_point(aes(shape = sh, colour = l_col), size = marker_size, show.legend = show_legend)
+
   } else if(is.null(marker_shape)){
-    pl <- pl + geom_point(aes(color = l_col), size = 3, show.legend = show_legend)
+    pl <- pl + geom_point(aes(colour = l_col), size = 3, show.legend = show_legend)
   }
 
   #label at last data point---------
@@ -231,13 +232,13 @@ g_spiderplot <- function(marker_x,
   pl <- pl + annotate("segment", x=-Inf, xend=Inf, y=-Inf, yend=-Inf)+
     annotate("segment", x=-Inf, xend=-Inf, y=-Inf, yend=Inf) +
     theme_bw() +
-    theme(strip.background = element_rect(colour = "white", fill = "white"),
+    theme(strip.background = element_rect(linetype = "blank", fill = "white"),
           text = element_text(size = 16),
           axis.text = element_text(color = "black"),
           legend.text=element_text(size=7),
           legend.title = element_text(size = 7)) +
     labs(shape = "Shape") +
-    guides(color = guide_legend(override.aes = list(size=2)))
+    guides(colour = FALSE)
 
   if(is.numeric(marker_x[, 1])){
     pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.3)

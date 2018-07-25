@@ -97,7 +97,7 @@ p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
              href_line = -0.3,
              x_label = "Time (Days)",
              y_label = "Change (\%) from Baseline",
-             show_legend = FALSE)
+             show_legend = TRUE)
 p
 
 \dontrun{
