@@ -75,7 +75,8 @@
 #'   class = ANL$AEBODSYS,
 #'   term =  ANL$AEDECOD,
 #'   id = ANL$USUBJID,
-#'   col_by = factor(ANL$ARM)
+#'   col_by = factor(ANL$ARM),
+#'   total = "None"
 #' )
 #'
 #' tbl2

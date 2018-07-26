@@ -154,7 +154,7 @@ t_ae_oview <- function(id,
   total <- tot_column(total)
 
   # adding All Patients
-  if(total != "NONE"){
+  if(tolower(total) != "none"){
     df <- duplicate_with_var(df, id = paste(df$id, "-", total), col_by = total)
     df_flags <- duplicate_with_var(df_flags, id = paste(df_flags$id, "-", total), col_by = total)
 

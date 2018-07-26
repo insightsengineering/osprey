@@ -142,7 +142,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   total <- tot_column(total)
 
   # adding All Patients
-  if(total != "NONE"){
+  if(tolower(total) != "none"){
     df <- duplicate_with_var(df, id = paste(df$id, "-", total), col_by = total)
   }
 
