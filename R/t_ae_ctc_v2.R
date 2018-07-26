@@ -143,7 +143,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   df <- df %>% mutate(class = ifelse(class == "", NA, class),
                       term = ifelse(term == "", NA, term))
 
-  if(total != "NONE"){
+  if(tolower(total) != "NONE"){
     # adding All Patients
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
   }
