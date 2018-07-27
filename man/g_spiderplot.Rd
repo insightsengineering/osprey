@@ -37,10 +37,10 @@ mrkr_all - vector of ID's (for annotation marker)
 mrkr_ann - vector of ID's (subset of mrkr_all) where arrow is desired to
 indicate any study interim points}
 
-\item{facet_rows}{vector defines what variable is used to split the
+\item{facet_rows}{dataframe defines what variable is used to split the
 plot into rows, default here is \code{NULL}}
 
-\item{facet_columns}{vector defines what variable is used to split the
+\item{facet_columns}{dataframe defines what variable is used to split the
 plot into columns, default here is \code{NULL}}
 
 \item{vref_line}{value defines vertical line overlay
@@ -91,8 +91,8 @@ p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
              datalabel_txt = list(txt_ann = ANL$USUBJID),
              #datalabel_txt = list(txt_ann = ANL$USUBJID, mrkr_all = ANL$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
              #datalabel_txt = list(mrkr_all = ANL$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
-             facet_rows = ANL$SEX,
-             facet_columns = ANL$ARM,
+             facet_rows = data.frame(sex = ANL$SEX),
+             facet_columns = data.frame(arm = ANL$ARM),
              vref_line = c(10, 37),
              href_line = -0.3,
              x_label = "Time (Days)",

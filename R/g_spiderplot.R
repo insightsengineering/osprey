@@ -23,9 +23,9 @@
 #' mrkr_all - vector of ID's (for annotation marker)
 #' mrkr_ann - vector of ID's (subset of mrkr_all) where arrow is desired to
 #' indicate any study interim points
-#' @param facet_rows vector defines what variable is used to split the
+#' @param facet_rows dataframe defines what variable is used to split the
 #' plot into rows, default here is \code{NULL}
-#' @param facet_columns vector defines what variable is used to split the
+#' @param facet_columns dataframe defines what variable is used to split the
 #' plot into columns, default here is \code{NULL}
 #' @param vref_line value defines vertical line overlay
 #' (can be a vector), default here is \code{NULL}
@@ -69,8 +69,8 @@
 #'              datalabel_txt = list(txt_ann = ANL$USUBJID),
 #'              #datalabel_txt = list(txt_ann = ANL$USUBJID, mrkr_all = ANL$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
 #'              #datalabel_txt = list(mrkr_all = ANL$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
-#'              facet_rows = ANL$SEX,
-#'              facet_columns = ANL$ARM,
+#'              facet_rows = data.frame(sex = ANL$SEX),
+#'              facet_columns = data.frame(arm = ANL$ARM),
 #'              vref_line = c(10, 37),
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
@@ -119,12 +119,24 @@ g_spiderplot <- function(marker_x,
   if(!is.null(facet_rows)){
     if(length(unique(c(nrow(facet_rows), check_input_length))) != 1)
       stop("invalid arguments: check that the length of input arguments are identical")
-    dat$f_rows <- facet_rows
+    if(ncol(facet_rows) == 1){
+      dat$f_rows <- facet_rows [, 1]
+    } else if(ncol(facet_rows) == 2){
+      dat$f_rows <- facet_rows[, 1]
+      dat$f_rows_2 <- facet_rows[, 2]
+    }
+
   }
   if(!is.null(facet_columns)){
     if(length(unique(c(nrow(facet_columns), check_input_length))) != 1)
       stop("invalid arguments: check that the length of input arguments are identical")
-    dat$f_columns <- facet_columns
+
+    if(ncol(facet_columns) == 1){
+      dat$f_columns <- facet_columns[, 1]
+    } else if(ncol(facet_rows) == 2){
+      dat$f_columns <- facet_columns[, 1]
+      dat$f_columns_2 <- facet_columns[, 2]
+    }
   }
   if(!is.null(line_colby)){
     if(length(unique(c(nrow(line_colby), check_input_length))) != 1)
@@ -208,11 +220,32 @@ g_spiderplot <- function(marker_x,
   if(is.null(facet_rows) && is.null(facet_columns)){
     pl
   } else if(is.null(facet_rows) && !is.null(facet_columns)){
-    pl <- pl + facet_grid(.~ f_columns) # facet_rep_grid(.~ f_columns) - use rep to add in axis lines (require lemon)
+
+    if(ncol(facet_columns) == 1){
+      pl <- pl + facet_grid(.~ f_columns)
+    } else if(ncol(facet_columns) == 2){
+      pl <- pl + facet_grid(.~ f_columns + f_columns_2)
+    }
+
   } else if(is.null(facet_columns) && !is.null(facet_rows)){
-    pl <- pl + facet_grid(f_rows ~.)
+
+    if(ncol(facet_rows) == 1){
+      pl <- pl + facet_grid(f_rows ~.)
+    } else if(ncol(facet_rows) == 2){
+      pl <- pl + facet_grid(f_rows + f_rows_2 ~.)
+    }
+
   } else{
-    pl <- pl + facet_grid(f_rows ~ f_columns)
+    if(ncol(facet_columns) == 1 && ncol(facet_rows) == 1){
+      pl <- pl + facet_grid(f_rows ~ f_columns)
+    } else if(ncol(facet_columns) == 1 && ncol(facet_rows) == 2){
+      pl <- pl + facet_grid(f_rows + f_rows_2 ~ f_columns)
+    } else if(ncol(facet_columns) == 2 && ncol(facet_rows) == 1){
+      pl <- pl + facet_grid(f_rows ~ f_columns + f_columns_2)
+    } else if(ncol(facet_columns) == 2 && ncol(facet_rows) == 2){
+      pl <- pl + facet_grid(f_rows + f_rows_2 ~ f_columns + f_columns_2)
+    }
+
   }
 
   call_color <- function(len){
