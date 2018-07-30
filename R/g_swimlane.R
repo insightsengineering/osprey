@@ -163,6 +163,7 @@ g_swimlane <- function(bar_id,
   p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_length)) +
     geom_bar(stat = "identity", aes(fill = col_by)) +
     coord_flip(xlim = c(1,length(unique(bar_id)) + 1)) +
+    theme_bw() +
     theme(
       panel.background = element_blank(),
       panel.grid = element_blank(),
