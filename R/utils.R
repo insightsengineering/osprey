@@ -110,7 +110,7 @@ recursive_indent <- function(tbl_l, ind_count){
 }
 
 #arguments for total in tables (AET01, AET02, DST01)
-tot_column <- function(choice = c("All Patients", "None")){
+tot_column <- function(choice = c("All Patients")){
   choice <- match.arg(choice)
   return(choice)
 }

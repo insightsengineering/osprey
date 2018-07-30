@@ -58,7 +58,7 @@
 #'   term =  ANL$TERM,
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
-#'   total = "All Patients"
+#'   total = "ALL Patients"
 #' )
 #'
 #' tbl
@@ -114,10 +114,9 @@ t_ae <- function(class, term, id, col_by, total="All Patients", ...) {
   df <- df %>% mutate(class = ifelse(class == "", "No Coding Available", class),
                       term = ifelse(term == "", "No Coding Available", term))
 
-  total <- tot_column(total)
-
   # adding All Patients
   if(!is.null(total)){
+    total <- tot_column(total)
     if (total %in% levels(col_by))
       stop(paste('col_by can not have', total, 'group.'))
 

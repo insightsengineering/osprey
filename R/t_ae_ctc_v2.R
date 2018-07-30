@@ -142,6 +142,8 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
                       term = ifelse(term == "", NA, term))
 
   if(!is.null(total)){
+    total <- tot_column(total)
+
     if (total %in% levels(col_by))
       stop(paste('col_by can not have', total, 'group. t_ae_cts will derive it.'))
 

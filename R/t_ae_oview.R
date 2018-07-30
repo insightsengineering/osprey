@@ -148,10 +148,10 @@ t_ae_oview <- function(id,
   df <- df %>% mutate(class = ifelse(class == "", NA, class),
                       term = ifelse(term == "", NA, term))
 
-  total <- tot_column(total)
-
   # adding All Patients
   if(!is.null(total)){
+    total <- tot_column(total)
+
     if (total %in% levels(col_by))
       stop(paste('col_by can not have', total, 'group.'))
 

@@ -136,10 +136,10 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   df <- df %>% mutate(class = ifelse(class == "", "None", as.character(class)),
                       term = ifelse(term == "", "None", as.character(term)))
 
-  total <- tot_column(total)
-
   # adding All Patients
   if(!is.null(total)){
+    total <- tot_column(total)
+
     if (total %in% levels(col_by))
       stop(paste('col_by can not have', total, 'group.'))
 
