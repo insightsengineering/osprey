@@ -14,7 +14,7 @@
 #' @param col_by group variable that will be used for a column header. \code{col_by}
 #'  has to be a factor and can not be missing. See 'Examples'.
 #' @param total character string that will be used as a label for a column with
-#'  pooled total population, default is "All Patients", if set to "NONE" then
+#'  pooled total population, default is "All Patients", if set to \code{NULL} then
 #'  the "All Patients" column is suppressed.
 #' @param grade_levels ordered values of possible of grades in a form of
 #'   \code{x:y}, default is \code{1:5}. This assures a proper fill in for
@@ -143,7 +143,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   df <- df %>% mutate(class = ifelse(class == "", NA, class),
                       term = ifelse(term == "", NA, term))
 
-  if(tolower(total) != "NONE"){
+  if(!is.null(total)){
     # adding All Patients
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
   }

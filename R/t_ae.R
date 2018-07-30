@@ -11,7 +11,7 @@
 #' @param col_by group variable that will be used for a column header. \code{col_by}
 #'  has to be a factor and can not be missing.
 #' @param total character string that will be used as a label for a column with
-#'  pooled total population, default here is "All Patients", if set to "NONE" then
+#'  pooled total population, default here is "All Patients", if set to \code{NULL} then
 #'  the "All Patients" column is suppressed.
 #'
 #' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet02)}
@@ -120,7 +120,7 @@ t_ae <- function(class, term, id, col_by, total="All Patients", ...) {
   total <- tot_column(total)
 
   # adding All Patients
-  if(tolower(total) != "none"){
+  if(!is.null(total)){
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
   }
 
