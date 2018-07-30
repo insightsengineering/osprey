@@ -93,9 +93,6 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
   #check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
 
-  if (total %in% levels(col_by))
-    stop(paste('col_by can not have', total, 'group.'))
-
   if (any("- Overall -" %in% term))
     stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
   if (any("All Patients" %in% col_by))
@@ -143,6 +140,9 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   # adding All Patients
   if(!is.null(total)){
+    if (total %in% levels(col_by))
+      stop(paste('col_by can not have', total, 'group.'))
+
     df <- duplicate_with_var(df, id = paste(df$id, "-", total), col_by = total)
   }
 

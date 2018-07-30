@@ -125,8 +125,6 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
 
   # check argument validity and consitency ----------------------------------
   check_col_by(col_by, min_num_levels = 1)
-  if (total %in% levels(col_by))
-    stop(paste('col_by can not have', total, 'group. t_ae_cts will derive it.'))
 
   if (any("- Overall -" %in% term)) stop("'- Overall -' is not a valid term, t_ae_ctc_v2 reserves it for derivation")
   if (any("All Patients" %in% col_by)) stop("'All Patients' is not a valid col_by, t_ae_ctc_v2 derives All Patients column")
@@ -144,6 +142,9 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
                       term = ifelse(term == "", NA, term))
 
   if(!is.null(total)){
+    if (total %in% levels(col_by))
+      stop(paste('col_by can not have', total, 'group. t_ae_cts will derive it.'))
+
     # adding All Patients
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
   }

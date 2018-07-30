@@ -76,7 +76,7 @@
 #'   term =  ANL$AEDECOD,
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
-#'   total = "None"
+#'   total = NULL
 #' )
 #'
 #' tbl2
@@ -86,9 +86,6 @@ t_ae <- function(class, term, id, col_by, total="All Patients", ...) {
 
   #check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
-
-  if (total %in% levels(col_by))
-    stop(paste('col_by can not have', total, 'group.'))
 
   if (any("- Overall -" %in% term))
     stop("'- Overall -' is not a valid term, t_ae reserves it for derivation")
@@ -121,6 +118,9 @@ t_ae <- function(class, term, id, col_by, total="All Patients", ...) {
 
   # adding All Patients
   if(!is.null(total)){
+    if (total %in% levels(col_by))
+      stop(paste('col_by can not have', total, 'group.'))
+
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
   }
 

@@ -94,9 +94,6 @@ t_ae_oview <- function(id,
                      "aerel",
                      "aetoxgr")
 
-  if (total %in% levels(col_by))
-    stop(paste('col_by can not have', total, 'group.'))
-
   if (any("- Overall -" %in% term))
     stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
   if (any("All Patients" %in% col_by))
@@ -155,6 +152,9 @@ t_ae_oview <- function(id,
 
   # adding All Patients
   if(!is.null(total)){
+    if (total %in% levels(col_by))
+      stop(paste('col_by can not have', total, 'group.'))
+
     df <- duplicate_with_var(df, id = paste(df$id, "-", total), col_by = total)
     df_flags <- duplicate_with_var(df_flags, id = paste(df_flags$id, "-", total), col_by = total)
 
