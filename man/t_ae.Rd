@@ -19,7 +19,7 @@ adverse event then the subject \code{id} should be listed where
 has to be a factor and can not be missing.}
 
 \item{total}{character string that will be used as a label for a column with
-pooled total population, default here is "All Patients", if set to "NONE" then
+pooled total population, default here is "All Patients", if set to \code{NULL} then
 the "All Patients" column is suppressed.}
 }
 \value{
@@ -66,7 +66,7 @@ tbl <- t_ae(
   term =  ANL$TERM,
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
-  total = "All Patients"
+  total = "ALL Patients"
 )
 
 tbl
@@ -83,7 +83,8 @@ tbl2 <- t_ae(
   class = ANL$AEBODSYS,
   term =  ANL$AEDECOD,
   id = ANL$USUBJID,
-  col_by = factor(ANL$ARM)
+  col_by = factor(ANL$ARM),
+  total = NULL
 )
 
 tbl2

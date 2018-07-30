@@ -70,7 +70,7 @@
 #'              #datalabel_txt = list(txt_ann = ANL$USUBJID, mrkr_all = ANL$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
 #'              #datalabel_txt = list(mrkr_all = ANL$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
 #'              facet_rows = data.frame(sex = ANL$SEX),
-#'              facet_columns = data.frame(arm = ANL$ARM),
+#'              #facet_columns = data.frame(arm = ANL$ARM),
 #'              vref_line = c(10, 37),
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
@@ -174,10 +174,10 @@ g_spiderplot <- function(marker_x,
 
   #marker color------------
   if(!is.null(marker_shape)){
-    pl <- pl + geom_point(aes(shape = sh, colour = l_col), size = marker_size, show.legend = show_legend)
+    pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
 
   } else if(is.null(marker_shape)){
-    pl <- pl + geom_point(aes(colour = l_col), size = 3, show.legend = show_legend)
+    pl <- pl + geom_point(size = 3, show.legend = show_legend)
   }
 
   #label at last data point---------
