@@ -369,6 +369,9 @@ g_butterfly <- function(category,
     }
   }
 
+  counts1 <- counts1 %>% filter(flag1 == 1)
+  counts2 <- counts2 %>% filter(flag2 == 1)
+
   counts1$y <- str_wrap(counts1$y, width = 30)
   total_text_ann1$y <- str_wrap(total_text_ann1$y, width = 30)
   text_ann1$y <- str_wrap(text_ann1$y, width = 30)
@@ -383,6 +386,7 @@ g_butterfly <- function(category,
     counts2$y <- factor(counts2$y, levels = rev(unique(counts$y[order(counts$y, decreasing = TRUE)])))
 
   } else if(sort_by == "count"){
+
     tot1 <- counts1 %>% group_by(y, flag1) %>%
       filter(label_ypos == last(label_ypos)) %>%
       group_by(y) %>%
@@ -407,9 +411,6 @@ g_butterfly <- function(category,
     g1 <- group_names[1]
     g2 <- group_names[2]
   }
-
-  counts1 <- counts1 %>% filter(flag1 == 1)
-  counts2 <- counts2 %>% filter(flag2 == 1)
 
   #plot butterfly plot --------------------
   if(!is.null(block_color)){
