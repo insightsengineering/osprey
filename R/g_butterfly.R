@@ -423,8 +423,8 @@ g_butterfly <- function(category,
       labs(x = y_label, y = block_count, fill = legend_label)
   } else {
     pl <- ggplot(NULL, aes(x=y)) +
-      geom_bar(data=counts1, aes(y=n0, fill=bar_color), stat="identity") +
-      geom_bar(data=counts2, aes(y=-n0, fill=bar_color), stat="identity") +
+      geom_bar(data=counts1, aes(y=n0), stat="identity") +
+      geom_bar(data=counts2, aes(y=-n0), stat="identity") +
       geom_hline(yintercept=0, colour="black", lwd=0.4) +
       geom_text(data=total_text_ann1, aes(y = label_ypos, label = n), fontface = "bold",hjust=-1) +
       geom_text(data=total_text_ann2, aes(y = -label_ypos - 0.4, label = n), fontface = "bold", hjust=0.9) +
