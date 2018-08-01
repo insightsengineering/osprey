@@ -296,10 +296,16 @@ g_butterfly <- function(category,
 
       counts1$n0 <- rep(1, nrow(counts1))
       counts1 <- ddply(counts1, c("y", "flag1"), transform, label_ypos=cumsum(n0))
+      text_ann1 <- counts1 %>%
+        group_by(y, flag1) %>%
+        filter(label_ypos == max(label_ypos))
       total_text_ann1 <- text_ann1 %>% group_by(y, flag1) %>% filter(label_ypos == max(label_ypos))
 
       counts2$n0 <- rep(1, nrow(counts2))
       counts2 <- ddply(counts2, c("y", "flag2"), transform, label_ypos=cumsum(n0))
+      text_ann2 <- counts2 %>%
+        group_by(y, flag2) %>%
+        filter(label_ypos == max(label_ypos))
       total_text_ann2 <- text_ann2 %>% group_by(y, flag2) %>% filter(label_ypos == max(label_ypos))
 
     } else{
@@ -349,10 +355,16 @@ g_butterfly <- function(category,
 
       counts1$n0 <- rep(1, nrow(counts1))
       counts1 <- ddply(counts1, c("y", "flag1", "f_rows"), transform, label_ypos=cumsum(n0))
+      text_ann1 <- counts1 %>%
+        group_by(y, flag1, f_rows) %>%
+        filter(label_ypos == max(label_ypos))
       total_text_ann1 <- text_ann1 %>% group_by(y, flag1, f_rows) %>% filter(label_ypos == max(label_ypos))
 
       counts2$n0 <- rep(1, nrow(counts2))
       counts2 <- ddply(counts2, c("y", "flag2", "f_rows"), transform, label_ypos=cumsum(n0))
+      text_ann2 <- counts2 %>%
+        group_by(y, flag2, f_rows) %>%
+        filter(label_ypos == max(label_ypos))
       total_text_ann2 <- text_ann2 %>% group_by(y, flag2, f_rows) %>% filter(label_ypos == max(label_ypos))
     }
   }
