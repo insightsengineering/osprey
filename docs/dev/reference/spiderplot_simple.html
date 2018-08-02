@@ -159,7 +159,7 @@
 
 <span class='no'>atr</span> <span class='kw'>&lt;-</span> <span class='fu'>left_join</span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ATR"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>),<span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ADSL"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("USUBJID", "STUDYID")</span></div><div class='input'>
 
-<span class='fu'>spiderplot_simple</span>(<span class='no'>atr</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter</span>(<span class='no'>PARAMCD</span> <span class='kw'>==</span> <span class='st'>"SUMTGLES"</span>), <span class='kw'>groupCol</span><span class='kw'>=</span><span class='no'>SEX</span>)</div><div class='output co'>#&gt; <span class='error'>Error in !days: invalid argument type</span></div><div class='input'>
+<span class='fu'>spiderplot_simple</span>(<span class='no'>atr</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter</span>(<span class='no'>PARAMCD</span> <span class='kw'>==</span> <span class='st'>"SUMTGLES"</span>), <span class='kw'>groupCol</span><span class='kw'>=</span><span class='no'>SEX</span>)</div><div class='img'><img src='spiderplot_simple-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

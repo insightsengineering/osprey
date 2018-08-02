@@ -84,13 +84,8 @@ p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
              marker_y = ANL$PCHG,
              line_colby = ANL$USUBJID,
              marker_shape = ANL$RACE,
-             #marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
-             #                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
-             #                     "AMERICAN INDIAN OR ALASKA NATIVE" = 5, "UNKNOWN" = 6),
              marker_size = 5,
              datalabel_txt = list(txt_ann = ANL$USUBJID),
-             #datalabel_txt = list(txt_ann = ANL$USUBJID, mrkr_all = ANL$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
-             #datalabel_txt = list(mrkr_all = ANL$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
              facet_rows = data.frame(sex = ANL$SEX),
              #facet_columns = data.frame(arm = ANL$ARM),
              vref_line = c(10, 37),
@@ -100,10 +95,6 @@ p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
              show_legend = TRUE)
 p
 
-\dontrun{
-#test discrete x-axis points
-dat2 <- dat \%>\% arrange(TUDY) \%>\% mutate(day = as.character(TUDY)) \%>\% as.data.frame()
-}
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

@@ -57,7 +57,7 @@ start_with = list(
       ADY = rexp(nrow(ASL), 1/80)
    )) \%>\% filter(PARAMCD == "OVRINV")
 ANL <- ASL \%>\% left_join(ARS, by = c("STUDYID", "USUBJID"))
-anno_txt <- ASL[, c("ARMCD", "SEX", "RACE")]
+anno_txt <- ASL[, c("ARMCD", "SEX")]
 
 g_swimlane(bar_id = ASL$USUBJID,
 bar_length = ASL$TRTDUR,
@@ -77,8 +77,6 @@ title = "Swimlane Plot")
 
 # Example 2
 library(dplyr)
-load(file = "data/rADSL.rda")
-load(file = "data/rADRS.rda")
 ASL <- rADSL
 ARS <- rADRS
 
