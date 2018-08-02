@@ -71,14 +71,14 @@ g_butterfly(category = ANL$AEBODSYS,
             leftFlag = ANL$flag2,
             group_names = c("flag1 F", "flag2 M"),
             block_count = "# of AEs",
-            #block_color = ANL$AETOXGR,
+            block_color = ANL$AETOXGR,
             id = ANL$USUBJID,
-            #facet_rows = ANL$RACE,
             x_label = "# of patients",
             y_label = "AE Derived Terms",
             legend_label = "AETOXGR",
             sort_by = "count",
-            show_legend = TRUE)
+            show_legend = TRUE
+            )
 
 }
 \author{

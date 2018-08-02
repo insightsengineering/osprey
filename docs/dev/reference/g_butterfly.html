@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bbutterfly Plot — g_butterfly • osprey</title>
+<title>Butterfly Plot (version 2.0) — g_butterfly • osprey</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,13 @@
 
 
 
-<meta property="og:title" content="Bbutterfly Plot — g_butterfly" />
+<meta property="og:title" content="Butterfly Plot (version 2.0) — g_butterfly" />
 
-<meta property="og:description" content="The butterfly plot is often used in Early Development (ED) and shows ..." />
+<meta property="og:description" content="The butterfly plot is often used in Early Development (ED) and is an opposed
+barplot that shows instances of AEs or # of patients by category separated by
+a dichotomization variable. Each bar can be color coded according
+to a variable of choice and sorted according to either alphabetical order or the
+maximum count." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -109,21 +113,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Bbutterfly Plot</h1>
+    <h1>Butterfly Plot (version 2.0)</h1>
     
     <div class="hidden name"><code>g_butterfly.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>The butterfly plot is often used in Early Development (ED) and shows ...</p>
+    <p>The butterfly plot is often used in Early Development (ED) and is an opposed
+barplot that shows instances of AEs or # of patients by category separated by
+a dichotomization variable. Each bar can be color coded according
+to a variable of choice and sorted according to either alphabetical order or the
+maximum count.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>g_butterfly</span>(<span class='no'>category</span>, <span class='no'>groups</span>, <span class='kw'>block_count</span> <span class='kw'>=</span> <span class='st'>"# of patients"</span>,
-  <span class='kw'>block_color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>id</span>, <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='no'>block_count</span>,
-  <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"AE Derived Terms"</span>, <span class='kw'>legend_label</span> <span class='kw'>=</span> <span class='st'>"AETOXGR"</span>,
-  <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"alphabetical"</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>g_butterfly</span>(<span class='no'>category</span>, <span class='no'>rightFlag</span>, <span class='no'>leftFlag</span>, <span class='kw'>group_names</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>block_count</span> <span class='kw'>=</span> <span class='st'>"# of patients"</span>, <span class='kw'>block_color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>id</span>,
+  <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='no'>block_count</span>, <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"AE Derived Terms"</span>,
+  <span class='kw'>legend_label</span> <span class='kw'>=</span> <span class='st'>"AETOXGR"</span>, <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"alphabetical"</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,8 +141,19 @@
       <td><p>vector of y values</p></td>
     </tr>
     <tr>
-      <th>groups</th>
-      <td><p>vector of dichotomization values</p></td>
+      <th>rightFlag</th>
+      <td><p>vector of 1/0 represents right side of barplot</p></td>
+    </tr>
+    <tr>
+      <th>leftFlag</th>
+      <td><p>vector of 1/0 represents left side of barplot</p></td>
+    </tr>
+    <tr>
+      <th>group_names</th>
+      <td><p>string vector of length 2 with desired names of dichotomization variables
+required format : first name corresponds to the name of the right side
+                  second name corresponds to name of the left side
+default: will extract column names from group</p></td>
     </tr>
     <tr>
       <th>block_count</th>
@@ -151,7 +170,7 @@
     <tr>
       <th>facet_rows</th>
       <td><p>vector defines what variable is used to split the
-plot into rows, default here is <code>NULL</code></p></td>
+plot into rows, default here is NULL</p></td>
     </tr>
     <tr>
       <th>x_label</th>
@@ -170,7 +189,7 @@ options: "alphabetical" or "count", default here is set to "count"</p></td>
     <tr>
       <th>show_legend</th>
       <td><p>boolean of whether color coding legend is included,
-default here is <code>FALSE</code></p></td>
+default here is FALSE</p></td>
     </tr>
     </table>
     
@@ -178,28 +197,36 @@ default here is <code>FALSE</code></p></td>
 
     <p>ggplot object</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>there is no equivalent STREAM output</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
-<span class='fu'>library</span>(<span class='no'>dplyr</span>)
+    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
 
-<span class='no'>ADSL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ADSL"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>)
-<span class='no'>AAE</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"AAE"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>)
+<span class='fu'>data</span>(<span class='st'>"rADSL"</span>)
+<span class='fu'>data</span>(<span class='st'>"rADAE"</span>)
+<span class='no'>ADSL</span> <span class='kw'>&lt;-</span> <span class='no'>rADSL</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>STUDYID</span>, <span class='no'>SEX</span>, <span class='no'>ARM</span>, <span class='no'>RACE</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>SEX</span> <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"F"</span>, <span class='st'>"M"</span>))
+<span class='no'>AAE</span> <span class='kw'>&lt;-</span> <span class='no'>rADAE</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>STUDYID</span>, <span class='no'>AEBODSYS</span>, <span class='no'>AETOXGR</span>)
 
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></span>(<span class='no'>AAE</span>, <span class='no'>ADSL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span>))
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></span>(<span class='no'>AAE</span>, <span class='no'>ADSL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"STUDYID"</span>, <span class='st'>"USUBJID"</span>))
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='no'>ANL</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>flag1</span> <span class='kw'>=</span> <span class='fu'>ifelse</span>(<span class='no'>SEX</span> <span class='kw'>==</span> <span class='st'>"F"</span>, <span class='fl'>1</span>, <span class='fl'>0</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>flag2</span> <span class='kw'>=</span> <span class='fu'>ifelse</span>(<span class='no'>SEX</span> <span class='kw'>==</span> <span class='st'>"M"</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='fu'>na.omit</span>(<span class='no'>ANL</span>)
 
-
-<span class='fu'>g_butterfly</span>(<span class='kw'>category</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>AEBODSYS</span>,
-            <span class='kw'>groups</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>SEX</span>,
-            <span class='kw'>block_count</span> <span class='kw'>=</span> <span class='st'>"# of patients"</span>,
-            <span class='kw'>block_color</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>AETOXGR</span>,
-            <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>USUBJID</span>,
-            <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>RACE</span>,
+<span class='fu'>g_butterfly</span>(<span class='kw'>category</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AEBODSYS</span>,
+            <span class='kw'>rightFlag</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>flag1</span>,
+            <span class='kw'>leftFlag</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>flag2</span>,
+            <span class='kw'>group_names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"flag1 F"</span>, <span class='st'>"flag2 M"</span>),
+            <span class='kw'>block_count</span> <span class='kw'>=</span> <span class='st'>"# of AEs"</span>,
+            <span class='kw'>block_color</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AETOXGR</span>,
+            <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
             <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"# of patients"</span>,
             <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"AE Derived Terms"</span>,
             <span class='kw'>legend_label</span> <span class='kw'>=</span> <span class='st'>"AETOXGR"</span>,
             <span class='kw'>sort_by</span> <span class='kw'>=</span> <span class='st'>"count"</span>,
-            <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("y", "groups", "f_rows")</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "y"</span></div><div class='img'><img src='g_butterfly-1.png' alt='' width='700' height='433' /></div><div class='input'>
+            <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+            )</div><div class='img'><img src='g_butterfly-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -208,13 +235,15 @@ default here is <code>FALSE</code></p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
     
-Carolyn Zhang
+Carolyn Zhang (zhanc107) <a href='mailto:carolyn.zhang@duke.edu'>carolyn.zhang@duke.edu</a>
 
   </div>
 </div>

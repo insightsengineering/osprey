@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a spiderplot for Early Development Visualization — g_spiderplot • osprey</title>
+<title>Spider Plot — g_spiderplot • osprey</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Create a spiderplot for Early Development Visualization — g_spiderplot" />
+<meta property="og:title" content="Spider Plot — g_spiderplot" />
 
-<meta property="og:description" content="Create a spiderplot for Early Development Visualization" />
+<meta property="og:description" content="Spider plot is often used in Early Development (ED) and displays individual
+patient plot of an endpoint over time by group." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -109,23 +110,24 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a spiderplot for Early Development Visualization</h1>
+    <h1>Spider Plot</h1>
     
     <div class="hidden name"><code>g_spiderplot.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Create a spiderplot for Early Development Visualization</p>
+    <p>Spider plot is often used in Early Development (ED) and displays individual
+patient plot of an endpoint over time by group.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>g_spiderplot</span>(<span class='no'>marker_x</span>, <span class='no'>marker_y</span>, <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>marker_color_opt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_shape_opt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>marker_size</span> <span class='kw'>=</span> <span class='fl'>6</span>, <span class='kw'>datalabel_txt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>facet_columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vref_line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>href_line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>, <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
-  <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draw</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>newpage</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>g_spiderplot</span>(<span class='no'>marker_x</span>, <span class='no'>marker_y</span>, <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>marker_shape_opt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_size</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>datalabel_txt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>facet_columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vref_line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>href_line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
+  <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draw</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>newpage</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -133,9 +135,9 @@
     <tr>
       <th>marker_x</th>
       <td><p>dataframe with 2 columns,
-column 1 is the vector of x values and
+column 1 is the vector of x values (must be in sorted order) and
 column 2 is the vector to group the points together (default
-should be defined as USUBJID)</p></td>
+should be USUBJID)</p></td>
     </tr>
     <tr>
       <th>marker_y</th>
@@ -144,29 +146,20 @@ should be defined as USUBJID)</p></td>
     <tr>
       <th>line_colby</th>
       <td><p>vector defines by what variable plot is color coded,
-default here is NULL</p></td>
-    </tr>
-    <tr>
-      <th>marker_color</th>
-      <td><p>vector defines by what variable points are color coded,
-, default here is NULL</p></td>
-    </tr>
-    <tr>
-      <th>marker_color_opt</th>
-      <td><p>vector defines marker color code, default here is NULL</p></td>
+default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>marker_shape</th>
       <td><p>vector defines by what variable points are shape coded,
-, default here is NULL</p></td>
+, default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>marker_shape_opt</th>
-      <td><p>vector defines marker shape code, default here is NULL</p></td>
+      <td><p>vector defines marker shape code, default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>marker_size</th>
-      <td><p>size of markers in plot, default here is NULL</p></td>
+      <td><p>size of markers in plot, default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>datalabel_txt</th>
@@ -180,18 +173,18 @@ indicate any study interim points</p></td>
     </tr>
     <tr>
       <th>facet_rows</th>
-      <td><p>vector defines what variable is used to split the
-plot into rows, default here is NULL</p></td>
+      <td><p>dataframe defines what variable is used to split the
+plot into rows, default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>facet_columns</th>
-      <td><p>vector defines what variable is used to split the
-plot into columns, default here is NULL</p></td>
+      <td><p>dataframe defines what variable is used to split the
+plot into columns, default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>vref_line</th>
       <td><p>value defines vertical line overlay
-(can be a vector), default here is NULL</p></td>
+(can be a vector), default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>href_line</th>
@@ -209,7 +202,7 @@ plot into columns, default here is NULL</p></td>
     <tr>
       <th>show_legend</th>
       <td><p>boolean of whether marker legend is included,
-default here is FALSE</p></td>
+default here is <code>FALSE</code></p></td>
     </tr>
     </table>
     
@@ -217,66 +210,39 @@ default here is FALSE</p></td>
 
     <p>ggplot object</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>there is no equivalent STREAM output</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
-<span class='fu'>library</span>(<span class='no'>plyr</span>)</div><div class='output co'>#&gt; <span class='message'>------------------------------------------------------------------------------</span></div><div class='output co'>#&gt; <span class='message'>You have loaded plyr after dplyr - this is likely to cause problems.</span>
-#&gt; <span class='message'>If you need functions from both plyr and dplyr, please load plyr first, then dplyr:</span>
-#&gt; <span class='message'>library(plyr); library(dplyr)</span></div><div class='output co'>#&gt; <span class='message'>------------------------------------------------------------------------------</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘plyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:dplyr’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    arrange, count, desc, failwith, id, mutate, rename, summarise,</span>
-#&gt; <span class='message'>    summarize</span></div><div class='input'><span class='fu'>library</span>(<span class='no'>dplyr</span>)
-<span class='fu'>require</span>(<span class='no'>lemon</span>)
-<span class='fu'>library</span>(<span class='no'>colorspace</span>)
+    <pre class="examples"><div class='input'><span class='co'># simple example</span>
+<span class='fu'>library</span>(<span class='no'>dplyr</span>)
 
-<span class='no'>atr</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ATR"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>),<span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ADSL"</span>, <span class='kw'>N</span><span class='kw'>=</span><span class='fl'>10</span>))</div><div class='output co'>#&gt; <span class='message'>Joining, by = c("USUBJID", "STUDYID")</span></div><div class='input'><span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>atr</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>PARAMCD</span> <span class='kw'>==</span> <span class='st'>"SUMTGLES"</span>)
+<span class='fu'>data</span>(<span class='st'>"rADSL"</span>)
+<span class='fu'>data</span>(<span class='st'>"rADTR"</span>)
+<span class='no'>ADTR</span> <span class='kw'>&lt;-</span> <span class='no'>rADTR</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>, <span class='no'>ADY</span>, <span class='no'>PCHG</span>, <span class='no'>PARAMCD</span>)
+<span class='no'>ADSL</span> <span class='kw'>&lt;-</span> <span class='no'>rADSL</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>STUDYID</span>, <span class='no'>USUBJID</span>, <span class='no'>RACE</span>, <span class='no'>SEX</span>, <span class='no'>ARM</span>)
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></span>(<span class='no'>ADTR</span>, <span class='no'>ADSL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"STUDYID"</span>, <span class='st'>"USUBJID"</span>))
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='no'>ANL</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>PARAMCD</span> <span class='kw'>==</span> <span class='st'>"SLDINV"</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>RACE</span> <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"WHITE"</span>, <span class='st'>"ASIAN"</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span>(<span class='no'>USUBJID</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>ADY</span>)
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='fu'>na.omit</span>(<span class='no'>ANL</span>)
+<span class='no'>ANL</span>$<span class='no'>USUBJID</span> <span class='kw'>&lt;-</span> <span class='fu'>substr</span>(<span class='no'>ANL</span>$<span class='no'>USUBJID</span>, <span class='fl'>14</span>, <span class='fl'>18</span>)
 
-<span class='co'>#test changing where annotation marker lies</span>
-<span class='co'>#dat &lt;- dat[-4, ]</span>
 
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>TUDY</span>, <span class='kw'>groupby</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>USUBJID</span>),
-             <span class='kw'>marker_y</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>PCHG</span>,
-             <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>USUBJID</span>,
-             <span class='kw'>marker_color</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>RACE</span>,
-             <span class='co'>#marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",</span>
-             <span class='co'>#                     "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",</span>
-             <span class='co'>#                     "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),</span>
-             <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>RACE</span>,
-             <span class='co'>#marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,</span>
-             <span class='co'>#                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,</span>
-             <span class='co'>#                     "AMERICAN INDIAN OR ALASKA NATIVE" = 5),</span>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>ADY</span>, <span class='kw'>groupby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>),
+             <span class='kw'>marker_y</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>PCHG</span>,
+             <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
+             <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>RACE</span>,
              <span class='kw'>marker_size</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-             <span class='kw'>datalabel_txt</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>txt_ann</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>USUBJID</span>),
-             <span class='co'>#datalabel_txt = list(txt_ann = dat$USUBJID, mrkr_all = dat$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),</span>
-             <span class='co'>#datalabel_txt = list(mrkr_all = dat$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),</span>
-             <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>SEX</span>,
-             <span class='kw'>facet_columns</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>ARM</span>,
+             <span class='kw'>datalabel_txt</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>txt_ann</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>),
+             <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>sex</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>SEX</span>),
+             <span class='co'>#facet_columns = data.frame(arm = ANL$ARM),</span>
              <span class='kw'>vref_line</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>37</span>),
              <span class='kw'>href_line</span> <span class='kw'>=</span> -<span class='fl'>0.3</span>,
              <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
              <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
-             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='co'>#test discrete x-axis points</span>
-<span class='no'>dat2</span> <span class='kw'>&lt;-</span> <span class='no'>dat</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span>(<span class='no'>TUDY</span>) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='fu'>as.character</span>(<span class='no'>TUDY</span>)) <span class='kw'>%&gt;%</span> <span class='fu'>as.data.frame</span>()
-<span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='fu'>as.factor</span>(<span class='no'>dat2</span>$<span class='no'>day</span>), <span class='kw'>groupby</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>USUBJID</span>),
-             <span class='kw'>marker_y</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>PCHG</span>,
-             <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>USUBJID</span>,
-             <span class='kw'>marker_color</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>USUBJID</span>,
-             <span class='co'>#marker_color_opt = map_marker_color,</span>
-             <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>RACE</span>,
-             <span class='co'>#marker_shape_opt = map_marker_shape,</span>
-             <span class='kw'>marker_size</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-             <span class='kw'>datalabel_txt</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>txt_ann</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>USUBJID</span>, <span class='kw'>mrkr_all</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>USUBJID</span>, <span class='kw'>mrkr_ann</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"id-2"</span>, <span class='st'>"id-4"</span>, <span class='st'>"id-7"</span>)),
-             <span class='co'>#datalabel_txt = list(mrkr_all = dat2$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),</span>
-             <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>SEX</span>,
-             <span class='kw'>facet_columns</span> <span class='kw'>=</span> <span class='no'>dat2</span>$<span class='no'>ARM</span>,
-             <span class='kw'>vref_line</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"10"</span>, <span class='st'>"37"</span>),
-             <span class='kw'>href_line</span> <span class='kw'>=</span> -<span class='fl'>0.3</span>,
-             <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
-             <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
-             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>p</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 2 rows containing missing values (geom_segment).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 2 rows containing missing values (geom_segment).</span></div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -285,13 +251,15 @@ default here is FALSE</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
     
-Carolyn Zhang
+Carolyn Zhang (zhanc107) <a href='mailto:carolyn.zhang@duke.edu'>carolyn.zhang@duke.edu</a>
 
   </div>
 </div>

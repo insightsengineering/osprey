@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a Patient Disposition (DST01) Table — t_ds • osprey</title>
+<title>Patient Disposition Table — t_ds • osprey</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Create a Patient Disposition (DST01) Table — t_ds" />
+<meta property="og:title" content="Patient Disposition Table — t_ds" />
 
-<meta property="og:description" content="t_ds returns patient disposition according to STREAM format DST01" />
+<meta property="og:description" content="t_ds returns patient disposition table that corresponds to STREAM template DST01" />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -109,14 +109,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a Patient Disposition (DST01) Table</h1>
+    <h1>Patient Disposition Table</h1>
     
     <div class="hidden name"><code>t_ds.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p><code>t_ds</code> returns patient disposition according to STREAM format DST01</p>
+    <p><code>t_ds</code> returns patient disposition table that corresponds to STREAM template DST01</p>
     
     </div>
 
@@ -147,7 +147,7 @@ has to be a factor and can not be missing.</p></td>
     <tr>
       <th>total</th>
       <td><p>character string that will be used as a label for a column with
-pooled total population, default here is "All Patients", if set to "NONE" then
+pooled total population, default here is "All Patients", if set to <code>NULL</code> then
 the "All Patients" column is suppressed.</p></td>
     </tr>
     </table>
@@ -156,20 +156,23 @@ the "All Patients" column is suppressed.</p></td>
 
     <p><code>rtable</code> object</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>this is an equivalent of the STREAM output <code>%stream_t_summary(templates = aet01)</code>
+  (<a href='man'>man</a>http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html)</p>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Simple example</span>
-<span class='fu'>library</span>(<span class='no'>tibble</span>)
 <span class='fu'>library</span>(<span class='no'>dplyr</span>)
-<span class='fu'>library</span>(<span class='no'>rtables</span>)
 
-<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/tibble/topics/tibble'>tibble</a></span>(
+<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(
   <span class='kw'>USUBJID</span> <span class='kw'>=</span> <span class='fu'>paste0</span>(<span class='st'>"id-"</span>, <span class='fl'>1</span>:<span class='fl'>10</span>),
   <span class='kw'>ARM</span> <span class='kw'>=</span> <span class='fu'>paste</span>(<span class='st'>"ARM"</span>, <span class='no'>LETTERS</span>[<span class='fu'>rep</span>(<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>2</span>), <span class='fu'>c</span>(<span class='fl'>3</span>,<span class='fl'>7</span>))])
 )
 
 
-<span class='no'>ae_lookup</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/tibble/topics/tribble'>tribble</a></span>(
+<span class='no'>ae_lookup</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tribble</a></span>(
 ~<span class='no'>CLASS</span>,         ~<span class='no'>TERM</span>,   ~<span class='no'>GRADE</span>,
 <span class='st'>"cl A"</span>,   <span class='st'>"trm A_1/2"</span>,        <span class='fl'>1</span>,
 <span class='st'>"cl A"</span>,   <span class='st'>"trm A_2/2"</span>,        <span class='fl'>2</span>,
@@ -180,7 +183,7 @@ the "All Patients" column is suppressed.</p></td>
 )
 
 <span class='no'>AAE</span> <span class='kw'>&lt;-</span> <span class='fu'>cbind</span>(
-  <span class='fu'><a href='http://www.rdocumentation.org/packages/tibble/topics/tibble'>tibble</a></span>(
+  <span class='fu'><a href='http://dplyr.tidyverse.org/reference/reexports.html'>tibble</a></span>(
     <span class='kw'>USUBJID</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>USUBJID</span>[<span class='fu'>c</span>(<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>4</span>,<span class='fl'>5</span>,<span class='fl'>6</span>,<span class='fl'>6</span>,<span class='fl'>7</span>,<span class='fl'>7</span>)]
   ),
   <span class='no'>ae_lookup</span>[<span class='fu'>c</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>,<span class='fl'>6</span>,<span class='fl'>4</span>,<span class='fl'>2</span>,<span class='fl'>2</span>,<span class='fl'>3</span>,<span class='fl'>4</span>,<span class='fl'>2</span>,<span class='fl'>1</span>,<span class='fl'>5</span>,<span class='fl'>4</span>,<span class='fl'>6</span>),]
@@ -193,28 +196,20 @@ the "All Patients" column is suppressed.</p></td>
   <span class='kw'>term</span> <span class='kw'>=</span>  <span class='no'>ANL</span>$<span class='no'>TERM</span>,
   <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
   <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='no'>ANL</span>$<span class='no'>ARM</span>),
-  <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>,
+  <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>
 )
 
 <span class='no'>tbl</span></div><div class='output co'>#&gt;                       ARM A               ARM B            All Patients
 #&gt;                       (N=3)               (N=7)               (N=10)   
 #&gt; -----------------------------------------------------------------------
 #&gt; cl A                1 (33.33%)          3 (42.86%)           4 (40%)   
-#&gt; 
 #&gt;   trm A_1/2         1 (33.33%)          1 (14.29%)           2 (20%)   
-#&gt; 
 #&gt;   trm A_2/2         1 (33.33%)          2 (28.57%)           3 (30%)   
-#&gt; 
 #&gt; cl B                1 (33.33%)          3 (42.86%)           4 (40%)   
-#&gt; 
 #&gt;   trm B_1/3             0               1 (14.29%)           1 (10%)   
-#&gt; 
 #&gt;   trm B_2/3         1 (33.33%)          2 (28.57%)           3 (30%)   
-#&gt; 
 #&gt;   trm B_3/3             0               1 (14.29%)           1 (10%)   
-#&gt; 
 #&gt; cl C                1 (33.33%)          1 (14.29%)           2 (20%)   
-#&gt; 
 #&gt;   trm C_1/1         1 (33.33%)          1 (14.29%)           2 (20%)   </div><div class='input'>
 <span class='no'>tbl2</span> <span class='kw'>&lt;-</span> <span class='fu'>t_ds</span>(
   <span class='kw'>class</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>CLASS</span>,
@@ -222,52 +217,52 @@ the "All Patients" column is suppressed.</p></td>
   <span class='kw'>sub</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>GRADE</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>GRADE</span>),
   <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
   <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='no'>ANL</span>$<span class='no'>ARM</span>),
-  <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>,
+  <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>
 )
 
 <span class='no'>tbl2</span></div><div class='output co'>#&gt;                       ARM A               ARM B            All Patients
 #&gt;                       (N=3)               (N=7)               (N=10)   
 #&gt; -----------------------------------------------------------------------
 #&gt; cl A                1 (33.33%)          3 (42.86%)           4 (40%)   
-#&gt; 
 #&gt;   trm A_1/2         1 (33.33%)          1 (14.29%)           2 (20%)   
-#&gt; 
 #&gt;     1               1 (33.33%)          1 (14.29%)           2 (20%)   
-#&gt; 
 #&gt;   trm A_2/2         1 (33.33%)          2 (28.57%)           3 (30%)   
-#&gt; 
 #&gt;     2               1 (33.33%)          2 (28.57%)           3 (30%)   
-#&gt; 
 #&gt; cl B                1 (33.33%)          3 (42.86%)           4 (40%)   
-#&gt; 
 #&gt;   trm B_1/3             0               1 (14.29%)           1 (10%)   
-#&gt; 
 #&gt;     2                   0               1 (14.29%)           1 (10%)   
-#&gt; 
 #&gt;   trm B_2/3         1 (33.33%)          2 (28.57%)           3 (30%)   
-#&gt; 
 #&gt;     3               1 (33.33%)          2 (28.57%)           3 (30%)   
-#&gt; 
 #&gt;   trm B_3/3             0               1 (14.29%)           1 (10%)   
-#&gt; 
 #&gt;     1                   0               1 (14.29%)           1 (10%)   
-#&gt; 
 #&gt; cl C                1 (33.33%)          1 (14.29%)           2 (20%)   
-#&gt; 
 #&gt;   trm C_1/1         1 (33.33%)          1 (14.29%)           2 (20%)   
-#&gt; 
 #&gt;     1               1 (33.33%)          1 (14.29%)           2 (20%)   </div><div class='input'>
-<span class='co'># test wth Ninas study data</span>
-<span class='co'>#asl &lt;- read.bce("/opt/BIOSTAT/prod/s30103j/libraries/asl.sas7bdat")</span>
-<span class='no'>asl</span> <span class='kw'>&lt;-</span> <span class='fu'>read.bce</span>(<span class='st'>"/opt/BIOSTAT/home/qit3/cdt70094/s30103j/libraries/aae_b.sas7bdat"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in read.bce("/opt/BIOSTAT/home/qit3/cdt70094/s30103j/libraries/aae_b.sas7bdat"): could not find function "read.bce"</span></div><div class='input'><span class='no'>asl</span> <span class='kw'>&lt;-</span> <span class='no'>asl</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>AEREL1</span> <span class='kw'>!=</span> <span class='st'>""</span> <span class='kw'>&amp;</span> <span class='no'>AESOC</span> <span class='kw'>!=</span> <span class='st'>""</span> <span class='kw'>&amp;</span> <span class='no'>AEDECOD</span> <span class='kw'>!=</span> <span class='st'>""</span>)<span class='co'># &amp; (AESOC == "INVESTIGATIONS" | AESOC == "CARDIAC DISORDERS"))</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(lhs, parent, parent): object 'asl' not found</span></div><div class='input'><span class='no'>asl</span> <span class='kw'>&lt;-</span> <span class='no'>asl</span>[<span class='fl'>1</span>:<span class='fl'>20</span>,]</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'asl' not found</span></div><div class='input'><span class='no'>tbl3</span> <span class='kw'>&lt;-</span> <span class='fu'>t_ds</span>(
-  <span class='kw'>class</span> <span class='kw'>=</span> <span class='no'>asl</span>$<span class='no'>AESOC</span>,
-  <span class='kw'>term</span> <span class='kw'>=</span>  <span class='no'>asl</span>$<span class='no'>AEREL1</span>,
-  <span class='kw'>sub</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>AEDECOD</span> <span class='kw'>=</span> <span class='no'>asl</span>$<span class='no'>AEDECOD</span>),
-  <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>asl</span>$<span class='no'>USUBJID</span>,
-  <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='no'>asl</span>$<span class='no'>ARMCD</span>),
-  <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>,
-)</div><div class='output co'>#&gt; <span class='error'>Error in factor(asl$ARMCD): object 'asl' not found</span></div><div class='input'>
-<span class='no'>tbl3</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'tbl3' not found</span></div><div class='input'>
+<span class='co'># simple example using osprey dummy dataset</span>
+
+<span class='fu'>data</span>(<span class='st'>"rADSL"</span>)
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='no'>rADSL</span>
+
+<span class='no'>tbl3</span> <span class='kw'>&lt;-</span> <span class='fu'>t_ds</span>(
+   <span class='kw'>class</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>EOSSTT</span>,
+   <span class='kw'>term</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>DCSREAS</span>,
+   <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
+   <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='no'>ANL</span>$<span class='no'>ARM</span>),
+   <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>
+)
+
+<span class='no'>tbl3</span></div><div class='output co'>#&gt;                                     A: Placebo            B: Drug X           C: Combination         All Patients 
+#&gt;                                       (N=11)                (N=21)                (N=18)                (N=50)    
+#&gt; ------------------------------------------------------------------------------------------------------------------
+#&gt; Completed                           3 (27.27%)            7 (33.33%)            8 (44.44%)             18 (36%)   
+#&gt; Discontinued                        4 (36.36%)            5 (23.81%)            3 (16.67%)             12 (24%)   
+#&gt;   Adverse Event                         0                 1 (4.76%)                 0                   1 (2%)    
+#&gt;   Death                             1 (9.09%)             3 (14.29%)            1 (5.56%)              5 (10%)    
+#&gt;   Physician Decision                2 (18.18%)                0                     0                   2 (4%)    
+#&gt;   Progressive Disease                   0                 1 (4.76%)                 0                   1 (2%)    
+#&gt;   Symptomatic Deterioation              0                     0                 1 (5.56%)               1 (2%)    
+#&gt;   Withdrawal by Subject             1 (9.09%)                 0                 1 (5.56%)               2 (4%)    
+#&gt; Ongoing                             4 (36.36%)            9 (42.86%)            7 (38.89%)             20 (40%)   </div><div class='input'>
 
 </div></pre>
   </div>
@@ -277,13 +272,15 @@ the "All Patients" column is suppressed.</p></td>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
     
-Carolyn Zhang
+Carolyn Zhang (zhanc107) <a href='mailto:carolyn.zhang@duke.edu'>carolyn.zhang@duke.edu</a>
 
   </div>
 </div>
