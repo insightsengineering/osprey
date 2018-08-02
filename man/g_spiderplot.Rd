@@ -51,7 +51,7 @@ plot into columns, default here is \code{NULL}}
 
 \item{x_label}{string of text for x axis label, default is time}
 
-\item{y_label}{string of text for y axis label, default is % change}
+\item{y_label}{string of text for y axis label, default is \% change}
 
 \item{show_legend}{boolean of whether marker legend is included,
 default here is \code{FALSE}}

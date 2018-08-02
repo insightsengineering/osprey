@@ -2,7 +2,6 @@
 
 export(as_pdf)
 export(g_butterfly)
-export(g_butterfly_modD)
 export(g_spiderplot)
 export(g_swimlane)
 export(getdata_bce)

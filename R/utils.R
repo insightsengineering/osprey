@@ -120,7 +120,7 @@ tot_column <- function(choice = c("All Patients")){
 #' @param ... rtbale objects
 #' @param nrow_pad number of empty rows between tables in \code{...}
 #'
-#'
+#' @noRd
 #'
 stack_rtables_condense <- function(..., nrow_pad = 1) {
 
