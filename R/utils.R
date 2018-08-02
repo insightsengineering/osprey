@@ -91,7 +91,7 @@ remove_Null <- function(x) {
 recursive_indent <- function(tbl_l, ind_count){
   if (class(tbl_l) == "rtable"){
     in_t <- list(" " = tbl_l)
-    t <- do.call(stack_rtables, in_t)
+    t <- do.call(stack_rtables_condense, in_t)
     for (i in 1:nrow(t)) {
       attr(t[[i]], "indent") <- attr(t[[i]], "indent") + ind_count
     }
@@ -104,13 +104,38 @@ recursive_indent <- function(tbl_l, ind_count){
       else
         ind_count + 1})
     count <- unlist(count)
-    # #for inner most level remove duplicates
-    # if(max(count) == min(count)){
-    #   tbl_l <- tbl_l[odd_ind]
-    #   count <- count[odd_ind]
-    # }
     t0 <- Map(recursive_indent, tbl_l, count)
-    tbl <- do.call(stack_rtables, t0)
+    tbl <- do.call(stack_rtables_condense, t0)
   }
 }
 
+#arguments for total in tables (AET01, AET02, DST01)
+tot_column <- function(choice = c("All Patients")){
+  choice <- match.arg(choice)
+  return(choice)
+}
+
+#' Stack rtables with rbind
+#'
+#' @param ... rtbale objects
+#' @param nrow_pad number of empty rows between tables in \code{...}
+#'
+#' @noRd
+#'
+stack_rtables_condense <- function(..., nrow_pad = 1) {
+
+  tbls <- Filter(Negate(is.null), list(...))
+
+  if (length(tbls) > 0) {
+    if (!rtables:::are(tbls, "rtable")) stop("not all objects are of type rtable")
+
+    header <- attr(tbls[[1]], "header")
+    Reduce(
+      function(x, y) rbind(x, y),
+      tbls
+    )
+
+  } else {
+    list()
+  }
+}

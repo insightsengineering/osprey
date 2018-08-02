@@ -2,17 +2,24 @@
 % Please edit documentation in R/g_butterfly.R
 \name{g_butterfly}
 \alias{g_butterfly}
-\title{Butterfly Plot}
+\title{Butterfly Plot (version 2.0)}
 \usage{
-g_butterfly(category, groups, block_count = "# of patients",
-  block_color = NULL, id, facet_rows = NULL, x_label = block_count,
-  y_label = "AE Derived Terms", legend_label = "AETOXGR",
-  sort_by = "alphabetical", show_legend = TRUE)
+g_butterfly(category, rightFlag, leftFlag, group_names = NULL,
+  block_count = "# of patients", block_color = NULL, id,
+  facet_rows = NULL, x_label = block_count, y_label = "AE Derived Terms",
+  legend_label = "AETOXGR", sort_by = "alphabetical", show_legend = TRUE)
 }
 \arguments{
 \item{category}{vector of y values}
 
-\item{groups}{vector of dichotomization values}
+\item{rightFlag}{vector of 1/0 represents right side of barplot}
+
+\item{leftFlag}{vector of 1/0 represents left side of barplot}
+
+\item{group_names}{string vector of length 2 with desired names of dichotomization variables
+required format : first name corresponds to the name of the right side
+                  second name corresponds to name of the left side
+default: will extract column names from group}
 
 \item{block_count}{string - what to count by (ex: # of AEs or # of patients)}
 
@@ -21,7 +28,7 @@ g_butterfly(category, groups, block_count = "# of patients",
 \item{id}{unique subject identifier variable.}
 
 \item{facet_rows}{vector defines what variable is used to split the
-plot into rows, default here is \code{NULL}}
+plot into rows, default here is NULL}
 
 \item{x_label}{string of text for x axis label, default is block_count}
 
@@ -32,32 +39,41 @@ variables in the output table,
 options: "alphabetical" or "count", default here is set to "count"}
 
 \item{show_legend}{boolean of whether color coding legend is included,
-default here is \code{FALSE}}
+default here is FALSE}
 }
 \value{
 ggplot object
 }
 \description{
-The butterfly plot is often used in Early Development (ED) and shows ...
+The butterfly plot is often used in Early Development (ED) and is an opposed
+barplot that shows instances of AEs or # of patients by category separated by
+a dichotomization variable. Each bar can be color coded according
+to a variable of choice and sorted according to either alphabetical order or the
+maximum count.
 }
 \details{
-this is an equivalent of the STREAM output \code{str_abc}
-  (\url{man}{http://<stream-url>})
+there is no equivalent STREAM output
 }
 \examples{
-library(random.cdisc.data)
 library(dplyr)
 
-ADSL <- radam("ADSL", N=10)
-AAE <- radam("AAE", N=10)
+data("rADSL")
+data("rADAE")
+ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% filter(SEX \%in\% c("F", "M"))
+AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
-data <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID"))
+ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
+ANL <- ANL \%>\% mutate(flag1 = ifelse(SEX == "F", 1, 0)) \%>\% mutate(flag2 = ifelse(SEX == "M", 1, 0))
+ANL <- na.omit(ANL)
 
-g_butterfly(category = data$AEBODSYS,
-            groups = data$SEX,
-            block_count = "# of patients",
-            block_color = data$AETOXGR,
-            id = data$USUBJID,
+g_butterfly(category = ANL$AEBODSYS,
+            rightFlag = ANL$flag1,
+            leftFlag = ANL$flag2,
+            group_names = c("flag1 F", "flag2 M"),
+            block_count = "# of AEs",
+            #block_color = ANL$AETOXGR,
+            id = ANL$USUBJID,
+            #facet_rows = ANL$RACE,
             x_label = "# of patients",
             y_label = "AE Derived Terms",
             legend_label = "AETOXGR",
@@ -66,5 +82,5 @@ g_butterfly(category = data$AEBODSYS,
 
 }
 \author{
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/t_ae_oview.R
 \name{t_ae_oview}
 \alias{t_ae_oview}
-\title{Create an AE Overview Summary Table (AET01)}
+\title{AE Overview Summary Table}
 \usage{
 t_ae_oview(id, class, term, flags, display_id = c("fatal", "ser", "serwd",
   "serdsm", "relser", "wd", "dsm", "rel", "relwd", "reldsm", "ctc35"),
@@ -32,43 +32,45 @@ will be the table's row name)}
 has to be a factor and can not be missing.}
 
 \item{total}{character string that will be used as a label for a column with
-pooled total population, default here is "All Patients", if set to "NONE" then
+pooled total population, default here is "All Patients", if set to \code{NULL} then
 the "All Patients" column is suppressed.}
 }
 \value{
 \code{rtable} object
 }
 \description{
-\code{t_ae_oview} returns adverse events according to STREAM format AET01
+\code{t_ae_oview} returns a summary table of overall AE profile: adverse events, deaths,
+and withdrawals by trial treatment. It corresponds to STREAM template AET01.
+}
+\details{
+this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
+  (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 }
 \examples{
 library(dplyr)
-suppressPackageStartupMessages(library(tidyverse))
-library(rtables)
 
-load(file = "data/rADAE.rda")
-
-adae <- rADAE
-flag <- data.frame(dthfl = adae$DTHFL,
-                   dcsreas = adae$DCSREAS,
-                   aesdth = adae$AESDTH,
-                   aeser = adae$AESER,
-                   aeacn = adae$AEACN,
-                   arel = adae$AREL,
-                   aerel = adae$AEREL,
-                   aetoxgr = adae$AETOXGR)
+data("rADAE")
+ANL <- rADAE
+flag <- data.frame(dthfl = ANL$DTHFL,
+                   dcsreas = ANL$DCSREAS,
+                   aesdth = ANL$AESDTH,
+                   aeser = ANL$AESER,
+                   aeacn = ANL$AEACN,
+                   arel = ANL$AREL,
+                   aerel = ANL$AEREL,
+                   aetoxgr = ANL$AETOXGR)
 
 extra <- data.frame(fatal2 = flag$aesdth,
                    ser2 = flag$aeser)
 tbl <- t_ae_oview(
-   id = adae$USUBJID,
-   class = adae$AESOC,
-   term = adae$AEDECOD,
+   id = ANL$USUBJID,
+   class = ANL$AESOC,
+   term = ANL$AEDECOD,
    flags = flag,
    display_id = c("fatal", "ser", "serwd", "serdsm", "relser",
                   "wd", "dsm", "rel", "relwd", "reldsm"),
    extra_flag = extra,
-   col_by = factor(adae$ARM),
+   col_by = factor(ANL$ARM),
    total="All Patients"
 )
 
@@ -77,5 +79,5 @@ tbl
 
 }
 \author{
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }

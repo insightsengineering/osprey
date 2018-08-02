@@ -2,37 +2,32 @@
 % Please edit documentation in R/g_spiderplot.R
 \name{g_spiderplot}
 \alias{g_spiderplot}
-\title{Create a spiderplot for Early Development Visualization}
+\title{Spider Plot}
 \usage{
-g_spiderplot(marker_x, marker_y, line_colby = NULL, marker_color = NULL,
-  marker_color_opt = NULL, marker_shape = NULL, marker_shape_opt = NULL,
-  marker_size = 6, datalabel_txt = NULL, facet_rows = NULL,
-  facet_columns = NULL, vref_line = NULL, href_line = NULL,
-  x_label = "Time (Days)", y_label = "Change (\%) from Baseline",
-  show_legend = FALSE, draw = TRUE, newpage = TRUE)
+g_spiderplot(marker_x, marker_y, line_colby = NULL, marker_shape = NULL,
+  marker_shape_opt = NULL, marker_size = 3, datalabel_txt = NULL,
+  facet_rows = NULL, facet_columns = NULL, vref_line = NULL,
+  href_line = NULL, x_label = "Time (Days)",
+  y_label = "Change (\%) from Baseline", show_legend = FALSE, draw = TRUE,
+  newpage = TRUE)
 }
 \arguments{
 \item{marker_x}{dataframe with 2 columns,
-column 1 is the vector of x values and
+column 1 is the vector of x values (must be in sorted order) and
 column 2 is the vector to group the points together (default
-should be defined as USUBJID)}
+should be USUBJID)}
 
 \item{marker_y}{vector of y values}
 
 \item{line_colby}{vector defines by what variable plot is color coded,
-default here is NULL}
-
-\item{marker_color}{vector defines by what variable points are color coded,
-, default here is NULL}
-
-\item{marker_color_opt}{vector defines marker color code, default here is NULL}
+default here is \code{NULL}}
 
 \item{marker_shape}{vector defines by what variable points are shape coded,
-, default here is NULL}
+, default here is \code{NULL}}
 
-\item{marker_shape_opt}{vector defines marker shape code, default here is NULL}
+\item{marker_shape_opt}{vector defines marker shape code, default here is \code{NULL}}
 
-\item{marker_size}{size of markers in plot, default here is NULL}
+\item{marker_size}{size of markers in plot, default here is \code{NULL}}
 
 \item{datalabel_txt}{list defines text (at last time point) and
 flag for an arrow annotation
@@ -42,14 +37,14 @@ mrkr_all - vector of ID's (for annotation marker)
 mrkr_ann - vector of ID's (subset of mrkr_all) where arrow is desired to
 indicate any study interim points}
 
-\item{facet_rows}{vector defines what variable is used to split the
-plot into rows, default here is NULL}
+\item{facet_rows}{dataframe defines what variable is used to split the
+plot into rows, default here is \code{NULL}}
 
-\item{facet_columns}{vector defines what variable is used to split the
-plot into columns, default here is NULL}
+\item{facet_columns}{dataframe defines what variable is used to split the
+plot into columns, default here is \code{NULL}}
 
 \item{vref_line}{value defines vertical line overlay
-(can be a vector), default here is NULL}
+(can be a vector), default here is \code{NULL}}
 
 \item{href_line}{value defines horizontal line overlay
 (can be a vector), default here is NULL}
@@ -59,69 +54,57 @@ plot into columns, default here is NULL}
 \item{y_label}{string of text for y axis label, default is \% change}
 
 \item{show_legend}{boolean of whether marker legend is included,
-default here is FALSE}
+default here is \code{FALSE}}
 }
 \value{
 ggplot object
 }
 \description{
-Create a spiderplot for Early Development Visualization
+Spider plot is often used in Early Development (ED) and displays individual
+patient plot of an endpoint over time by group.
+}
+\details{
+there is no equivalent STREAM output
 }
 \examples{
-library(random.cdisc.data)
-library(plyr)
+# simple example
 library(dplyr)
 
-atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
-dat <- atr \%>\% filter(PARAMCD == "SUMTGLES")
+data("rADSL")
+data("rADTR")
+ADTR <- rADTR \%>\% select(STUDYID, USUBJID, ADY, PCHG, PARAMCD)
+ADSL <- rADSL \%>\% select(STUDYID, USUBJID, RACE, SEX, ARM)
+ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
+ANL <- ANL \%>\% filter(PARAMCD == "SLDINV") \%>\% filter(RACE \%in\% c("WHITE", "ASIAN")) \%>\% group_by(USUBJID) \%>\% arrange(ADY)
+ANL <- na.omit(ANL)
+ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 
-#test changing where annotation marker lies
-#dat <- dat[-4, ]
 
-p <- g_spiderplot(marker_x = data.frame(day = dat$TUDY, groupby = dat$USUBJID),
-             marker_y = dat$PCHG,
-             line_colby = dat$USUBJID,
-             marker_color = dat$RACE,
-             marker_color_opt = c("ASIAN" = "yellow", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = "red",
-                                  "BLACK OR AFRICAN AMERICAN" = "black", "WHITE" = "green",
-                                  "AMERICAN INDIAN OR ALASKA NATIVE" = "blue"),
-             marker_shape = dat$RACE,
+p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
+             marker_y = ANL$PCHG,
+             line_colby = ANL$USUBJID,
+             marker_shape = ANL$RACE,
              #marker_shape_opt = c("ASIAN" = 1, "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER" = 2,
              #                     "BLACK OR AFRICAN AMERICAN" = 3, "WHITE" = 4,
-             #                     "AMERICAN INDIAN OR ALASKA NATIVE" = 5),
+             #                     "AMERICAN INDIAN OR ALASKA NATIVE" = 5, "UNKNOWN" = 6),
              marker_size = 5,
-             datalabel_txt = list(txt_ann = dat$USUBJID),
-             #datalabel_txt = list(txt_ann = dat$USUBJID, mrkr_all = dat$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
-             #datalabel_txt = list(mrkr_all = dat$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
-             facet_rows = dat$SEX,
-             facet_columns = dat$ARM,
+             datalabel_txt = list(txt_ann = ANL$USUBJID),
+             #datalabel_txt = list(txt_ann = ANL$USUBJID, mrkr_all = ANL$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
+             #datalabel_txt = list(mrkr_all = ANL$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
+             facet_rows = data.frame(sex = ANL$SEX),
+             #facet_columns = data.frame(arm = ANL$ARM),
              vref_line = c(10, 37),
              href_line = -0.3,
              x_label = "Time (Days)",
              y_label = "Change (\%) from Baseline",
-             show_legend = FALSE)
+             show_legend = TRUE)
+p
 
+\dontrun{
 #test discrete x-axis points
 dat2 <- dat \%>\% arrange(TUDY) \%>\% mutate(day = as.character(TUDY)) \%>\% as.data.frame()
-g_spiderplot(marker_x = data.frame(day = as.factor(dat2$day), groupby = dat2$USUBJID),
-             marker_y = dat2$PCHG,
-             line_colby = dat2$USUBJID,
-             marker_color = dat2$USUBJID,
-             #marker_color_opt = map_marker_color,
-             marker_shape = dat2$RACE,
-             #marker_shape_opt = map_marker_shape,
-             marker_size = 5,
-             datalabel_txt = list(txt_ann = dat2$USUBJID, mrkr_all = dat2$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
-             #datalabel_txt = list(mrkr_all = dat2$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
-             facet_rows = dat2$SEX,
-             facet_columns = dat2$ARM,
-             vref_line = c("10", "37"),
-             href_line = -0.3,
-             x_label = "Time (Days)",
-             y_label = "Change (\%) from Baseline",
-             show_legend = FALSE)
-
+}
 }
 \author{
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }

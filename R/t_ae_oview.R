@@ -1,7 +1,8 @@
 
-#' Create an AE Overview Summary Table (AET01)
+#' AE Overview Summary Table
 #'
-#' \code{t_ae_oview} returns adverse events according to STREAM format AET01
+#' \code{t_ae_oview} returns a summary table of overall AE profile: adverse events, deaths,
+#' and withdrawals by trial treatment. It corresponds to STREAM template AET01.
 #'
 #' @param id unique subject identifier variable. If a particular subject has no
 #'   adverse event then the subject \code{id} should be listed where
@@ -19,44 +20,43 @@
 #' @param col_by group variable that will be used for a column header. \code{col_by}
 #'    has to be a factor and can not be missing.
 #' @param total character string that will be used as a label for a column with
-#'    pooled total population, default here is "All Patients", if set to "NONE" then
+#'    pooled total population, default here is "All Patients", if set to \code{NULL} then
 #'    the "All Patients" column is suppressed.
 #'
+#' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
+#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 #'
 #' @return \code{rtable} object
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
 #' library(dplyr)
-#' suppressPackageStartupMessages(library(tidyverse))
-#' library(rtables)
 #'
-#' load(file = "data/rADAE.rda")
-#'
-#' adae <- rADAE
-#' flag <- data.frame(dthfl = adae$DTHFL,
-#'                    dcsreas = adae$DCSREAS,
-#'                    aesdth = adae$AESDTH,
-#'                    aeser = adae$AESER,
-#'                    aeacn = adae$AEACN,
-#'                    arel = adae$AREL,
-#'                    aerel = adae$AEREL,
-#'                    aetoxgr = adae$AETOXGR)
+#' data("rADAE")
+#' ANL <- rADAE
+#' flag <- data.frame(dthfl = ANL$DTHFL,
+#'                    dcsreas = ANL$DCSREAS,
+#'                    aesdth = ANL$AESDTH,
+#'                    aeser = ANL$AESER,
+#'                    aeacn = ANL$AEACN,
+#'                    arel = ANL$AREL,
+#'                    aerel = ANL$AEREL,
+#'                    aetoxgr = ANL$AETOXGR)
 #'
 #'extra <- data.frame(fatal2 = flag$aesdth,
 #'                    ser2 = flag$aeser)
 #' tbl <- t_ae_oview(
-#'    id = adae$USUBJID,
-#'    class = adae$AESOC,
-#'    term = adae$AEDECOD,
+#'    id = ANL$USUBJID,
+#'    class = ANL$AESOC,
+#'    term = ANL$AEDECOD,
 #'    flags = flag,
 #'    display_id = c("fatal", "ser", "serwd", "serdsm", "relser",
 #'                   "wd", "dsm", "rel", "relwd", "reldsm"),
 #'    extra_flag = extra,
-#'    col_by = factor(adae$ARM),
+#'    col_by = factor(ANL$ARM),
 #'    total="All Patients"
 #' )
 #'
@@ -93,9 +93,6 @@ t_ae_oview <- function(id,
                      "arel",
                      "aerel",
                      "aetoxgr")
-
-  if (total %in% levels(col_by))
-    stop(paste('col_by can not have', total, 'group.'))
 
   if (any("- Overall -" %in% term))
     stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
@@ -152,7 +149,12 @@ t_ae_oview <- function(id,
                       term = ifelse(term == "", NA, term))
 
   # adding All Patients
-  if(total != "NONE"){
+  if(!is.null(total)){
+    total <- tot_column(total)
+
+    if (total %in% levels(col_by))
+      stop(paste('col_by can not have', total, 'group.'))
+
     df <- duplicate_with_var(df, id = paste(df$id, "-", total), col_by = total)
     df_flags <- duplicate_with_var(df_flags, id = paste(df_flags$id, "-", total), col_by = total)
 
@@ -282,14 +284,17 @@ t_ae_oview <- function(id,
   tbls_ind <- c(list("Total number of patients with at least one" = tbl_ind))
   tbls_class <- Map(function(tbls_i, class_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables, lt1)
+    t2 <- do.call(stack_rtables_condense, lt1)
     add_ae_class(indent_table(t2, 1), class_i)
   }, tbls_ind, names(tbls_ind))
 
-  tbl_total <- do.call(stack_rtables, tbls_ov)
-  tbl_cl <- do.call(stack_rtables, tbls_class)
+  tbl_total <- do.call(stack_rtables_condense, tbls_ov)
+  tbl_cl <- do.call(stack_rtables_condense, tbls_class)
 
-  tbl <- rbind(tbl_total, tbl_cl)
+  header <- attr(tbl_cl, "header")
+  tbl_with_empty_rows <- rtablel(header = header, replicate(1, rrow()))
+
+  tbl <- rbind(tbl_total, tbl_with_empty_rows, tbl_cl)
 
   tbl
 }

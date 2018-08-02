@@ -1,6 +1,7 @@
-#' Create a Patient Disposition (DST01) Table
+
+#' Patient Disposition Table
 #'
-#' \code{t_ds} returns patient disposition according to STREAM format DST01
+#' \code{t_ds} returns patient disposition table that corresponds to STREAM template DST01
 #'
 #' @param id unique subject identifier variable. If a particular subject has no
 #'   adverse event then the subject \code{id} should be listed where
@@ -10,20 +11,20 @@
 #' @param col_by group variable that will be used for a column header. \code{col_by}
 #'  has to be a factor and can not be missing.
 #' @param total character string that will be used as a label for a column with
-#'  pooled total population, default here is "All Patients", if set to "NONE" then
+#'  pooled total population, default here is "All Patients", if set to \code{NULL} then
 #'  the "All Patients" column is suppressed.
 #'
+#' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
+#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 #' @return \code{rtable} object
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
 #' # Simple example
-#' library(tibble)
 #' library(dplyr)
-#' library(rtables)
 #'
 #' ASL <- tibble(
 #'   USUBJID = paste0("id-", 1:10),
@@ -55,7 +56,7 @@
 #'   term =  ANL$TERM,
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
-#'   total = "All Patients",
+#'   total = "All Patients"
 #' )
 #'
 #' tbl
@@ -66,7 +67,7 @@
 #'   sub = data.frame(GRADE = ANL$GRADE),
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
-#'   total = "All Patients",
+#'   total = "All Patients"
 #' )
 #'
 #' tbl2
@@ -74,14 +75,14 @@
 #'# simple example using osprey dummy dataset
 #'
 #' data("rADSL")
-#' ASL <- rADSL
+#' ANL <- rADSL
 #'
 #' tbl3 <- t_ds(
-#'    class = ASL$EOSSTT,
-#'    term = ASL$DCSREAS,
-#'    id = ASL$USUBJID,
-#'    col_by = factor(ASL$ARM),
-#'    total = "ALL Patients"
+#'    class = ANL$EOSSTT,
+#'    term = ANL$DCSREAS,
+#'    id = ANL$USUBJID,
+#'    col_by = factor(ANL$ARM),
+#'    total = "All Patients"
 #' )
 #'
 #' tbl3
@@ -91,9 +92,6 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   #check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
-
-  if (total %in% levels(col_by))
-    stop(paste('col_by can not have', total, 'group.'))
 
   if (any("- Overall -" %in% term))
     stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
@@ -139,7 +137,12 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
                       term = ifelse(term == "", "None", as.character(term)))
 
   # adding All Patients
-  if(total != "NONE"){
+  if(!is.null(total)){
+    total <- tot_column(total)
+
+    if (total %in% levels(col_by))
+      stop(paste('col_by can not have', total, 'group.'))
+
     df <- duplicate_with_var(df, id = paste(df$id, "-", total), col_by = total)
   }
 
@@ -204,11 +207,11 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   tbls_all <- remove_Null(l_t_class_terms)
   tbls_class <- Map(recursive_indent, tbls_all, rep(0, length(tbls_all)))
-  tbl <- do.call(stack_rtables, tbls_class)
+  tbl <- do.call(stack_rtables_condense, tbls_class)
 
   #remove NA rows
   index <- numeric(0)
-  for(i in seq(1, length(tbl), 2)){
+  for(i in seq(1, length(tbl))){
     if(attr(tbl[[i]], "row.name") == "None"){
       index <- c(index, i)
     }

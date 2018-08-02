@@ -1,4 +1,8 @@
-#' Swimlane bar plot for each id with markers
+
+#' Swimlane Plot
+#'
+#' Swimlane plot is often used in Early Development (ED) and displays individual
+#' patient bar plot with markers of events and patient level annotation
 #'
 #' @param bar_id vector of IDs to identify each bar
 #' @param bar_length numeric vector to be plotted as length for each bar
@@ -16,7 +20,7 @@
 #' @param ylab label for bar length
 #' @param title string to be displayed as plot title
 #'
-#' @author qit3
+#' @template author_qit3
 #'
 #' @import ggplot2 grid gridExtra gtable
 #'
@@ -34,7 +38,6 @@
 #'       ADY = rexp(nrow(ASL), 1/80)
 #'    )) %>% filter(PARAMCD == "OVRINV")
 #' ANL <- ASL %>% left_join(ARS, by = c("STUDYID", "USUBJID"))
-#' # pre-process bar length breaks for treatment duration for longitudinal records
 #' anno_txt <- ASL[, c("ARMCD", "SEX", "RACE")]
 #'
 #' g_swimlane(bar_id = ASL$USUBJID,
@@ -73,7 +76,7 @@
 #' ADS <- ASL %>%
 #' filter(EOSSTT == "Discontinued" | DCSREAS != "") %>%
 #' select(USUBJID, EOSDY, DCSREAS) %>%
-#' rename(ADY = EOSDY, AVALC = DCSREAS)
+#' dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
 #'
 #' # combine ARS with ADS records as one data for markers and join with ASL
 #' ANL <- ASL %>%
@@ -81,7 +84,7 @@
 #'
 #' g_swimlane(bar_id = ASL$USUBJID,
 #' bar_length = ASL$TRTDURD,
-#' sort_by = ASL$ARMCD,
+#' sort_by = NULL,
 #' col_by = ASL$ARMCD,
 #' marker_id = ANL$USUBJID,
 #' marker_pos = ANL$ADY,
@@ -145,11 +148,13 @@ g_swimlane <- function(bar_id,
     marker_color = if (is.null(marker_color)) "x" else to_n(marker_color, length(marker_id))
     )
 
-  # if sort by a variable, reorder bar_id; otherwise sort by bar length
+  # if sort by a variable, reorder bar_id by sort var and then bar length; otherwise sort by bar length
   if (!is.null(sort_by)) {
-    bar_data$bar_id = factor(bar_data$bar_id, levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by)])))
+    bar_data$bar_id = factor(bar_data$bar_id,
+                             levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by, -bar_data$bar_length)])))
   } else{
-    bar_data$bar_id = factor(bar_data$bar_id, levels = rev(unique(bar_data$bar_id[order(bar_data$bar_length, decreasing = TRUE)])))
+    bar_data$bar_id = factor(bar_data$bar_id,
+                             levels = rev(unique(bar_data$bar_id[order(-bar_data$bar_length)])))
   }
 
   # labeling
@@ -160,6 +165,7 @@ g_swimlane <- function(bar_id,
   p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_length)) +
     geom_bar(stat = "identity", aes(fill = col_by)) +
     coord_flip(xlim = c(1,length(unique(bar_id)) + 1)) +
+    theme_bw() +
     theme(
       panel.background = element_blank(),
       panel.grid = element_blank(),
@@ -171,8 +177,7 @@ g_swimlane <- function(bar_id,
 
   if (is.null(col_by)) {
     p <- p + guides(fill = FALSE)
-  }
-  else {
+  } else {
     p <- p + guides(fill = guide_legend("Bar Color", order = 1, ncol = 1)) +
       theme(
         legend.title = element_text(size = 9),
@@ -247,9 +252,9 @@ g_swimlane <- function(bar_id,
 
   # if sort by a variable, reorder bar_id; otherwise sort by bar length
   if (!is.null(sort_by)) {
-    t <- t[with(t, order(sort_by, bar_id)), -c(2,3)]
+    t <- t[with(t, order(sort_by, -bar_length, bar_id)), -c(2,3)]
   } else{
-    t <- t[with(t, order(bar_length, bar_id)), -c(2,3)]
+    t <- t[with(t, order(-bar_length, bar_id)), -c(2,3)]
   }
 
   t <- as.data.frame(t)

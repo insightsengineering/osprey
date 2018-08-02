@@ -1,7 +1,7 @@
 
-#' Create an Adverse Events (AET02) Table
+#' Adverse Events by System Organ Class and Preferred Term
 #'
-#' \code{t_ae} returns adverse events according to STREAM format AET02
+#' \code{t_ae} returns adverse events summary table that corresponds to STREAM template AET02
 #'
 #' @param class system organ class variable.
 #' @param term preferred term variable.
@@ -11,24 +11,22 @@
 #' @param col_by group variable that will be used for a column header. \code{col_by}
 #'  has to be a factor and can not be missing.
 #' @param total character string that will be used as a label for a column with
-#'  pooled total population, default here is "All Patients", if set to "NONE" then
+#'  pooled total population, default here is "All Patients", if set to \code{NULL} then
 #'  the "All Patients" column is suppressed.
-#' @param sort_by character string that defines the ordering of the class and term
-#' variables in the output table,
-#' options: "alphabetical" or "count", default here is set to "count"
+#'
+#' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet02)}
+#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet02.html})
 #'
 #'
 #' @return \code{rtable} object
 #'
 #' @export
 #'
-#' @author Carolyn Zhang
+#' @template author_zhanc107
 #'
 #' @examples
 #' # Simple example
-#' library(tibble)
 #' library(dplyr)
-#' library(rtables)
 #'
 #' ASL <- tibble(
 #'   USUBJID = paste0("id-", 1:10),
@@ -60,44 +58,39 @@
 #'   term =  ANL$TERM,
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
-#'   total = "All Patients",
+#'   total = "ALL Patients"
 #' )
 #'
 #' tbl
 #'
 #' # Simple example 2
 #'
-#' library(dplyr)
-#' library(rtables)
-#' library(random.cdisc.data)
-#'
-#'
-#' data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
+#' data("rADSL")
+#' data("rADAE")
+#' ADSL <- rADSL %>% select(USUBJID, STUDYID, ARM)
+#' AAE <- rADAE %>% select(USUBJID, STUDYID, ARM, AEBODSYS, AEDECOD)
+#' ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
 #'
 #' tbl2 <- t_ae(
-#'   class = data$AEBODSYS,
-#'   term =  data$AEDECOD,
-#'   id = data$USUBJID,
-#'   col_by = factor(data$ARM),
-#'   total = "None",
-#'   sort_by = "alphabetical"
+#'   class = ANL$AEBODSYS,
+#'   term =  ANL$AEDECOD,
+#'   id = ANL$USUBJID,
+#'   col_by = factor(ANL$ARM),
+#'   total = NULL
 #' )
 #'
 #' tbl2
 #'
 #'
-t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count", ...) {
+t_ae <- function(class, term, id, col_by, total="All Patients", ...) {
 
   #check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
 
-  if (total %in% levels(col_by))
-    stop(paste('col_by can not have', total, 'group.'))
-
   if (any("- Overall -" %in% term))
-    stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
+    stop("'- Overall -' is not a valid term, t_ae reserves it for derivation")
   if (any("All Patients" %in% col_by))
-    stop("'All Patients' is not a valid col_by, t_ae_oview derives All Patients column")
+    stop("'All Patients' is not a valid col_by, t_ae derives All Patients column")
 
   check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)))
   check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
@@ -118,11 +111,15 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
 
   df <- df %>% arrange(class, term)
 
-  df <- df %>% mutate(class = ifelse(class == "", NA, class),
-                      term = ifelse(term == "", NA, term))
+  df <- df %>% mutate(class = ifelse(class == "", "No Coding Available", class),
+                      term = ifelse(term == "", "No Coding Available", term))
 
   # adding All Patients
-  if(total != "NONE"){
+  if(!is.null(total)){
+    total <- tot_column(total)
+    if (total %in% levels(col_by))
+      stop(paste('col_by can not have', total, 'group.'))
+
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
   }
 
@@ -195,34 +192,31 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
     l_t_summary <- c(l_t_terms[1], l_t_num_ae)
     l_t_terms <- c(l_t_terms[2:length(l_t_terms)])
 
-    if(sort_by == "count"){
-      # sort terms by total
-      N_total_any <- vapply(l_t_terms, function(tbl) {
-        a <- 0
-        for(i in c(1:n_cols)){
-          a <- a + tbl[1, i][1]
-        }
-        a
-      }, numeric(1))
-
-      l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
-    }
-
-    l_t_terms <- c(l_t_summary, l_t_terms)
-  })#---------------------------end class and term chunk
-
-  if(sort_by == "count"){
-    # now sort tables
-    N_total_overall <- vapply(l_t_class_terms, function(tbl) {
+    # sort terms by total
+    N_total_any <- vapply(l_t_terms, function(tbl) {
       a <- 0
       for(i in c(1:n_cols)){
-        a <- a + tbl[[1]][1, i][1]
+        a <- a + tbl[1, i][1]
       }
       a
     }, numeric(1))
 
-    l_t_class_terms <- l_t_class_terms[order(-N_total_overall, names(l_t_class_terms), decreasing = FALSE)]
-  }
+    l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
+
+
+    l_t_terms <- c(l_t_summary, l_t_terms)
+  })#---------------------------end class and term chunk
+
+  # now sort tables
+  N_total_overall <- vapply(l_t_class_terms, function(tbl) {
+    a <- 0
+    for(i in c(1:n_cols)){
+      a <- a + tbl[[1]][1, i][1]
+    }
+    a
+  }, numeric(1))
+
+  l_t_class_terms <- l_t_class_terms[order(-N_total_overall, names(l_t_class_terms), decreasing = FALSE)]
 
   #Overall: total num patients
   df_patients <- list("Total number of patients with at least one adverse event" = df)
@@ -276,7 +270,6 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
 
   tbls_all <- l_t_class_terms
 
-
   tbls_overview <- c(
     list("Total number of patients with at least one adverse event" = tbl_overall_patients),
     list("Overall total number of events" = tbl_overall_ae)
@@ -284,20 +277,23 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
 
   tbls_class <- Map(function(tbls_i, class_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables, lt1)
+    t2 <- do.call(stack_rtables_condense, lt1)
     add_ae_class(indent_table(t2, 1), class_i)
   }, tbls_all, names(tbls_all))
 
   tbls_ov <- Map(function(tbls_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables, lt1)
+    t2 <- do.call(stack_rtables_condense, lt1)
   }, tbls_overview)
 
 
   tbl_cl <- do.call(stack_rtables, tbls_class)
   tbl_total <- do.call(stack_rtables, tbls_ov)
 
-  tbl <- rbind(tbl_total, tbl_cl)
+  header <- attr(tbl_cl, "header")
+  tbl_with_empty_rows <- rtablel(header = header, replicate(1, rrow()))
+
+  tbl <- rbind(tbl_total, tbl_with_empty_rows, tbl_cl)
 
   attr(attr(tbl, "header")[[1]], "row.name") <- 'MedDRA System Organ Class'
   attr(attr(tbl, "header")[[2]], "row.name") <- 'MedDRA Preferred Term'
@@ -305,6 +301,3 @@ t_ae <- function(class, term, id, col_by, total="All Patients", sort_by = "count
 
   return(tbl)
 }
-
-
-

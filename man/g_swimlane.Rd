@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_swimlane.R
 \name{g_swimlane}
 \alias{g_swimlane}
-\title{Swimlane bar plot for each id with markers}
+\title{Swimlane Plot}
 \usage{
 g_swimlane(bar_id, bar_length, sort_by = NULL, col_by = NULL,
   marker_id = NULL, marker_pos = NULL, marker_shape = NULL,
@@ -44,7 +44,8 @@ g_swimlane(bar_id, bar_length, sort_by = NULL, col_by = NULL,
 plot object
 }
 \description{
-Swimlane bar plot for each id with markers
+Swimlane plot is often used in Early Development (ED) and displays individual
+patient bar plot with markers of events and patient level annotation
 }
 \examples{
 # Example 1
@@ -56,7 +57,6 @@ start_with = list(
       ADY = rexp(nrow(ASL), 1/80)
    )) \%>\% filter(PARAMCD == "OVRINV")
 ANL <- ASL \%>\% left_join(ARS, by = c("STUDYID", "USUBJID"))
-# pre-process bar length breaks for treatment duration for longitudinal records
 anno_txt <- ASL[, c("ARMCD", "SEX", "RACE")]
 
 g_swimlane(bar_id = ASL$USUBJID,
@@ -95,7 +95,7 @@ select(USUBJID, ADY, AVALC)
 ADS <- ASL \%>\%
 filter(EOSSTT == "Discontinued" | DCSREAS != "") \%>\%
 select(USUBJID, EOSDY, DCSREAS) \%>\%
-rename(ADY = EOSDY, AVALC = DCSREAS)
+dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
 
 # combine ARS with ADS records as one data for markers and join with ASL
 ANL <- ASL \%>\%
@@ -103,7 +103,7 @@ inner_join(rbind(ARS, ADS), "USUBJID")
 
 g_swimlane(bar_id = ASL$USUBJID,
 bar_length = ASL$TRTDURD,
-sort_by = ASL$ARMCD,
+sort_by = NULL,
 col_by = ASL$ARMCD,
 marker_id = ANL$USUBJID,
 marker_pos = ANL$ADY,
@@ -124,5 +124,5 @@ title = "Swimlane Plot")
 
 }
 \author{
-qit3
+Ting Qi (qit3) \email{qit3@gene.com}
 }

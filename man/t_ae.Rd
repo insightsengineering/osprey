@@ -2,10 +2,9 @@
 % Please edit documentation in R/t_ae.R
 \name{t_ae}
 \alias{t_ae}
-\title{Create an Adverse Events (AET02) Table}
+\title{Adverse Events by System Organ Class and Preferred Term}
 \usage{
-t_ae(class, term, id, col_by, total = "All Patients", sort_by = "count",
-  ...)
+t_ae(class, term, id, col_by, total = "All Patients", ...)
 }
 \arguments{
 \item{class}{system organ class variable.}
@@ -20,24 +19,22 @@ adverse event then the subject \code{id} should be listed where
 has to be a factor and can not be missing.}
 
 \item{total}{character string that will be used as a label for a column with
-pooled total population, default here is "All Patients", if set to "NONE" then
+pooled total population, default here is "All Patients", if set to \code{NULL} then
 the "All Patients" column is suppressed.}
-
-\item{sort_by}{character string that defines the ordering of the class and term
-variables in the output table,
-options: "alphabetical" or "count", default here is set to "count"}
 }
 \value{
 \code{rtable} object
 }
 \description{
-\code{t_ae} returns adverse events according to STREAM format AET02
+\code{t_ae} returns adverse events summary table that corresponds to STREAM template AET02
+}
+\details{
+this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet02)}
+  (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet02.html})
 }
 \examples{
 # Simple example
-library(tibble)
 library(dplyr)
-library(rtables)
 
 ASL <- tibble(
   USUBJID = paste0("id-", 1:10),
@@ -69,27 +66,25 @@ tbl <- t_ae(
   term =  ANL$TERM,
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
-  total = "All Patients",
+  total = "ALL Patients"
 )
 
 tbl
 
 # Simple example 2
 
-library(dplyr)
-library(rtables)
-library(random.cdisc.data)
-
-
-data <- left_join(radam("AAE", N=10),radam("ADSL", N=10))
+data("rADSL")
+data("rADAE")
+ADSL <- rADSL \%>\% select(USUBJID, STUDYID, ARM)
+AAE <- rADAE \%>\% select(USUBJID, STUDYID, ARM, AEBODSYS, AEDECOD)
+ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
 
 tbl2 <- t_ae(
-  class = data$AEBODSYS,
-  term =  data$AEDECOD,
-  id = data$USUBJID,
-  col_by = factor(data$ARM),
-  total = "None",
-  sort_by = "alphabetical"
+  class = ANL$AEBODSYS,
+  term =  ANL$AEDECOD,
+  id = ANL$USUBJID,
+  col_by = factor(ANL$ARM),
+  total = NULL
 )
 
 tbl2
@@ -97,5 +92,5 @@ tbl2
 
 }
 \author{
-Carolyn Zhang
+Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
 }
