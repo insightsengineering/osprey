@@ -70,7 +70,7 @@
 #'              #datalabel_txt = list(txt_ann = ANL$USUBJID, mrkr_all = ANL$USUBJID, mrkr_ann = c("id-1", "id-4", "id-7")),
 #'              #datalabel_txt = list(mrkr_all = ANL$USUBJID, mrkr_ann = c("id-2", "id-4", "id-7")),
 #'              facet_rows = data.frame(sex = ANL$SEX),
-#'              #facet_columns = data.frame(arm = ANL$ARM),
+#'              facet_columns = data.frame(arm = ANL$ARM),
 #'              vref_line = c(10, 37),
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
@@ -133,7 +133,7 @@ g_spiderplot <- function(marker_x,
 
     if(ncol(facet_columns) == 1){
       dat$f_columns <- facet_columns[, 1]
-    } else if(ncol(facet_rows) == 2){
+    } else if(ncol(facet_columns) == 2){
       dat$f_columns <- facet_columns[, 1]
       dat$f_columns_2 <- facet_columns[, 2]
     }
