@@ -148,11 +148,13 @@ g_swimlane <- function(bar_id,
     marker_color = if (is.null(marker_color)) "x" else to_n(marker_color, length(marker_id))
     )
 
-  # if sort by a variable, reorder bar_id; otherwise sort by bar length
+  # if sort by a variable, reorder bar_id by sort var and then bar length; otherwise sort by bar length
   if (!is.null(sort_by)) {
-    bar_data$bar_id = factor(bar_data$bar_id, levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by)])))
+    bar_data$bar_id = factor(bar_data$bar_id,
+                             levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by, -bar_data$bar_length)])))
   } else{
-    bar_data$bar_id = factor(bar_data$bar_id, levels = rev(unique(bar_data$bar_id[order(bar_data$bar_length, decreasing = TRUE)])))
+    bar_data$bar_id = factor(bar_data$bar_id,
+                             levels = rev(unique(bar_data$bar_id[order(-bar_data$bar_length)])))
   }
 
   # labeling
@@ -175,8 +177,7 @@ g_swimlane <- function(bar_id,
 
   if (is.null(col_by)) {
     p <- p + guides(fill = FALSE)
-  }
-  else {
+  } else {
     p <- p + guides(fill = guide_legend("Bar Color", order = 1, ncol = 1)) +
       theme(
         legend.title = element_text(size = 9),
@@ -251,9 +252,9 @@ g_swimlane <- function(bar_id,
 
   # if sort by a variable, reorder bar_id; otherwise sort by bar length
   if (!is.null(sort_by)) {
-    t <- t[with(t, order(sort_by, bar_id)), -c(2,3)]
+    t <- t[with(t, order(sort_by, -bar_length, bar_id)), -c(2,3)]
   } else{
-    t <- t[with(t, order(bar_length, bar_id)), -c(2,3)]
+    t <- t[with(t, order(-bar_length, bar_id)), -c(2,3)]
   }
 
   t <- as.data.frame(t)
