@@ -61,9 +61,9 @@
 #' p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
 #'              marker_y = ANL$PCHG,
 #'              line_colby = ANL$USUBJID,
-#'              marker_shape = ANL$RACE,
-#'              marker_size = 5,
-#'              datalabel_txt = list(txt_ann = ANL$USUBJID),
+#'              marker_shape = ANL$USUBJID,
+#'              #marker_size = 5,
+#'              #datalabel_txt = list(txt_ann = ANL$USUBJID),
 #'              #facet_rows = data.frame(sex = ANL$SEX),
 #'              #facet_columns = data.frame(arm = ANL$ARM),
 #'              vref_line = c(10, 37),
@@ -152,7 +152,7 @@ g_spiderplot <- function(marker_x,
     pl <- pl + geom_line(size = 1, alpha = 0.5, show.legend = show_legend)
   }
 
-  #marker color------------
+  #marker shape------------
   if(!is.null(marker_shape)){
     pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
 
@@ -215,6 +215,12 @@ g_spiderplot <- function(marker_x,
     return(datCol[1:len, 1])
   }
 
+  if(!is.null(marker_shape) && is.null(marker_shape_opt)){
+    pl <- pl + scale_shape_manual(name = "Shape",
+                                  breaks = dat$sh,
+                                  values = c(0:length(unique(dat$sh))-1) )
+  }
+
   if(!is.null(marker_shape_opt)){
     pl <- pl + scale_shape_manual(name = "Shape",
                                   breaks = dat$sh,
@@ -230,8 +236,8 @@ g_spiderplot <- function(marker_x,
           axis.text = element_text(color = "black"),
           legend.text=element_text(size=7),
           legend.title = element_text(size = 7)) +
-    labs(shape = "Shape") +
-    guides(colour = FALSE)
+    labs(shape = "Shape", color = "Color")# +
+    #guides(colour = FALSE)
 
   if(is.numeric(marker_x[, 1])){
     pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.3)
