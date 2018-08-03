@@ -110,24 +110,13 @@ g_spiderplot <- function(marker_x,
   if(!is.null(facet_rows)){
     if(length(unique(c(nrow(facet_rows), check_input_length))) != 1)
       stop("invalid arguments: check that the length of input arguments are identical")
-    if(ncol(facet_rows) == 1){
-      dat$f_rows <- facet_rows [, 1]
-    } else if(ncol(facet_rows) == 2){
-      dat$f_rows <- facet_rows[, 1]
-      dat$f_rows_2 <- facet_rows[, 2]
-    }
+    dat$f_rows <- interaction(facet_rows)
 
   }
   if(!is.null(facet_columns)){
     if(length(unique(c(nrow(facet_columns), check_input_length))) != 1)
       stop("invalid arguments: check that the length of input arguments are identical")
-
-    if(ncol(facet_columns) == 1){
-      dat$f_columns <- facet_columns[, 1]
-    } else if(ncol(facet_columns) == 2){
-      dat$f_columns <- facet_columns[, 1]
-      dat$f_columns_2 <- facet_columns[, 2]
-    }
+    dat$f_columns <- interaction(facet_columns)
   }
   if(!is.null(line_colby)){
     if(length(unique(c(nrow(line_colby), check_input_length))) != 1)
@@ -200,6 +189,7 @@ g_spiderplot <- function(marker_x,
   if(!is.null(href_line)){
     pl <- pl + geom_hline(yintercept = href_line, linetype = "dotted", color = "black")
   }
+  pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 2)
 
   if(!is.null(vref_line)){
     for(i in 1:length(vref_line)){
@@ -211,32 +201,11 @@ g_spiderplot <- function(marker_x,
   if(is.null(facet_rows) && is.null(facet_columns)){
     pl
   } else if(is.null(facet_rows) && !is.null(facet_columns)){
-
-    if(ncol(facet_columns) == 1){
-      pl <- pl + facet_grid(.~ f_columns)
-    } else if(ncol(facet_columns) == 2){
-      pl <- pl + facet_grid(.~ f_columns + f_columns_2)
-    }
-
+    pl <- pl + facet_grid(.~ f_columns)
   } else if(is.null(facet_columns) && !is.null(facet_rows)){
-
-    if(ncol(facet_rows) == 1){
-      pl <- pl + facet_grid(f_rows ~.)
-    } else if(ncol(facet_rows) == 2){
-      pl <- pl + facet_grid(f_rows + f_rows_2 ~.)
-    }
-
+    pl <- pl + facet_grid(f_rows ~.)
   } else{
-    if(ncol(facet_columns) == 1 && ncol(facet_rows) == 1){
-      pl <- pl + facet_grid(f_rows ~ f_columns)
-    } else if(ncol(facet_columns) == 1 && ncol(facet_rows) == 2){
-      pl <- pl + facet_grid(f_rows + f_rows_2 ~ f_columns)
-    } else if(ncol(facet_columns) == 2 && ncol(facet_rows) == 1){
-      pl <- pl + facet_grid(f_rows ~ f_columns + f_columns_2)
-    } else if(ncol(facet_columns) == 2 && ncol(facet_rows) == 2){
-      pl <- pl + facet_grid(f_rows + f_rows_2 ~ f_columns + f_columns_2)
-    }
-
+    pl <- pl + facet_grid(f_rows ~ f_columns)
   }
 
   call_color <- function(len){

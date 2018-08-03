@@ -104,6 +104,9 @@ g_butterfly <- function(category,
 
   #set up data-------
   groups <- data.frame(flag1 = rightFlag, flag2 = leftFlag)
+  if(!is.null(facet_rows)){
+    facet_rows <- interaction(facet_rows)
+  }
 
   if(length(unique(as.character(groups$flag1))) > 2 || length(unique(as.character(groups$flag2))) > 2)
     stop("invalid arguments: groups can only have 2 unique values")
@@ -184,8 +187,6 @@ g_butterfly <- function(category,
     } else{
       if(length(unique(c(nrow(data.frame(facet_rows)),check_input_length))) > 1)
         stop("invalid arguments: check that the length of input arguments are identical")
-      if(length(unique(c(ncol(data.frame(facet_rows)),check_input_col))) > 1 || unique(c(ncol(data.frame(facet_rows)),check_input_col)) != 1)
-        stop("invalid arguments: check that the inputs have a single column")
 
       dat <- data.frame(id = id, y = category, flag1 = groups$flag1, flag2 = groups$flag2, bar_color = block_color, f_rows = facet_rows)
 
@@ -311,8 +312,6 @@ g_butterfly <- function(category,
     } else{
       if(length(unique(c(nrow(data.frame(facet_rows)),check_input_length))) > 1)
         stop("invalid arguments: check that the length of input arguments are identical")
-      if(length(unique(c(ncol(data.frame(facet_rows)),check_input_col))) > 1 || unique(c(ncol(data.frame(facet_rows)),check_input_col)) != 1)
-        stop("invalid arguments: check that the inputs have a single column")
 
       dat <- data.frame(id = id, y = category, flag1 = groups$flag1, flag2 = groups$flag2, f_rows = facet_rows)
 
