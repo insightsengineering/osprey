@@ -44,7 +44,7 @@ and withdrawals by trial treatment. It corresponds to STREAM template AET01.
 }
 \details{
 this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
-  (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
+  (\url{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 }
 \examples{
 library(dplyr)

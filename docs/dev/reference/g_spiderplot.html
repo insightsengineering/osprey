@@ -232,17 +232,17 @@ default here is <code>FALSE</code></p></td>
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>ADY</span>, <span class='kw'>groupby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>),
              <span class='kw'>marker_y</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>PCHG</span>,
              <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
-             <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>RACE</span>,
-             <span class='kw'>marker_size</span> <span class='kw'>=</span> <span class='fl'>5</span>,
-             <span class='kw'>datalabel_txt</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>txt_ann</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>),
-             <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>sex</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>SEX</span>),
+             <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
+             <span class='co'>#marker_size = 5,</span>
+             <span class='co'>#datalabel_txt = list(txt_ann = ANL$USUBJID),</span>
+             <span class='co'>#facet_rows = data.frame(sex = ANL$SEX),</span>
              <span class='co'>#facet_columns = data.frame(arm = ANL$ARM),</span>
              <span class='kw'>vref_line</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>37</span>),
              <span class='kw'>href_line</span> <span class='kw'>=</span> -<span class='fl'>0.3</span>,
              <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
              <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
-             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>p</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 2 rows containing missing values (geom_segment).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 2 rows containing missing values (geom_segment).</span></div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>p</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_segment).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_segment).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unimplemented pch value '26'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font width unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font width unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font width unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unimplemented pch value '26'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unimplemented pch value '26'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unimplemented pch value '26'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font width unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for character 0x1</span></div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

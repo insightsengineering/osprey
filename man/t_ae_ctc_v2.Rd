@@ -61,7 +61,7 @@ grades. If data does not have any records with \code{grade} 5 and the intent
 is to show only grades 1-4 rows then use \code{grade_levels = 1:4}.
 
 this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet04)}
-  (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html})
+  (\url{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html})
 }
 \examples{
 # Simple example

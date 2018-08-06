@@ -83,16 +83,16 @@ ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
              marker_y = ANL$PCHG,
              line_colby = ANL$USUBJID,
-             marker_shape = ANL$RACE,
-             marker_size = 5,
-             datalabel_txt = list(txt_ann = ANL$USUBJID),
+             marker_shape = ANL$USUBJID,
+             #marker_size = 5,
+             #datalabel_txt = list(txt_ann = ANL$USUBJID),
              #facet_rows = data.frame(sex = ANL$SEX),
              #facet_columns = data.frame(arm = ANL$ARM),
              vref_line = c(10, 37),
              href_line = -0.3,
              x_label = "Time (Days)",
              y_label = "Change (\%) from Baseline",
-             show_legend = TRUE)
+             show_legend = FALSE)
 p
 
 }

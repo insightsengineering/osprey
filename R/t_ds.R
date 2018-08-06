@@ -15,7 +15,7 @@
 #'  the "All Patients" column is suppressed.
 #'
 #' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
-#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
+#'   (\url{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 #' @return \code{rtable} object
 #'
 #' @export

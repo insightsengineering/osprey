@@ -47,7 +47,7 @@
 #' is to show only grades 1-4 rows then use \code{grade_levels = 1:4}.
 #'
 #' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet04)}
-#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html})
+#'   (\url{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html})
 #'
 #' @export
 #'
@@ -240,13 +240,4 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   attr(tbl, "header")[[1]][[1]] <- rcell(NULL)
 
   tbl
-}
-
-
-
-add_ae_class <- function(tbl, class) {
-  rbind(
-    rtable(header(tbl), rrow(class)),
-    tbl
-  )
 }

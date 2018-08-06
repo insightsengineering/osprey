@@ -70,7 +70,7 @@
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
-#'              show_legend = TRUE)
+#'              show_legend = FALSE)
 #' p
 #'
 g_spiderplot <- function(marker_x,
