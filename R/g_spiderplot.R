@@ -144,6 +144,8 @@ g_spiderplot <- function(marker_x,
     ylab(y_label) +
     theme(legend.position="top", legend.title = element_blank())
 
+  pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 1)
+
 
   #line color
   if(!is.null(line_colby)){
@@ -154,10 +156,10 @@ g_spiderplot <- function(marker_x,
 
   #marker shape------------
   if(!is.null(marker_shape)){
-    pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
+    pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
 
   } else if(is.null(marker_shape)){
-    pl <- pl + geom_point(size = 3, show.legend = show_legend)
+    pl <- pl + geom_point(aes(color = l_col), size = 3, show.legend = show_legend)
   }
 
   #label at last data point---------
@@ -189,7 +191,6 @@ g_spiderplot <- function(marker_x,
   if(!is.null(href_line)){
     pl <- pl + geom_hline(yintercept = href_line, linetype = "dotted", color = "black")
   }
-  pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 2)
 
   if(!is.null(vref_line)){
     for(i in 1:length(vref_line)){
@@ -216,9 +217,13 @@ g_spiderplot <- function(marker_x,
   }
 
   if(!is.null(marker_shape) && is.null(marker_shape_opt)){
+    symbol_val <- c(0:25)
+
     pl <- pl + scale_shape_manual(name = "Shape",
                                   breaks = dat$sh,
-                                  values = c(0:length(unique(dat$sh))-1) )
+                                  values = sample(symbol_val, length(unique(dat$sh)),
+                                                  replace = TRUE)
+                                  )
   }
 
   if(!is.null(marker_shape_opt)){
