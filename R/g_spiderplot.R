@@ -156,10 +156,19 @@ g_spiderplot <- function(marker_x,
 
   #marker shape------------
   if(!is.null(marker_shape)){
-    pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
+    if(!is.null(line_colby)){
+      pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
+    } else{
+      pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
+    }
 
   } else if(is.null(marker_shape)){
-    pl <- pl + geom_point(aes(color = l_col), size = 3, show.legend = show_legend)
+    if(!is.null(line_colby)){
+      pl <- pl + geom_point(aes(color = l_col), size = 3, show.legend = show_legend)
+    } else{
+      pl <- pl + geom_point(size = 3, show.legend = show_legend)
+    }
+
   }
 
   #label at last data point---------
@@ -218,8 +227,10 @@ g_spiderplot <- function(marker_x,
   }
 
   #remove marker from color legend
-  pl <- pl + scale_color_manual( values = call_color(length(unique(dat$l_col))),
-                                 guide = guide_legend(override.aes = list(shape = rep(NA, length(unique(dat$l_col))))))
+  if(!is.null(line_colby)){
+    pl <- pl + scale_color_manual( values = call_color(length(unique(dat$l_col))),
+                                   guide = guide_legend(override.aes = list(shape = rep(NA, length(unique(dat$l_col))))))
+  }
 
   if(!is.null(marker_shape) && is.null(marker_shape_opt)){
     symbol_val <- c(0:25)
