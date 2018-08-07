@@ -209,6 +209,7 @@ g_spiderplot <- function(marker_x,
     pl <- pl + facet_grid(f_rows ~ f_columns)
   }
 
+  # simple function to call a vector of color values
   call_color <- function(len){
     datCol <- data.frame(color_opt = colors())
     datCol <- datCol %>% filter(!grepl("white",color_opt)) %>% droplevels
@@ -216,13 +217,18 @@ g_spiderplot <- function(marker_x,
     return(datCol[1:len, 1])
   }
 
+  #remove marker from color legend
+  pl <- pl + scale_color_manual( values = call_color(length(unique(dat$l_col))),
+                                 guide = guide_legend(override.aes = list(shape = rep(NA, length(unique(dat$l_col))))))
+
   if(!is.null(marker_shape) && is.null(marker_shape_opt)){
     symbol_val <- c(0:25)
 
     pl <- pl + scale_shape_manual(name = "Shape",
                                   breaks = dat$sh,
                                   values = sample(symbol_val, length(unique(dat$sh)),
-                                                  replace = TRUE)
+                                                  replace = TRUE),
+                                  guide = guide_legend(override.aes = list(linetype = rep("blank", length(unique(dat$sh)))))
                                   )
   }
 
