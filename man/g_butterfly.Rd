@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_butterfly.R
 \name{g_butterfly}
 \alias{g_butterfly}
-\title{Butterfly Plot (version 2.0)}
+\title{Butterfly Plot}
 \usage{
 g_butterfly(category, rightFlag, leftFlag, group_names = NULL,
   block_count = "# of patients", block_color = NULL, id,
@@ -63,13 +63,14 @@ ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% filter(SEX \%
 AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
-ANL <- ANL \%>\% mutate(flag1 = ifelse(SEX == "F", 1, 0)) \%>\% mutate(flag2 = ifelse(SEX == "M", 1, 0))
+ANL <- ANL \%>\% mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\% mutate(flag2 = ifelse(SEX == "M", 1, 0))
 ANL <- na.omit(ANL)
+ANL <- ANL \%>\% filter(AEBODSYS \%in\% c("Investigations", "Vascular disorders", "Musculoskeletal and connective tissue disorders"))
 
 g_butterfly(category = ANL$AEBODSYS,
             rightFlag = ANL$flag1,
             leftFlag = ANL$flag2,
-            group_names = c("flag1 F", "flag2 M"),
+            group_names = c("flag1 Asian", "flag2 M"),
             block_count = "# of AEs",
             block_color = ANL$AETOXGR,
             id = ANL$USUBJID,

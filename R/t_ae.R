@@ -15,7 +15,7 @@
 #'  the "All Patients" column is suppressed.
 #'
 #' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet02)}
-#'   (\url{man}{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet02.html})
+#'   (\url{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet02.html})
 #'
 #'
 #' @return \code{rtable} object
@@ -58,7 +58,7 @@
 #'   term =  ANL$TERM,
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
-#'   total = "ALL Patients"
+#'   total = "All Patients"
 #' )
 #'
 #' tbl

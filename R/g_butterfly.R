@@ -1,5 +1,5 @@
 
-#' Butterfly Plot (version 2.0)
+#' Butterfly Plot
 #'
 #'
 #' The butterfly plot is often used in Early Development (ED) and is an opposed
@@ -49,13 +49,14 @@
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 #'
 #' ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
-#' ANL <- ANL %>% mutate(flag1 = ifelse(SEX == "F", 1, 0)) %>% mutate(flag2 = ifelse(SEX == "M", 1, 0))
+#' ANL <- ANL %>% mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) %>% mutate(flag2 = ifelse(SEX == "M", 1, 0))
 #' ANL <- na.omit(ANL)
+#' ANL <- ANL %>% filter(AEBODSYS %in% c("Investigations", "Vascular disorders", "Musculoskeletal and connective tissue disorders"))
 #'
 #' g_butterfly(category = ANL$AEBODSYS,
 #'             rightFlag = ANL$flag1,
 #'             leftFlag = ANL$flag2,
-#'             group_names = c("flag1 F", "flag2 M"),
+#'             group_names = c("flag1 Asian", "flag2 M"),
 #'             block_count = "# of AEs",
 #'             block_color = ANL$AETOXGR,
 #'             id = ANL$USUBJID,
@@ -104,6 +105,9 @@ g_butterfly <- function(category,
 
   #set up data-------
   groups <- data.frame(flag1 = rightFlag, flag2 = leftFlag)
+  if(!is.null(facet_rows)){
+    facet_rows <- interaction(facet_rows)
+  }
 
   if(length(unique(as.character(groups$flag1))) > 2 || length(unique(as.character(groups$flag2))) > 2)
     stop("invalid arguments: groups can only have 2 unique values")
@@ -184,8 +188,6 @@ g_butterfly <- function(category,
     } else{
       if(length(unique(c(nrow(data.frame(facet_rows)),check_input_length))) > 1)
         stop("invalid arguments: check that the length of input arguments are identical")
-      if(length(unique(c(ncol(data.frame(facet_rows)),check_input_col))) > 1 || unique(c(ncol(data.frame(facet_rows)),check_input_col)) != 1)
-        stop("invalid arguments: check that the inputs have a single column")
 
       dat <- data.frame(id = id, y = category, flag1 = groups$flag1, flag2 = groups$flag2, bar_color = block_color, f_rows = facet_rows)
 
@@ -311,8 +313,6 @@ g_butterfly <- function(category,
     } else{
       if(length(unique(c(nrow(data.frame(facet_rows)),check_input_length))) > 1)
         stop("invalid arguments: check that the length of input arguments are identical")
-      if(length(unique(c(ncol(data.frame(facet_rows)),check_input_col))) > 1 || unique(c(ncol(data.frame(facet_rows)),check_input_col)) != 1)
-        stop("invalid arguments: check that the inputs have a single column")
 
       dat <- data.frame(id = id, y = category, flag1 = groups$flag1, flag2 = groups$flag2, f_rows = facet_rows)
 

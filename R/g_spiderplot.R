@@ -61,16 +61,16 @@
 #' p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
 #'              marker_y = ANL$PCHG,
 #'              line_colby = ANL$USUBJID,
-#'              marker_shape = ANL$RACE,
-#'              marker_size = 5,
-#'              datalabel_txt = list(txt_ann = ANL$USUBJID),
-#'              facet_rows = data.frame(sex = ANL$SEX),
+#'              marker_shape = ANL$USUBJID,
+#'              #marker_size = 5,
+#'              #datalabel_txt = list(txt_ann = ANL$USUBJID),
+#'              #facet_rows = data.frame(sex = ANL$SEX),
 #'              #facet_columns = data.frame(arm = ANL$ARM),
 #'              vref_line = c(10, 37),
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
-#'              show_legend = TRUE)
+#'              show_legend = FALSE)
 #' p
 #'
 g_spiderplot <- function(marker_x,
@@ -110,24 +110,13 @@ g_spiderplot <- function(marker_x,
   if(!is.null(facet_rows)){
     if(length(unique(c(nrow(facet_rows), check_input_length))) != 1)
       stop("invalid arguments: check that the length of input arguments are identical")
-    if(ncol(facet_rows) == 1){
-      dat$f_rows <- facet_rows [, 1]
-    } else if(ncol(facet_rows) == 2){
-      dat$f_rows <- facet_rows[, 1]
-      dat$f_rows_2 <- facet_rows[, 2]
-    }
+    dat$f_rows <- interaction(facet_rows)
 
   }
   if(!is.null(facet_columns)){
     if(length(unique(c(nrow(facet_columns), check_input_length))) != 1)
       stop("invalid arguments: check that the length of input arguments are identical")
-
-    if(ncol(facet_columns) == 1){
-      dat$f_columns <- facet_columns[, 1]
-    } else if(ncol(facet_rows) == 2){
-      dat$f_columns <- facet_columns[, 1]
-      dat$f_columns_2 <- facet_columns[, 2]
-    }
+    dat$f_columns <- interaction(facet_columns)
   }
   if(!is.null(line_colby)){
     if(length(unique(c(nrow(line_colby), check_input_length))) != 1)
@@ -163,7 +152,7 @@ g_spiderplot <- function(marker_x,
     pl <- pl + geom_line(size = 1, alpha = 0.5, show.legend = show_legend)
   }
 
-  #marker color------------
+  #marker shape------------
   if(!is.null(marker_shape)){
     pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
 
@@ -200,6 +189,7 @@ g_spiderplot <- function(marker_x,
   if(!is.null(href_line)){
     pl <- pl + geom_hline(yintercept = href_line, linetype = "dotted", color = "black")
   }
+  pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 2)
 
   if(!is.null(vref_line)){
     for(i in 1:length(vref_line)){
@@ -211,32 +201,11 @@ g_spiderplot <- function(marker_x,
   if(is.null(facet_rows) && is.null(facet_columns)){
     pl
   } else if(is.null(facet_rows) && !is.null(facet_columns)){
-
-    if(ncol(facet_columns) == 1){
-      pl <- pl + facet_grid(.~ f_columns)
-    } else if(ncol(facet_columns) == 2){
-      pl <- pl + facet_grid(.~ f_columns + f_columns_2)
-    }
-
+    pl <- pl + facet_grid(.~ f_columns)
   } else if(is.null(facet_columns) && !is.null(facet_rows)){
-
-    if(ncol(facet_rows) == 1){
-      pl <- pl + facet_grid(f_rows ~.)
-    } else if(ncol(facet_rows) == 2){
-      pl <- pl + facet_grid(f_rows + f_rows_2 ~.)
-    }
-
+    pl <- pl + facet_grid(f_rows ~.)
   } else{
-    if(ncol(facet_columns) == 1 && ncol(facet_rows) == 1){
-      pl <- pl + facet_grid(f_rows ~ f_columns)
-    } else if(ncol(facet_columns) == 1 && ncol(facet_rows) == 2){
-      pl <- pl + facet_grid(f_rows + f_rows_2 ~ f_columns)
-    } else if(ncol(facet_columns) == 2 && ncol(facet_rows) == 1){
-      pl <- pl + facet_grid(f_rows ~ f_columns + f_columns_2)
-    } else if(ncol(facet_columns) == 2 && ncol(facet_rows) == 2){
-      pl <- pl + facet_grid(f_rows + f_rows_2 ~ f_columns + f_columns_2)
-    }
-
+    pl <- pl + facet_grid(f_rows ~ f_columns)
   }
 
   call_color <- function(len){
@@ -244,6 +213,12 @@ g_spiderplot <- function(marker_x,
     datCol <- datCol %>% filter(!grepl("white",color_opt)) %>% droplevels
 
     return(datCol[1:len, 1])
+  }
+
+  if(!is.null(marker_shape) && is.null(marker_shape_opt)){
+    pl <- pl + scale_shape_manual(name = "Shape",
+                                  breaks = dat$sh,
+                                  values = c(0:length(unique(dat$sh))-1) )
   }
 
   if(!is.null(marker_shape_opt)){
@@ -261,8 +236,8 @@ g_spiderplot <- function(marker_x,
           axis.text = element_text(color = "black"),
           legend.text=element_text(size=7),
           legend.title = element_text(size = 7)) +
-    labs(shape = "Shape") +
-    guides(colour = FALSE)
+    labs(shape = "Shape", color = "Color")# +
+    #guides(colour = FALSE)
 
   if(is.numeric(marker_x[, 1])){
     pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.3)
