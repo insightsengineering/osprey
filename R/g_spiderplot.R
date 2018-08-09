@@ -5,13 +5,13 @@
 #' patient plot of an endpoint over time by group.
 #'
 #'
-#' @param marker_x dataframe with 2 columns,
-#' column 1 is the vector of x values (must be in sorted order) and
-#' column 2 is the vector to group the points together (default
+#' @param marker_x vector of x values (must be in sorted order)
+#' @param marker_id vector to group the points together (default
 #' should be USUBJID)
 #' @param marker_y vector of y values
 #' @param line_colby vector defines by what variable plot is color coded,
 #' default here is \code{NULL}
+#' @param line_color_opt vector defines line color, default here is \code{NULL}
 #' @param marker_size size of markers in plot, default here is \code{NULL}
 #' @param marker_shape vector defines by what variable points are shape coded,
 #' , default here is \code{NULL}
@@ -58,7 +58,8 @@
 #' ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 #'
 #'
-#' p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
+#' p <- g_spiderplot(marker_x = ANL$ADY,
+#'              marker_id = ANL$USUBJID,
 #'              marker_y = ANL$PCHG,
 #'              line_colby = ANL$USUBJID,
 #'              marker_shape = ANL$USUBJID,
@@ -70,12 +71,36 @@
 #'              href_line = -0.3,
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
-#'              show_legend = FALSE)
+#'              show_legend = TRUE)
 #' p
 #'
+#' \dontrun{
+#' #example using line color option
+# p <- g_spiderplot(marker_x = ANL$ADY,
+#                   marker_id = ANL$USUBJID,
+#                   marker_y = ANL$PCHG,
+#                   line_colby = ANL$RACE,
+#                   line_color_opt = c("WHITE" = 1, "ASIAN" = 2),
+#                   marker_shape = ANL$USUBJID,
+#                   #marker_size = 5,
+#                   #datalabel_txt = list(txt_ann = ANL$USUBJID),
+#                   #facet_rows = data.frame(sex = ANL$SEX),
+#                   #facet_columns = data.frame(arm = ANL$ARM),
+#                   vref_line = c(10, 37),
+#                   href_line = -0.3,
+#                   x_label = "Time (Days)",
+#                   y_label = "Change (%) from Baseline",
+#                   show_legend = TRUE)
+#'
+#' p
+#'
+#' }
+#'
 g_spiderplot <- function(marker_x,
+                         marker_id,
                          marker_y,
                          line_colby = NULL,
+                         line_color_opt = NULL,
                          marker_shape = NULL,
                          marker_shape_opt = NULL,
                          marker_size = 3,
@@ -90,17 +115,15 @@ g_spiderplot <- function(marker_x,
                          draw = TRUE,
                          newpage = TRUE){
 
-  check_input_length <- c(nrow(data.frame(marker_x)), nrow(data.frame(marker_y)))
+  check_input_length <- c(nrow(data.frame(marker_x)), nrow(data.frame(marker_id)), nrow(data.frame(marker_y)))
 
   if(length(unique(check_input_length)) > 1)
     stop("invalid arguments: check that the length of input arguments are identical")
-  if(ncol(marker_x) != 2 || ncol(data.frame(marker_y)) != 1)
-    stop("invalid arguments: check that the inputs have the correct numner of columns")
   if(any(check_input_length == 0))
     stop("invalid arguments: check that inputs are not null")
 
   #set up data-------
-  dat <- data.frame(day = marker_x[, 1], pchg = marker_y, group = marker_x[, 2])
+  dat <- data.frame(x = marker_x, y = marker_y, group = marker_id)
 
   if(!is.null(marker_shape)){
     if(length(unique(c(nrow(marker_shape), check_input_length))) != 1)
@@ -128,7 +151,7 @@ g_spiderplot <- function(marker_x,
 
     dat <- dat %>%
       group_by(lbl_all) %>%
-      mutate(lab = ifelse(day == last(day), as.character(lbl_all), " "))
+      mutate(lab = ifelse(x == last(x), as.character(lbl_all), " "))
   }
   if(!is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)){
     if(length(unique(c(nrow(datalabel_txt$mrkr_all), check_input_length))) != 1)
@@ -139,10 +162,12 @@ g_spiderplot <- function(marker_x,
   dat <- dat %>% as.data.frame()
 
   #plot spider plot-----------------
-  pl <- ggplot(data = dat, aes(x = day, y = pchg, group = group)) +
+  pl <- ggplot(data = dat, aes(x = x, y = y, group = group)) +
     xlab(x_label) +
     ylab(y_label) +
     theme(legend.position="top", legend.title = element_blank())
+
+  pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 1)
 
 
   #line color
@@ -154,33 +179,42 @@ g_spiderplot <- function(marker_x,
 
   #marker shape------------
   if(!is.null(marker_shape)){
-    pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
+    if(!is.null(line_colby)){
+      pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
+    } else{
+      pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
+    }
 
   } else if(is.null(marker_shape)){
-    pl <- pl + geom_point(size = 3, show.legend = show_legend)
+    if(!is.null(line_colby)){
+      pl <- pl + geom_point(aes(color = l_col), size = 3, show.legend = show_legend)
+    } else{
+      pl <- pl + geom_point(size = 3, show.legend = show_legend)
+    }
+
   }
 
   #label at last data point---------
   if(!is.null(datalabel_txt)){
 
     if(!is.null(datalabel_txt$txt_ann) && is.null(datalabel_txt$mrkr_all) && is.null(datalabel_txt$mrkr_ann)){
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.3, size = 4, show.legend = FALSE)
+      pl <- pl + geom_text(data = dat, aes(x = x, y =  y, label= lab), hjust = -0.3, size = 4, show.legend = FALSE)
     } else if(is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)){
 
       dat_arrow <- dat %>%
         filter(id %in% datalabel_txt$mrkr_ann) %>%
         group_by(id) %>%
-        filter(day == last(day))
-      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
+        filter(x == last(x))
+      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = x, y = y, xend = x, yend = y), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
 
     } else if(!is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)){
-      pl <- pl + geom_text(data = dat, aes(x = day, y =  pchg, label= lab), hjust = -0.45, size = 4, show.legend = FALSE)
+      pl <- pl + geom_text(data = dat, aes(x = x, y =  y, label= lab), hjust = -0.45, size = 4, show.legend = FALSE)
 
       dat_arrow <- dat %>%
         filter(id %in% datalabel_txt$mrkr_ann) %>%
         group_by(id) %>%
-        filter(day == last(day))
-      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = day, y = pchg, xend = day, yend = pchg), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
+        filter(x == last(x))
+      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = x, y = y, xend = x, yend = y), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
 
     }
   }
@@ -189,7 +223,6 @@ g_spiderplot <- function(marker_x,
   if(!is.null(href_line)){
     pl <- pl + geom_hline(yintercept = href_line, linetype = "dotted", color = "black")
   }
-  pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 2)
 
   if(!is.null(vref_line)){
     for(i in 1:length(vref_line)){
@@ -208,6 +241,7 @@ g_spiderplot <- function(marker_x,
     pl <- pl + facet_grid(f_rows ~ f_columns)
   }
 
+  # simple function to call a vector of color values
   call_color <- function(len){
     datCol <- data.frame(color_opt = colors())
     datCol <- datCol %>% filter(!grepl("white",color_opt)) %>% droplevels
@@ -215,10 +249,28 @@ g_spiderplot <- function(marker_x,
     return(datCol[1:len, 1])
   }
 
+  #remove marker from color legend
+  if(!is.null(line_colby)){
+    pl <- pl + guides(color = guide_legend(override.aes = list(shape = rep(NA, length(unique(dat$l_col))))))
+
+    if(!is.null(line_color_opt)){
+      pl <- pl + scale_color_manual(name = "Color",
+                                    breaks = dat$l_col,
+                                    values = line_color_opt)
+    }
+  }
+
   if(!is.null(marker_shape) && is.null(marker_shape_opt)){
+    symbol_val <- c(0:25)
+    len <- length(unique(dat$sh))
+    if(length(unique(dat$sh)) > 26)
+      symbol_val <- rep(symbol_val, ceiling(len/26))
+
     pl <- pl + scale_shape_manual(name = "Shape",
                                   breaks = dat$sh,
-                                  values = c(0:length(unique(dat$sh))-1) )
+                                  values = symbol_val[1:len],
+                                  guide = guide_legend(override.aes = list(linetype = rep("blank", len)))
+                                  )
   }
 
   if(!is.null(marker_shape_opt)){
@@ -239,8 +291,8 @@ g_spiderplot <- function(marker_x,
     labs(shape = "Shape", color = "Color")# +
     #guides(colour = FALSE)
 
-  if(is.numeric(marker_x[, 1])){
-    pl <- pl + xlim(min(marker_x[, 1]), max(marker_x[, 1])*1.3)
+  if(is.numeric(marker_x)){
+    pl <- pl + xlim(min(marker_x), max(marker_x)*1.3)
   }else{
     pl <- pl + scale_x_discrete(expand = c(0.3, 0))
   }
