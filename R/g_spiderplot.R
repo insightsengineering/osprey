@@ -161,7 +161,7 @@ g_spiderplot <- function(marker_x,
 
   dat <- dat %>% as.data.frame()
 
-  #plot spider plot-----------------
+  #plot spider plot----------------- this section can be condensed later
   pl <- ggplot(data = dat, aes(x = x, y = y, group = group)) +
     xlab(x_label) +
     ylab(y_label) +
@@ -177,7 +177,7 @@ g_spiderplot <- function(marker_x,
     pl <- pl + geom_line(size = 1, alpha = 0.5, show.legend = show_legend)
   }
 
-  #marker shape------------
+  #marker shape------------ this section can be condensed later
   if(!is.null(marker_shape)){
     if(!is.null(line_colby)){
       pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
@@ -261,13 +261,12 @@ g_spiderplot <- function(marker_x,
   }
 
   if(!is.null(marker_shape) && is.null(marker_shape_opt)){
-    symbol_val <- c(0:25)
+    symbol_val <- c(15:18, 1:14)
     len <- length(unique(dat$sh))
-    if(length(unique(dat$sh)) > 26)
-      symbol_val <- rep(symbol_val, ceiling(len/26))
+    symbol_val <- rep(symbol_val, ceiling(len/26))
 
     pl <- pl + scale_shape_manual(name = "Shape",
-                                  breaks = dat$sh,
+                                  breaks = sort(dat$sh),
                                   values = symbol_val[1:len],
                                   guide = guide_legend(override.aes = list(linetype = rep("blank", len)))
                                   )
