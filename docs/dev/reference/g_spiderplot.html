@@ -122,21 +122,23 @@ patient plot of an endpoint over time by group.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>g_spiderplot</span>(<span class='no'>marker_x</span>, <span class='no'>marker_y</span>, <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>marker_shape_opt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_size</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>datalabel_txt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>facet_columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vref_line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>href_line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
-  <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>, <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draw</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>newpage</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>g_spiderplot</span>(<span class='no'>marker_x</span>, <span class='no'>marker_id</span>, <span class='no'>marker_y</span>, <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>line_color_opt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>marker_shape_opt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>marker_size</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>datalabel_txt</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>facet_rows</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>facet_columns</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>vref_line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>href_line</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>, <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
+  <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draw</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>newpage</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>marker_x</th>
-      <td><p>dataframe with 2 columns,
-column 1 is the vector of x values (must be in sorted order) and
-column 2 is the vector to group the points together (default
+      <td><p>vector of x values (must be in sorted order)</p></td>
+    </tr>
+    <tr>
+      <th>marker_id</th>
+      <td><p>vector to group the points together (default
 should be USUBJID)</p></td>
     </tr>
     <tr>
@@ -147,6 +149,10 @@ should be USUBJID)</p></td>
       <th>line_colby</th>
       <td><p>vector defines by what variable plot is color coded,
 default here is <code>NULL</code></p></td>
+    </tr>
+    <tr>
+      <th>line_color_opt</th>
+      <td><p>vector defines line color, default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>marker_shape</th>
@@ -229,7 +235,8 @@ default here is <code>FALSE</code></p></td>
 <span class='no'>ANL</span>$<span class='no'>USUBJID</span> <span class='kw'>&lt;-</span> <span class='fu'>substr</span>(<span class='no'>ANL</span>$<span class='no'>USUBJID</span>, <span class='fl'>14</span>, <span class='fl'>18</span>)
 
 
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='fu'>data.frame</span>(<span class='kw'>day</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>ADY</span>, <span class='kw'>groupby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>),
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>ADY</span>,
+             <span class='kw'>marker_id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
              <span class='kw'>marker_y</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>PCHG</span>,
              <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
              <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
@@ -241,8 +248,14 @@ default here is <code>FALSE</code></p></td>
              <span class='kw'>href_line</span> <span class='kw'>=</span> -<span class='fl'>0.3</span>,
              <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
              <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
-             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>p</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_segment).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_segment).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unimplemented pch value '26'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font width unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font width unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font width unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unimplemented pch value '26'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unimplemented pch value '26'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: unimplemented pch value '26'</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font width unknown for character 0x1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: font metrics unknown for character 0x1</span></div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>p</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_segment).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_segment).</span></div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='co'>#example using line color option</span>
+
+<span class='no'>p</span>
+
+<span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

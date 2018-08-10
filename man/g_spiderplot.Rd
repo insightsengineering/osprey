@@ -4,23 +4,25 @@
 \alias{g_spiderplot}
 \title{Spider Plot}
 \usage{
-g_spiderplot(marker_x, marker_y, line_colby = NULL, marker_shape = NULL,
-  marker_shape_opt = NULL, marker_size = 3, datalabel_txt = NULL,
-  facet_rows = NULL, facet_columns = NULL, vref_line = NULL,
-  href_line = NULL, x_label = "Time (Days)",
-  y_label = "Change (\%) from Baseline", show_legend = FALSE, draw = TRUE,
-  newpage = TRUE)
+g_spiderplot(marker_x, marker_id, marker_y, line_colby = NULL,
+  line_color_opt = NULL, marker_shape = NULL, marker_shape_opt = NULL,
+  marker_size = 3, datalabel_txt = NULL, facet_rows = NULL,
+  facet_columns = NULL, vref_line = NULL, href_line = NULL,
+  x_label = "Time (Days)", y_label = "Change (\%) from Baseline",
+  show_legend = FALSE, draw = TRUE, newpage = TRUE)
 }
 \arguments{
-\item{marker_x}{dataframe with 2 columns,
-column 1 is the vector of x values (must be in sorted order) and
-column 2 is the vector to group the points together (default
+\item{marker_x}{vector of x values (must be in sorted order)}
+
+\item{marker_id}{vector to group the points together (default
 should be USUBJID)}
 
 \item{marker_y}{vector of y values}
 
 \item{line_colby}{vector defines by what variable plot is color coded,
 default here is \code{NULL}}
+
+\item{line_color_opt}{vector defines line color, default here is \code{NULL}}
 
 \item{marker_shape}{vector defines by what variable points are shape coded,
 , default here is \code{NULL}}
@@ -80,7 +82,8 @@ ANL <- na.omit(ANL)
 ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 
 
-p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
+p <- g_spiderplot(marker_x = ANL$ADY,
+             marker_id = ANL$USUBJID,
              marker_y = ANL$PCHG,
              line_colby = ANL$USUBJID,
              marker_shape = ANL$USUBJID,
@@ -92,8 +95,15 @@ p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
              href_line = -0.3,
              x_label = "Time (Days)",
              y_label = "Change (\%) from Baseline",
-             show_legend = FALSE)
+             show_legend = TRUE)
 p
+
+\dontrun{
+#example using line color option
+
+p
+
+}
 
 }
 \author{
