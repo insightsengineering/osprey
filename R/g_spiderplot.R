@@ -50,51 +50,45 @@
 #'
 #' data("rADSL")
 #' data("rADTR")
-#' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, PCHG, PARAMCD)
+#' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 #' ADSL <- rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)
 #' ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
-#' ANL <- ANL %>% filter(PARAMCD == "SLDINV") %>% filter(RACE %in% c("WHITE", "ASIAN")) %>% group_by(USUBJID) %>% arrange(ADY)
+#' ANL <- ANL %>% filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
+#'        filter(RACE %in% c("WHITE", "ASIAN")) %>%
+#'        group_by(USUBJID) %>%
+#'        arrange(ADY)
 #' ANL <- na.omit(ANL)
 #' ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 #'
-#'
-#' p <- g_spiderplot(marker_x = ANL$ADY,
+#' # Plot 1 - default color and shape mapping
+#' p1 <- g_spiderplot(marker_x = ANL$ADY,
 #'              marker_id = ANL$USUBJID,
 #'              marker_y = ANL$PCHG,
 #'              line_colby = ANL$USUBJID,
 #'              marker_shape = ANL$USUBJID,
 #'              #marker_size = 5,
-#'              #datalabel_txt = list(txt_ann = ANL$USUBJID),
+#'              datalabel_txt = list(txt_ann = ANL$USUBJID),
 #'              #facet_rows = data.frame(sex = ANL$SEX),
 #'              #facet_columns = data.frame(arm = ANL$ARM),
-#'              vref_line = c(10, 37),
-#'              href_line = -0.3,
+#'              vref_line = c(42, 86),
+#'              href_line = c(-20, 20),
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
 #'              show_legend = TRUE)
-#' p
+#' p1
 #'
-#' \dontrun{
-#' #example using line color option
-# p <- g_spiderplot(marker_x = ANL$ADY,
-#                   marker_id = ANL$USUBJID,
-#                   marker_y = ANL$PCHG,
-#                   line_colby = ANL$RACE,
-#                   line_color_opt = c("WHITE" = 1, "ASIAN" = 2),
-#                   marker_shape = ANL$USUBJID,
-#                   #marker_size = 5,
-#                   #datalabel_txt = list(txt_ann = ANL$USUBJID),
-#                   #facet_rows = data.frame(sex = ANL$SEX),
-#                   #facet_columns = data.frame(arm = ANL$ARM),
-#                   vref_line = c(10, 37),
-#                   href_line = -0.3,
-#                   x_label = "Time (Days)",
-#                   y_label = "Change (%) from Baseline",
-#                   show_legend = TRUE)
+#' #Plot 2 - with line color mapping
+#' p2 <- g_spiderplot(marker_x = ANL$AVISIT,
+#'                   marker_id = ANL$USUBJID,
+#'                   marker_y = ANL$CHG,
+#'                   line_colby = ANL$RACE,
+#'                   line_color_opt = c("WHITE" = "red", "ASIAN" = "blue"),
+#'                   marker_shape = ANL$USUBJID,
+#'                   x_label = "Time (Days)",
+#'                   y_label = "Change (%) from Baseline",
+#'                   show_legend = TRUE)
 #'
-#' p
-#'
-#' }
+#' p2
 #'
 g_spiderplot <- function(marker_x,
                          marker_id,
