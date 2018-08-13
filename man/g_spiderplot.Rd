@@ -4,23 +4,25 @@
 \alias{g_spiderplot}
 \title{Spider Plot}
 \usage{
-g_spiderplot(marker_x, marker_y, line_colby = NULL, marker_shape = NULL,
-  marker_shape_opt = NULL, marker_size = 3, datalabel_txt = NULL,
-  facet_rows = NULL, facet_columns = NULL, vref_line = NULL,
-  href_line = NULL, x_label = "Time (Days)",
-  y_label = "Change (\%) from Baseline", show_legend = FALSE, draw = TRUE,
-  newpage = TRUE)
+g_spiderplot(marker_x, marker_id, marker_y, line_colby = NULL,
+  line_color_opt = NULL, marker_shape = NULL, marker_shape_opt = NULL,
+  marker_size = 3, datalabel_txt = NULL, facet_rows = NULL,
+  facet_columns = NULL, vref_line = NULL, href_line = NULL,
+  x_label = "Time (Days)", y_label = "Change (\%) from Baseline",
+  show_legend = FALSE, draw = TRUE, newpage = TRUE)
 }
 \arguments{
-\item{marker_x}{dataframe with 2 columns,
-column 1 is the vector of x values (must be in sorted order) and
-column 2 is the vector to group the points together (default
+\item{marker_x}{vector of x values (must be in sorted order)}
+
+\item{marker_id}{vector to group the points together (default
 should be USUBJID)}
 
 \item{marker_y}{vector of y values}
 
 \item{line_colby}{vector defines by what variable plot is color coded,
 default here is \code{NULL}}
+
+\item{line_color_opt}{vector defines line color, default here is \code{NULL}}
 
 \item{marker_shape}{vector defines by what variable points are shape coded,
 , default here is \code{NULL}}
@@ -72,28 +74,45 @@ library(dplyr)
 
 data("rADSL")
 data("rADTR")
-ADTR <- rADTR \%>\% select(STUDYID, USUBJID, ADY, PCHG, PARAMCD)
+ADTR <- rADTR \%>\% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 ADSL <- rADSL \%>\% select(STUDYID, USUBJID, RACE, SEX, ARM)
 ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
-ANL <- ANL \%>\% filter(PARAMCD == "SLDINV") \%>\% filter(RACE \%in\% c("WHITE", "ASIAN")) \%>\% group_by(USUBJID) \%>\% arrange(ADY)
+ANL <- ANL \%>\% filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") \%>\%
+       filter(RACE \%in\% c("WHITE", "ASIAN")) \%>\%
+       group_by(USUBJID) \%>\%
+       arrange(ADY)
 ANL <- na.omit(ANL)
 ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 
-
-p <- g_spiderplot(marker_x = data.frame(day = ANL$ADY, groupby = ANL$USUBJID),
+# Plot 1 - default color and shape mapping
+p1 <- g_spiderplot(marker_x = ANL$ADY,
+             marker_id = ANL$USUBJID,
              marker_y = ANL$PCHG,
              line_colby = ANL$USUBJID,
-             marker_shape = ANL$RACE,
-             marker_size = 5,
+             marker_shape = ANL$USUBJID,
+             #marker_size = 5,
              datalabel_txt = list(txt_ann = ANL$USUBJID),
-             facet_rows = data.frame(sex = ANL$SEX),
+             #facet_rows = data.frame(sex = ANL$SEX),
              #facet_columns = data.frame(arm = ANL$ARM),
-             vref_line = c(10, 37),
-             href_line = -0.3,
+             vref_line = c(42, 86),
+             href_line = c(-20, 20),
              x_label = "Time (Days)",
              y_label = "Change (\%) from Baseline",
              show_legend = TRUE)
-p
+p1
+
+#Plot 2 - with line color mapping
+p2 <- g_spiderplot(marker_x = ANL$AVISIT,
+                  marker_id = ANL$USUBJID,
+                  marker_y = ANL$CHG,
+                  line_colby = ANL$RACE,
+                  line_color_opt = c("WHITE" = "red", "ASIAN" = "blue"),
+                  marker_shape = ANL$USUBJID,
+                  x_label = "Time (Days)",
+                  y_label = "Change (\%) from Baseline",
+                  show_legend = TRUE)
+
+p2
 
 }
 \author{

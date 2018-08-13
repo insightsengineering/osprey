@@ -267,9 +267,9 @@ g_swimlane <- function(bar_id,
   tb$heights <- unit(rep(1/nrow(tb), nrow(tb)), "null")
 
   # grab plot and table as one plot
-  g <- ggplotGrob(p)
-  g <- gtable_add_cols(g, sum(tb$widths), 0)
-  g <- gtable_add_grob(g, tb, t = 6, l = 1)
+  g0 <- ggplotGrob(p)
+  g1 <- gtable_add_cols(g0, sum(tb$widths), 0)
+  g <- gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
 
   grid.newpage()
   grid.draw(g)

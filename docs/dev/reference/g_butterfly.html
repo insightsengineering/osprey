@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Butterfly Plot (version 2.0) — g_butterfly • osprey</title>
+<title>Butterfly Plot — g_butterfly • osprey</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,7 +30,7 @@
 
 
 
-<meta property="og:title" content="Butterfly Plot (version 2.0) — g_butterfly" />
+<meta property="og:title" content="Butterfly Plot — g_butterfly" />
 
 <meta property="og:description" content="The butterfly plot is often used in Early Development (ED) and is an opposed
 barplot that shows instances of AEs or # of patients by category separated by
@@ -113,7 +113,7 @@ maximum count." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Butterfly Plot (version 2.0)</h1>
+    <h1>Butterfly Plot</h1>
     
     <div class="hidden name"><code>g_butterfly.Rd</code></div>
     </div>
@@ -211,13 +211,14 @@ default here is FALSE</p></td>
 <span class='no'>AAE</span> <span class='kw'>&lt;-</span> <span class='no'>rADAE</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>USUBJID</span>, <span class='no'>STUDYID</span>, <span class='no'>AEBODSYS</span>, <span class='no'>AETOXGR</span>)
 
 <span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/join.html'>left_join</a></span>(<span class='no'>AAE</span>, <span class='no'>ADSL</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"STUDYID"</span>, <span class='st'>"USUBJID"</span>))
-<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='no'>ANL</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>flag1</span> <span class='kw'>=</span> <span class='fu'>ifelse</span>(<span class='no'>SEX</span> <span class='kw'>==</span> <span class='st'>"F"</span>, <span class='fl'>1</span>, <span class='fl'>0</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>flag2</span> <span class='kw'>=</span> <span class='fu'>ifelse</span>(<span class='no'>SEX</span> <span class='kw'>==</span> <span class='st'>"M"</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='no'>ANL</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>flag1</span> <span class='kw'>=</span> <span class='fu'>ifelse</span>(<span class='no'>RACE</span> <span class='kw'>==</span> <span class='st'>"ASIAN"</span>, <span class='fl'>1</span>, <span class='fl'>0</span>)) <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='kw'>flag2</span> <span class='kw'>=</span> <span class='fu'>ifelse</span>(<span class='no'>SEX</span> <span class='kw'>==</span> <span class='st'>"M"</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))
 <span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='fu'>na.omit</span>(<span class='no'>ANL</span>)
+<span class='no'>ANL</span> <span class='kw'>&lt;-</span> <span class='no'>ANL</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>AEBODSYS</span> <span class='kw'>%in%</span> <span class='fu'>c</span>(<span class='st'>"Investigations"</span>, <span class='st'>"Vascular disorders"</span>, <span class='st'>"Musculoskeletal and connective tissue disorders"</span>))
 
 <span class='fu'>g_butterfly</span>(<span class='kw'>category</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AEBODSYS</span>,
             <span class='kw'>rightFlag</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>flag1</span>,
             <span class='kw'>leftFlag</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>flag2</span>,
-            <span class='kw'>group_names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"flag1 F"</span>, <span class='st'>"flag2 M"</span>),
+            <span class='kw'>group_names</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"flag1 Asian"</span>, <span class='st'>"flag2 M"</span>),
             <span class='kw'>block_count</span> <span class='kw'>=</span> <span class='st'>"# of AEs"</span>,
             <span class='kw'>block_color</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AETOXGR</span>,
             <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,

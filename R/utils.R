@@ -139,3 +139,11 @@ stack_rtables_condense <- function(..., nrow_pad = 1) {
     list()
   }
 }
+
+#'@export
+add_ae_class <- function(tbl, class) {
+  rbind(
+    rtable(header(tbl), rrow(class)),
+    tbl
+  )
+}
