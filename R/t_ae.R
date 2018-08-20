@@ -114,6 +114,12 @@ t_ae <- function(class, term, id, col_by, total="All Patients", ...) {
   df <- df %>% mutate(class = ifelse(class == "", "No Coding Available", class),
                       term = ifelse(term == "", "No Coding Available", term))
 
+  class_label <- attr(class, "label")
+  term_label <- attr(term, "label")
+
+  if(is.null(class_label)) class_label <- deparse(substitute(class))
+  if(is.null(term_label)) term_label <- deparse(substitute(term))
+
   # adding All Patients
   if(!is.null(total)){
     total <- tot_column(total)
@@ -290,13 +296,14 @@ t_ae <- function(class, term, id, col_by, total="All Patients", ...) {
   tbl_cl <- do.call(stack_rtables, tbls_class)
   tbl_total <- do.call(stack_rtables, tbls_ov)
 
+
   header <- attr(tbl_cl, "header")
   tbl_with_empty_rows <- rtablel(header = header, replicate(1, rrow()))
 
   tbl <- rbind(tbl_total, tbl_with_empty_rows, tbl_cl)
 
-  attr(attr(tbl, "header")[[1]], "row.name") <- 'MedDRA System Organ Class'
-  attr(attr(tbl, "header")[[2]], "row.name") <- 'MedDRA Preferred Term'
+  attr(attr(tbl, "header")[[1]], "row.name") <- class_label
+  attr(attr(tbl, "header")[[2]], "row.name") <- term_label
   attr(attr(tbl, "header")[[2]], "indent") <- 1
 
   return(tbl)

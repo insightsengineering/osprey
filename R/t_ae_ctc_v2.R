@@ -55,7 +55,6 @@
 #' @author Adrian Waddell
 #' @template author_zhanc107
 #'
-#'
 #' @examples
 #' # Simple example
 #' library(tibble)
@@ -140,6 +139,14 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
 
   df <- df %>% mutate(class = ifelse(class == "", NA, class),
                       term = ifelse(term == "", NA, term))
+
+  class_label <- attr(class, "label")
+  term_label <- attr(term, "label")
+  grade_label <- attr(grade, "label")
+
+  if(is.null(class_label)) class_label <- deparse(substitute(class))
+  if(is.null(term_label)) term_label <- deparse(substitute(term))
+  if(is.null(grade_label)) grade_label <- deparse(substitute(grade))
 
   if(!is.null(total)){
     total <- tot_column(total)
@@ -232,11 +239,11 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
 
   tbl <- do.call(stack_rtables, tbls_class)
 
-  attr(attr(tbl, "header")[[1]], "row.name") <- 'MedDRA System Organ Class'
-  attr(attr(tbl, "header")[[2]], "row.name") <- 'MedDRA Preferred Term'
+  attr(attr(tbl, "header")[[1]], "row.name") <- class_label
+  attr(attr(tbl, "header")[[2]], "row.name") <- term_label
   attr(attr(tbl, "header")[[2]], "indent") <- 1
 
-  attr(tbl, "header")[[2]][[1]] <- rcell('NCI CTCAE Grade')
+  attr(tbl, "header")[[2]][[1]] <- rcell(grade_label)
   attr(tbl, "header")[[1]][[1]] <- rcell(NULL)
 
   tbl
