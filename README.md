@@ -61,9 +61,11 @@ Everyone is welcome to share their R functions in `opsrey`.
 
 To qualify to `osprey` package, TLG code has to:
 
-1. Be a function that produces a output 2. Have working example 3. Use [roxygen
-documentation](http://r-pkgs.had.co.nz/man.html) for creation of Help 4. Have
-help page 5. Be compatible with pkgdown (should be when points 1-4 are OK)
+1. Be a function that produces a output 
+2. Have working example 
+3. Use [roxygen documentation](http://r-pkgs.had.co.nz/man.html) for creation of Help 
+4. Have help page 
+5. Be compatible with pkgdown (should be when points 1-4 are OK)
 
 ### Instructions
 
@@ -75,11 +77,15 @@ package](https://streamingmedia.roche.com/media/Adding+TLG+functions+to+the+Ospr
 
 That is, follow the following steps:
 
-1. Clone the opsrey repository 1. Create branch 1. Develop a function 1. Create
-roxygen comments (ctrl+shift+alt+R or copy from earlier) 1. Document
-(ctrl+shift+D) 1. Install and Restart 1. Test your function with working example
-1. Create webpage (in console: `pkgdown::build_site()`) 1. When everything
-works, make pull request.
+1. Clone the opsrey repository 
+2. Create branch 
+3. Develop a function 
+4. Create roxygen comments (ctrl+shift+alt+R or copy from earlier) 
+5. Document (ctrl+shift+D) 
+6. Install and Restart 
+7. Test your function with working example
+8. Create webpage (in console: `pkgdown::build_site()`) 
+9. When everything works, make pull request.
 
 ### Example plot
 
