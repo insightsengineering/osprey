@@ -26,4 +26,4 @@ Imports:
 Suggests: random.cdisc.data
 Additional_repositories: 
   https://github.roche.com/Rpackages/random.cdisc.data
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

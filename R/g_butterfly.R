@@ -1,4 +1,3 @@
-
 #' Butterfly Plot
 #'
 #'

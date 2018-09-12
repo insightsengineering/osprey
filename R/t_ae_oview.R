@@ -1,36 +1,48 @@
 
-#' AE Overview Summary Table
+#'AE Overview Summary Table
 #'
-#' \code{t_ae_oview} returns a summary table of overall AE profile: adverse events, deaths,
-#' and withdrawals by trial treatment. It corresponds to STREAM template AET01.
+#'\code{t_ae_oview} returns a summary table of overall AE profile: adverse
+#'events, deaths, and withdrawals by trial treatment. It corresponds to STREAM
+#'template AET01.
 #'
-#' @param id unique subject identifier variable. If a particular subject has no
-#'   adverse event then the subject \code{id} should be listed where
-#'   \code{class} and \code{term} should be set to missing (i.e. \code{NA}).
-#' @param class system organ class variable.
-#' @param term preferred term variable.
-#' @param flags dataframe containing all event flags of interest,
-#'    default should include dthfl ,dcsreas, aesdth, aeser, aeacn, aerel,
-#'    atoxgr to match STREAM output (lowercase column names).
-#'    Minimally needs: dthfl and dcsreas
-#' @param display_id vector of strings for which analyses to display
-#'    possible values are: fatal ser serwd serdsm relser wd dsm rel relwd reldsm ctc35
-#' @param extra_flag dataframe with flags to be calculated (column name here
-#'    will be the table's row name)
-#' @param col_by group variable that will be used for a column header. \code{col_by}
-#'    has to be a factor and can not be missing.
-#' @param total character string that will be used as a label for a column with
-#'    pooled total population, default here is "All Patients", if set to \code{NULL} then
-#'    the "All Patients" column is suppressed.
+#'@param id unique subject identifier variable. If a particular subject has no
+#'  adverse event then the subject \code{id} should be listed where \code{class}
+#'  and \code{term} should be set to missing (i.e. \code{NA}).
+#'@param class system organ class variable.
+#'@param term preferred term variable.
+#'@param flags dataframe containing flag variables of all events of interest,
+#'  default variables should include \code{dthfl}, \code{dcsreas},
+#'  \code{aesdth}, \code{aeser}, \code{aeacn}, \code{aerel}, \code{aetoxgr} to
+#'  match STREAM output (lowercase column names). Flags dataframe must include
+#'  \code{dthfl} and \code{dcsreas} at minimal.
+#'@param display_id vector of strings for which analyses to display possible
+#'  values are: fatal ser serwd serdsm relser wd dsm rel relwd reldsm ctc35
+#'@param extra_flag dataframe with flag variables to be tabulated. Only records
+#'  where values equals to "Y" are counted. Variable names of the dataframe will
+#'  be used as the summary table row name.
+#'@param col_by group variable that will be used for a column header.
+#'  \code{col_by} has to be a factor and can not be missing.
+#'@param total character string that will be used as a label for a column with
+#'  pooled total population, default here is "All Patients", if set to
+#'  \code{NULL} then the "All Patients" column is suppressed.
 #'
-#' @details this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet01)}
-#'   (\url{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
+#'@details this is an equivalent of the STREAM output
+#'  \code{\%stream_t_summary(templates = aet01)}
+#'  (\url{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html})
 #'
-#' @return \code{rtable} object
+#'  The \code{flags} dataframe should be taken from the same dataset and in the
+#'  same order as \code{id}, \code{class} and \code{term}. It should only
+#'  contain variables needed for the specified flags. All other desired
+#'  variables should be passed to the \code{extra_flag} argument, along with the
+#'  desired label names (as the variable name of dataframe). Each variable in
+#'  \code{extra_flag} will be tabulated to one row in the summary table, where
+#'  only "Y" values are counted towards the total.
 #'
-#' @export
+#'@return \code{rtable} object
 #'
-#' @template author_zhanc107
+#'@export
+#'
+#'@template author_zhanc107
 #'
 #' @examples
 #' library(dplyr)
