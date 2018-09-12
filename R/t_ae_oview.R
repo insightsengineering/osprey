@@ -10,7 +10,7 @@
 #' @param class system organ class variable.
 #' @param term preferred term variable.
 #' @param flags dataframe containing all event flags of interest,
-#'    default should include dthfl ,dcsreas, aesdth, aeser, aeacn, arel, aerel,
+#'    default should include dthfl ,dcsreas, aesdth, aeser, aeacn, aerel,
 #'    atoxgr to match STREAM output (lowercase column names).
 #'    Minimally needs: dthfl and dcsreas
 #' @param display_id vector of strings for which analyses to display
@@ -42,7 +42,6 @@
 #'                    aesdth = ANL$AESDTH,
 #'                    aeser = ANL$AESER,
 #'                    aeacn = ANL$AEACN,
-#'                    arel = ANL$AREL,
 #'                    aerel = ANL$AEREL,
 #'                    aetoxgr = ANL$AETOXGR)
 #'
@@ -90,7 +89,6 @@ t_ae_oview <- function(id,
                      "aesdth",
                      "aeser",
                      "aeacn",
-                     "arel",
                      "aerel",
                      "aetoxgr")
 
@@ -186,13 +184,13 @@ t_ae_oview <- function(id,
   if("serdsm" %in% display_id) df_flags$serdsm <- factor(if_else(df_flags$aeser == "Y" &
                                       df_flags$aeacn %in% dsm, 1, 0))
   if("relser" %in% display_id) df_flags$relser <- factor(if_else(df_flags$aeser == "Y" &
-                                      df_flags$arel == "Y", 1, 0))
+                                      df_flags$aerel == "Y", 1, 0))
   if("wd" %in% display_id) df_flags$wd  <- factor(if_else(df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
   if("dsm" %in% display_id) df_flags$dsm <- factor(if_else(df_flags$aeacn %in% dsm, 1, 0))
   if("rel" %in% display_id) df_flags$rel <- factor(if_else(df_flags$aerel == "Y", 1, 0))
   if("relwd" %in% display_id) df_flags$relwd <- factor(if_else(df_flags$aerel == "Y" &
                                      df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
-  if("reldsm" %in% display_id) df_flags$reldsm <- factor(if_else(df_flags$arel == "Y" &
+  if("reldsm" %in% display_id) df_flags$reldsm <- factor(if_else(df_flags$aerel == "Y" &
                                       df_flags$aeacn %in% dsm, 1, 0))
   if("ctc35" %in% display_id) df_flags$ctc35 <- factor(if_else(df_flags$aetoxgr %in% c("3", "4", "5"), 1, 0))
 
@@ -219,7 +217,7 @@ t_ae_oview <- function(id,
                       term = term,
                       remove_dupl = TRUE,
                       with_percent = TRUE)
-  },df_patients,  names(df_patients), c(" ", " ", "dthfl", "dcsreas"), SIMPLIFY = FALSE)
+  },df_patients,  names(df_patients), c("uniqueid", "rowcount", "dthfl", "dcsreas"), SIMPLIFY = FALSE)
 
   #Summary table: individual components
   term_label <- c("AE with fatal outcome",

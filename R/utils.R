@@ -1,10 +1,20 @@
 #tabulation function for condition checks
 t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percent){
 
-  if(remove_dupl){
-    df_id <- df_id[!duplicated(df_id$id), ]
-  }
-  if(checkcol == " "){
+  if (checkcol == "rowcount") {
+    tbl <- rtabulate(
+      na.omit(df_id),
+      row_by_var = no_by(""),
+      col_by_var = "col_by",
+      FUN = nrow,
+      format = "xx"
+    )
+  } else if(checkcol == "uniqueid"){
+
+    if(remove_dupl){
+      df_id <- df_id[!duplicated(df_id$id), ]
+    }
+
     if(with_percent){
       tbl <- rtabulate(
         na.omit(df_id),
@@ -14,8 +24,7 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
         N = N,
         format = "xx (xx.xx%)"
       )
-    }
-    else{
+    } else {
       tbl <- rtabulate(
         na.omit(df_id),
         row_by_var = no_by(""),
@@ -25,8 +34,12 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
         format = "xx"
       )
     }
-  }
-  else{
+  } else {
+
+    if(remove_dupl){
+      df_id <- df_id[!duplicated(df_id$id), ]
+    }
+
     tbl <- rtabulate(
       na.omit(df_id),
       row_by_var = checkcol,
@@ -38,8 +51,7 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
 
     if(dim(tbl)[1] > 1){
       tbl <- tbl[dim(tbl)[1]]
-    }
-    else{
+    } else{
       for(i in 1:dim(tbl)[2]){
         tbl[[1]][[i]] <- rcell(0)
       }
