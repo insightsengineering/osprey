@@ -30,10 +30,10 @@ Please install package dependencies as follows:
 devtools::install_github(repo = "Roche/rtables", ref = "master",
   upgrade_dependencies = FALSE)
 
-devtools::install_github(repo = "Rpackages/tern", ref = "master", 
+devtools::install_github(repo = "Rpackages/tern", ref = "0.5.0", 
   host = "https://github.roche.com/api/v3", upgrade_dependencies = FALSE)
 
-devtools::install_github(repo = "Rpackages/osprey", ref = "release-tag", 
+devtools::install_github(repo = "Rpackages/osprey", ref = "0.1.0", 
   host = "https://github.roche.com/api/v3", upgrade_dependencies = FALSE)
 ```
 
@@ -48,7 +48,7 @@ devtools::install_github("Roche/rtables", ref = "master",
 devtools::install_github( repo = "Rpackages/tern", ref = "master", 
   host = "https://github.roche.com/api/v3", upgrade_dependencies = FALSE )
 
-devtools::install_github(repo = "Rpackages/osprey", 
+devtools::install_github(repo = "Rpackages/osprey", ref = "master"
   host = "https://github.roche.com/api/v3", upgrade_dependencies = FALSE) 
 ``` 
 
