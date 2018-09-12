@@ -32,8 +32,9 @@
 
 <meta property="og:title" content="AE Overview Summary Table — t_ae_oview" />
 
-<meta property="og:description" content="t_ae_oview returns a summary table of overall AE profile: adverse events, deaths,
-and withdrawals by trial treatment. It corresponds to STREAM template AET01." />
+<meta property="og:description" content="t_ae_oview returns a summary table of overall AE profile: adverse
+events, deaths, and withdrawals by trial treatment. It corresponds to STREAM
+template AET01." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -117,14 +118,15 @@ and withdrawals by trial treatment. It corresponds to STREAM template AET01." />
 
     <div class="ref-description">
     
-    <p><code>t_ae_oview</code> returns a summary table of overall AE profile: adverse events, deaths,
-and withdrawals by trial treatment. It corresponds to STREAM template AET01.</p>
+    <p><code>t_ae_oview</code> returns a summary table of overall AE profile: adverse
+events, deaths, and withdrawals by trial treatment. It corresponds to STREAM
+template AET01.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>t_ae_oview</span>(<span class='no'>id</span>, <span class='no'>class</span>, <span class='no'>term</span>, <span class='no'>flags</span>, <span class='kw'>display_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"fatal"</span>, <span class='st'>"ser"</span>, <span class='st'>"serwd"</span>,
-  <span class='st'>"serdsm"</span>, <span class='st'>"relser"</span>, <span class='st'>"wd"</span>, <span class='st'>"dsm"</span>, <span class='st'>"rel"</span>, <span class='st'>"relwd"</span>, <span class='st'>"reldsm"</span>, <span class='st'>"ctc35"</span>),
-  <span class='kw'>extra_flag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>col_by</span>, <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>)</pre>
+    <pre class="usage"><span class='fu'>t_ae_oview</span>(<span class='no'>id</span>, <span class='no'>class</span>, <span class='no'>term</span>, <span class='no'>flags</span>, <span class='kw'>display_id</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"fatal"</span>, <span class='st'>"ser"</span>,
+  <span class='st'>"serwd"</span>, <span class='st'>"serdsm"</span>, <span class='st'>"relser"</span>, <span class='st'>"wd"</span>, <span class='st'>"dsm"</span>, <span class='st'>"rel"</span>, <span class='st'>"relwd"</span>, <span class='st'>"reldsm"</span>,
+  <span class='st'>"ctc35"</span>), <span class='kw'>extra_flag</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>col_by</span>, <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -132,8 +134,8 @@ and withdrawals by trial treatment. It corresponds to STREAM template AET01.</p>
     <tr>
       <th>id</th>
       <td><p>unique subject identifier variable. If a particular subject has no
-adverse event then the subject <code>id</code> should be listed where
-<code>class</code> and <code>term</code> should be set to missing (i.e. <code>NA</code>).</p></td>
+adverse event then the subject <code>id</code> should be listed where <code>class</code>
+and <code>term</code> should be set to missing (i.e. <code>NA</code>).</p></td>
     </tr>
     <tr>
       <th>class</th>
@@ -145,31 +147,33 @@ adverse event then the subject <code>id</code> should be listed where
     </tr>
     <tr>
       <th>flags</th>
-      <td><p>dataframe containing all event flags of interest,
-default should include dthfl ,dcsreas, aesdth, aeser, aeacn, arel, aerel,
-atoxgr to match STREAM output (lowercase column names).
-Minimally needs: dthfl and dcsreas</p></td>
+      <td><p>dataframe containing flag variables of all events of interest,
+default variables should include <code>dthfl</code>, <code>dcsreas</code>,
+<code>aesdth</code>, <code>aeser</code>, <code>aeacn</code>, <code>aerel</code>, <code>aetoxgr</code> to
+match STREAM output (lowercase column names). Flags dataframe must include
+<code>dthfl</code> and <code>dcsreas</code> at minimal.</p></td>
     </tr>
     <tr>
       <th>display_id</th>
-      <td><p>vector of strings for which analyses to display
-possible values are: fatal ser serwd serdsm relser wd dsm rel relwd reldsm ctc35</p></td>
+      <td><p>vector of strings for which analyses to display possible
+values are: fatal ser serwd serdsm relser wd dsm rel relwd reldsm ctc35</p></td>
     </tr>
     <tr>
       <th>extra_flag</th>
-      <td><p>dataframe with flags to be calculated (column name here
-will be the table's row name)</p></td>
+      <td><p>dataframe with flag variables to be tabulated. Only records
+where values equals to "Y" are counted. Variable names of the dataframe will
+be used as the summary table row name.</p></td>
     </tr>
     <tr>
       <th>col_by</th>
-      <td><p>group variable that will be used for a column header. <code>col_by</code>
-has to be a factor and can not be missing.</p></td>
+      <td><p>group variable that will be used for a column header.
+<code>col_by</code> has to be a factor and can not be missing.</p></td>
     </tr>
     <tr>
       <th>total</th>
       <td><p>character string that will be used as a label for a column with
-pooled total population, default here is "All Patients", if set to <code>NULL</code> then
-the "All Patients" column is suppressed.</p></td>
+pooled total population, default here is "All Patients", if set to
+<code>NULL</code> then the "All Patients" column is suppressed.</p></td>
     </tr>
     </table>
     
@@ -179,8 +183,16 @@ the "All Patients" column is suppressed.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>this is an equivalent of the STREAM output <code>%stream_t_summary(templates = aet01)</code>
-  (<a href='http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html'>http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html</a>)</p>
+    <p>this is an equivalent of the STREAM output
+ <code>%stream_t_summary(templates = aet01)</code>
+ (<a href='http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html'>http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet01.html</a>)</p>
+<p>The <code>flags</code> dataframe should be taken from the same dataset and in the
+ same order as <code>id</code>, <code>class</code> and <code>term</code>. It should only
+ contain variables needed for the specified flags. All other desired
+ variables should be passed to the <code>extra_flag</code> argument, along with the
+ desired label names (as the variable name of dataframe). Each variable in
+ <code>extra_flag</code> will be tabulated to one row in the summary table, where
+ only "Y" values are counted towards the total.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -193,7 +205,6 @@ the "All Patients" column is suppressed.</p></td>
                    <span class='kw'>aesdth</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AESDTH</span>,
                    <span class='kw'>aeser</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AESER</span>,
                    <span class='kw'>aeacn</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AEACN</span>,
-                   <span class='kw'>arel</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AREL</span>,
                    <span class='kw'>aerel</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AEREL</span>,
                    <span class='kw'>aetoxgr</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AETOXGR</span>)
 
@@ -215,7 +226,7 @@ the "All Patients" column is suppressed.</p></td>
 #&gt;                                                                       (N=11)                (N=21)                (N=18)                (N=50)    
 #&gt; --------------------------------------------------------------------------------------------------------------------------------------------------
 #&gt; Total number of patients with at least one AE                       11 (100%)             21 (100%)             18 (100%)             50 (100%)   
-#&gt; Total number of AEs                                                 11 (100%)             21 (100%)             18 (100%)             50 (100%)   
+#&gt; Total number of AEs                                                     65                   133                    99                   297      
 #&gt; Total number of deaths                                              2 (18.18%)            4 (19.05%)            1 (5.56%)              7 (14%)    
 #&gt; Total number of patients withdrawn from study due to an AE              0                     0                     0                     0       
 #&gt; 
