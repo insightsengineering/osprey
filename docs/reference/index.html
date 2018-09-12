@@ -21,15 +21,18 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
 
 <meta property="og:title" content="Function reference" />
 
+<meta name="robots" content="noindex">
 
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
@@ -55,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.1.0</span>
+        <span class="label label-danger" data-toggle="tooltip" data-placement="bottom" title="In-development package">0.1.0</span>
       </span>
     </div>
 
@@ -109,6 +112,7 @@
     <table class="ref-index">
 
     <colgroup>
+      
       <col class="alias" />
       <col class="title" />
     </colgroup>
@@ -116,40 +120,86 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-graphs" class="hasAnchor"><a href="#section-graphs" class="anchor"></a>Graphs</h2>
+          <p class="section-desc"><p>Graphs</p></p>
         </th>
       </tr>
       <tr>
-        <!--  -->
+        
         <td>
-          <p><code><a href="dummyplot.html">dummyplot()</a></code> </p>
+          <p><code><a href="g_butterfly.html">g_butterfly()</a></code> </p>
         </td>
-        <td><p>Create a dummyplot</p></td>
+        <td><p>Butterfly Plot</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
-          <p><code><a href="spiderplot.html">spiderplot()</a></code> </p>
+          <p><code><a href="g_spiderplot.html">g_spiderplot()</a></code> </p>
         </td>
-        <td><p>Create a spiderplot</p></td>
+        <td><p>Spider Plot</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
-          <p><code><a href="spiderplot_simple.html">spiderplot_simple()</a></code> </p>
+          <p><code><a href="g_swimlane.html">g_swimlane()</a></code> </p>
         </td>
-        <td><p>Create a spiderplot_simple</p></td>
+        <td><p>Swimlane Plot</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-tables" class="hasAnchor"><a href="#section-tables" class="anchor"></a>Tables</h2>
+          <p class="section-desc"><p>some useful tables</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="t_ae.html">t_ae()</a></code> </p>
+        </td>
+        <td><p>Adverse Events by System Organ Class and Preferred Term</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
-          <p><code><a href="swimlineplot.html">swimlineplot()</a></code> </p>
+          <p><code><a href="t_ae_ctc_v2.html">t_ae_ctc_v2()</a></code> </p>
         </td>
-        <td><p>Create a swimlineplot</p></td>
+        <td><p>Adverse Events Table by Highest NCI CTCAE Grade</p></td>
       </tr><tr>
-        <!--  -->
+        
         <td>
-          <p><code><a href="waterfall.html">waterfall()</a></code> </p>
+          <p><code><a href="t_ae_oview.html">t_ae_oview()</a></code> </p>
         </td>
-        <td><p>Create A Waterfall plot</p></td>
+        <td><p>AE Overview Summary Table</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="t_ds.html">t_ds()</a></code> </p>
+        </td>
+        <td><p>Patient Disposition Table</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-remaining" class="hasAnchor"><a href="#section-remaining" class="anchor"></a>Remaining</h2>
+          <p class="section-desc"><p>some useful functions</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="as_pdf.html">as_pdf()</a></code> </p>
+        </td>
+        <td><p>Output decorated grob (gTree) objects as PDF</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="getdata_bce.html">getdata_bce()</a></code> </p>
+        </td>
+        <td><p>Load Multiple SAS datasets from BCE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="grobs2pdf.html">grobs2pdf()</a></code> </p>
+        </td>
+        <td><p>Decorate grob (gTree) objects then outputs as IDM compatible PDF</p></td>
       </tr>
     </tbody>
     </table>
@@ -158,7 +208,9 @@
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#section-graphs">Graphs</a></li>
+      <li><a href="#section-tables">Tables</a></li>
+      <li><a href="#section-remaining">Remaining</a></li>
     </ul>
   </div>
 </div>

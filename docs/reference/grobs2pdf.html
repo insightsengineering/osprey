@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a swimlineplot — swimlineplot • osprey</title>
+<title>Decorate grob (gTree) objects then outputs as IDM compatible PDF — grobs2pdf • osprey</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="Create a swimlineplot — swimlineplot" />
+<meta property="og:title" content="Decorate grob (gTree) objects then outputs as IDM compatible PDF — grobs2pdf" />
 
-<meta property="og:description" content="Descr of this plot" />
+<meta property="og:description" content="This is an utility function to decorated grob (gTree) object with titles and
+footnotes in accordance with IDM specification and export as PDF file with
+full path to program and the output for easy tracking and archiving." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -109,51 +111,87 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a swimlineplot</h1>
+    <h1>Decorate grob (gTree) objects then outputs as IDM compatible PDF</h1>
     
-    <div class="hidden name"><code>swimlineplot.Rd</code></div>
+    <div class="hidden name"><code>grobs2pdf.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Descr of this plot</p>
+    <p>This is an utility function to decorated grob (gTree) object with titles and
+footnotes in accordance with IDM specification and export as PDF file with
+full path to program and the output for easy tracking and archiving.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>swimlineplot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>col</span>)</pre>
+    <pre class="usage"><span class='fu'>grobs2pdf</span>(<span class='no'>grobs</span>, <span class='no'>titles</span>, <span class='no'>footnotes</span>, <span class='no'>progpath</span>, <span class='no'>outpath</span>, <span class='kw'>fontsize</span> <span class='kw'>=</span> <span class='fl'>9</span>,
+  <span class='kw'>pagesize</span> <span class='kw'>=</span> <span class='st'>"letter.landscape"</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>x coordinates</p></td>
+      <th>grobs</th>
+      <td><p>A grid grob (gTree) object, optionally <code>NULL</code> if only a
+grob with the decoration should be shown</p></td>
     </tr>
     <tr>
-      <th>y</th>
-      <td><p>y coordinates</p></td>
+      <th>titles</th>
+      <td><p>Vector of character strings. Vector elements are separated by a
+newline and strings are wrapped according to the page with</p></td>
     </tr>
     <tr>
-      <th>col</th>
-      <td><p>color of points</p></td>
+      <th>footnotes</th>
+      <td><p>Vector of character string. Same rules as for <code>titles</code></p></td>
+    </tr>
+    <tr>
+      <th>progpath</th>
+      <td><p>Specify the full path to the R program that generate the
+grobs and the PDF</p></td>
+    </tr>
+    <tr>
+      <th>outpath</th>
+      <td><p>Specify full path to output pdf to BCE or BEE</p></td>
+    </tr>
+    <tr>
+      <th>fontsize</th>
+      <td><p>Base font size used in pdf, default set to 9. Font size for
+title is set to <code>fontsize</code> + 1 (default = 10) and for footnotes set to
+<code>fontsize</code> - 1 (default = 8)</p></td>
+    </tr>
+    <tr>
+      <th>papersize</th>
+      <td><p>name of paper size and orientation, accepted values include
+<code>"a4.landscape"</code>, <code>"a4.portrait"</code>, <code>"letter.portrait"</code> and
+<code>"letter.landscape"</code> (default)</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>ggplot object</p>
+    <p>a pdf file</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
+    <pre class="examples"><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='fu'>library</span>(<span class='no'>ggplot2</span>)
 
+<span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='fu'>with</span>(<span class='no'>iris</span>, {
+<span class='fu'>list</span>(
+  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplotGrob'>ggplotGrob</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/qplot'>qplot</a></span>(<span class='no'>Sepal.Length</span>, <span class='no'>Sepal.Width</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>Species</span>)),
+  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplotGrob'>ggplotGrob</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/qplot'>qplot</a></span>(<span class='no'>Sepal.Length</span>, <span class='no'>Petal.Length</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>Species</span>)),
+  <span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/ggplotGrob'>ggplotGrob</a></span>(<span class='fu'><a href='http://www.rdocumentation.org/packages/ggplot2/topics/qplot'>qplot</a></span>(<span class='no'>Sepal.Length</span>, <span class='no'>Petal.Width</span>, <span class='kw'>col</span><span class='kw'>=</span><span class='no'>Species</span>))
+  )
+})
 
-<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ASL"</span>, <span class='kw'>start_with</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>WEIGHT</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>80</span>, <span class='fl'>85</span>, <span class='fl'>90</span>), <span class='kw'>STUDYID</span> <span class='kw'>=</span> <span class='st'>"A"</span>))
-
-<span class='fu'>with</span>(<span class='no'>ASL</span>, <span class='fu'>swimlineplot</span>(<span class='no'>WEIGHT</span>, <span class='no'>BAGE</span>, <span class='no'>ARM</span>))</div><div class='img'><img src='swimlineplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>swimlineplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>WEIGHT</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>BAGE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>ARM</span>)</div><div class='img'><img src='swimlineplot-2.png' alt='' width='700' height='433' /></div><div class='input'>
-
-</div></pre>
+<span class='fu'>grobs2pdf</span>(<span class='kw'>grobs</span> <span class='kw'>=</span> <span class='no'>g</span>,
+          <span class='kw'>titles</span> <span class='kw'>=</span> <span class='st'>"Visualization of Iris Data"</span>,
+          <span class='kw'>footnotes</span> <span class='kw'>=</span> <span class='st'>"This is a footnote"</span>,
+          <span class='kw'>progpath</span> <span class='kw'>=</span> <span class='st'>"~/example_prog.R"</span>,
+          <span class='kw'>outpath</span> <span class='kw'>=</span> <span class='st'>"~/example_grobs2pdf.pdf"</span>
+          )
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -167,7 +205,7 @@
 
     <h2>Author</h2>
     
-Mika
+Chendi Liao (liaoc10) <a href='mailto:chendi.liao@roche.com'>chendi.liao@roche.com</a>
 
   </div>
 </div>

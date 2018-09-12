@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a swimlineplot — swimlineplot • osprey</title>
+<title>Load Multiple SAS datasets from BCE — getdata_bce • osprey</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="Create a swimlineplot — swimlineplot" />
+<meta property="og:title" content="Load Multiple SAS datasets from BCE — getdata_bce" />
 
-<meta property="og:description" content="Descr of this plot" />
+<meta property="og:description" content="This is an utility function to quickly read-in one or multiple SAS datasets
+from BCE without typing out the full path, while keeping the file name as the
+assigned dataset name." />
 <meta name="twitter:card" content="summary" />
 
 <meta name="robots" content="noindex">
@@ -109,50 +111,67 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a swimlineplot</h1>
+    <h1>Load Multiple SAS datasets from BCE</h1>
     
-    <div class="hidden name"><code>swimlineplot.Rd</code></div>
+    <div class="hidden name"><code>getdata_bce.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Descr of this plot</p>
+    <p>This is an utility function to quickly read-in one or multiple SAS datasets
+from BCE without typing out the full path, while keeping the file name as the
+assigned dataset name.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>swimlineplot</span>(<span class='no'>x</span>, <span class='no'>y</span>, <span class='no'>col</span>)</pre>
+    <pre class="usage"><span class='fu'>getdata_bce</span>(<span class='no'>snapshot</span>, <span class='no'>area</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>load</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>snapshot</th>
+      <td><p>name of the BCE snapshot in string format (eg. "s12345a")</p></td>
+    </tr>
+    <tr>
+      <th>area</th>
+      <td><p>specify the BCE area in string format, accepted values are
+<code>"sdtm"</code>, <code>"prod"</code>, <code>"qa"</code> and <code>"home"</code></p></td>
+    </tr>
+    <tr>
       <th>x</th>
-      <td><p>x coordinates</p></td>
+      <td><p>a character vector containing the name of the SAS datasets to be
+loaded. Default is <code>NULL</code>, where all datasets within the snapshot
+directory will be loaded.</p></td>
     </tr>
     <tr>
-      <th>y</th>
-      <td><p>y coordinates</p></td>
-    </tr>
-    <tr>
-      <th>col</th>
-      <td><p>color of points</p></td>
+      <th>load</th>
+      <td><p>if <code>TRUE</code> (default), all read-in datasets will be loaded.
+Use <code>FALSE</code> if do not want to load datasets automatically, and assign
+to an object.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>ggplot object</p>
+    <p>dataframe objects</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>random.cdisc.data</span>)
+    <pre class="examples"><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='co'>#Example 1 - load add datasets in directory</span>
+<span class='fu'>getdata_bce</span>(<span class='st'>'s39148b'</span>, <span class='st'>'prod'</span>)
 
+<span class='co'>#Example 2 - load only specified datasets</span>
+<span class='fu'>getdata_bce</span>(<span class='st'>'s39148b'</span>, <span class='st'>'sdtm'</span>, <span class='fu'>c</span>(<span class='st'>'dm'</span>, <span class='st'>'ex'</span>, <span class='st'>'ds'</span>))
 
-<span class='no'>ASL</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam'>radam</a></span>(<span class='st'>"ASL"</span>, <span class='kw'>start_with</span> <span class='kw'>=</span> <span class='fu'>list</span>(<span class='kw'>WEIGHT</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>80</span>, <span class='fl'>85</span>, <span class='fl'>90</span>), <span class='kw'>STUDYID</span> <span class='kw'>=</span> <span class='st'>"A"</span>))
+<span class='co'>#Example 3 - load from home</span>
+<span class='co'>#equivalent to read_bce('/opt/BIOSTAT/home/&lt;UNIXID&gt;/&lt;snapshot&gt;/libraries/asl.sas7bdat')</span>
+<span class='no'>snapshot</span> <span class='kw'>=</span> <span class='st'>'s39148b'</span>
+<span class='fu'>getdata_bce</span>(<span class='no'>snapshot</span>, <span class='st'>'home'</span>, <span class='st'>'asl'</span>)
 
-<span class='fu'>with</span>(<span class='no'>ASL</span>, <span class='fu'>swimlineplot</span>(<span class='no'>WEIGHT</span>, <span class='no'>BAGE</span>, <span class='no'>ARM</span>))</div><div class='img'><img src='swimlineplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'>swimlineplot</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>WEIGHT</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>BAGE</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='no'>ASL</span>$<span class='no'>ARM</span>)</div><div class='img'><img src='swimlineplot-2.png' alt='' width='700' height='433' /></div><div class='input'>
-
+<span class='co'># }</span><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -167,7 +186,7 @@
 
     <h2>Author</h2>
     
-Mika
+Chendi Liao (liaoc10) <a href='mailto:chendi.liao@roche.com'>chendi.liao@roche.com</a>
 
   </div>
 </div>
