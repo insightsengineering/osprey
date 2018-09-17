@@ -159,7 +159,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
     l_t_comp <-  t_helper_tabulate(df_id = df,
                                    N = N,
-                                   checkcol = " ",
+                                   checkcol = "uniqueid",
                                    term = name_in,
                                    remove_dupl = TRUE,
                                    with_percent = TRUE)
@@ -168,7 +168,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
       l_t_ov <- t_helper_tabulate(df_id = df,
                         N = N,
-                        checkcol = " ",
+                        checkcol = "uniqueid",
                         term = name_in,
                         remove_dupl = TRUE,
                         with_percent = TRUE)
@@ -176,7 +176,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
       l_t_terms <- mapply(function(df_i, term) {
           t_helper_tabulate(df_id = df_i,
                             N = N,
-                            checkcol = " ",
+                            checkcol = "uniqueid",
                             term = term,
                             remove_dupl = TRUE,
                             with_percent = TRUE)
