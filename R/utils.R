@@ -37,6 +37,8 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
   } else {
 
     if(remove_dupl){
+      #sort by checkcol in descending order first
+      df_id <- df_id[order(df_id[checkcol], decreasing = TRUE),]
       df_id <- df_id[!duplicated(df_id$id), ]
     }
 

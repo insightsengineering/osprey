@@ -43,6 +43,7 @@
 #'@export
 #'
 #'@template author_zhanc107
+#'@template author_liaoc10
 #'
 #' @examples
 #' library(dplyr)
@@ -118,7 +119,11 @@ t_ae_oview <- function(id,
   if(any(is.element(colnames(flags), possible_names) == FALSE))
     stop("invalid arguments: check that the column names in flags matches the expected input")
 
+  #Convert all text to upper case
+  flags <- as.data.frame(vapply(flags, toupper, rep(character(1), nrow(flags))))
+
   if(!is.null(extra_flag)){
+    extra_flag <- as.data.frame(vapply(extra_flag, toupper, rep(character(1), nrow(extra_flag))))
     check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(flags)), nrow(extra_flag))
     check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)))
   } else {
@@ -247,7 +252,7 @@ t_ae_oview <- function(id,
   for(i in 1:length(display_id)){
     df_ind[[i]] = df_flags
   }
-  names(df_ind) = term_label[1:length(display_id)]#display_id
+  names(df_ind) = term_label[1:length(display_id)] #display_id
 
   tbl_ind <- mapply(function(df_i, term, c_col) {
     t_helper_tabulate(df_id = df_i,
