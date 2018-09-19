@@ -13,7 +13,6 @@
 #' @return \code{dataframe} object
 #' @author Iain Bennett
 #' @export
-#' @importFrom  magrittr %>%
 #' @examples
 #' ASL <- random.cdisc.data::rasl()
 #' ATE <- random.cdisc.data::rate(ASL)

@@ -100,22 +100,22 @@
 <span class="kw">library</span>(osprey)
 <span class="kw">library</span>(random.cdisc.data)
 
-ASL &lt;-<span class="st"> </span><span class="kw">radam</span>(<span class="st">"ASL"</span>, <span class="dt">N=</span><span class="dv">10</span> ,<span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">CHANGE =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="kw">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>)))
-ATE &lt;-<span class="st"> </span><span class="kw">radam</span>(<span class="st">"ATE"</span>, <span class="dt">N=</span><span class="dv">10</span> ,<span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">CHANGE =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="kw">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>)))
+ASL &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam">radam</a></span>(<span class="st">"ASL"</span>, <span class="dt">N=</span><span class="dv">10</span> ,<span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">CHANGE =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="kw">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>)))
+ATE &lt;-<span class="st"> </span><span class="kw"><a href="http://www.rdocumentation.org/packages/random.cdisc.data/topics/radam">radam</a></span>(<span class="st">"ATE"</span>, <span class="dt">N=</span><span class="dv">10</span> ,<span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">CHANGE =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="kw">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>)))
 
-x &lt;-<span class="st"> </span>teal::<span class="kw">init</span>(
+x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/init">init</a></span>(
   <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">ASL=</span>ASL, <span class="dt">ATE =</span> ATE),
-  <span class="dt">modules =</span> <span class="kw">root_modules</span>(
-    <span class="kw">tm_data_table</span>(),
-    <span class="kw">module</span>(
+  <span class="dt">modules =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/root_modules">root_modules</a></span>(
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/tm_data_table">tm_data_table</a></span>(),
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/module">module</a></span>(
       <span class="dt">label =</span> <span class="st">"Spiderplot"</span>,
-      <span class="dt">ui =</span> function(id) {ns &lt;-<span class="st"> </span><span class="kw">NS</span>(id); <span class="kw">plotOutput</span>(<span class="kw">ns</span>(<span class="st">"plot"</span>))},
-      <span class="dt">server =</span> function(input, output, session, datasets) {
-        output$plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+      <span class="dt">ui =</span> <span class="cf">function</span>(id) {ns &lt;-<span class="st"> </span><span class="kw">NS</span>(id); <span class="kw">plotOutput</span>(<span class="kw">ns</span>(<span class="st">"plot"</span>))},
+      <span class="dt">server =</span> <span class="cf">function</span>(input, output, session, datasets) {
+        output<span class="op">$</span>plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
           
-          ATE &lt;-<span class="st"> </span>datasets$<span class="kw">get_data</span>(<span class="st">'ATE'</span>,  <span class="dt">filtered =</span> <span class="ot">TRUE</span>, <span class="dt">reactive =</span> <span class="ot">TRUE</span>)
+          ATE &lt;-<span class="st"> </span>datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="st">'ATE'</span>,  <span class="dt">filtered =</span> <span class="ot">TRUE</span>, <span class="dt">reactive =</span> <span class="ot">TRUE</span>)
           
-          osprey::<span class="kw">spiderplot</span>(<span class="dt">x =</span> ATE$AVAL, <span class="dt">y =</span> ATE$CHANGE, <span class="dt">group=</span> ATE$USUBJID,<span class="dt">color =</span> ATE$STUDYID)
+          osprey<span class="op">::</span><span class="kw">spiderplot</span>(<span class="dt">x =</span> ATE<span class="op">$</span>AVAL, <span class="dt">y =</span> ATE<span class="op">$</span>CHANGE, <span class="dt">group=</span> ATE<span class="op">$</span>USUBJID,<span class="dt">color =</span> ATE<span class="op">$</span>STUDYID)
           
         })
       },
@@ -127,7 +127,7 @@ x &lt;-<span class="st"> </span>teal::<span class="kw">init</span>(
 
 
 
-<span class="kw">shinyApp</span>(x$ui, x$server)</code></pre></div>
+<span class="kw">shinyApp</span>(x<span class="op">$</span>ui, x<span class="op">$</span>server)</code></pre></div>
 </div>
   </div>
 
