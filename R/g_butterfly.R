@@ -38,6 +38,7 @@
 #' @export
 #'
 #' @template author_zhanc107
+#' @template author_qit3
 #'
 #' @examples
 #' library(dplyr)
@@ -473,13 +474,13 @@ g_butterfly <- function(category,
   }
 
   #pl <- pl + labs(title = str_wrap(g2, width = 30))
-  g <- ggplotGrob(pl)
+  g_0 <- ggplotGrob(pl)
 
-  g <- gtable_add_grob(g, grid.text(str_wrap(g1, width = 30), x=1, just = "center", hjust=1, gp=gpar(fontsize = 11)),
-                        t=1.5, l=4, b=3, r=4, name="right-title", clip = "off")
-  g <- gtable_add_grob(g, grid.text(str_wrap(g2, width = 30), x=1, just = "center", hjust=0, gp=gpar(fontsize = 11)),
-                        t=1.5, l=3, b=3, r = 3, name="left-title", clip = "off")
-  grid.draw(g)
+  g_1 <- gtable_add_grob(g_0, grid.text(str_wrap(g1, width = 30), x=1, just = "center", hjust=1, gp=gpar(fontsize = 11)),
+                        t=1.5, l=g_0$layout[g_0$layout$name == "axis-r", 2], b=3, name="right-title", clip = "off")
+  g_2 <- gtable_add_grob(g_1, grid.text(str_wrap(g2, width = 30), x=1, just = "center", hjust=0, gp=gpar(fontsize = 11)),
+                        t=1.5, l=g_0$layout[g_0$layout$name == "axis-l", 2], b=3, name="left-title", clip = "off")
+  grid.draw(g_2)
 
 }
 
