@@ -10,7 +10,7 @@ Authors@R: c(
   person("Carolyn", "Zhang", email = "carolyn.zhang@duke.edu", role = c("aut"))
   )
 Description: Community effort to collect TLG code and create a catalogue
-License: Copyright Roche
+License: Copyright Roche, for internal use only
 Encoding: UTF-8
 LazyData: true
 Depends:
@@ -24,6 +24,16 @@ Imports:
    tern,
    plyr
 Suggests: random.cdisc.data
-Additional_repositories: 
-  https://github.roche.com/Rpackages/random.cdisc.data
 RoxygenNote: 6.1.0
+VignetteBuilder: knitr
+URL: 
+  https://pages.github.roche.com/Rpackages/osprey/, 
+  https://github.roche.com/Rpackages/osprey/
+BugReports: 
+  https://github.roche.com/Rpackages/osprey/issues
+Additional_repositories:
+  https://github.com/Roche/rtables,
+  https://github.roche.com/Rpackages/teal,
+  https://github.roche.com/Rpackages/tern,
+  https://github.roche.com/Rpackages/teal.tern,
+  https://github.roche.com/Rpackages/random.cdisc.data
