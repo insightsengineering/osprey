@@ -88,6 +88,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -197,12 +200,20 @@ the "All Patients" column is suppressed.</p></td>
   <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
   <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='no'>ANL</span>$<span class='no'>ARM</span>),
   <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in rtabulate.data.frame(na.omit(df_id), row_by_var = checkcol, col_by_var = "col_by",     FUN = count_perc_col_N, N = N, format = "xx (xx.xx%)"): x[[row_by_var]] currently needs to be a factor</span></div><div class='input'>
-<span class='no'>tbl</span></div><div class='output co'>#&gt; function (src, ...) 
-#&gt; {
-#&gt;     UseMethod("tbl")
-#&gt; }
-#&gt; &lt;environment: namespace:dplyr&gt;</div><div class='input'>
+)
+
+<span class='no'>tbl</span></div><div class='output co'>#&gt;                       ARM A               ARM B            All Patients
+#&gt;                       (N=3)               (N=7)               (N=10)   
+#&gt; -----------------------------------------------------------------------
+#&gt; cl A                1 (33.33%)          3 (42.86%)           4 (40%)   
+#&gt;   trm A_1/2         1 (33.33%)          1 (14.29%)           2 (20%)   
+#&gt;   trm A_2/2         1 (33.33%)          2 (28.57%)           3 (30%)   
+#&gt; cl B                1 (33.33%)          3 (42.86%)           4 (40%)   
+#&gt;   trm B_1/3             0               1 (14.29%)           1 (10%)   
+#&gt;   trm B_2/3         1 (33.33%)          2 (28.57%)           3 (30%)   
+#&gt;   trm B_3/3             0               1 (14.29%)           1 (10%)   
+#&gt; cl C                1 (33.33%)          1 (14.29%)           2 (20%)   
+#&gt;   trm C_1/1         1 (33.33%)          1 (14.29%)           2 (20%)   </div><div class='input'>
 <span class='no'>tbl2</span> <span class='kw'>&lt;-</span> <span class='fu'>t_ds</span>(
   <span class='kw'>class</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>CLASS</span>,
   <span class='kw'>term</span> <span class='kw'>=</span>  <span class='no'>ANL</span>$<span class='no'>TERM</span>,
@@ -210,8 +221,26 @@ the "All Patients" column is suppressed.</p></td>
   <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
   <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='no'>ANL</span>$<span class='no'>ARM</span>),
   <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in rtabulate.data.frame(na.omit(df_id), row_by_var = checkcol, col_by_var = "col_by",     FUN = count_perc_col_N, N = N, format = "xx (xx.xx%)"): x[[row_by_var]] currently needs to be a factor</span></div><div class='input'>
-<span class='no'>tbl2</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'tbl2' not found</span></div><div class='input'>
+)
+
+<span class='no'>tbl2</span></div><div class='output co'>#&gt;                       ARM A               ARM B            All Patients
+#&gt;                       (N=3)               (N=7)               (N=10)   
+#&gt; -----------------------------------------------------------------------
+#&gt; cl A                1 (33.33%)          3 (42.86%)           4 (40%)   
+#&gt;   trm A_1/2         1 (33.33%)          1 (14.29%)           2 (20%)   
+#&gt;     1               1 (33.33%)          1 (14.29%)           2 (20%)   
+#&gt;   trm A_2/2         1 (33.33%)          2 (28.57%)           3 (30%)   
+#&gt;     2               1 (33.33%)          2 (28.57%)           3 (30%)   
+#&gt; cl B                1 (33.33%)          3 (42.86%)           4 (40%)   
+#&gt;   trm B_1/3             0               1 (14.29%)           1 (10%)   
+#&gt;     2                   0               1 (14.29%)           1 (10%)   
+#&gt;   trm B_2/3         1 (33.33%)          2 (28.57%)           3 (30%)   
+#&gt;     3               1 (33.33%)          2 (28.57%)           3 (30%)   
+#&gt;   trm B_3/3             0               1 (14.29%)           1 (10%)   
+#&gt;     1                   0               1 (14.29%)           1 (10%)   
+#&gt; cl C                1 (33.33%)          1 (14.29%)           2 (20%)   
+#&gt;   trm C_1/1         1 (33.33%)          1 (14.29%)           2 (20%)   
+#&gt;     1               1 (33.33%)          1 (14.29%)           2 (20%)   </div><div class='input'>
 <span class='co'># simple example using osprey dummy dataset</span>
 
 <span class='fu'>data</span>(<span class='st'>"rADSL"</span>)
@@ -223,8 +252,20 @@ the "All Patients" column is suppressed.</p></td>
    <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
    <span class='kw'>col_by</span> <span class='kw'>=</span> <span class='fu'>factor</span>(<span class='no'>ANL</span>$<span class='no'>ARM</span>),
    <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in rtabulate.data.frame(na.omit(df_id), row_by_var = checkcol, col_by_var = "col_by",     FUN = count_perc_col_N, N = N, format = "xx (xx.xx%)"): x[[row_by_var]] currently needs to be a factor</span></div><div class='input'>
-<span class='no'>tbl3</span></div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'tbl3' not found</span></div><div class='input'>
+)
+
+<span class='no'>tbl3</span></div><div class='output co'>#&gt;                                     A: Placebo            B: Drug X           C: Combination         All Patients 
+#&gt;                                       (N=11)                (N=21)                (N=18)                (N=50)    
+#&gt; ------------------------------------------------------------------------------------------------------------------
+#&gt; Completed                           3 (27.27%)            7 (33.33%)            8 (44.44%)             18 (36%)   
+#&gt; Discontinued                        4 (36.36%)            5 (23.81%)            3 (16.67%)             12 (24%)   
+#&gt;   Adverse Event                         0                 1 (4.76%)                 0                   1 (2%)    
+#&gt;   Death                             1 (9.09%)             3 (14.29%)            1 (5.56%)              5 (10%)    
+#&gt;   Physician Decision                2 (18.18%)                0                     0                   2 (4%)    
+#&gt;   Progressive Disease                   0                 1 (4.76%)                 0                   1 (2%)    
+#&gt;   Symptomatic Deterioation              0                     0                 1 (5.56%)               1 (2%)    
+#&gt;   Withdrawal by Subject             1 (9.09%)                 0                 1 (5.56%)               2 (4%)    
+#&gt; Ongoing                             4 (36.36%)            9 (42.86%)            7 (38.89%)             20 (40%)   </div><div class='input'>
 
 </div></pre>
   </div>

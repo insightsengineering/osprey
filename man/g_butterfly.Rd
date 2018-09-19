@@ -85,4 +85,6 @@ g_butterfly(category = ANL$AEBODSYS,
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
+
+Ting Qi (qit3) \email{qit3@gene.com}
 }
