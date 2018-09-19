@@ -82,7 +82,3 @@ That is, follow the following steps:
 7. Test your function with working example
 8. Create webpage (in console: `pkgdown::build_site()`) 
 9. When everything works, make pull request.
-
-### Example plot
-
-https://github.roche.com/Rpackages/osprey/blob/master/R/dummyplot.R

@@ -81,9 +81,9 @@
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Using Osprey TLGs with teal</h1>
-                        <h4 class="author">Adrian Waddell</h4>
+                        <h4 class="author">Adrian Waddell, Nina Qi</h4>
             
-            <h4 class="date">2/1/2018</h4>
+            <h4 class="date">09/20/2018</h4>
       
       
       <div class="hidden name"><code>osprey_teal.Rmd</code></div>
@@ -95,31 +95,39 @@
 <div id="using-an-osprey-outputs-with-teal" class="section level2">
 <h2 class="hasAnchor">
 <a href="#using-an-osprey-outputs-with-teal" class="anchor"></a>Using an osprey outputs with teal</h2>
-<p>Here is a code to run the <code>spiderplot</code> in a teal module:</p>
+<p>Here is a code to run the <code>g_spiderplot</code> in a teal module:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(teal)
 <span class="kw">library</span>(osprey)
-<span class="kw">library</span>(random.cdisc.data)
+<span class="kw">library</span>(dplyr)
 
-ASL &lt;-<span class="st"> </span><span class="kw">radam</span>(<span class="st">"ASL"</span>, <span class="dt">N=</span><span class="dv">10</span> ,<span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">CHANGE =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="kw">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>)))
-ATE &lt;-<span class="st"> </span><span class="kw">radam</span>(<span class="st">"ATE"</span>, <span class="dt">N=</span><span class="dv">10</span> ,<span class="dt">start_with =</span> <span class="kw">list</span>(<span class="dt">CHANGE =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">80</span>, <span class="dv">85</span>, <span class="dv">90</span>), <span class="dt">STUDYID =</span> <span class="kw">c</span>(<span class="st">"A"</span>,<span class="st">"B"</span>)))
+ASL &lt;-<span class="st"> </span>rADSL <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(STUDYID, USUBJID)
+ADTR &lt;-<span class="st"> </span>rADTR <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/select.html">select</a></span>(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 
-x &lt;-<span class="st"> </span>teal::<span class="kw">init</span>(
-  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">ASL=</span>ASL, <span class="dt">ATE =</span> ATE),
-  <span class="dt">modules =</span> <span class="kw">root_modules</span>(
-    <span class="kw">tm_data_table</span>(),
-    <span class="kw">module</span>(
+ATR &lt;-<span class="st"> </span>ADTR <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(PARAMCD <span class="op">==</span><span class="st"> "SLDINV"</span> <span class="op">&amp;</span><span class="st"> </span>AVISIT <span class="op">!=</span><span class="st"> "POST-BASELINE MINIMUM"</span>) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(USUBJID) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span>(ADY) <span class="op">%&gt;%</span>
+<span class="st">      </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="dt">PCHG =</span> <span class="kw">ifelse</span>(AVISIT <span class="op">==</span><span class="st"> "Screening"</span>, <span class="dv">0</span>, PCHG))
+ATR &lt;-<span class="st"> </span><span class="kw"><a href="http://dplyr.tidyverse.org/reference/join.html">inner_join</a></span>(ASL, ATR, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span>))
+
+<span class="co"># ANL$USUBJID &lt;- substr(ANL$USUBJID, 14, 18)</span>
+
+x &lt;-<span class="st"> </span>teal<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/init">init</a></span>(
+  <span class="dt">data =</span> <span class="kw">list</span>(<span class="dt">ASL=</span>ASL, <span class="dt">ATR =</span> ATR),
+  <span class="dt">modules =</span> <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/root_modules">root_modules</a></span>(
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/tm_data_table">tm_data_table</a></span>(),
+    <span class="kw"><a href="http://www.rdocumentation.org/packages/teal/topics/module">module</a></span>(
       <span class="dt">label =</span> <span class="st">"Spiderplot"</span>,
-      <span class="dt">ui =</span> function(id) {ns &lt;-<span class="st"> </span><span class="kw">NS</span>(id); <span class="kw">plotOutput</span>(<span class="kw">ns</span>(<span class="st">"plot"</span>))},
-      <span class="dt">server =</span> function(input, output, session, datasets) {
-        output$plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
+      <span class="dt">ui =</span> <span class="cf">function</span>(id) {ns &lt;-<span class="st"> </span><span class="kw">NS</span>(id); <span class="kw">plotOutput</span>(<span class="kw">ns</span>(<span class="st">"plot"</span>))},
+      <span class="dt">server =</span> <span class="cf">function</span>(input, output, session, datasets) {
+        output<span class="op">$</span>plot &lt;-<span class="st"> </span><span class="kw">renderPlot</span>({
           
-          ATE &lt;-<span class="st"> </span>datasets$<span class="kw">get_data</span>(<span class="st">'ATE'</span>,  <span class="dt">filtered =</span> <span class="ot">TRUE</span>, <span class="dt">reactive =</span> <span class="ot">TRUE</span>)
+          ATR &lt;-<span class="st"> </span>datasets<span class="op">$</span><span class="kw">get_data</span>(<span class="st">'ATR'</span>,  <span class="dt">filtered =</span> <span class="ot">TRUE</span>, <span class="dt">reactive =</span> <span class="ot">TRUE</span>)
           
-          osprey::<span class="kw">spiderplot</span>(<span class="dt">x =</span> ATE$AVAL, <span class="dt">y =</span> ATE$CHANGE, <span class="dt">group=</span> ATE$USUBJID,<span class="dt">color =</span> ATE$STUDYID)
+          osprey<span class="op">::</span><span class="kw"><a href="https://pages.github.roche.com/Rpackages/osprey/dev//reference/g_spiderplot.html">g_spiderplot</a></span>(<span class="dt">marker_x =</span> ATR<span class="op">$</span>ADY, <span class="dt">marker_y =</span> ATR<span class="op">$</span>PCHG, <span class="dt">marker_id =</span> ATR<span class="op">$</span>USUBJID, <span class="dt">line_colby =</span> ATR<span class="op">$</span>STUDYID)
           
         })
       },
-      <span class="dt">filters =</span> <span class="st">'ATE'</span>
+      <span class="dt">filters =</span> <span class="st">'ATR'</span>
     )
   )
 )
@@ -127,7 +135,7 @@ x &lt;-<span class="st"> </span>teal::<span class="kw">init</span>(
 
 
 
-<span class="kw">shinyApp</span>(x$ui, x$server)</code></pre></div>
+<span class="kw">shinyApp</span>(x<span class="op">$</span>ui, x<span class="op">$</span>server)</code></pre></div>
 </div>
   </div>
 

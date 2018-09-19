@@ -56,8 +56,9 @@
 #' ANL <- ANL %>% filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
 #'        filter(RACE %in% c("WHITE", "ASIAN")) %>%
 #'        group_by(USUBJID) %>%
-#'        arrange(ADY)
-#' ANL <- na.omit(ANL)
+#'        arrange(ADY) %>%
+#'        mutate(CHG = ifelse(AVISIT == "Screening", 0, CHG),
+#'               PCHG = ifelse(AVISIT == "Screening", 0, PCHG))
 #' ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 #'
 #' # Plot 1 - default color and shape mapping

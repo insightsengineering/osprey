@@ -1,7 +1,7 @@
 ---
 title: "Using Osprey TLGs with teal"
-author: "Adrian Waddell"
-date: "2/1/2018"
+author: "Adrian Waddell, Nina Qi"
+date: "09/20/2018"
 output: html_document
 ---
 
@@ -11,19 +11,27 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Using an osprey outputs with teal
 
-Here is a code to run the `spiderplot` in a teal module:
+Here is a code to run the `g_spiderplot` in a teal module:
 
 
 ```{r eval=FALSE}
 library(teal)
 library(osprey)
-library(random.cdisc.data)
+library(dplyr)
 
-ASL <- radam("ASL", N=10 ,start_with = list(CHANGE = c(0, 80, 85, 90), STUDYID = c("A","B")))
-ATE <- radam("ATE", N=10 ,start_with = list(CHANGE = c(0, 80, 85, 90), STUDYID = c("A","B")))
+ASL <- rADSL %>% select(STUDYID, USUBJID)
+ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
+
+ATR <- ADTR %>% filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
+      group_by(USUBJID) %>%
+      arrange(ADY) %>%
+      mutate(PCHG = ifelse(AVISIT == "Screening", 0, PCHG))
+ATR <- inner_join(ASL, ATR, by = c("STUDYID", "USUBJID"))
+
+# ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 
 x <- teal::init(
-  data = list(ASL=ASL, ATE = ATE),
+  data = list(ASL=ASL, ATR = ATR),
   modules = root_modules(
     tm_data_table(),
     module(
@@ -32,13 +40,13 @@ x <- teal::init(
       server = function(input, output, session, datasets) {
         output$plot <- renderPlot({
           
-          ATE <- datasets$get_data('ATE',  filtered = TRUE, reactive = TRUE)
+          ATR <- datasets$get_data('ATR',  filtered = TRUE, reactive = TRUE)
           
-          osprey::spiderplot(x = ATE$AVAL, y = ATE$CHANGE, group= ATE$USUBJID,color = ATE$STUDYID)
+          osprey::g_spiderplot(marker_x = ATR$ADY, marker_y = ATR$PCHG, marker_id = ATR$USUBJID, line_colby = ATR$STUDYID)
           
         })
       },
-      filters = 'ATE'
+      filters = 'ATR'
     )
   )
 )
