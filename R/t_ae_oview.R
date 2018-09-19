@@ -44,6 +44,7 @@
 #'
 #'@template author_zhanc107
 #'@template author_liaoc10
+#'@template author_qit3
 #'
 #' @examples
 #' library(dplyr)
@@ -146,6 +147,9 @@ t_ae_oview <- function(id,
                    dcsreas = flags$dcsreas,
                    col_by = col_by,
                    stringsAsFactors = FALSE)
+
+  df <- df %>% mutate(class = ifelse(class == "", "No Coding Available", class),
+                      term = ifelse(term == "", "No Coding Available", term))
 
   df_flags <- data.frame(id = id,
                          flags,
