@@ -7,10 +7,6 @@ create TLGs. We also provide [teal](https://github.roche.com/Rpackages/teal)
 modules for outputs in `osprey` in the
 [teal.osprey](https://github.roche.com/Rpackages/teal.osprey) R package.
 
-* Note that currently **osprey may not be used for regulatory submissions**
-
-* However you can use `osprey` for exploratory analysis and for quality control
-
 There are two versions of webpage manual for this package
 
 * development version: https://pages.github.roche.com/Rpackages/osprey/dev/
