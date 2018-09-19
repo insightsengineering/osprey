@@ -148,8 +148,8 @@ t_ae_oview <- function(id,
                    col_by = col_by,
                    stringsAsFactors = FALSE)
 
-  df <- df %>% mutate(class = ifelse(class == "", "No Coding Available", class),
-                      term = ifelse(term == "", "No Coding Available", term))
+  df$class[df$class == ""] <- "No Coding Available"
+  df$term[df$term == ""] <- "No Coding Available"
 
   df_flags <- data.frame(id = id,
                          flags,
@@ -163,9 +163,6 @@ t_ae_oview <- function(id,
                                  extra_flag,
                                  stringsAsFactors = FALSE)
   }
-
-  df <- df %>% mutate(class = ifelse(class == "", NA, class),
-                      term = ifelse(term == "", NA, term))
 
   # adding All Patients
   if(!is.null(total)){
