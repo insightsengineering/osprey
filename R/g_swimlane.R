@@ -273,6 +273,7 @@ g_swimlane <- function(bar_id,
 
   grid.newpage()
   grid.draw(g)
+  invisible(g)
 
 }
 

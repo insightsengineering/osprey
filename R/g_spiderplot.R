@@ -290,6 +290,8 @@ g_spiderplot <- function(marker_x,
   }else{
     pl <- pl + scale_x_discrete(expand = c(0.3, 0))
   }
-  pl
+
+  grid.draw(pl)
+  invisible(pl)
 
 }

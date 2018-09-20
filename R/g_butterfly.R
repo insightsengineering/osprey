@@ -481,7 +481,7 @@ g_butterfly <- function(category,
   g_2 <- gtable_add_grob(g_1, grid.text(str_wrap(g2, width = 30), x=1, just = "center", hjust=0, gp=gpar(fontsize = 11)),
                         t=1.5, l=g_0$layout[g_0$layout$name == "axis-l", 2], b=3, name="left-title", clip = "off")
   grid.draw(g_2)
-
+  invisible(g_2)
 }
 
 
