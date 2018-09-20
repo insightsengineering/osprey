@@ -14,12 +14,12 @@ License: Copyright Roche, for internal use only
 Encoding: UTF-8
 LazyData: true
 Depends:
-  ggplot2,
+  ggplot2 (>= 2.0.0),
   dplyr,
   tidyr,
-  rtables,
+  rtables (>= 0.1),
   stringr,
-  tern
+  tern (>= 0.5.0.1)
 Imports: 
    tern,
    plyr

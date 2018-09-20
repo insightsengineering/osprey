@@ -243,7 +243,7 @@ default here is <code>FALSE</code></p></td>
 <span class='no'>ANL</span>$<span class='no'>USUBJID</span> <span class='kw'>&lt;-</span> <span class='fu'>substr</span>(<span class='no'>ANL</span>$<span class='no'>USUBJID</span>, <span class='fl'>14</span>, <span class='fl'>18</span>)
 
 <span class='co'># Plot 1 - default color and shape mapping</span>
-<span class='no'>p1</span> <span class='kw'>&lt;-</span> <span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>ADY</span>,
+<span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>ADY</span>,
              <span class='kw'>marker_id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
              <span class='kw'>marker_y</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>PCHG</span>,
              <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
@@ -256,10 +256,9 @@ default here is <code>FALSE</code></p></td>
              <span class='kw'>href_line</span> <span class='kw'>=</span> <span class='fu'>c</span>(-<span class='fl'>20</span>, <span class='fl'>20</span>),
              <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
              <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
-             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='no'>p1</span></div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
+             <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'>#Plot 2 - with line color mapping</span>
-<span class='no'>p2</span> <span class='kw'>&lt;-</span> <span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AVISIT</span>,
+<span class='fu'>g_spiderplot</span>(<span class='kw'>marker_x</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>AVISIT</span>,
                   <span class='kw'>marker_id</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
                   <span class='kw'>marker_y</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>CHG</span>,
                   <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>RACE</span>,
@@ -267,9 +266,8 @@ default here is <code>FALSE</code></p></td>
                   <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
                   <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
                   <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
-                  <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+                  <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='g_spiderplot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 
-<span class='no'>p2</span></div><div class='img'><img src='g_spiderplot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

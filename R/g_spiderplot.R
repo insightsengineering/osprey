@@ -62,7 +62,7 @@
 #' ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 #'
 #' # Plot 1 - default color and shape mapping
-#' p1 <- g_spiderplot(marker_x = ANL$ADY,
+#' g_spiderplot(marker_x = ANL$ADY,
 #'              marker_id = ANL$USUBJID,
 #'              marker_y = ANL$PCHG,
 #'              line_colby = ANL$USUBJID,
@@ -76,10 +76,9 @@
 #'              x_label = "Time (Days)",
 #'              y_label = "Change (%) from Baseline",
 #'              show_legend = TRUE)
-#' p1
 #'
 #' #Plot 2 - with line color mapping
-#' p2 <- g_spiderplot(marker_x = ANL$AVISIT,
+#' g_spiderplot(marker_x = ANL$AVISIT,
 #'                   marker_id = ANL$USUBJID,
 #'                   marker_y = ANL$CHG,
 #'                   line_colby = ANL$RACE,
@@ -89,7 +88,6 @@
 #'                   y_label = "Change (%) from Baseline",
 #'                   show_legend = TRUE)
 #'
-#' p2
 #'
 g_spiderplot <- function(marker_x,
                          marker_id,
