@@ -6,9 +6,8 @@
 \usage{
 g_swimlane(bar_id, bar_length, sort_by = NULL, col_by = NULL,
   marker_id = NULL, marker_pos = NULL, marker_shape = NULL,
-  marker_shape_opt = NULL, marker_color = NULL,
-  marker_color_opt = NULL, anno_txt = NULL, yref_line = NULL,
-  ytick_at = waiver(), ylab, title)
+  marker_shape_opt = NULL, marker_color = NULL, marker_color_opt = NULL,
+  anno_txt = NULL, yref_line = NULL, ytick_at = waiver(), ylab, title)
 }
 \arguments{
 \item{bar_id}{vector of IDs to identify each bar}

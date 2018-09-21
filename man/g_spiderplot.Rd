@@ -5,12 +5,11 @@
 \title{Spider Plot}
 \usage{
 g_spiderplot(marker_x, marker_id, marker_y, line_colby = NULL,
-  line_color_opt = NULL, marker_shape = NULL,
-  marker_shape_opt = NULL, marker_size = 3, datalabel_txt = NULL,
-  facet_rows = NULL, facet_columns = NULL, vref_line = NULL,
-  href_line = NULL, x_label = "Time (Days)",
-  y_label = "Change (\%) from Baseline", show_legend = FALSE,
-  draw = TRUE, newpage = TRUE)
+  line_color_opt = NULL, marker_shape = NULL, marker_shape_opt = NULL,
+  marker_size = 3, datalabel_txt = NULL, facet_rows = NULL,
+  facet_columns = NULL, vref_line = NULL, href_line = NULL,
+  x_label = "Time (Days)", y_label = "Change (\%) from Baseline",
+  show_legend = FALSE, draw = TRUE, newpage = TRUE)
 }
 \arguments{
 \item{marker_x}{vector of x values (must be in sorted order)}
