@@ -18,11 +18,11 @@
 #' @param marker_shape_opt vector defines marker shape code, default here is \code{NULL}
 #' @param datalabel_txt list defines text (at last time point) and
 #' flag for an arrow annotation
-#' (per defined variable) - elements must be labeled txt_ann/mrkr_all/mrkr_ann
-#' txt_ann - text annotation next to final data point (for text annotation)
-#' mrkr_all - vector of ID's (for annotation marker)
-#' mrkr_ann - vector of ID's (subset of mrkr_all) where arrow is desired to
-#' indicate any study interim points
+#' (per defined variable) - elements must be labeled \code{txt_ann}/\code{mrkr_all}/\code{mrkr_ann}.
+#' \code{txt_ann} - text annotation next to final data point (for text annotation)
+#' \code{mrkr_all} - vector of ID's (for annotation marker)
+#' \code{mrkr_ann} - vector of ID's (subset of \code{mrkr_all}) where arrow is desired to
+#' indicate any study interim points. Default here is \code{NULL}
 #' @param facet_rows dataframe defines what variable is used to split the
 #' plot into rows, default here is \code{NULL}
 #' @param facet_columns dataframe defines what variable is used to split the
@@ -84,8 +84,8 @@
 #'                   line_colby = ANL$RACE,
 #'                   line_color_opt = c("WHITE" = "red", "ASIAN" = "blue"),
 #'                   marker_shape = ANL$USUBJID,
-#'                   x_label = "Time (Days)",
-#'                   y_label = "Change (%) from Baseline",
+#'                   x_label = "Visit",
+#'                   y_label = "Change from Baseline",
 #'                   show_legend = TRUE)
 #'
 #'
@@ -286,7 +286,8 @@ g_spiderplot <- function(marker_x,
   if(is.numeric(marker_x)){
     pl <- pl + xlim(min(marker_x), max(marker_x)*1.3)
   }else{
-    pl <- pl + scale_x_discrete(expand = c(0.3, 0))
+    pl <- pl + scale_x_discrete(expand = c(0.3, 0)) +
+      theme(axis.text.x = element_text(angle = 90))
   }
 
   grid.draw(pl)

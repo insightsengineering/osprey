@@ -175,11 +175,11 @@ default here is <code>NULL</code></p></td>
       <th>datalabel_txt</th>
       <td><p>list defines text (at last time point) and
 flag for an arrow annotation
-(per defined variable) - elements must be labeled txt_ann/mrkr_all/mrkr_ann
-txt_ann - text annotation next to final data point (for text annotation)
-mrkr_all - vector of ID's (for annotation marker)
-mrkr_ann - vector of ID's (subset of mrkr_all) where arrow is desired to
-indicate any study interim points</p></td>
+(per defined variable) - elements must be labeled <code>txt_ann</code>/<code>mrkr_all</code>/<code>mrkr_ann</code>.
+<code>txt_ann</code> - text annotation next to final data point (for text annotation)
+<code>mrkr_all</code> - vector of ID's (for annotation marker)
+<code>mrkr_ann</code> - vector of ID's (subset of <code>mrkr_all</code>) where arrow is desired to
+indicate any study interim points. Default here is <code>NULL</code></p></td>
     </tr>
     <tr>
       <th>facet_rows</th>
@@ -264,8 +264,8 @@ default here is <code>FALSE</code></p></td>
                   <span class='kw'>line_colby</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>RACE</span>,
                   <span class='kw'>line_color_opt</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"WHITE"</span> <span class='kw'>=</span> <span class='st'>"red"</span>, <span class='st'>"ASIAN"</span> <span class='kw'>=</span> <span class='st'>"blue"</span>),
                   <span class='kw'>marker_shape</span> <span class='kw'>=</span> <span class='no'>ANL</span>$<span class='no'>USUBJID</span>,
-                  <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Time (Days)"</span>,
-                  <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
+                  <span class='kw'>x_label</span> <span class='kw'>=</span> <span class='st'>"Visit"</span>,
+                  <span class='kw'>y_label</span> <span class='kw'>=</span> <span class='st'>"Change from Baseline"</span>,
                   <span class='kw'>show_legend</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='g_spiderplot-2.png' alt='' width='700' height='433' /></div><div class='input'>
 
 </div></pre>
