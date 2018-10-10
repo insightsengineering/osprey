@@ -5,11 +5,12 @@
 \title{Spider Plot}
 \usage{
 g_spiderplot(marker_x, marker_id, marker_y, line_colby = NULL,
-  line_color_opt = NULL, marker_shape = NULL, marker_shape_opt = NULL,
-  marker_size = 3, datalabel_txt = NULL, facet_rows = NULL,
-  facet_columns = NULL, vref_line = NULL, href_line = NULL,
-  x_label = "Time (Days)", y_label = "Change (\%) from Baseline",
-  show_legend = FALSE, draw = TRUE, newpage = TRUE)
+  line_color_opt = NULL, marker_shape = NULL,
+  marker_shape_opt = NULL, marker_size = 3, datalabel_txt = NULL,
+  facet_rows = NULL, facet_columns = NULL, vref_line = NULL,
+  href_line = NULL, x_label = "Time (Days)",
+  y_label = "Change (\%) from Baseline", show_legend = FALSE,
+  draw = TRUE, newpage = TRUE)
 }
 \arguments{
 \item{marker_x}{vector of x values (must be in sorted order)}
@@ -33,11 +34,11 @@ default here is \code{NULL}}
 
 \item{datalabel_txt}{list defines text (at last time point) and
 flag for an arrow annotation
-(per defined variable) - elements must be labeled txt_ann/mrkr_all/mrkr_ann
-txt_ann - text annotation next to final data point (for text annotation)
-mrkr_all - vector of ID's (for annotation marker)
-mrkr_ann - vector of ID's (subset of mrkr_all) where arrow is desired to
-indicate any study interim points}
+(per defined variable) - elements must be labeled \code{txt_ann}/\code{mrkr_all}/\code{mrkr_ann}.
+\code{txt_ann} - text annotation next to final data point (for text annotation)
+\code{mrkr_all} - vector of ID's (for annotation marker)
+\code{mrkr_ann} - vector of ID's (subset of \code{mrkr_all}) where arrow is desired to
+indicate any study interim points. Default here is \code{NULL}}
 
 \item{facet_rows}{dataframe defines what variable is used to split the
 plot into rows, default here is \code{NULL}}
@@ -108,8 +109,8 @@ g_spiderplot(marker_x = ANL$AVISIT,
                   line_colby = ANL$RACE,
                   line_color_opt = c("WHITE" = "red", "ASIAN" = "blue"),
                   marker_shape = ANL$USUBJID,
-                  x_label = "Time (Days)",
-                  y_label = "Change (\%) from Baseline",
+                  x_label = "Visit",
+                  y_label = "Change from Baseline",
                   show_legend = TRUE)
 
 
