@@ -51,7 +51,7 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
       format = "xx (xx.xx%)"
     )
 
-    if(dim(tbl)[1] > 1){
+    if(dim(tbl)[1] > 1 | (dim(tbl)[1] == 1 & attributes(tbl[1])$names == "1")){
       tbl <- tbl[dim(tbl)[1]]
     } else{
       for(i in 1:dim(tbl)[2]){
