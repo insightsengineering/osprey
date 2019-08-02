@@ -43,19 +43,20 @@ full path to program and the output for easy tracking and archiving.
 library(ggplot2)
 
 g <- with(iris, {
-list(
-  ggplotGrob(qplot(Sepal.Length, Sepal.Width, col=Species)),
-  ggplotGrob(qplot(Sepal.Length, Petal.Length, col=Species)),
-  ggplotGrob(qplot(Sepal.Length, Petal.Width, col=Species))
+  list(
+    ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
+    ggplotGrob(qplot(Sepal.Length, Petal.Length, col = Species)),
+    ggplotGrob(qplot(Sepal.Length, Petal.Width, col = Species))
   )
 })
 
-grobs2pdf(grobs = g,
-          titles = "Visualization of Iris Data",
-          footnotes = "This is a footnote",
-          progpath = "~/example_prog.R",
-          outpath = "~/example_grobs2pdf.pdf"
-          )
+grobs2pdf(
+  grobs = g,
+  titles = "Visualization of Iris Data",
+  footnotes = "This is a footnote",
+  progpath = "~/example_prog.R",
+  outpath = "~/example_grobs2pdf.pdf"
+)
 }
 }
 \author{

@@ -9,27 +9,33 @@ Authors@R: c(
   person("Nina", "Qi", email = "qit3@gene.com", role = c("aut")),
   person("Carolyn", "Zhang", email = "carolyn.zhang@duke.edu", role = c("aut"))
   )
-Description: Community effort to collect TLG code and create a catalogue
-License: Copyright Roche, for internal use only
+Description: Community effort to collect TLG code and create a catalogue.
+License: file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
+  R (>= 3.3),
+  tern (>= 0.6.2),
+  dplyr
+Imports:
   ggplot2 (>= 2.0.0),
-  dplyr,
-  tidyr,
-  rtables (>= 0.1),
+  gridExtra,
+  gtable,
+  plyr,
+  rocheBCE,
+  rtables (>= 0.1.2),
   stringr,
-  tern (>= 0.5.0.1)
-Imports: 
-   tern,
-   plyr
-Suggests: random.cdisc.data
-RoxygenNote: 6.1.0
-VignetteBuilder: knitr
-URL: 
-  https://pages.github.roche.com/Rpackages/osprey/, 
+  tibble,
+  tidyr
+Suggests:
+  random.cdisc.data,
+  knitr,
+  testthat
+RoxygenNote: 6.1.1
+URL:
+  https://pages.github.roche.com/Rpackages/osprey/,
   https://github.roche.com/Rpackages/osprey/
-BugReports: 
+BugReports:
   https://github.roche.com/Rpackages/osprey/issues
 Additional_repositories:
   https://github.com/Roche/rtables,
@@ -37,3 +43,4 @@ Additional_repositories:
   https://github.roche.com/Rpackages/tern,
   https://github.roche.com/Rpackages/teal.tern,
   https://github.roche.com/Rpackages/random.cdisc.data
+VignetteBuilder: knitr

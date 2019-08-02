@@ -1,5 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^docs$
-_pkdown.yaml
+^dev$
+_pkgdown.yaml
 README.md
+^man-roxygen$

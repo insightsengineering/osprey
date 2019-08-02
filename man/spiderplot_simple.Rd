@@ -28,11 +28,10 @@ Descr of this plot
 library(random.cdisc.data)
 
 
-atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
+atr <- left_join(radam("ATR", N = 10), radam("ADSL", N = 10))
 
 
-spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol=SEX)
-
+spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol = SEX)
 }
 \author{
 Mika Maekinen

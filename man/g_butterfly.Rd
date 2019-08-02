@@ -64,24 +64,29 @@ ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% filter(SEX \%
 AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
-ANL <- ANL \%>\% mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\% mutate(flag2 = ifelse(SEX == "M", 1, 0))
+ANL <- ANL \%>\%
+  mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\%
+  mutate(flag2 = ifelse(SEX == "M", 1, 0))
 ANL <- na.omit(ANL)
-ANL <- ANL \%>\% filter(AEBODSYS \%in\% c("Investigations", "Vascular disorders", "Musculoskeletal and connective tissue disorders"))
+ANL <- ANL \%>\% filter(AEBODSYS \%in\% c(
+  "Investigations", "Vascular disorders",
+  "Musculoskeletal and connective tissue disorders"
+))
 
-g_butterfly(category = ANL$AEBODSYS,
-            rightFlag = ANL$flag1,
-            leftFlag = ANL$flag2,
-            group_names = c("flag1 Asian", "flag2 M"),
-            block_count = "# of AEs",
-            block_color = ANL$AETOXGR,
-            id = ANL$USUBJID,
-            x_label = "# of patients",
-            y_label = "AE Derived Terms",
-            legend_label = "AETOXGR",
-            sort_by = "count",
-            show_legend = TRUE
-            )
-
+g_butterfly(
+  category = ANL$AEBODSYS,
+  rightFlag = ANL$flag1,
+  leftFlag = ANL$flag2,
+  group_names = c("flag1 Asian", "flag2 M"),
+  block_count = "# of AEs",
+  block_color = ANL$AETOXGR,
+  id = ANL$USUBJID,
+  x_label = "# of patients",
+  y_label = "AE Derived Terms",
+  legend_label = "AETOXGR",
+  sort_by = "count",
+  show_legend = TRUE
+)
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

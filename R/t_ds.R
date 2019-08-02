@@ -22,38 +22,40 @@
 #'
 #' @template author_zhanc107
 #'
+#' @import tibble
+#' @import dplyr
 #' @examples
 #' # Simple example
 #' library(dplyr)
 #'
 #' ASL <- tibble(
 #'   USUBJID = paste0("id-", 1:10),
-#'   ARM = paste("ARM", LETTERS[rep(c(1,2), c(3,7))])
+#'   ARM = paste("ARM", LETTERS[rep(c(1, 2), c(3, 7))])
 #' )
 #'
 #'
 #' ae_lookup <- tribble(
-#' ~CLASS,         ~TERM,   ~GRADE,
-#' "cl A",   "trm A_1/2",        1,
-#' "cl A",   "trm A_2/2",        2,
-#' "cl B",   "trm B_1/3",        2,
-#' "cl B",   "trm B_2/3",        3,
-#' "cl B",   "trm B_3/3",        1,
-#' "cl C",   "trm C_1/1",        1
+#'   ~CLASS, ~TERM, ~GRADE,
+#'   "cl A", "trm A_1/2", 1,
+#'   "cl A", "trm A_2/2", 2,
+#'   "cl B", "trm B_1/3", 2,
+#'   "cl B", "trm B_2/3", 3,
+#'   "cl B", "trm B_3/3", 1,
+#'   "cl C", "trm C_1/1", 1
 #' )
 #'
 #' AAE <- cbind(
 #'   tibble(
-#'     USUBJID = ASL$USUBJID[c(2,2,2,3,3,4,4,4,4,5,6,6,7,7)]
+#'     USUBJID = ASL$USUBJID[c(2, 2, 2, 3, 3, 4, 4, 4, 4, 5, 6, 6, 7, 7)]
 #'   ),
-#'   ae_lookup[c(1,1,2,6,4,2,2,3,4,2,1,5,4,6),]
+#'   ae_lookup[c(1, 1, 2, 6, 4, 2, 2, 3, 4, 2, 1, 5, 4, 6), ]
 #' )
 #'
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
 #' tbl <- t_ds(
 #'   class = ANL$CLASS,
-#'   term =  ANL$TERM,
+#'   term = ANL$TERM,
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
 #'   total = "All Patients"
@@ -63,7 +65,7 @@
 #'
 #' tbl2 <- t_ds(
 #'   class = ANL$CLASS,
-#'   term =  ANL$TERM,
+#'   term = ANL$TERM,
 #'   sub = data.frame(GRADE = ANL$GRADE),
 #'   id = ANL$USUBJID,
 #'   col_by = factor(ANL$ARM),
@@ -72,33 +74,33 @@
 #'
 #' tbl2
 #'
-#'# simple example using osprey dummy dataset
+#' # simple example using osprey dummy dataset
 #'
 #' data("rADSL")
 #' ANL <- rADSL
 #'
 #' tbl3 <- t_ds(
-#'    class = ANL$EOSSTT,
-#'    term = ANL$DCSREAS,
-#'    id = ANL$USUBJID,
-#'    col_by = factor(ANL$ARM),
-#'    total = "All Patients"
+#'   class = ANL$EOSSTT,
+#'   term = ANL$DCSREAS,
+#'   id = ANL$USUBJID,
+#'   col_by = factor(ANL$ARM),
+#'   total = "All Patients"
 #' )
 #'
 #' tbl3
-#'
-#'
-t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) {
+t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients", ...) {
 
-  #check input arguments ---------------------------
+  # check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
 
-  if (any("- Overall -" %in% term))
+  if (any("- Overall -" %in% term)) {
     stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
-  if (any("All Patients" %in% col_by))
+  }
+  if (any("All Patients" %in% col_by)) {
     stop("'All Patients' is not a valid col_by, t_ae_oview derives All Patients column")
+  }
 
-  if(!is.null(sub)){
+  if (!is.null(sub)) {
     check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)), nrow(sub))
     check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
   } else {
@@ -106,42 +108,52 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
     check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
   }
 
-  if(length(unique(check_input_length)) > 1)
+  if (length(unique(check_input_length)) > 1) {
     stop("invalid arguments: check that the length of input arguments are identical")
-  if(length(unique(check_input_col)) > 1 || unique(check_input_col) != 1)
+  }
+  if (length(unique(check_input_col)) > 1 || unique(check_input_col) != 1) {
     stop("invalid arguments: check that the inputs have a single column")
-  if(any(check_input_length == 0) || any(check_input_col == 0))
+  }
+  if (any(check_input_length == 0) || any(check_input_col == 0)) {
     stop("invalid arguments: check that inputs are not null")
+  }
 
 
-  #prepare data ------------------------------------
-  df <- data.frame(id = id,
-                   class = class,
-                   term = term,
-                   col_by = col_by,
-                   stringsAsFactors = FALSE)
+  # prepare data ------------------------------------
+  df <- data.frame(
+    id = id,
+    class = class,
+    term = term,
+    col_by = col_by,
+    stringsAsFactors = FALSE
+  )
 
   df <- df %>% arrange(class, term)
 
-  if(!is.null(sub)){
-    df <- data.frame(id = id,
-                     class = class,
-                     term = term,
-                     sub,
-                     col_by = col_by,
-                     stringsAsFactors = FALSE)
+  if (!is.null(sub)) {
+    df <- data.frame(
+      id = id,
+      class = class,
+      term = term,
+      sub,
+      col_by = col_by,
+      stringsAsFactors = FALSE
+    )
     df <- df %>% arrange(class, term)
   }
 
-  df <- df %>% mutate(class = ifelse(class == "", "None", as.character(class)),
-                      term = ifelse(term == "", "None", as.character(term)))
+  df <- df %>% mutate(
+    class = ifelse(class == "", "None", as.character(class)),
+    term = ifelse(term == "", "None", as.character(term))
+  )
 
   # adding All Patients
-  if(!is.null(total)){
+  if (!is.null(total)) {
     total <- tot_column(total)
 
-    if (total %in% levels(col_by))
-      stop(paste('col_by can not have', total, 'group.'))
+    if (total %in% levels(col_by)) {
+      stop(paste("col_by can not have", total, "group."))
+    }
 
     df <- duplicate_with_var(df, id = paste(df$id, "-", total), col_by = total)
   }
@@ -151,72 +163,81 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total="All Patients",...) 
 
   # start tabulating --------------------------------------------------------
 
-  ###---------NEED TO MOVE TO UTILS-------------utility functions
-  #split class, term, and subterms into lists
-  recursive_split <- function(df, name_in, count, max_count){
-    if(nrow(df) == 0)
+  ### ---------NEED TO MOVE TO UTILS-------------utility functions
+  # split class, term, and subterms into lists
+  recursive_split <- function(df, name_in, count, max_count) {
+    if (nrow(df) == 0) {
       return()
+    }
 
-    l_t_comp <-  t_helper_tabulate(df_id = df,
-                                   N = N,
-                                   checkcol = "uniqueid",
-                                   term = name_in,
-                                   remove_dupl = TRUE,
-                                   with_percent = TRUE)
+    l_t_comp <- t_helper_tabulate(
+      df_id = df,
+      N = N,
+      checkcol = "uniqueid",
+      term = name_in,
+      remove_dupl = TRUE,
+      with_percent = TRUE
+    )
 
-    if(count == max_count || (!is.null(nrow(split(df, df[,count]))))&& nrow(split(df, df[,count]))==0){
-
-      l_t_ov <- t_helper_tabulate(df_id = df,
-                        N = N,
-                        checkcol = "uniqueid",
-                        term = name_in,
-                        remove_dupl = TRUE,
-                        with_percent = TRUE)
+    if (count == max_count || (!is.null(nrow(split(df, df[, count])))) && nrow(split(df, df[, count])) == 0) {
+      l_t_ov <- t_helper_tabulate(
+        df_id = df,
+        N = N,
+        checkcol = "uniqueid",
+        term = name_in,
+        remove_dupl = TRUE,
+        with_percent = TRUE
+      )
 
       l_t_terms <- mapply(function(df_i, term) {
-          t_helper_tabulate(df_id = df_i,
-                            N = N,
-                            checkcol = "uniqueid",
-                            term = term,
-                            remove_dupl = TRUE,
-                            with_percent = TRUE)
-
-      },split(df, df[,count]),  names(split(df, df[,count])), SIMPLIFY = FALSE)
+        t_helper_tabulate(
+          df_id = df_i,
+          N = N,
+          checkcol = "uniqueid",
+          term = term,
+          remove_dupl = TRUE,
+          with_percent = TRUE
+        )
+      }, split(df, df[, count]), names(split(df, df[, count])), SIMPLIFY = FALSE)
       l_t_terms <- list(l_t_ov, l_t_terms)
       return(l_t_terms)
-    } else{
-      out <- mapply(recursive_split,
-                    split(df, df[,count]),
-                    names(split(df, df[,count])),
-                    count+1,
-                    max_count)
+    } else {
+      out <- mapply(
+        recursive_split,
+        split(df, df[, count]),
+        names(split(df, df[, count])),
+        count + 1,
+        max_count
+      )
 
       l_out <- list(l_t_comp, out)
       return(l_out)
     }
   }
-  ##############--------------------------------
+  ############## --------------------------------
 
   # split into lists of lists of subterms
-  l_t_class_terms <- mapply( recursive_split,
-                             df = split(df, df$class),
-                             name_in = names(split(df, df$class)),
-                             count = rep(3, length(split(df, df$class))),
-                             max_count = rep(ncol(df)-1, length(split(df, df$class))),
-                             SIMPLIFY = FALSE)
+  l_t_class_terms <- mapply(recursive_split,
+    df = split(df, df$class),
+    name_in = names(split(df, df$class)),
+    count = rep(3, length(split(df, df$class))),
+    max_count = rep(ncol(df) - 1, length(split(df, df$class))),
+    SIMPLIFY = FALSE
+  )
 
   tbls_all <- remove_Null(l_t_class_terms)
   tbls_class <- Map(recursive_indent, tbls_all, rep(0, length(tbls_all)))
   tbl <- do.call(stack_rtables_condense, tbls_class)
 
-  #remove NA rows
+  # remove NA rows
   index <- numeric(0)
-  for(i in seq(1, length(tbl))){
-    if(attr(tbl[[i]], "row.name") == "None"){
+  for (i in seq(1, length(tbl))) {
+    if (attr(tbl[[i]], "row.name") == "None") {
       index <- c(index, i)
     }
   }
-  if(length(index) > 0)
-    tbl <- tbl[-index,]
+  if (length(index) > 0) {
+    tbl <- tbl[-index, ]
+  }
   return(tbl)
 }

@@ -31,17 +31,16 @@ assigned dataset name.
 \examples{
 
 \dontrun{
-#Example 1 - load add datasets in directory
-getdata_bce('s39148b', 'prod')
+# Example 1 - load add datasets in directory
+getdata_bce("s39148b", "prod")
 
-#Example 2 - load only specified datasets
-getdata_bce('s39148b', 'sdtm', c('dm', 'ex', 'ds'))
+# Example 2 - load only specified datasets
+getdata_bce("s39148b", "sdtm", c("dm", "ex", "ds"))
 
-#Example 3 - load from home
-#equivalent to read_bce('/opt/BIOSTAT/home/<UNIXID>/<snapshot>/libraries/asl.sas7bdat')
-snapshot = 's39148b'
-getdata_bce(snapshot, 'home', 'asl')
-
+# Example 3 - load from home
+# equivalent to read_bce('/opt/BIOSTAT/home/<UNIXID>/<snapshot>/libraries/asl.sas7bdat')
+snapshot <- "s39148b"
+getdata_bce(snapshot, "home", "asl")
 }
 
 }

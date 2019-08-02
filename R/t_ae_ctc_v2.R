@@ -55,6 +55,8 @@
 #' @author Adrian Waddell
 #' @template author_zhanc107
 #'
+#' @import tibble
+#' @import dplyr
 #' @examples
 #' # Simple example
 #' library(tibble)
@@ -62,32 +64,32 @@
 #'
 #' ASL <- tibble(
 #'   USUBJID = paste0("id-", 1:10),
-#'   ARM = paste("ARM", LETTERS[rep(c(1,2), c(3,7))])
+#'   ARM = paste("ARM", LETTERS[rep(c(1, 2), c(3, 7))])
 #' )
 #'
 #'
 #' ae_lookup <- tribble(
-#' ~CLASS,         ~TERM,   ~GRADE,
-#' "cl A",   "trm A_1/2",        1,
-#' "cl A",   "trm A_2/2",        2,
-#' "cl B",   "trm B_1/3",        2,
-#' "cl B",   "trm B_2/3",        3,
-#' "cl B",   "trm B_3/3",        1,
-#' "cl C",   "trm C_1/1",        1
+#'   ~CLASS, ~TERM, ~GRADE,
+#'   "cl A", "trm A_1/2", 1,
+#'   "cl A", "trm A_2/2", 2,
+#'   "cl B", "trm B_1/3", 2,
+#'   "cl B", "trm B_2/3", 3,
+#'   "cl B", "trm B_3/3", 1,
+#'   "cl C", "trm C_1/1", 1
 #' )
 #'
 #' AAE <- cbind(
 #'   tibble(
-#'     USUBJID = ASL$USUBJID[c(2,2,2,3,3,4,4,4,4,5,6,6,7,7)]
+#'     USUBJID = ASL$USUBJID[c(2, 2, 2, 3, 3, 4, 4, 4, 4, 5, 6, 6, 7, 7)]
 #'   ),
-#'   ae_lookup[c(1,1,2,6,4,2,2,3,4,2,1,5,4,6),]
+#'   ae_lookup[c(1, 1, 2, 6, 4, 2, 2, 3, 4, 2, 1, 5, 4, 6), ]
 #' )
 #'
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
 #' tbl <- t_ae_ctc_v2(
 #'   class = ANL$CLASS,
-#'   term =  ANL$TERM,
+#'   term = ANL$TERM,
 #'   id = ANL$USUBJID,
 #'   grade = ANL$GRADE,
 #'   col_by = factor(ANL$ARM),
@@ -106,20 +108,20 @@
 #'
 #' ANL <- left_join(AAE, ASL %>% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
 #'
-#' tbl <- with(ANL,
-#'             t_ae_ctc_v2(
-#'               class = AEBODSYS,
-#'               term =  AEDECOD,
-#'               id = USUBJID,
-#'               grade = AETOXGR,
-#'               col_by = factor(ARM),
-#'               total = "All Patients",
-#'               grade_levels = 1:5
-#'             )
+#' tbl <- with(
+#'   ANL,
+#'   t_ae_ctc_v2(
+#'     class = AEBODSYS,
+#'     term = AEDECOD,
+#'     id = USUBJID,
+#'     grade = AETOXGR,
+#'     col_by = factor(ARM),
+#'     total = "All Patients",
+#'     grade_levels = 1:5
+#'   )
 #' )
 #'
 #' tbl
-#'
 t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5, ...) {
 
   # check argument validity and consitency ----------------------------------
@@ -129,30 +131,35 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   if (any("All Patients" %in% col_by)) stop("'All Patients' is not a valid col_by, t_ae_ctc_v2 derives All Patients column")
 
   # data prep ---------------------------------------------------------------
-  df <- data.frame(class = class,
-                   term = term,
-                   subjid = id,
-                   gradev = grade,
-                   col_by = col_by,
-                   stringsAsFactors = FALSE)
+  df <- data.frame(
+    class = class,
+    term = term,
+    subjid = id,
+    gradev = grade,
+    col_by = col_by,
+    stringsAsFactors = FALSE
+  )
   df <- df %>% arrange(class, term)
 
-  df <- df %>% mutate(class = ifelse(class == "", NA, class),
-                      term = ifelse(term == "", NA, term))
+  df <- df %>% mutate(
+    class = ifelse(class == "", NA, class),
+    term = ifelse(term == "", NA, term)
+  )
 
   class_label <- attr(class, "label")
   term_label <- attr(term, "label")
   grade_label <- attr(grade, "label")
 
-  if(is.null(class_label)) class_label <- deparse(substitute(class))
-  if(is.null(term_label)) term_label <- deparse(substitute(term))
-  if(is.null(grade_label)) grade_label <- deparse(substitute(grade))
+  if (is.null(class_label)) class_label <- deparse(substitute(class))
+  if (is.null(term_label)) term_label <- deparse(substitute(term))
+  if (is.null(grade_label)) grade_label <- deparse(substitute(grade))
 
-  if(!is.null(total)){
+  if (!is.null(total)) {
     total <- tot_column(total)
 
-    if (total %in% levels(col_by))
-      stop(paste('col_by can not have', total, 'group. t_ae_cts will derive it.'))
+    if (total %in% levels(col_by)) {
+      stop(paste("col_by can not have", total, "group. t_ae_cts will derive it."))
+    }
 
     # adding All Patients
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
@@ -170,14 +177,12 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
 
   # class and term chunks
   l_t_class_terms <- lapply(split(df, df$class), function(df_s_cl) {
-
     df_s_cl_term <- c(
       list("- Overall -" = df_s_cl),
       split(df_s_cl, df_s_cl$term)
     )
 
     l_t_terms <- lapply(df_s_cl_term, function(df_i) {
-
       t_max_grade_per_id(
         grade = df_i$gradev,
         id = df_i$subjid,
@@ -186,13 +191,12 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
         grade_levels = grade_levels,
         any_grade = "- Any Grade -"
       )
-
     })
 
     # sort terms by total
     N_total_any <- vapply(l_t_terms, function(tbl) {
       a <- 0
-      for(i in c(1:n_cols)){
+      for (i in c(1:n_cols)) {
         a <- a + tbl[1, i][1]
       }
       a
@@ -207,7 +211,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   # now sort tables
   N_total_overall <- vapply(l_t_class_terms, function(tbl) {
     a <- 0
-    for(i in c(1:n_cols)){
+    for (i in c(1:n_cols)) {
       a <- a + tbl[[1]][1, i][1]
     }
     a

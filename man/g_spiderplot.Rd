@@ -78,42 +78,47 @@ data("rADTR")
 ADTR <- rADTR \%>\% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 ADSL <- rADSL \%>\% select(STUDYID, USUBJID, RACE, SEX, ARM)
 ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
-ANL <- ANL \%>\% filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") \%>\%
-       filter(RACE \%in\% c("WHITE", "ASIAN")) \%>\%
-       group_by(USUBJID) \%>\%
-       arrange(ADY) \%>\%
-       mutate(CHG = ifelse(AVISIT == "Screening", 0, CHG),
-              PCHG = ifelse(AVISIT == "Screening", 0, PCHG))
+ANL <- ANL \%>\%
+  filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") \%>\%
+  filter(RACE \%in\% c("WHITE", "ASIAN")) \%>\%
+  group_by(USUBJID) \%>\%
+  arrange(ADY) \%>\%
+  mutate(
+    CHG = ifelse(AVISIT == "Screening", 0, CHG),
+    PCHG = ifelse(AVISIT == "Screening", 0, PCHG)
+  )
 ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 
 # Plot 1 - default color and shape mapping
-g_spiderplot(marker_x = ANL$ADY,
-             marker_id = ANL$USUBJID,
-             marker_y = ANL$PCHG,
-             line_colby = ANL$USUBJID,
-             marker_shape = ANL$USUBJID,
-             #marker_size = 5,
-             datalabel_txt = list(txt_ann = ANL$USUBJID),
-             #facet_rows = data.frame(sex = ANL$SEX),
-             #facet_columns = data.frame(arm = ANL$ARM),
-             vref_line = c(42, 86),
-             href_line = c(-20, 20),
-             x_label = "Time (Days)",
-             y_label = "Change (\%) from Baseline",
-             show_legend = TRUE)
+g_spiderplot(
+  marker_x = ANL$ADY,
+  marker_id = ANL$USUBJID,
+  marker_y = ANL$PCHG,
+  line_colby = ANL$USUBJID,
+  marker_shape = ANL$USUBJID,
+  # marker_size = 5,
+  datalabel_txt = list(txt_ann = ANL$USUBJID),
+  # facet_rows = data.frame(sex = ANL$SEX),
+  # facet_columns = data.frame(arm = ANL$ARM),
+  vref_line = c(42, 86),
+  href_line = c(-20, 20),
+  x_label = "Time (Days)",
+  y_label = "Change (\%) from Baseline",
+  show_legend = TRUE
+)
 
-#Plot 2 - with line color mapping
-g_spiderplot(marker_x = ANL$AVISIT,
-                  marker_id = ANL$USUBJID,
-                  marker_y = ANL$CHG,
-                  line_colby = ANL$RACE,
-                  line_color_opt = c("WHITE" = "red", "ASIAN" = "blue"),
-                  marker_shape = ANL$USUBJID,
-                  x_label = "Visit",
-                  y_label = "Change from Baseline",
-                  show_legend = TRUE)
-
-
+# Plot 2 - with line color mapping
+g_spiderplot(
+  marker_x = ANL$AVISIT,
+  marker_id = ANL$USUBJID,
+  marker_y = ANL$CHG,
+  line_colby = ANL$RACE,
+  line_color_opt = c("WHITE" = "red", "ASIAN" = "blue"),
+  marker_shape = ANL$USUBJID,
+  x_label = "Visit",
+  y_label = "Change from Baseline",
+  show_legend = TRUE
+)
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

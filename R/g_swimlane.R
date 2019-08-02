@@ -32,76 +32,85 @@
 #' # Example 1
 #' library(random.cdisc.data)
 #' library(dplyr)
-#' ASL <- radam("ASL", N=50, start_with = list(TRTDUR = rexp(50, 1/100)))
-#' ARS <- radam("ARS", ADSL = ASL,
-#' start_with = list(
-#'       ADY = rexp(nrow(ASL), 1/80)
-#'    )) %>% filter(PARAMCD == "OVRINV")
+#' ASL <- radam("ASL", N = 50, start_with = list(TRTDUR = rexp(50, 1 / 100)))
+#' ARS <- radam("ARS",
+#'   ADSL = ASL,
+#'   start_with = list(
+#'     ADY = rexp(nrow(ASL), 1 / 80)
+#'   )
+#' ) %>% filter(PARAMCD == "OVRINV")
 #' ANL <- ASL %>% left_join(ARS, by = c("STUDYID", "USUBJID"))
 #' anno_txt <- ASL[, c("ARMCD", "SEX")]
-#'
-#' g_swimlane(bar_id = ASL$USUBJID,
-#' bar_length = ASL$TRTDUR,
-#' sort_by = ASL$ARM,
-#' col_by = ASL$ARM,
-#' marker_id = ANL$USUBJID,
-#' marker_pos = ANL$ADY,
-#' marker_shape = ANL$AVALC,
-#' marker_shape_opt = c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 4),
-#' marker_color = NULL,
-#' marker_color_opt = NULL,
-#' anno_txt = anno_txt,
-#' yref_line = c(100, 200),
-#' ytick_at = waiver(),
-#' ylab = "Time from First Treatment (Day)",
-#' title = "Swimlane Plot")
-#'
+#' 
+#' g_swimlane(
+#'   bar_id = ASL$USUBJID,
+#'   bar_length = ASL$TRTDUR,
+#'   sort_by = ASL$ARM,
+#'   col_by = ASL$ARM,
+#'   marker_id = ANL$USUBJID,
+#'   marker_pos = ANL$ADY,
+#'   marker_shape = ANL$AVALC,
+#'   marker_shape_opt = c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 4),
+#'   marker_color = NULL,
+#'   marker_color_opt = NULL,
+#'   anno_txt = anno_txt,
+#'   yref_line = c(100, 200),
+#'   ytick_at = waiver(),
+#'   ylab = "Time from First Treatment (Day)",
+#'   title = "Swimlane Plot"
+#' )
+#' 
 #' # Example 2
 #' library(dplyr)
 #' ASL <- rADSL
 #' ARS <- rADRS
-#'
+#' 
 #' anno_txt_vars <- c("ARMCD", "SEX", "COUNTRY")
 #' anno_txt <- ASL[, anno_txt_vars]
-#'
+#' 
 #' # markers from ARS
-#' ARS <- ASL %>% select(USUBJID) %>%
-#' left_join(ARS, "USUBJID") %>%
-#' filter(PARAMCD == "OVRINV") %>%
-#' select(USUBJID, ADY, AVALC)
-#'
+#' ARS <- ASL %>%
+#'   select(USUBJID) %>%
+#'   left_join(ARS, "USUBJID") %>%
+#'   filter(PARAMCD == "OVRINV") %>%
+#'   select(USUBJID, ADY, AVALC)
+#' 
 #' # markers from ASL - discontinuation
 #' ADS <- ASL %>%
-#' filter(EOSSTT == "Discontinued" | DCSREAS != "") %>%
-#' select(USUBJID, EOSDY, DCSREAS) %>%
-#' dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
-#'
+#'   filter(EOSSTT == "Discontinued" | DCSREAS != "") %>%
+#'   select(USUBJID, EOSDY, DCSREAS) %>%
+#'   dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
+#' 
 #' # combine ARS with ADS records as one data for markers and join with ASL
 #' ANL <- ASL %>%
-#' inner_join(rbind(ARS, ADS), "USUBJID")
-#'
-#' g_swimlane(bar_id = ASL$USUBJID,
-#' bar_length = ASL$TRTDURD,
-#' sort_by = NULL,
-#' col_by = ASL$ARMCD,
-#' marker_id = ANL$USUBJID,
-#' marker_pos = ANL$ADY,
-#' marker_shape = ANL$AVALC,
-#' marker_shape_opt <- c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 0,
-#' "Adverse Event" = 7, "Death" = 8, "Physician Decision" = 9, "Progressive Disease" = 10,
-#' "Symptomatic Deterioation" = 11, "Withdrawal by Subject" = 12),
-#' marker_color = ANL$AVALC,
-#' marker_color_opt <- c("CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
-#' "NE" = "grey", "Adverse Event" = "orange", "Death" = "black", "Physician Decision" = "navy",
-#' "Progressive Disease" = "purple", "Symptomatic Deterioation" = "cyan",
-#' "Withdrawal by Subject" = "darkred"),
-#' anno_txt = anno_txt,
-#' yref_line = c(50, 100),
-#' ytick_at = waiver(),
-#' ylab = "Time from First Treatment (Day)",
-#' title = "Swimlane Plot")
-#'
-
+#'   inner_join(rbind(ARS, ADS), "USUBJID")
+#' 
+#' g_swimlane(
+#'   bar_id = ASL$USUBJID,
+#'   bar_length = ASL$TRTDURD,
+#'   sort_by = NULL,
+#'   col_by = ASL$ARMCD,
+#'   marker_id = ANL$USUBJID,
+#'   marker_pos = ANL$ADY,
+#'   marker_shape = ANL$AVALC,
+#'   marker_shape_opt <- c(
+#'     "CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 0,
+#'     "Adverse Event" = 7, "Death" = 8, "Physician Decision" = 9, "Progressive Disease" = 10,
+#'     "Symptomatic Deterioation" = 11, "Withdrawal by Subject" = 12
+#'   ),
+#'   marker_color = ANL$AVALC,
+#'   marker_color_opt <- c(
+#'     "CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
+#'     "NE" = "grey", "Adverse Event" = "orange", "Death" = "black", "Physician Decision" = "navy",
+#'     "Progressive Disease" = "purple", "Symptomatic Deterioation" = "cyan",
+#'     "Withdrawal by Subject" = "darkred"
+#'   ),
+#'   anno_txt = anno_txt,
+#'   yref_line = c(50, 100),
+#'   ytick_at = waiver(),
+#'   ylab = "Time from First Treatment (Day)",
+#'   title = "Swimlane Plot"
+#' )
 g_swimlane <- function(bar_id,
                        bar_length,
                        sort_by = NULL,
@@ -116,8 +125,7 @@ g_swimlane <- function(bar_id,
                        yref_line = NULL,
                        ytick_at = waiver(),
                        ylab,
-                       title
-) {
+                       title) {
 
   # check data
   if (!is.null(sort_by)) check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
@@ -135,24 +143,26 @@ g_swimlane <- function(bar_id,
     bar_length,
     sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
     col_by = if (is.null(col_by)) "x" else to_n(col_by, length(bar_length))
-    )
+  )
 
-  #data for marker
+  # data for marker
   if (is.null(marker_id)) marker_id <- bar_id
   marker_data <- data.frame(
     marker_id,
     marker_pos = if (is.null(marker_pos)) "x" else to_n(marker_pos, length(marker_id)),
     marker_shape = if (is.null(marker_shape)) "x" else to_n(marker_shape, length(marker_id)),
     marker_color = if (is.null(marker_color)) "x" else to_n(marker_color, length(marker_id))
-    )
+  )
 
   # if sort by a variable, reorder bar_id by sort var and then bar length; otherwise sort by bar length
   if (!is.null(sort_by)) {
-    bar_data$bar_id = factor(bar_data$bar_id,
-                             levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by, -bar_data$bar_length)])))
-  } else{
-    bar_data$bar_id = factor(bar_data$bar_id,
-                             levels = rev(unique(bar_data$bar_id[order(-bar_data$bar_length)])))
+    bar_data$bar_id <- factor(bar_data$bar_id,
+      levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by, -bar_data$bar_length)]))
+    )
+  } else {
+    bar_data$bar_id <- factor(bar_data$bar_id,
+      levels = rev(unique(bar_data$bar_id[order(-bar_data$bar_length)]))
+    )
   }
 
   # labeling
@@ -162,7 +172,7 @@ g_swimlane <- function(bar_id,
   # plot bar plot first
   p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_length)) +
     geom_bar(stat = "identity", aes(fill = col_by)) +
-    coord_flip(xlim = c(1,length(unique(bar_id)) + 1)) +
+    coord_flip(xlim = c(1, length(unique(bar_id)) + 1)) +
     theme_bw() +
     theme(
       panel.background = element_blank(),
@@ -180,14 +190,17 @@ g_swimlane <- function(bar_id,
       theme(
         legend.title = element_text(size = 9),
         legend.text = element_text(size = 9),
-        legend.key = element_rect(fill = NA))
+        legend.key = element_rect(fill = NA)
+      )
   }
 
 
   # plot marker
   if (!is.null(marker_pos)) {
-    p <- p + geom_point(data = marker_data,
-                        aes(x = marker_id, y = marker_pos, shape = marker_shape, color = marker_color), size = 2.5, na.rm = T) +
+    p <- p + geom_point(
+      data = marker_data,
+      aes(x = marker_id, y = marker_pos, shape = marker_shape, color = marker_color), size = 2.5, na.rm = T
+    ) +
       scale_y_continuous(limits = c(0, max(bar_length, marker_pos) + 5), breaks = ytick_at, expand = c(0, 0))
 
     if (!is.null(marker_shape)) {
@@ -203,25 +216,32 @@ g_swimlane <- function(bar_id,
     }
 
     if (!is.null(marker_shape_opt)) {
-      p <- p + scale_shape_manual(name = "Marker Shape",
-                                  breaks = marker_data$marker_shape,
-                                  values = marker_shape_opt)
-    } else{
-      p <- p + scale_shape_manual(name = "Marker Shape",
-                                  breaks = marker_data$marker_shape,
-                                  values = c(15:25, 0:14))
+      p <- p + scale_shape_manual(
+        name = "Marker Shape",
+        breaks = marker_data$marker_shape,
+        values = marker_shape_opt
+      )
+    } else {
+      p <- p + scale_shape_manual(
+        name = "Marker Shape",
+        breaks = marker_data$marker_shape,
+        values = c(15:25, 0:14)
+      )
     }
 
     if (!is.null(marker_color_opt)) {
-      p <- p + scale_color_manual(name = "Marker Color",
-                                  breaks = marker_data$marker_color,
-                                  values = marker_color_opt)
-    } else{
-      p <- p + scale_color_manual(name = "Marker Shape",
-                                  breaks = marker_data$marker_color,
-                                  values = c(1:25))
+      p <- p + scale_color_manual(
+        name = "Marker Color",
+        breaks = marker_data$marker_color,
+        values = marker_color_opt
+      )
+    } else {
+      p <- p + scale_color_manual(
+        name = "Marker Shape",
+        breaks = marker_data$marker_color,
+        values = c(1:25)
+      )
     }
-
   }
 
 
@@ -241,30 +261,37 @@ g_swimlane <- function(bar_id,
   # create annotation as a separate table plot
   if (is.null(anno_txt)) {
     t <- data.frame(bar_id, bar_length,
-                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)))
+      sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length))
+    )
   } else {
     t <- data.frame(bar_id, bar_length,
-                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
-                    anno_txt)
+      sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
+      anno_txt
+    )
   }
 
   # if sort by a variable, reorder bar_id; otherwise sort by bar length
   if (!is.null(sort_by)) {
-    t <- t[with(t, order(sort_by, -bar_length, bar_id)), -c(2,3)]
-  } else{
-    t <- t[with(t, order(-bar_length, bar_id)), -c(2,3)]
+    t <- t[with(t, order(sort_by, -bar_length, bar_id)), -c(2, 3)]
+  } else {
+    t <- t[with(t, order(-bar_length, bar_id)), -c(2, 3)]
   }
 
   t <- as.data.frame(t)
   colnames(t)[1] <- " "
 
   my_theme <- ttheme_default(
-    core = list(bg_params = list(fill = NA, col = NA),
-                fg_params = list(cex = 0.8)),
-    colhead = list(bg_params = list(fill = NA, col = NA),
-                   fg_params = list(cex = 0.8)))
+    core = list(
+      bg_params = list(fill = NA, col = NA),
+      fg_params = list(cex = 0.8)
+    ),
+    colhead = list(
+      bg_params = list(fill = NA, col = NA),
+      fg_params = list(cex = 0.8)
+    )
+  )
   tb <- tableGrob(t, rows = NULL, theme = my_theme)
-  tb$heights <- unit(rep(1/nrow(tb), nrow(tb)), "null")
+  tb$heights <- unit(rep(1 / nrow(tb), nrow(tb)), "null")
 
   # grab plot and table as one plot
   g0 <- ggplotGrob(p)
@@ -274,6 +301,4 @@ g_swimlane <- function(bar_id,
   grid.newpage()
   grid.draw(g)
   invisible(g)
-
 }
-

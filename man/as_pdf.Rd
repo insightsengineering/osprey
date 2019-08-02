@@ -28,16 +28,16 @@ This is an utility function to output a decorated grob (gTree) object
 library(ggplot2)
 g <- with(iris, {
   list(
-    ggplotGrob(qplot(Sepal.Length, Sepal.Width, col=Species)),
-    ggplotGrob(qplot(Sepal.Length, Petal.Length, col=Species)),
-    ggplotGrob(qplot(Sepal.Length, Petal.Width, col=Species))
+    ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
+    ggplotGrob(qplot(Sepal.Length, Petal.Length, col = Species)),
+    ggplotGrob(qplot(Sepal.Length, Petal.Width, col = Species))
   )
 })
 
-#output to pdf
+# output to pdf
 g \%>\% as_pdf("~/example_aspdf1.pdf")
-decorate_grob_set(grobs = g, titles = "Hello\\nOne\\ntwo", footnotes = "This is a footnote") \%>\% as_pdf("~/example_aspdf2.pdf")
-
+decorate_grob_set(grobs = g, titles = "Hello\\nOne\\ntwo", footnotes = "This is a footnote") \%>\%
+  as_pdf("~/example_aspdf2.pdf")
 }
 }
 \author{

@@ -38,32 +38,32 @@ library(dplyr)
 
 ASL <- tibble(
   USUBJID = paste0("id-", 1:10),
-  ARM = paste("ARM", LETTERS[rep(c(1,2), c(3,7))])
+  ARM = paste("ARM", LETTERS[rep(c(1, 2), c(3, 7))])
 )
 
 
 ae_lookup <- tribble(
-~CLASS,         ~TERM,   ~GRADE,
-"cl A",   "trm A_1/2",        1,
-"cl A",   "trm A_2/2",        2,
-"cl B",   "trm B_1/3",        2,
-"cl B",   "trm B_2/3",        3,
-"cl B",   "trm B_3/3",        1,
-"cl C",   "trm C_1/1",        1
+  ~CLASS, ~TERM, ~GRADE,
+  "cl A", "trm A_1/2", 1,
+  "cl A", "trm A_2/2", 2,
+  "cl B", "trm B_1/3", 2,
+  "cl B", "trm B_2/3", 3,
+  "cl B", "trm B_3/3", 1,
+  "cl C", "trm C_1/1", 1
 )
 
 AAE <- cbind(
   tibble(
-    USUBJID = ASL$USUBJID[c(2,2,2,3,3,4,4,4,4,5,6,6,7,7)]
+    USUBJID = ASL$USUBJID[c(2, 2, 2, 3, 3, 4, 4, 4, 4, 5, 6, 6, 7, 7)]
   ),
-  ae_lookup[c(1,1,2,6,4,2,2,3,4,2,1,5,4,6),]
+  ae_lookup[c(1, 1, 2, 6, 4, 2, 2, 3, 4, 2, 1, 5, 4, 6), ]
 )
 
 ANL <- left_join(ASL, AAE, by = "USUBJID")
 
 tbl <- t_ds(
   class = ANL$CLASS,
-  term =  ANL$TERM,
+  term = ANL$TERM,
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
   total = "All Patients"
@@ -73,7 +73,7 @@ tbl
 
 tbl2 <- t_ds(
   class = ANL$CLASS,
-  term =  ANL$TERM,
+  term = ANL$TERM,
   sub = data.frame(GRADE = ANL$GRADE),
   id = ANL$USUBJID,
   col_by = factor(ANL$ARM),
@@ -88,16 +88,14 @@ data("rADSL")
 ANL <- rADSL
 
 tbl3 <- t_ds(
-   class = ANL$EOSSTT,
-   term = ANL$DCSREAS,
-   id = ANL$USUBJID,
-   col_by = factor(ANL$ARM),
-   total = "All Patients"
+  class = ANL$EOSSTT,
+  term = ANL$DCSREAS,
+  id = ANL$USUBJID,
+  col_by = factor(ANL$ARM),
+  total = "All Patients"
 )
 
 tbl3
-
-
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
