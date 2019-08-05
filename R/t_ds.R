@@ -3,11 +3,12 @@
 #'
 #' \code{t_ds} returns patient disposition table that corresponds to STREAM template DST01
 #'
+#' @param class system organ class variable.
+#' @param term reason for discontinuation from study.
+#' @param sub dataframe of additional subsets of terms
 #' @param id unique subject identifier variable. If a particular subject has no
 #'   adverse event then the subject \code{id} should be listed where
 #'   \code{class} and \code{term} should be set to missing (i.e. \code{NA}).
-#' @param term reason for discontinuation from study.
-#' @param sub dataframe of additional subsets of terms
 #' @param col_by group variable that will be used for a column header. \code{col_by}
 #'  has to be a factor and can not be missing.
 #' @param total character string that will be used as a label for a column with
@@ -91,8 +92,9 @@
 #' )
 #'
 #' tbl3
-#' }
-t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients", ...) {
+#'}
+t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
+
 
   # check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)

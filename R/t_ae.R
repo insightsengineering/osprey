@@ -90,7 +90,7 @@
 #' )
 #' }
 #'
-t_ae <- function(class, term, id, col_by, total = "All Patients", ...) {
+t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
   # check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)

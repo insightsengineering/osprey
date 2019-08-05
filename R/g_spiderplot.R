@@ -47,7 +47,7 @@
 #' @examples
 #' # simple example
 #' library(dplyr)
-#' 
+#'
 #' data("rADSL")
 #' data("rADTR")
 #' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
@@ -63,7 +63,7 @@
 #'     PCHG = ifelse(AVISIT == "Screening", 0, PCHG)
 #'   )
 #' ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
-#' 
+#'
 #' # Plot 1 - default color and shape mapping
 #' g_spiderplot(
 #'   marker_x = ANL$ADY,
@@ -81,7 +81,7 @@
 #'   y_label = "Change (%) from Baseline",
 #'   show_legend = TRUE
 #' )
-#' 
+#'
 #' # Plot 2 - with line color mapping
 #' g_spiderplot(
 #'   marker_x = ANL$AVISIT,
@@ -109,9 +109,7 @@ g_spiderplot <- function(marker_x,
                          href_line = NULL,
                          x_label = "Time (Days)",
                          y_label = "Change (%) from Baseline",
-                         show_legend = FALSE,
-                         draw = TRUE,
-                         newpage = TRUE) {
+                         show_legend = FALSE) {
   check_input_length <- c(nrow(data.frame(marker_x)), nrow(data.frame(marker_id)), nrow(data.frame(marker_y)))
 
   if (length(unique(check_input_length)) > 1) {

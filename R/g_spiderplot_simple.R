@@ -4,6 +4,7 @@
 #'
 #' Descr of this plot
 #'
+#' @param anl The analysis data frame (e.g. ATE.sas7bdat on BCE)
 #' @param byvar Analysis dataset
 #' @param days Variable with time in days
 #' @param mesValue Variable with measurement
