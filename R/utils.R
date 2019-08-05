@@ -4,8 +4,8 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
   if (checkcol == "rowcount") {
     tbl <- rtabulate(
       na.omit(df_id),
-      row_by_var = no_by(""),
-      col_by_var = "col_by",
+      row_by = no_by(""),
+      col_by = df_id$col_by,
       FUN = nrow,
       format = "xx"
     )
@@ -17,19 +17,19 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
     if (with_percent) {
       tbl <- rtabulate(
         na.omit(df_id),
-        row_by_var = no_by(""),
-        col_by_var = "col_by",
+        row_by = no_by(""),
+        col_by = df_id$col_by,
         FUN = count_perc_col_N,
-        N = N,
+        col_wise_args = list(n_i = N),
         format = "xx (xx.xx%)"
       )
     } else {
       tbl <- rtabulate(
         na.omit(df_id),
-        row_by_var = no_by(""),
-        col_by_var = "col_by",
+        row_by = no_by(""),
+        col_by = df_id$col_by,
         FUN = count_col_N,
-        N = N,
+        col_wise_args = list(n_i = N),
         format = "xx"
       )
     }
@@ -42,10 +42,10 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
 
     tbl <- rtabulate(
       na.omit(df_id),
-      row_by_var = checkcol,
-      col_by_var = "col_by",
+      row_by = factor(checkcol),
+      col_by = df_id$col_by,
       FUN = count_perc_col_N,
-      N = N,
+      col_wise_args = list(n_i = N),
       format = "xx (xx.xx%)"
     )
 
@@ -68,9 +68,8 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
 }
 
 # checks if there is any case and derives counts, otherwise 0
-count_col_N <- function(x_cell, N) {
-  N_i <- if (nrow(x_cell) == 0) 0 else N[x_cell$col_by[1]]
-  if (N_i > 0) {
+count_col_N <- function(x_cell, n_i) {
+  if (n_i > 0) {
     length(x_cell$id) # obtaining the total
   } else {
     rcell(0, format = "xx")

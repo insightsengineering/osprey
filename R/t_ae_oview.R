@@ -106,7 +106,8 @@ t_ae_oview <- function(id,
                        total = "All Patients") {
 
   # check input arguments ---------------------------
-  check_col_by(col_by, min_num_levels = 1)
+  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
+  check_col_by(col_by, col_N, min_num_levels = 1)
   possible_names <- c(
     "dthfl",
     "dcsreas",

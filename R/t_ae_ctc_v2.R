@@ -127,7 +127,8 @@
 t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5) {
 
   # check argument validity and consitency ----------------------------------
-  check_col_by(col_by, min_num_levels = 1)
+  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
+  check_col_by(col_by, col_N, min_num_levels = 1)
 
   if (any("- Overall -" %in% term)) stop("'- Overall -' is not a valid term, t_ae_ctc_v2 reserves it for derivation")
   if (any("All Patients" %in% col_by)) stop("'All Patients' is not a valid col_by, t_ae_ctc_v2 derives All Patients column")

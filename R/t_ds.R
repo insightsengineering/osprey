@@ -95,7 +95,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
 
 
   # check input arguments ---------------------------
-  check_col_by(col_by, min_num_levels = 1)
+  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
+  check_col_by(col_by, col_N, min_num_levels = 1)
 
   if (any("- Overall -" %in% term)) {
     stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
