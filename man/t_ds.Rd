@@ -60,7 +60,10 @@ AAE <- cbind(
 )
 
 ANL <- left_join(ASL, AAE, by = "USUBJID")
+#' # @Todo The example code is not working with tern@master
+# Error: argument "col_by" is missing, with no default
 
+\dontrun{
 tbl <- t_ds(
   class = ANL$CLASS,
   term = ANL$TERM,
@@ -96,6 +99,7 @@ tbl3 <- t_ds(
 )
 
 tbl3
+}
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

@@ -20,16 +20,11 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
+#' atr <- left_join(rADRS, rADSL)
 #'
-#' atr <- left_join(radrs(10, 1), radsl(10, 1))
-#'
-#'
-#' spiderplot_simple(atr %>% filter(PARAMCD == "SUMTGLES"), groupCol = SEX)
-spiderplot_simple <- function(anl, byvar = USUBJID, days = TUDY, mesValue = PCHG, groupCol = USUBJID, baseday = 0) {
-  byvar <- enquo(byvar)
-  days <- enquo(days)
-  mesValue <- enquo(mesValue)
-  groupCol <- enquo(groupCol)
+#' spiderplot_simple(atr %>% filter(PARAMCD == "SUMTGLES"), groupCol = "SEX")
+spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
+    mesValue = "PARAM", groupCol = "USUBJID", baseday = 0) {
   ### remove patients without post baseline measurement
   anl <- anl %>%
     group_by(!!byvar) %>%
@@ -37,14 +32,15 @@ spiderplot_simple <- function(anl, byvar = USUBJID, days = TUDY, mesValue = PCHG
     filter(morebase == TRUE) %>%
     ungroup()
   ### find the last measurement
-  lastObs <- anl %>% group_by(!!byvar) %>% slice(which.max(!!days))
+  lastObs <- anl %>% group_by(!!as.symbol(byvar)) %>% slice(which.max(!!as.symbol(days)))
 
   # plotr
-  ggplot(data = anl, mapping = aes_(x = days, y = mesValue, group = byvar, colour = groupCol), size = 2, alpha = 1) +
+  ggplot(data = anl, mapping = aes_string(x = days, y = mesValue, group = byvar, colour = groupCol),
+          size = 2, alpha = 1) +
     geom_point(size = 3) + geom_line(size = 2, alpha = 0.7) +
-    geom_text(aes_(x = days, y = mesValue, label = byvar), data = lastObs, hjust = 0) +
+    geom_text(aes_string(x = days, y = mesValue, label = byvar), data = lastObs, hjust = 0) +
     geom_hline(aes(yintercept = 0), linetype = "dotted", color = "black") +
     xlab("Time (Days)") +
-    ylab("Change(%) from Baseline") +
-    expand_limits(anl, x = select_(anl, mesValue) * 1.2)
+    ylab("Change(%) from Baseline")# +
+    # expand_limits(anl, x = select_(anl, mesValue) * 1.2)
 }

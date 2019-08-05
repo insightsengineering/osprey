@@ -4,8 +4,8 @@
 \alias{spiderplot_simple}
 \title{Create a spiderplot_simple}
 \usage{
-spiderplot_simple(anl, byvar = USUBJID, days = TUDY, mesValue = PCHG,
-  groupCol = USUBJID, baseday = 0)
+spiderplot_simple(anl, byvar = "USUBJID", days = "TRTDURD",
+  mesValue = "PARAM", groupCol = "USUBJID", baseday = 0)
 }
 \arguments{
 \item{byvar}{Analysis dataset}
@@ -27,11 +27,9 @@ Descr of this plot
 \examples{
 library(random.cdisc.data)
 
+atr <- left_join(rADRS, rADSL)
 
-atr <- left_join(radrs(10, 1), radsl(10, 1))
-
-
-spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol = SEX)
+spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol = "SEX")
 }
 \author{
 Mika Maekinen

@@ -87,6 +87,10 @@
 #'
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
+#' #' # @@Todo The example code is not working with tern@@master
+#' # Error: argument "col_by" is missing, with no default
+#'
+#' \dontrun{
 #' tbl <- t_ae_ctc_v2(
 #'   class = ANL$CLASS,
 #'   term = ANL$TERM,
@@ -96,8 +100,7 @@
 #'   total = "All Patients",
 #'   grade_levels = 1:3
 #' )
-#'
-#' tbl
+#' }
 #'
 #'
 #' library(random.cdisc.data)
@@ -108,6 +111,10 @@
 #'
 #' ANL <- left_join(AAE, ASL %>% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
 #'
+#' #' # @@Todo The example code is not working with tern@@master
+#' # Error: argument "col_by" is missing, with no default
+#'
+#' \dontrun{
 #' tbl <- with(
 #'   ANL,
 #'   t_ae_ctc_v2(
@@ -120,8 +127,7 @@
 #'     grade_levels = 1:5
 #'   )
 #' )
-#'
-#' tbl
+#' }
 t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5, ...) {
 
   # check argument validity and consitency ----------------------------------

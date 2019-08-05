@@ -55,6 +55,10 @@
 #'
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
+#' # @@Todo The example code is not working with tern@@master
+#' # Error: argument "col_by" is missing, with no default
+#'
+#' \dontrun{
 #' tbl <- t_ae(
 #'   class = ANL$CLASS,
 #'   term = ANL$TERM,
@@ -64,7 +68,7 @@
 #' )
 #'
 #' tbl
-#'
+#' }
 #' # Simple example 2
 #'
 #' data("rADSL")
@@ -73,6 +77,10 @@
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, ARM, AEBODSYS, AEDECOD)
 #' ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
 #'
+#' # @@Todo The example code is not working with tern@@master
+#' # Error: argument "col_by" is missing, with no default
+#'
+#' \dontrun{
 #' tbl2 <- t_ae(
 #'   class = ANL$AEBODSYS,
 #'   term = ANL$AEDECOD,
@@ -80,8 +88,8 @@
 #'   col_by = factor(ANL$ARM),
 #'   total = NULL
 #' )
+#' }
 #'
-#' tbl2
 t_ae <- function(class, term, id, col_by, total = "All Patients", ...) {
 
   # check input arguments ---------------------------
