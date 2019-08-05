@@ -56,7 +56,7 @@
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
 #'
-#' \dontrun{
+#'
 #' tbl <- t_ae(
 #'   class = ANL$CLASS,
 #'   term = ANL$TERM,
@@ -66,7 +66,6 @@
 #' )
 #'
 #' tbl
-#' }
 #' # Simple example 2
 #'
 #' data("rADSL")
@@ -76,7 +75,6 @@
 #' ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
 #'
 #'
-#' \dontrun{
 #' tbl2 <- t_ae(
 #'   class = ANL$AEBODSYS,
 #'   term = ANL$AEDECOD,
@@ -84,7 +82,6 @@
 #'   col_by = factor(ANL$ARM),
 #'   total = NULL
 #' )
-#' }
 #'
 t_ae <- function(class, term, id, col_by, total = "All Patients") {
 

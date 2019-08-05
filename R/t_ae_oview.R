@@ -67,7 +67,6 @@
 #' )
 #'
 #'
-#' \dontrun{
 #' tbl <- t_ae_oview(
 #'   id = ANL$USUBJID,
 #'   class = ANL$AESOC,
@@ -83,7 +82,6 @@
 #' )
 #'
 #' tbl
-#' }
 t_ae_oview <- function(id,
                        class,
                        term,

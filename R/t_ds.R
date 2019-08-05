@@ -54,7 +54,6 @@
 #'
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
-#' \dontrun{
 #' tbl <- t_ds(
 #'   class = ANL$CLASS,
 #'   term = ANL$TERM,
@@ -90,7 +89,6 @@
 #' )
 #'
 #' tbl3
-#'}
 t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
 
 
