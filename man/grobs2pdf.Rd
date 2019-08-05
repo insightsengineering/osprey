@@ -25,7 +25,7 @@ grobs and the PDF}
 title is set to \code{fontsize} + 1 (default = 10) and for footnotes set to
 \code{fontsize} - 1 (default = 8)}
 
-\item{papersize}{name of paper size and orientation, accepted values include
+\item{pagesize}{name of paper size and orientation, accepted values include
 \code{"a4.landscape"}, \code{"a4.portrait"}, \code{"letter.portrait"} and
 \code{"letter.landscape"} (default)}
 }

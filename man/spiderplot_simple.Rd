@@ -8,6 +8,8 @@ spiderplot_simple(anl, byvar = "USUBJID", days = "TRTDURD",
   mesValue = "PARAM", groupCol = "USUBJID", baseday = 0)
 }
 \arguments{
+\item{anl}{The analysis data frame (e.g. ATE.sas7bdat on BCE)}
+
 \item{byvar}{Analysis dataset}
 
 \item{days}{Variable with time in days}

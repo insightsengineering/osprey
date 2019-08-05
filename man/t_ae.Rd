@@ -4,7 +4,7 @@
 \alias{t_ae}
 \title{Adverse Events by System Organ Class and Preferred Term}
 \usage{
-t_ae(class, term, id, col_by, total = "All Patients", ...)
+t_ae(class, term, id, col_by, total = "All Patients")
 }
 \arguments{
 \item{class}{system organ class variable.}

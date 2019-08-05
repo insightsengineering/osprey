@@ -4,9 +4,11 @@
 \alias{t_ds}
 \title{Patient Disposition Table}
 \usage{
-t_ds(class, term, sub = NULL, id, col_by, total = "All Patients", ...)
+t_ds(class, term, sub = NULL, id, col_by, total = "All Patients")
 }
 \arguments{
+\item{class}{system organ class variable.}
+
 \item{term}{reason for discontinuation from study.}
 
 \item{sub}{dataframe of additional subsets of terms}

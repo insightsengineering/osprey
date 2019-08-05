@@ -35,6 +35,8 @@ plot into rows, default here is NULL}
 
 \item{y_label}{string of text for y axis label, default is AE Derived Terms}
 
+\item{legend_label}{\code{character} for legend label, default is AETOXGR}
+
 \item{sort_by}{character string that defines the ordering of the class and term
 variables in the output table,
 options: "alphabetical" or "count", default here is set to "count"}

@@ -2,7 +2,11 @@
 title: "Using Osprey TLGs with teal"
 author: "Adrian Waddell, Nina Qi"
 date: "09/20/2018"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{Title of your vignette}
+  %\usepackage[UTF-8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
@@ -39,11 +43,11 @@ x <- teal::init(
       ui = function(id) {ns <- NS(id); plotOutput(ns("plot"))},
       server = function(input, output, session, datasets) {
         output$plot <- renderPlot({
-          
+
           ATR <- datasets$get_data('ATR',  filtered = TRUE, reactive = TRUE)
-          
+
           osprey::g_spiderplot(marker_x = ATR$ADY, marker_y = ATR$PCHG, marker_id = ATR$USUBJID, line_colby = ATR$STUDYID)
-          
+
         })
       },
       filters = 'ATR'
