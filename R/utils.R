@@ -1,6 +1,6 @@
-#tabulation function for condition checks
-t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percent){
-
+# tabulation function for condition checks
+#' @importFrom utils getFromNamespace
+t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percent) {
   if (checkcol == "rowcount") {
     tbl <- rtabulate(
       na.omit(df_id),
@@ -9,13 +9,12 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
       FUN = nrow,
       format = "xx"
     )
-  } else if(checkcol == "uniqueid"){
-
-    if(remove_dupl){
+  } else if (checkcol == "uniqueid") {
+    if (remove_dupl) {
       df_id <- df_id[!duplicated(df_id$id), ]
     }
 
-    if(with_percent){
+    if (with_percent) {
       tbl <- rtabulate(
         na.omit(df_id),
         row_by_var = no_by(""),
@@ -35,10 +34,9 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
       )
     }
   } else {
-
-    if(remove_dupl){
-      #sort by checkcol in descending order first
-      df_id <- df_id[order(df_id[checkcol], decreasing = TRUE),]
+    if (remove_dupl) {
+      # sort by checkcol in descending order first
+      df_id <- df_id[order(df_id[checkcol], decreasing = TRUE), ]
       df_id <- df_id[!duplicated(df_id$id), ]
     }
 
@@ -51,14 +49,13 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
       format = "xx (xx.xx%)"
     )
 
-    if(dim(tbl)[1] > 1 | (dim(tbl)[1] == 1 & attributes(tbl[1])$names == "1")){
+    if (dim(tbl)[1] > 1 | (dim(tbl)[1] == 1 & attributes(tbl[1])$names == "1")) {
       tbl <- tbl[dim(tbl)[1]]
-    } else{
-      for(i in 1:dim(tbl)[2]){
+    } else {
+      for (i in 1:dim(tbl)[2]) {
         tbl[[1]][[i]] <- rcell(0)
       }
     }
-
   }
 
   attr(tbl[[1]], "row.name") <- term
@@ -68,7 +65,6 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
     rrowl("", unname(N), format = "(N=xx)")
   )
   tbl
-
 }
 
 # checks if there is any case and derives counts, otherwise 0
@@ -82,49 +78,53 @@ count_col_N <- function(x_cell, N) {
 }
 
 
-#adds row name to rtable
+# adds row name to rtable
 shift_label_table_no_grade <- function(tbl, term) {
   attr(tbl[[1]], "row.name") <- term
   tbl
 }
 
-#adds row name to rtable
+# adds row name to rtable
 shift_label_table_mod <- function(tbl, term, ind_tbl) {
   attr(tbl[[1]], "row.name") <- term
   indent_tabl(tbl, ind_tbl)
   tbl
 }
 
-#remove null elements from list
+# remove null elements from list
 remove_Null <- function(x) {
   x <- Filter(Negate(is.null), x)
-  lapply(x, function(x){ if (is.list(x) && class(x) != "rtable") remove_Null(x) else x})
+  lapply(x, function(x) {
+    if (is.list(x) && class(x) != "rtable") remove_Null(x) else x
+  })
 }
 
-#recursive indent function
-recursive_indent <- function(tbl_l, ind_count){
-  if (class(tbl_l) == "rtable"){
+# recursive indent function
+recursive_indent <- function(tbl_l, ind_count) {
+  if (class(tbl_l) == "rtable") {
     in_t <- list(" " = tbl_l)
     t <- do.call(stack_rtables_condense, in_t)
     for (i in 1:nrow(t)) {
       attr(t[[i]], "indent") <- attr(t[[i]], "indent") + ind_count
     }
     t
-  } else if(is.list(tbl_l) && class(tbl_l) != "rtable"){
+  } else if (is.list(tbl_l) && class(tbl_l) != "rtable") {
     odd_ind <- seq(1, length(tbl_l), 2)
-    count <- lapply(tbl_l, function(x){
-      if(class(x) == "rtable")
+    count <- lapply(tbl_l, function(x) {
+      if (class(x) == "rtable") {
         ind_count
-      else
-        ind_count + 1})
+      } else {
+        ind_count + 1
+      }
+    })
     count <- unlist(count)
     t0 <- Map(recursive_indent, tbl_l, count)
     tbl <- do.call(stack_rtables_condense, t0)
   }
 }
 
-#arguments for total in tables (AET01, AET02, DST01)
-tot_column <- function(choice = c("All Patients")){
+# arguments for total in tables (AET01, AET02, DST01)
+tot_column <- function(choice = c("All Patients")) {
   choice <- match.arg(choice)
   return(choice)
 }
@@ -137,27 +137,64 @@ tot_column <- function(choice = c("All Patients")){
 #' @noRd
 #'
 stack_rtables_condense <- function(..., nrow_pad = 1) {
-
   tbls <- Filter(Negate(is.null), list(...))
 
   if (length(tbls) > 0) {
-    if (!rtables:::are(tbls, "rtable")) stop("not all objects are of type rtable")
+
+    are <- getFromNamespace("are", pos = "package:rtables")
+
+    if (!are(tbls, "rtable")) stop("not all objects are of type rtable")
 
     header <- attr(tbls[[1]], "header")
     Reduce(
       function(x, y) rbind(x, y),
       tbls
     )
-
   } else {
     list()
   }
 }
 
-#'@export
+#' Add Adverse Events class
+#'
+#' @param tbl (\code{tibble}) Containing the data
+#' @param class (\code{character}) Class of adverse events to be added as
+#'   an rtable row
+#'
+#' @export
 add_ae_class <- function(tbl, class) {
   rbind(
     rtable(header(tbl), rrow(class)),
     tbl
   )
+}
+
+#' stack a modified version of a data frame
+#'
+#' essenially rbind(X,modified(X)). this is useful for example when a total
+#' column is needed.
+#'
+#' @param X a data.frame
+#' @param ... key=value pairs, where the key refers to a variable in X and value
+#'   is the valueof the variable in modified(X)
+#'
+#' @noRd
+#'
+#' @examples
+#'
+#' duplicate_with_var(iris, Species = "Total")
+duplicate_with_var <- function(X, ...) {
+  dots <- list(...)
+  nms <- names(dots)
+  if (length(nms) > 1 && (is.null(nms) || !all(nms %in% names(X)))) {
+    stop("not all names in ... are existent or in X")
+  }
+  X_copy <- X
+  vl <- var_labels(X)
+  for (var in nms) {
+    X_copy[[var]] <- dots[[var]]
+  }
+  Y <- rbind(X, X_copy)
+  var_labels(Y) <- vl
+  Y
 }

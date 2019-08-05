@@ -5,7 +5,7 @@
 \title{Adverse Events Table by Highest NCI CTCAE Grade}
 \usage{
 t_ae_ctc_v2(class, term, id, grade, col_by, total = "All Patients",
-  grade_levels = 1:5, ...)
+  grade_levels = 1:5)
 }
 \arguments{
 \item{class}{system organ class variable.}
@@ -70,64 +70,70 @@ library(dplyr)
 
 ASL <- tibble(
   USUBJID = paste0("id-", 1:10),
-  ARM = paste("ARM", LETTERS[rep(c(1,2), c(3,7))])
+  ARM = paste("ARM", LETTERS[rep(c(1, 2), c(3, 7))])
 )
 
 
 ae_lookup <- tribble(
-~CLASS,         ~TERM,   ~GRADE,
-"cl A",   "trm A_1/2",        1,
-"cl A",   "trm A_2/2",        2,
-"cl B",   "trm B_1/3",        2,
-"cl B",   "trm B_2/3",        3,
-"cl B",   "trm B_3/3",        1,
-"cl C",   "trm C_1/1",        1
+  ~CLASS, ~TERM, ~GRADE,
+  "cl A", "trm A_1/2", 1,
+  "cl A", "trm A_2/2", 2,
+  "cl B", "trm B_1/3", 2,
+  "cl B", "trm B_2/3", 3,
+  "cl B", "trm B_3/3", 1,
+  "cl C", "trm C_1/1", 1
 )
 
 AAE <- cbind(
   tibble(
-    USUBJID = ASL$USUBJID[c(2,2,2,3,3,4,4,4,4,5,6,6,7,7)]
+    USUBJID = ASL$USUBJID[c(2, 2, 2, 3, 3, 4, 4, 4, 4, 5, 6, 6, 7, 7)]
   ),
-  ae_lookup[c(1,1,2,6,4,2,2,3,4,2,1,5,4,6),]
+  ae_lookup[c(1, 1, 2, 6, 4, 2, 2, 3, 4, 2, 1, 5, 4, 6), ]
 )
 
 ANL <- left_join(ASL, AAE, by = "USUBJID")
 
+#' # @Todo The example code is not working with tern@master
+# Error: argument "col_by" is missing, with no default
+
+\dontrun{
 tbl <- t_ae_ctc_v2(
   class = ANL$CLASS,
-  term =  ANL$TERM,
+  term = ANL$TERM,
   id = ANL$USUBJID,
   grade = ANL$GRADE,
   col_by = factor(ANL$ARM),
   total = "All Patients",
   grade_levels = 1:3
 )
-
-tbl
+}
 
 
 library(random.cdisc.data)
 library(dplyr)
 
-ASL <- radam("ASL", N = 10)
-AAE <- radam("AAE", ADSL = ASL)
+ASL <- radsl(N = 10, seed = 1)
+AAE <- radae(ASL, seed = 1)
 
 ANL <- left_join(AAE, ASL \%>\% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
 
-tbl <- with(ANL,
-            t_ae_ctc_v2(
-              class = AEBODSYS,
-              term =  AEDECOD,
-              id = USUBJID,
-              grade = AETOXGR,
-              col_by = factor(ARM),
-              total = "All Patients",
-              grade_levels = 1:5
-            )
+#' # @Todo The example code is not working with tern@master
+# Error: argument "col_by" is missing, with no default
+
+\dontrun{
+tbl <- with(
+  ANL,
+  t_ae_ctc_v2(
+    class = AEBODSYS,
+    term = AEDECOD,
+    id = USUBJID,
+    grade = AETOXGR,
+    col_by = factor(ARM),
+    total = "All Patients",
+    grade_levels = 1:5
+  )
 )
-
-tbl
-
+}
 }
 \author{
 Edgar Manukya

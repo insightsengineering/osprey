@@ -4,10 +4,12 @@
 \alias{spiderplot_simple}
 \title{Create a spiderplot_simple}
 \usage{
-spiderplot_simple(anl, byvar = USUBJID, days = TUDY, mesValue = PCHG,
-  groupCol = USUBJID, baseday = 0)
+spiderplot_simple(anl, byvar = "USUBJID", days = "TRTDURD",
+  mesValue = "PARAM", groupCol = "USUBJID", baseday = 0)
 }
 \arguments{
+\item{anl}{The analysis data frame (e.g. ATE.sas7bdat on BCE)}
+
 \item{byvar}{Analysis dataset}
 
 \item{days}{Variable with time in days}
@@ -27,12 +29,9 @@ Descr of this plot
 \examples{
 library(random.cdisc.data)
 
+atr <- left_join(rADRS, rADSL)
 
-atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
-
-
-spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol=SEX)
-
+spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol = "SEX")
 }
 \author{
 Mika Maekinen

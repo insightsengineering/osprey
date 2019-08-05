@@ -63,31 +63,41 @@ library(dplyr)
 
 data("rADAE")
 ANL <- rADAE
-flag <- data.frame(dthfl = ANL$DTHFL,
-                   dcsreas = ANL$DCSREAS,
-                   aesdth = ANL$AESDTH,
-                   aeser = ANL$AESER,
-                   aeacn = ANL$AEACN,
-                   aerel = ANL$AEREL,
-                   aetoxgr = ANL$AETOXGR)
+flag <- data.frame(
+  dthfl = ANL$DTHFL,
+  dcsreas = ANL$DCSREAS,
+  aesdth = ANL$AESDTH,
+  aeser = ANL$AESER,
+  aeacn = ANL$AEACN,
+  aerel = ANL$AEREL,
+  aetoxgr = ANL$AETOXGR
+)
 
-extra <- data.frame(fatal2 = flag$aesdth,
-                   ser2 = flag$aeser)
+extra <- data.frame(
+  fatal2 = flag$aesdth,
+  ser2 = flag$aeser
+)
+
+#' # @Todo The example code is not working with tern@master
+# Error: argument "col_by" is missing, with no default
+
+\dontrun{
 tbl <- t_ae_oview(
-   id = ANL$USUBJID,
-   class = ANL$AESOC,
-   term = ANL$AEDECOD,
-   flags = flag,
-   display_id = c("fatal", "ser", "serwd", "serdsm", "relser",
-                  "wd", "dsm", "rel", "relwd", "reldsm"),
-   extra_flag = extra,
-   col_by = factor(ANL$ARM),
-   total="All Patients"
+  id = ANL$USUBJID,
+  class = ANL$AESOC,
+  term = ANL$AEDECOD,
+  flags = flag,
+  display_id = c(
+    "fatal", "ser", "serwd", "serdsm", "relser",
+    "wd", "dsm", "rel", "relwd", "reldsm"
+  ),
+  extra_flag = extra,
+  col_by = factor(ANL$ARM),
+  total = "All Patients"
 )
 
 tbl
-
-
+}
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

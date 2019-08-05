@@ -1,12 +1,15 @@
-#import tern functions
-duplicate_with_var <- tern:::duplicate_with_var
-check_col_by <- tern:::check_col_by
-stack_rtables <- tern:::stack_rtables
-count_perc_col_N <- tern:::count_perc_col_N
-indent_table <- tern:::indent_table
-#add_ae_class <- tern:::add_ae_class
-check_same_N <- tern:::check_same_N
-to_n <- tern:::to_n
-var_relabel <- tern:::var_relabel
-t_max_grade_per_id <- tern:::t_max_grade_per_id
-shift_label_table <- tern:::shift_label_table
+# import tern functions
+#' @importFrom utils getFromNamespace
+check_col_by <- getFromNamespace("check_col_by", "tern")
+count_perc_col_N <- getFromNamespace("count_perc_col_N", "tern")
+indent_table <- getFromNamespace("indent_table", "tern")
+check_same_N <- getFromNamespace("check_same_n", "tern")
+to_n <- getFromNamespace("to_n", "tern")
+var_relabel <- getFromNamespace("var_relabel", "tern")
+t_max_grade_per_id <- getFromNamespace("t_max_grade_per_id", "tern")
+shift_label_table <- getFromNamespace("shift_label_table", "tern")
+
+
+stack_rtables <- function(...) {
+  rbind(..., gap = 1)
+}
