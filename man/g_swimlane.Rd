@@ -52,13 +52,8 @@ patient bar plot with markers of events and patient level annotation
 # Example 1
 library(random.cdisc.data)
 library(dplyr)
-ASL <- radam("ASL", N = 50, start_with = list(TRTDUR = rexp(50, 1 / 100)))
-ARS <- radam("ARS",
-  ADSL = ASL,
-  start_with = list(
-    ADY = rexp(nrow(ASL), 1 / 80)
-  )
-) \%>\% filter(PARAMCD == "OVRINV")
+ASL <- rADSL
+ARS <- rADRS \%>\% filter(PARAMCD == "OVRINV")
 ANL <- ASL \%>\% left_join(ARS, by = c("STUDYID", "USUBJID"))
 anno_txt <- ASL[, c("ARMCD", "SEX")]
 

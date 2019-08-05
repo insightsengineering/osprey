@@ -103,8 +103,8 @@
 #' library(random.cdisc.data)
 #' library(dplyr)
 #'
-#' ASL <- radam("ASL", N = 10)
-#' AAE <- radam("AAE", ADSL = ASL)
+#' ASL <- radsl(N = 10, seed = 1)
+#' AAE <- radae(ASL, seed = 1)
 #'
 #' ANL <- left_join(AAE, ASL %>% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
 #'

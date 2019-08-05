@@ -32,16 +32,11 @@
 #' # Example 1
 #' library(random.cdisc.data)
 #' library(dplyr)
-#' ASL <- radam("ASL", N = 50, start_with = list(TRTDUR = rexp(50, 1 / 100)))
-#' ARS <- radam("ARS",
-#'   ADSL = ASL,
-#'   start_with = list(
-#'     ADY = rexp(nrow(ASL), 1 / 80)
-#'   )
-#' ) %>% filter(PARAMCD == "OVRINV")
+#' ASL <- rADSL
+#' ARS <- rADRS %>% filter(PARAMCD == "OVRINV")
 #' ANL <- ASL %>% left_join(ARS, by = c("STUDYID", "USUBJID"))
 #' anno_txt <- ASL[, c("ARMCD", "SEX")]
-#' 
+#'
 #' g_swimlane(
 #'   bar_id = ASL$USUBJID,
 #'   bar_length = ASL$TRTDUR,
@@ -59,32 +54,32 @@
 #'   ylab = "Time from First Treatment (Day)",
 #'   title = "Swimlane Plot"
 #' )
-#' 
+#'
 #' # Example 2
 #' library(dplyr)
 #' ASL <- rADSL
 #' ARS <- rADRS
-#' 
+#'
 #' anno_txt_vars <- c("ARMCD", "SEX", "COUNTRY")
 #' anno_txt <- ASL[, anno_txt_vars]
-#' 
+#'
 #' # markers from ARS
 #' ARS <- ASL %>%
 #'   select(USUBJID) %>%
 #'   left_join(ARS, "USUBJID") %>%
 #'   filter(PARAMCD == "OVRINV") %>%
 #'   select(USUBJID, ADY, AVALC)
-#' 
+#'
 #' # markers from ASL - discontinuation
 #' ADS <- ASL %>%
 #'   filter(EOSSTT == "Discontinued" | DCSREAS != "") %>%
 #'   select(USUBJID, EOSDY, DCSREAS) %>%
 #'   dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
-#' 
+#'
 #' # combine ARS with ADS records as one data for markers and join with ASL
 #' ANL <- ASL %>%
 #'   inner_join(rbind(ARS, ADS), "USUBJID")
-#' 
+#'
 #' g_swimlane(
 #'   bar_id = ASL$USUBJID,
 #'   bar_length = ASL$TRTDURD,
