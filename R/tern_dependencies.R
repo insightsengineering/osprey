@@ -1,4 +1,5 @@
 # import tern functions
+#' @importFrom utils getFromNamespace
 check_col_by <- getFromNamespace("check_col_by", "tern")
 count_perc_col_N <- getFromNamespace("count_perc_col_N", "tern")
 indent_table <- getFromNamespace("indent_table", "tern")
