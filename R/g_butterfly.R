@@ -22,6 +22,7 @@
 #' plot into rows, default here is NULL
 #' @param x_label string of text for x axis label, default is block_count
 #' @param y_label string of text for y axis label, default is AE Derived Terms
+#' @param legend_label \code{character} for legend label, default is AETOXGR
 #' @param sort_by character string that defines the ordering of the class and term
 #' variables in the output table,
 #' options: "alphabetical" or "count", default here is set to "count"

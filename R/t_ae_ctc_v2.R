@@ -122,7 +122,7 @@
 #' )
 #'
 #' tbl
-t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5, ...) {
+t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5) {
 
   # check argument validity and consitency ----------------------------------
   check_col_by(col_by, min_num_levels = 1)
