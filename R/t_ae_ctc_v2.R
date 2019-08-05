@@ -87,8 +87,6 @@
 #'
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
-#' #' # @@Todo The example code is not working with tern@@master
-#' # Error: argument "col_by" is missing, with no default
 #'
 #' \dontrun{
 #' tbl <- t_ae_ctc_v2(
@@ -111,8 +109,6 @@
 #'
 #' ANL <- left_join(AAE, ASL %>% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
 #'
-#' #' # @@Todo The example code is not working with tern@@master
-#' # Error: argument "col_by" is missing, with no default
 #'
 #' \dontrun{
 #' tbl <- with(

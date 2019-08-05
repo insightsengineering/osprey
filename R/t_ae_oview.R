@@ -66,8 +66,6 @@
 #'   ser2 = flag$aeser
 #' )
 #'
-#' #' # @@Todo The example code is not working with tern@@master
-#' # Error: argument "col_by" is missing, with no default
 #'
 #' \dontrun{
 #' tbl <- t_ae_oview(
