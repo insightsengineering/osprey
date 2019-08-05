@@ -59,7 +59,7 @@ anno_txt <- ASL[, c("ARMCD", "SEX")]
 
 g_swimlane(
   bar_id = ASL$USUBJID,
-  bar_length = ASL$TRTDUR,
+  bar_length = ASL$TRTDURD,
   sort_by = ASL$ARM,
   col_by = ASL$ARM,
   marker_id = ANL$USUBJID,

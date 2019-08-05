@@ -14,8 +14,8 @@
 #' @author Iain Bennett
 #' @export
 #' @examples
-#' ASL <- random.cdisc.data::rasl()
-#' ATE <- random.cdisc.data::rate(ASL)
+#' ASL <- random.cdisc.data::radsl()
+#' ATE <- random.cdisc.data::radaette(ASL)
 #' filters <- as.data.frame(rbind(
 #'   c(ID = "IT", FLTTARGET = "SLREF", FLTWHERE = "where 1 eq 1"),
 #'   c(ID = "BIO", FLTTARGET = "SLREF", FLTWHERE = "where BMRKR1 ge 4.3"),
@@ -23,7 +23,7 @@
 #'   c(ID = "PFS", FLTTARGET = "ANL", FLTWHERE = "where PARAMCD eq 'PFS'"),
 #'   c(ID = "OS", FLTTARGET = "ANL", FLTWHERE = "where PARAMCD eq 'OS'")
 #' ))
-#' 
+#'
 #' ANL <- stream_filter(
 #'   slref = ASL,
 #'   anl = ATE,
@@ -184,7 +184,7 @@ stream_filter_index <- function(string1, string2) {
 #' @export
 #'
 #' @examples
-#' 
+#'
 #' stream_filter_convwhere(x = "where X in (1 2 3 4) and Y gt 4 ")
 #' stream_filter_convwhere(x = "where X = \"fred\" and Y gt 4 ")
 stream_filter_convwhere <- function(x) {

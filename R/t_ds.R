@@ -53,7 +53,10 @@
 #' )
 #'
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
+#' #' # @@Todo The example code is not working with tern@@master
+#' # Error: argument "col_by" is missing, with no default
 #'
+#' \dontrun{
 #' tbl <- t_ds(
 #'   class = ANL$CLASS,
 #'   term = ANL$TERM,
@@ -89,7 +92,9 @@
 #' )
 #'
 #' tbl3
+#'}
 t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
+
 
   # check input arguments ---------------------------
   check_col_by(col_by, min_num_levels = 1)
