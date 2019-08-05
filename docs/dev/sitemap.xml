@@ -4,7 +4,16 @@
     <loc>https://pages.github.roche.com/Rpackages/osprey/dev//index.html</loc>
   </url>
   <url>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/add_ae_class.html</loc>
+  </url>
+  <url>
     <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/as_pdf.html</loc>
+  </url>
+  <url>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/getdata_bce.html</loc>
+  </url>
+  <url>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/grobs2pdf.html</loc>
   </url>
   <url>
     <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/g_butterfly.html</loc>
@@ -16,10 +25,25 @@
     <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/g_swimlane.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/getdata_bce.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/meddra.html</loc>
   </url>
   <url>
-    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/grobs2pdf.html</loc>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/osprey.html</loc>
+  </url>
+  <url>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/rADAE.html</loc>
+  </url>
+  <url>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/rADRS.html</loc>
+  </url>
+  <url>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/rADSL.html</loc>
+  </url>
+  <url>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/rADTR.html</loc>
+  </url>
+  <url>
+    <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/rADTTE.html</loc>
   </url>
   <url>
     <loc>https://pages.github.roche.com/Rpackages/osprey/dev//reference/spiderplot_simple.html</loc>
