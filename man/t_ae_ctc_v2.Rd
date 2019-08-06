@@ -93,10 +93,7 @@ AAE <- cbind(
 
 ANL <- left_join(ASL, AAE, by = "USUBJID")
 
-#' # @Todo The example code is not working with tern@master
-# Error: argument "col_by" is missing, with no default
 
-\dontrun{
 tbl <- t_ae_ctc_v2(
   class = ANL$CLASS,
   term = ANL$TERM,
@@ -106,31 +103,27 @@ tbl <- t_ae_ctc_v2(
   total = "All Patients",
   grade_levels = 1:3
 )
-}
 
 
 library(random.cdisc.data)
 library(dplyr)
 
+\dontrun{
 ASL <- radsl(N = 10, seed = 1)
 AAE <- radae(ASL, seed = 1)
 
 ANL <- left_join(AAE, ASL \%>\% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
 
-#' # @Todo The example code is not working with tern@master
-# Error: argument "col_by" is missing, with no default
-
-\dontrun{
 tbl <- with(
   ANL,
   t_ae_ctc_v2(
-    class = AEBODSYS,
-    term = AEDECOD,
-    id = USUBJID,
-    grade = AETOXGR,
-    col_by = factor(ARM),
+    class = ANL$AEBODSYS,
+    term = ANL$AEDECOD,
+    id = ANL$USUBJID,
+    grade = ANL$AETOXGR,
+    col_by = factor(ANL$ARM),
     total = "All Patients",
-    grade_levels = 1:5
+    grade_levels = 1:3
   )
 )
 }

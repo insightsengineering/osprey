@@ -56,7 +56,7 @@
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
 #'
-#' \dontrun{
+#'
 #' tbl <- t_ae(
 #'   class = ANL$CLASS,
 #'   term = ANL$TERM,
@@ -66,7 +66,6 @@
 #' )
 #'
 #' tbl
-#' }
 #' # Simple example 2
 #'
 #' data("rADSL")
@@ -76,7 +75,6 @@
 #' ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
 #'
 #'
-#' \dontrun{
 #' tbl2 <- t_ae(
 #'   class = ANL$AEBODSYS,
 #'   term = ANL$AEDECOD,
@@ -84,12 +82,12 @@
 #'   col_by = factor(ANL$ARM),
 #'   total = NULL
 #' )
-#' }
 #'
 t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
   # check input arguments ---------------------------
-  check_col_by(col_by, min_num_levels = 1)
+  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
+  check_col_by(col_by, col_N, min_num_levels = 1)
 
   if (any("- Overall -" %in% term)) {
     stop("'- Overall -' is not a valid term, t_ae reserves it for derivation")
@@ -143,7 +141,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
   }
 
-  # total N for column header
+  # total N for column header (with All Patients)
   N <- tapply(df$subjid, df$col_by, function(x) (sum(!duplicated(x))))
 
   # need to remove extra records that came from subject level data
@@ -164,15 +162,15 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
     # count number of AE - includes duplicates per patient
     l_t_num_ae <- lapply(df_s_cl_num_ae, function(df_i) {
-      df_id <- data.frame(df_i$subjid, df_i$col_by)
+      df_id <- na.omit(data.frame(df_i$subjid, df_i$col_by))
       colnames(df_id) <- c("id", "col_by")
 
       tbl <- rtabulate(
-        na.omit(df_id),
-        row_by_var = no_by(""),
-        col_by_var = "col_by",
+        df_id,
+        row_by = no_by(""),
+        col_by = df_id$col_by,
         FUN = count_col_N,
-        N = N,
+        col_wise_args = list(n_i = N),
         format = "xx"
       )
 
@@ -188,12 +186,13 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
       colnames(df_id) <- c("id", "col_by")
       df_id <- df_id[!duplicated(df_id$id), ]
 
+
       tbl <- rtabulate(
         na.omit(df_id),
-        row_by_var = no_by(""),
-        col_by_var = "col_by",
+        row_by = no_by(""),
+        col_by = df_id$col_by,
         FUN = count_perc_col_N,
-        N = N,
+        col_wise_args = list(n_i = N),
         format = "xx (xx.x%)"
       )
 
@@ -242,10 +241,10 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
     tbl <- rtabulate(
       na.omit(df_id),
-      row_by_var = no_by(""),
-      col_by_var = "col_by",
+      row_by = no_by(""),
+      col_by = df_id$col_by,
       FUN = count_perc_col_N,
-      N = N,
+      col_wise_args = list(n_i = N),
       format = "xx (xx.x%)"
     )
 
@@ -266,10 +265,10 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
     tbl <- rtabulate(
       na.omit(df_id),
-      row_by_var = no_by(""),
-      col_by_var = "col_by",
+      row_by = no_by(""),
+      col_by = df_id$col_by,
       FUN = count_col_N,
-      N = N,
+      col_wise_args = list(n_i = N),
       format = "xx"
     )
 

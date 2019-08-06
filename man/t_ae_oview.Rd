@@ -78,10 +78,7 @@ extra <- data.frame(
   ser2 = flag$aeser
 )
 
-#' # @Todo The example code is not working with tern@master
-# Error: argument "col_by" is missing, with no default
 
-\dontrun{
 tbl <- t_ae_oview(
   id = ANL$USUBJID,
   class = ANL$AESOC,
@@ -97,7 +94,6 @@ tbl <- t_ae_oview(
 )
 
 tbl
-}
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

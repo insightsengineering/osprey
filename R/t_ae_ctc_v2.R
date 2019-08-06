@@ -88,7 +88,6 @@
 #' ANL <- left_join(ASL, AAE, by = "USUBJID")
 #'
 #'
-#' \dontrun{
 #' tbl <- t_ae_ctc_v2(
 #'   class = ANL$CLASS,
 #'   term = ANL$TERM,
@@ -98,36 +97,35 @@
 #'   total = "All Patients",
 #'   grade_levels = 1:3
 #' )
-#' }
 #'
 #'
 #' library(random.cdisc.data)
 #' library(dplyr)
 #'
+#' \dontrun{
 #' ASL <- radsl(N = 10, seed = 1)
 #' AAE <- radae(ASL, seed = 1)
 #'
 #' ANL <- left_join(AAE, ASL %>% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
 #'
-#'
-#' \dontrun{
 #' tbl <- with(
 #'   ANL,
 #'   t_ae_ctc_v2(
-#'     class = AEBODSYS,
-#'     term = AEDECOD,
-#'     id = USUBJID,
-#'     grade = AETOXGR,
-#'     col_by = factor(ARM),
+#'     class = ANL$AEBODSYS,
+#'     term = ANL$AEDECOD,
+#'     id = ANL$USUBJID,
+#'     grade = ANL$AETOXGR,
+#'     col_by = factor(ANL$ARM),
 #'     total = "All Patients",
-#'     grade_levels = 1:5
+#'     grade_levels = 1:3
 #'   )
 #' )
 #' }
 t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5) {
 
   # check argument validity and consitency ----------------------------------
-  check_col_by(col_by, min_num_levels = 1)
+  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
+  check_col_by(col_by, col_N, min_num_levels = 1)
 
   if (any("- Overall -" %in% term)) stop("'- Overall -' is not a valid term, t_ae_ctc_v2 reserves it for derivation")
   if (any("All Patients" %in% col_by)) stop("'All Patients' is not a valid col_by, t_ae_ctc_v2 derives All Patients column")
