@@ -14,6 +14,7 @@
 #'
 #' @return ggplot object
 #'
+#' @importFrom rlang .data
 #' @export
 #'
 #' @author Mika Maekinen
@@ -30,7 +31,7 @@ spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
   anl <- anl %>%
     group_by(!!byvar) %>%
     mutate(morebase = ifelse(max(!!days, na.rm = TRUE) > baseday, TRUE, FALSE)) %>%
-    filter(morebase == TRUE) %>%
+    filter(.data$morebase == TRUE) %>%
     ungroup()
   ### find the last measurement
   lastObs <- anl %>% group_by(!!as.symbol(byvar)) %>% slice(which.max(!!as.symbol(days)))

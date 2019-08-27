@@ -42,6 +42,8 @@
 #'
 #' @export
 #'
+#' @importFrom rlang .data
+#'
 #' @template author_zhanc107
 #'
 #' @examples
@@ -150,8 +152,8 @@ g_spiderplot <- function(marker_x,
     dat$lbl_all <- datalabel_txt$txt_ann
 
     dat <- dat %>%
-      group_by(lbl_all) %>%
-      mutate(lab = ifelse(x == last(x), as.character(lbl_all), " "))
+      group_by(.data$lbl_all) %>%
+      mutate(lab = ifelse(.data$x == last(.data$x), as.character(.data$lbl_all), " "))
   }
   if (!is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
     if (length(unique(c(nrow(datalabel_txt$mrkr_all), check_input_length))) != 1) {
@@ -163,7 +165,7 @@ g_spiderplot <- function(marker_x,
   dat <- dat %>% as.data.frame()
 
   # plot spider plot----------------- this section can be condensed later
-  pl <- ggplot(data = dat, aes(x = x, y = y, group = group)) +
+  pl <- ggplot(data = dat, aes_string(x = "x", y = "y", group = "group")) +
     xlab(x_label) +
     ylab(y_label) +
     theme(legend.position = "top", legend.title = element_blank())
@@ -173,7 +175,7 @@ g_spiderplot <- function(marker_x,
 
   # line color
   if (!is.null(line_colby)) {
-    pl <- pl + geom_line(aes(color = l_col), size = 1, alpha = 0.5, show.legend = show_legend)
+    pl <- pl + geom_line(aes_string(color = "l_col"), size = 1, alpha = 0.5, show.legend = show_legend)
   } else {
     pl <- pl + geom_line(size = 1, alpha = 0.5, show.legend = show_legend)
   }
@@ -181,13 +183,13 @@ g_spiderplot <- function(marker_x,
   # marker shape------------ this section can be condensed later
   if (!is.null(marker_shape)) {
     if (!is.null(line_colby)) {
-      pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
+      pl <- pl + geom_point(aes_string(shape = "sh", color = "l_col"), size = marker_size, show.legend = show_legend)
     } else {
-      pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
+      pl <- pl + geom_point(aes_string(shape = "sh"), size = marker_size, show.legend = show_legend)
     }
   } else if (is.null(marker_shape)) {
     if (!is.null(line_colby)) {
-      pl <- pl + geom_point(aes(color = l_col), size = 3, show.legend = show_legend)
+      pl <- pl + geom_point(aes_string(color = "l_col"), size = 3, show.legend = show_legend)
     } else {
       pl <- pl + geom_point(size = 3, show.legend = show_legend)
     }
@@ -196,21 +198,23 @@ g_spiderplot <- function(marker_x,
   # label at last data point---------
   if (!is.null(datalabel_txt)) {
     if (!is.null(datalabel_txt$txt_ann) && is.null(datalabel_txt$mrkr_all) && is.null(datalabel_txt$mrkr_ann)) {
-      pl <- pl + geom_text(data = dat, aes(x = x, y = y, label = lab), hjust = -0.3, size = 4, show.legend = FALSE)
+      pl <- pl + geom_text(data = dat, aes_string(x = "x", y = "y", label = "lab"), hjust = -0.3, size = 4, show.legend = FALSE)
     } else if (is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
       dat_arrow <- dat %>%
         filter(id %in% datalabel_txt$mrkr_ann) %>%
-        group_by(id) %>%
-        filter(x == last(x))
-      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = x, y = y, xend = x, yend = y), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
+        group_by(.data$id) %>%
+        filter(.data$x == last(.data$x))
+      pl <- pl + geom_segment(data = dat_arrow, mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
     } else if (!is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
-      pl <- pl + geom_text(data = dat, aes(x = x, y = y, label = lab), hjust = -0.45, size = 4, show.legend = FALSE)
+      pl <- pl + geom_text(data = dat, aes_string(x = "x", y = "y", label = "lab"), hjust = -0.45, size = 4, show.legend = FALSE)
 
       dat_arrow <- dat %>%
         filter(id %in% datalabel_txt$mrkr_ann) %>%
-        group_by(id) %>%
-        filter(x == last(x))
-      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = x, y = y, xend = x, yend = y), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
+        group_by(.data$id) %>%
+        filter(.data$x == last(.data$x))
+      pl <- pl + geom_segment(data = dat_arrow, mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+          arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+          size = 0.4, color = "black", show.legend = FALSE)
     }
   }
 
@@ -239,7 +243,7 @@ g_spiderplot <- function(marker_x,
   # simple function to call a vector of color values
   call_color <- function(len) {
     datCol <- data.frame(color_opt = colors())
-    datCol <- datCol %>% filter(!grepl("white", color_opt)) %>% droplevels()
+    datCol <- datCol %>% filter(!grepl("white", .data$color_opt)) %>% droplevels()
 
     return(datCol[1:len, 1])
   }

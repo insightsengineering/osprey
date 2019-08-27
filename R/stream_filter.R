@@ -10,6 +10,7 @@
 #' @param usubjid The unique subject identifier variable in quotes (e.g. "USUBJID")
 #' @param filters The name of the filters dataset (typically __filters.sas7bdat on BCE)
 #'
+#' @importFrom rtables rtablel
 #' @return \code{dataframe} object
 #' @author Iain Bennett
 #' @export
@@ -60,7 +61,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
 
     # find filter meta data
 
-    this.filter.df <- filter(filters, ID == this.filter) %>%
+    this.filter.df <- filter(filters, .data$ID == this.filter) %>%
       unique()
 
     if (nrow(this.filter.df) == 0) {
