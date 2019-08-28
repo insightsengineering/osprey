@@ -2,8 +2,8 @@
 #'
 #' @importFrom grDevices colors dev.off pdf
 #' @importFrom stats na.omit
-#' @import tern
-#' @import dplyr
+#' @import dplyr tern
+#' @rawNamespace import(gridExtra, except = combine)
 #' @docType package
 #' @name osprey
 NULL

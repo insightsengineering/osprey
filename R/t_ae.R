@@ -26,6 +26,7 @@
 #'
 #' @import tibble
 #' @import dplyr
+#' @importFrom rtables rrow
 #' @examples
 #' # Simple example
 #' library(dplyr)

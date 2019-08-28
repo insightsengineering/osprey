@@ -14,6 +14,7 @@
 #'
 #' @return ggplot object
 #'
+#' @importFrom rlang .data
 #' @export
 #'
 #' @author Mika Maekinen
@@ -23,14 +24,16 @@
 #'
 #' atr <- left_join(rADRS, rADSL)
 #'
-#' spiderplot_simple(atr %>% filter(PARAMCD == "SUMTGLES"), groupCol = "SEX")
+#' atr %>%
+#'   filter(PARAMCD == "OVRINV") %>%
+#'   spiderplot_simple(, groupCol = "SEX", days = "ADY", mesValue = "AVAL")
 spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
     mesValue = "PARAM", groupCol = "USUBJID", baseday = 0) {
   ### remove patients without post baseline measurement
   anl <- anl %>%
     group_by(!!byvar) %>%
     mutate(morebase = ifelse(max(!!days, na.rm = TRUE) > baseday, TRUE, FALSE)) %>%
-    filter(morebase == TRUE) %>%
+    filter(.data$morebase == TRUE) %>%
     ungroup()
   ### find the last measurement
   lastObs <- anl %>% group_by(!!as.symbol(byvar)) %>% slice(which.max(!!as.symbol(days)))

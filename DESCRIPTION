@@ -22,6 +22,7 @@ Imports:
   gridExtra,
   gtable,
   plyr,
+  rlang,
   rocheBCE,
   rtables (>= 0.1.2),
   stringr,

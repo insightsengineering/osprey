@@ -1,5 +1,6 @@
 # tabulation function for condition checks
 #' @importFrom utils getFromNamespace
+#' @importFrom rtables rrowl rheader header<- header rcell no_by rtabulate
 t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percent) {
   if (checkcol == "rowcount") {
     tbl <- rtabulate(
@@ -86,7 +87,7 @@ shift_label_table_no_grade <- function(tbl, term) {
 # adds row name to rtable
 shift_label_table_mod <- function(tbl, term, ind_tbl) {
   attr(tbl[[1]], "row.name") <- term
-  indent_tabl(tbl, ind_tbl)
+  indent_table(tbl, ind_tbl)
   tbl
 }
 
@@ -160,6 +161,7 @@ stack_rtables_condense <- function(..., nrow_pad = 1) {
 #' @param class (\code{character}) Class of adverse events to be added as
 #'   an rtable row
 #'
+#' @importFrom rtables rtable
 #' @export
 add_ae_class <- function(tbl, class) {
   rbind(

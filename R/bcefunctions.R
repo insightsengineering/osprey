@@ -114,23 +114,10 @@ getdata_bce <- function(snapshot, area, x = NULL, load = TRUE) {
 as_pdf <- function(grobs,
                    outpath,
                    pagesize = "letter.landscape") {
-  if (pagesize == "a4.landscape") {
-    paper.width <<- 11.7
-    paper.height <<- 8.3
-  } else if (pagesize == "a4.portrait") {
-    paper.width <<- 8.3
-    paper.height <<- 11.7
-  } else if (pagesize == "letter.portrait") {
-    paper.width <<- 8.5
-    paper.height <<- 11
-  } else if (pagesize == "letter.landscape") {
-    paper.width <<- 11
-    paper.height <<- 8.5
-  } else {
-    paper.width <<- 11
-    paper.height <<- 8.5
-  }
 
+  paper_sizes <- paper_size(pagesize)
+  paper.width <- paper_sizes[1]
+  paper.height <- paper_sizes[2]
   npages <- length(grobs)
 
   # Output to PDF
@@ -144,6 +131,26 @@ as_pdf <- function(grobs,
   dev.off()
 }
 
+
+paper_size <- function(pagesize) {
+  if (pagesize == "a4.landscape") {
+    paper.width <- 11.7
+    paper.height <- 8.3
+  } else if (pagesize == "a4.portrait") {
+    paper.width <- 8.3
+    paper.height <<- 11.7
+  } else if (pagesize == "letter.portrait") {
+    paper.width <- 8.5
+    paper.height <<- 11
+  } else if (pagesize == "letter.landscape") {
+    paper.width <- 11
+    paper.height <- 8.5
+  } else {
+    paper.width <- 11
+    paper.height <- 8.5
+  }
+  return(c(paper.width, paper.height))
+}
 #' Decorate grob (gTree) objects then outputs as IDM compatible PDF
 #'
 #' This is an utility function to decorated grob (gTree) object with titles and
@@ -204,31 +211,35 @@ grobs2pdf <- function(grobs,
 
   # Page type (default is letter.landscape, options=a4.portrait, a4.landscape, letter.portrait, letter.landscape)
   if (pagesize == "a4.landscape") {
-    top.margin <<- 1.44
-    bottom.margin <<- 0.83
-    left.margin <<- 1.3
-    right.margin <<- 1.32
+    top.margin <- 1.44
+    bottom.margin <- 0.83
+    left.margin <- 1.3
+    right.margin <- 1.32
   } else if (pagesize == "a4.portrait") {
-    top.margin <<- 1.32
-    bottom.margin <<- 1.3
-    left.margin <<- 1.44
-    right.margin <<- 0.83
+    top.margin <- 1.32
+    bottom.margin <- 1.3
+    left.margin <- 1.44
+    right.margin <- 0.83
   } else if (pagesize == "letter.portrait") {
-    top.margin <<- 0.95
-    bottom.margin <<- 0.98
-    left.margin <<- 1.5
-    right.margin <<- 1.0
+    top.margin <- 0.95
+    bottom.margin <- 0.98
+    left.margin <- 1.5
+    right.margin <- 1.0
   } else if (pagesize == "letter.landscape") {
-    top.margin <<- 1.5
-    bottom.margin <<- 1.0
-    left.margin <<- 0.98
-    right.margin <<- 0.95
+    top.margin <- 1.5
+    bottom.margin <- 1.0
+    left.margin <- 0.98
+    right.margin <- 0.95
   } else {
-    top.margin <<- 1.5
-    bottom.margin <<- 1.0
-    left.margin <<- 0.98
-    right.margin <<- 0.95
+    top.margin <- 1.5
+    bottom.margin <- 1.0
+    left.margin <- 0.98
+    right.margin <- 0.95
   }
+
+  paper_sizes <- paper_size(pagesize)
+  paper.width <- paper_sizes[1]
+  paper.height <- paper_sizes[2]
 
   ## Adding log text to footnotes
   log1 <- paste0("Program: ", progpath, "; Output: ", outpath)
