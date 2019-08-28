@@ -31,7 +31,9 @@ library(random.cdisc.data)
 
 atr <- left_join(rADRS, rADSL)
 
-spiderplot_simple(atr \%>\% filter(PARAMCD == "SUMTGLES"), groupCol = "SEX")
+atr \%>\%
+  filter(PARAMCD == "OVRINV") \%>\%
+  spiderplot_simple(, groupCol = "SEX", days = "ADY", mesValue = "AVAL")
 }
 \author{
 Mika Maekinen

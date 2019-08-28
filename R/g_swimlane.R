@@ -22,7 +22,7 @@
 #'
 #' @template author_qit3
 #'
-#' @import ggplot2 grid gridExtra gtable
+#' @import ggplot2 grid gtable
 #'
 #' @return plot object
 #'

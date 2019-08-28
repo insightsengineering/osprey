@@ -24,7 +24,9 @@
 #'
 #' atr <- left_join(rADRS, rADSL)
 #'
-#' spiderplot_simple(atr %>% filter(PARAMCD == "SUMTGLES"), groupCol = "SEX")
+#' atr %>%
+#'   filter(PARAMCD == "OVRINV") %>%
+#'   spiderplot_simple(, groupCol = "SEX", days = "ADY", mesValue = "AVAL")
 spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
     mesValue = "PARAM", groupCol = "USUBJID", baseday = 0) {
   ### remove patients without post baseline measurement

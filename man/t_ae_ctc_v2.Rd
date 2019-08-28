@@ -112,20 +112,15 @@ library(dplyr)
 ASL <- radsl(N = 10, seed = 1)
 AAE <- radae(ASL, seed = 1)
 
-ANL <- left_join(AAE, ASL \%>\% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
-
-tbl <- with(
-  ANL,
-  t_ae_ctc_v2(
-    class = ANL$AEBODSYS,
-    term = ANL$AEDECOD,
-    id = ANL$USUBJID,
-    grade = ANL$AETOXGR,
-    col_by = factor(ANL$ARM),
+tbl <- t_ae_ctc_v2(
+    class = AAE$AEBODSYS,
+    term = AAE$AEDECOD,
+    id = AAE$USUBJID,
+    grade = AAE$AETOXGR,
+    col_by = factor(AAE$ARM),
     total = "All Patients",
-    grade_levels = 1:3
+    grade_levels = 1:5
   )
-)
 }
 }
 \author{
