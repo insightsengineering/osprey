@@ -50,8 +50,6 @@
 #' # simple example
 #' library(dplyr)
 #'
-#' data("rADSL")
-#' data("rADTR")
 #' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 #' ADSL <- rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)
 #' ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
@@ -153,7 +151,7 @@ g_spiderplot <- function(marker_x,
 
     dat <- dat %>%
       group_by(.data$lbl_all) %>%
-      mutate(lab = ifelse(.data$x == last(.data$x), as.character(.data$lbl_all), " "))
+      dplyr::mutate(lab = ifelse(.data$x == last(.data$x), as.character(.data$lbl_all), " "))
   }
   if (!is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
     if (length(unique(c(nrow(datalabel_txt$mrkr_all), check_input_length))) != 1) {
@@ -198,15 +196,34 @@ g_spiderplot <- function(marker_x,
   # label at last data point---------
   if (!is.null(datalabel_txt)) {
     if (!is.null(datalabel_txt$txt_ann) && is.null(datalabel_txt$mrkr_all) && is.null(datalabel_txt$mrkr_ann)) {
-      pl <- pl + geom_text(data = dat, aes_string(x = "x", y = "y", label = "lab"), hjust = -0.3, size = 4, show.legend = FALSE)
-    } else if (is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
+      pl <- pl +
+        geom_text(data = dat,
+                  aes_string(x = "x", y = "y", label = "lab"), hjust = -0.3,
+                  size = 4,
+                  show.legend = FALSE)
+    } else if (is.null(datalabel_txt$txt_ann) &&
+               !is.null(datalabel_txt$mrkr_all) &&
+               !is.null(datalabel_txt$mrkr_ann)) {
       dat_arrow <- dat %>%
         filter(id %in% datalabel_txt$mrkr_ann) %>%
         group_by(.data$id) %>%
         filter(.data$x == last(.data$x))
-      pl <- pl + geom_segment(data = dat_arrow, mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
-    } else if (!is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
-      pl <- pl + geom_text(data = dat, aes_string(x = "x", y = "y", label = "lab"), hjust = -0.45, size = 4, show.legend = FALSE)
+      pl <- pl +
+        geom_segment(data = dat_arrow,
+                     mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+                     arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+                     size = 0.4,
+                     color = "black",
+                     show.legend = FALSE)
+    } else if (!is.null(datalabel_txt$txt_ann) &&
+               !is.null(datalabel_txt$mrkr_all) &&
+               !is.null(datalabel_txt$mrkr_ann)) {
+      pl <- pl +
+        geom_text(data = dat,
+                  aes_string(x = "x", y = "y", label = "lab"),
+                  hjust = -0.45,
+                  size = 4,
+                  show.legend = FALSE)
 
       dat_arrow <- dat %>%
         filter(id %in% datalabel_txt$mrkr_ann) %>%
@@ -225,7 +242,14 @@ g_spiderplot <- function(marker_x,
 
   if (!is.null(vref_line)) {
     for (i in 1:length(vref_line)) {
-      pl <- pl + annotate("segment", x = vref_line[i], y = -Inf, xend = vref_line[i], yend = Inf, linetype = "dotted", color = "black")
+      pl <- pl +
+        annotate("segment",
+                 x = vref_line[i],
+                 y = -Inf,
+                 xend = vref_line[i],
+                 yend = Inf,
+                 linetype = "dotted",
+                 color = "black")
     }
   }
 
@@ -242,10 +266,12 @@ g_spiderplot <- function(marker_x,
 
   # simple function to call a vector of color values
   call_color <- function(len) {
-    datCol <- data.frame(color_opt = colors())
-    datCol <- datCol %>% filter(!grepl("white", .data$color_opt)) %>% droplevels()
+    dat_col <- data.frame(color_opt = colors())
+    dat_col <- dat_col %>%
+      filter(!grepl("white", .data$color_opt)) %>%
+      droplevels()
 
-    return(datCol[1:len, 1])
+    return(dat_col[1:len, 1])
   }
 
   # remove marker from color legend
@@ -294,7 +320,6 @@ g_spiderplot <- function(marker_x,
       legend.title = element_text(size = 7)
     ) +
     labs(shape = "Shape", color = "Color") # +
-  # guides(colour = FALSE)
 
   if (is.numeric(marker_x)) {
     pl <- pl + xlim(min(marker_x), max(marker_x) * 1.3)

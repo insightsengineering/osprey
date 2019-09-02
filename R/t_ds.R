@@ -77,8 +77,7 @@
 #'
 #' # simple example using osprey dummy dataset
 #'
-#' data("rADSL")
-#' ANL <- rADSL
+#' ANL <- osprey::rADSL
 #'
 #' tbl3 <- t_ds(
 #'   class = ANL$EOSSTT,
@@ -93,8 +92,8 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
 
 
   # check input arguments ---------------------------
-  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
-  check_col_by(col_by, col_N, min_num_levels = 1)
+  col_n <- tapply(id, col_by, function(x) sum(!duplicated(x)))
+  check_col_by(col_by, col_n, min_num_levels = 1)
 
   if (any("- Overall -" %in% term)) {
     stop("'- Overall -' is not a valid term, t_ae_oview reserves it for derivation")
@@ -104,11 +103,24 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
   }
 
   if (!is.null(sub)) {
-    check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)), nrow(sub))
-    check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
+    check_input_length <- c(nrow(data.frame(class)),
+                            nrow(data.frame(term)),
+                            nrow(data.frame(id)),
+                            nrow(data.frame(col_by)),
+                            nrow(sub))
+    check_input_col <- c(ncol(data.frame(class)),
+                         ncol(data.frame(term)),
+                         ncol(data.frame(id)),
+                         ncol(data.frame(col_by)))
   } else {
-    check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)))
-    check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
+    check_input_length <- c(nrow(data.frame(class)),
+                            nrow(data.frame(term)),
+                            nrow(data.frame(id)),
+                            nrow(data.frame(col_by)))
+    check_input_col <- c(ncol(data.frame(class)),
+                         ncol(data.frame(term)),
+                         ncol(data.frame(id)),
+                         ncol(data.frame(col_by)))
   }
 
   if (length(unique(check_input_length)) > 1) {
@@ -131,7 +143,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
     stringsAsFactors = FALSE
   )
 
-  df <- df %>% arrange(class, term)
+  df <- df %>% dplyr::arrange(class, term)
 
   if (!is.null(sub)) {
     df <- data.frame(
@@ -142,10 +154,10 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
       col_by = col_by,
       stringsAsFactors = FALSE
     )
-    df <- df %>% arrange(class, term)
+    df <- df %>% dplyr::arrange(class, term)
   }
 
-  df <- df %>% mutate(
+  df <- df %>% dplyr::mutate(
     class = ifelse(class == "", "None", as.character(class)),
     term = ifelse(term == "", "None", as.character(term))
   )
@@ -162,7 +174,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
   }
 
   # total N for column header
-  N <- tapply(df$id, df$col_by, function(x) (sum(!duplicated(x))))
+  n_total <- tapply(df$id, df$col_by, function(x) sum(!duplicated(x)))
 
   # start tabulating --------------------------------------------------------
 
@@ -175,7 +187,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
 
     l_t_comp <- t_helper_tabulate(
       df_id = df,
-      N = N,
+      n = n_total,
       checkcol = "uniqueid",
       term = name_in,
       remove_dupl = TRUE,
@@ -185,7 +197,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
     if (count == max_count || (!is.null(nrow(split(df, df[, count])))) && nrow(split(df, df[, count])) == 0) {
       l_t_ov <- t_helper_tabulate(
         df_id = df,
-        N = N,
+        n = n_total,
         checkcol = "uniqueid",
         term = name_in,
         remove_dupl = TRUE,
@@ -195,7 +207,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
       l_t_terms <- mapply(function(df_i, term) {
         t_helper_tabulate(
           df_id = df_i,
-          N = N,
+          n = n_total,
           checkcol = "uniqueid",
           term = term,
           remove_dupl = TRUE,
@@ -228,7 +240,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
     SIMPLIFY = FALSE
   )
 
-  tbls_all <- remove_Null(l_t_class_terms)
+  tbls_all <- remove_null(l_t_class_terms)
   tbls_class <- Map(recursive_indent, tbls_all, rep(0, length(tbls_all)))
   tbl <- do.call(stack_rtables_condense, tbls_class)
 

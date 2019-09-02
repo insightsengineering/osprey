@@ -1,14 +1,12 @@
-
-
-#' Create a spiderplot_simple
+#' Simple spider plot
 #'
 #' Descr of this plot
 #'
 #' @param anl The analysis data frame (e.g. ATE.sas7bdat on BCE)
 #' @param byvar Analysis dataset
 #' @param days Variable with time in days
-#' @param mesValue Variable with measurement
-#' @param groupCol Variable to color the individual lines and id in plot
+#' @param mes_value Variable with measurement
+#' @param group_col Variable to color the individual lines and id in plot
 #' @param baseday Numeric Value, pts with only smaller values will be cut out
 #'
 #'
@@ -21,14 +19,17 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
+#' library(dplyr)
 #'
-#' atr <- left_join(rADRS, rADSL)
+#' ADSL <- rADSL
+#' ADRS <- rADRS
+#' atr <- left_join(ADSL, ADRS)
 #'
 #' atr %>%
 #'   filter(PARAMCD == "OVRINV") %>%
-#'   spiderplot_simple(, groupCol = "SEX", days = "ADY", mesValue = "AVAL")
+#'   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
-    mesValue = "PARAM", groupCol = "USUBJID", baseday = 0) {
+    mes_value = "PARAM", group_col = "USUBJID", baseday = 0) {
   ### remove patients without post baseline measurement
   anl <- anl %>%
     group_by(!!byvar) %>%
@@ -36,15 +37,17 @@ spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
     filter(.data$morebase == TRUE) %>%
     ungroup()
   ### find the last measurement
-  lastObs <- anl %>% group_by(!!as.symbol(byvar)) %>% slice(which.max(!!as.symbol(days)))
+  last_obs <- anl %>%
+    group_by(!!as.symbol(byvar)) %>%
+    slice(which.max(!!as.symbol(days)))
 
   # plotr
-  ggplot(data = anl, mapping = aes_string(x = days, y = mesValue, group = byvar, colour = groupCol),
+  ggplot(data = anl, mapping = aes_string(x = days, y = mes_value, group = byvar, colour = group_col),
           size = 2, alpha = 1) +
     geom_point(size = 3) + geom_line(size = 2, alpha = 0.7) +
-    geom_text(aes_string(x = days, y = mesValue, label = byvar), data = lastObs, hjust = 0) +
+    geom_text(aes_string(x = days, y = mes_value, label = byvar), data = last_obs, hjust = 0) +
     geom_hline(aes(yintercept = 0), linetype = "dotted", color = "black") +
     xlab("Time (Days)") +
-    ylab("Change(%) from Baseline")# +
-    # expand_limits(anl, x = select_(anl, mesValue) * 1.2)
+    ylab("Change(%) from Baseline")# + # nolint
+    # expand_limits(anl, x = select_(anl, mesValue) * 1.2) # nolint
 }

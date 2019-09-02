@@ -45,8 +45,6 @@
 #' @examples
 #' library(dplyr)
 #'
-#' data("rADSL")
-#' data("rADAE")
 #' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM, RACE) %>% filter(SEX %in% c("F", "M"))
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 #'
@@ -185,8 +183,18 @@ g_butterfly <- function(category,
         temp1 <- temp1[, -1]
         temp2 <- temp2[, -1]
       } else if (block_count == "# of AEs") {
-        counts1 <- dat %>% group_by(.data$y, .data$flag1) %>% tally() %>% filter(.data$flag1 == 1) %>% as.data.frame()
-        counts2 <- dat %>% group_by(.data$y, .data$flag2) %>% tally() %>% filter(.data$flag2 == 1) %>% as.data.frame()
+        counts1 <- dat %>%
+          group_by(.data$y, .data$flag1) %>%
+          tally() %>%
+          filter(.data$flag1 == 1) %>%
+          as.data.frame()
+
+        counts2 <- dat %>%
+          group_by(.data$y, .data$flag2) %>%
+          tally() %>%
+          filter(.data$flag2 == 1) %>%
+          as.data.frame()
+
         temp1 <- data.frame(id = id, y = category, flag1 = groups$flag1, bar_color = block_color)
         temp2 <- data.frame(id = id, y = category, flag2 = groups$flag2, bar_color = block_color)
         temp1 <- temp1[, -1]
@@ -374,8 +382,14 @@ g_butterfly <- function(category,
         temp1 <- temp1[, -1]
         temp2 <- temp2[, -1]
       } else if (block_count == "# of AEs") {
-        counts1 <- dat %>% group_by(.data$y, .data$flag1) %>% tally() %>% as.data.frame()
-        counts2 <- dat %>% group_by(.data$y, .data$flag2) %>% tally() %>% as.data.frame()
+        counts1 <- dat %>%
+          group_by(.data$y, .data$flag1) %>%
+          tally() %>%
+          as.data.frame()
+        counts2 <- dat %>%
+          group_by(.data$y, .data$flag2) %>%
+          tally() %>%
+          as.data.frame()
         temp1 <- data.frame(id = id, y = category, flag1 = groups$flag1)
         temp2 <- data.frame(id = id, y = category, flag2 = groups$flag2)
         temp1 <- temp1[, -1]
@@ -451,8 +465,14 @@ g_butterfly <- function(category,
         temp1 <- temp1[, -1]
         temp2 <- temp2[, -1]
       } else if (block_count == "# of AEs") {
-        counts1 <- dat %>% group_by(.data$y, .data$flag1, .data$f_rows) %>% tally() %>% as.data.frame()
-        counts2 <- dat %>% group_by(.data$y, .data$flag2, .data$f_rows) %>% tally() %>% as.data.frame()
+        counts1 <- dat %>%
+          group_by(.data$y, .data$flag1, .data$f_rows) %>%
+          tally() %>%
+          as.data.frame()
+        counts2 <- dat %>%
+          group_by(.data$y, .data$flag2, .data$f_rows) %>%
+          tally() %>%
+          as.data.frame()
         temp1 <- data.frame(id = id, y = category, flag1 = groups$flag1, f_rows = facet_rows)
         temp2 <- data.frame(id = id, y = category, flag2 = groups$flag2, f_rows = facet_rows)
         temp1 <- temp1[, -1]
@@ -485,7 +505,8 @@ g_butterfly <- function(category,
         filter(.data$flag2 == 1) %>%
         group_by(.data$y, .data$flag2, .data$f_rows) %>%
         filter(.data$label_ypos == max(.data$label_ypos))
-      total_text_ann2 <- text_ann2 %>% group_by(.data$y, .data$flag2, .data$f_rows) %>%
+      total_text_ann2 <- text_ann2 %>%
+        group_by(.data$y, .data$flag2, .data$f_rows) %>%
         filter(.data$label_ypos == max(.data$label_ypos))
     }
   }
@@ -518,7 +539,10 @@ g_butterfly <- function(category,
       group_by(.data$y) %>%
       tally(n) %>%
       data.frame()
-    tot <- rbind(tot1, tot2) %>% group_by(.data$y) %>% tally(n) %>% as.data.frame()
+    tot <- rbind(tot1, tot2) %>%
+      group_by(.data$y) %>%
+      tally(n) %>%
+      as.data.frame()
 
     counts1$y <- factor(counts1$y, levels = rev(unique(tot$y[order(tot[, 2], decreasing = TRUE)])))
     counts2$y <- factor(counts2$y, levels = rev(unique(tot$y[order(tot[, 2], decreasing = TRUE)])))
@@ -541,7 +565,10 @@ g_butterfly <- function(category,
       geom_text(data = text_ann1, aes_string(y = "label_ypos - 0.2", label = "bar_count"), hjust = 1) +
       geom_text(data = text_ann2, aes_string(y = "-label_ypos", label = "bar_count"), hjust = -0.9) +
       geom_text(data = total_text_ann1, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
-      geom_text(data = total_text_ann2, aes_string(y = "-label_ypos - 0.4", label = "n"), fontface = "bold", hjust = 0.9) +
+      geom_text(data = total_text_ann2,
+                aes_string(y = "-label_ypos - 0.4", label = "n"),
+                fontface = "bold",
+                hjust = 0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
@@ -551,7 +578,10 @@ g_butterfly <- function(category,
       geom_bar(data = counts2, aes_string(y = "-n0"), stat = "identity") +
       geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
       geom_text(data = total_text_ann1, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
-      geom_text(data = total_text_ann2, aes_string(y = "-label_ypos - 0.4", label = "n"), fontface = "bold", hjust = 0.9) +
+      geom_text(data = total_text_ann2,
+                aes_string(y = "-label_ypos - 0.4", label = "n"),
+                fontface = "bold",
+                hjust = 0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
       labs(x = y_label, y = block_count, fill = legend_label)

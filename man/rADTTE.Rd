@@ -5,6 +5,9 @@
 \alias{rADTTE}
 \title{Random Time to Event Analysis Dataset}
 \format{An object of class \code{data.frame} with 150 rows and 33 columns.}
+\source{
+internal
+}
 \usage{
 data(rADTTE)
 }
@@ -12,6 +15,6 @@ data(rADTTE)
 Random Time to Event Analysis Dataset
 }
 \examples{
-data(rADTTE)
+rADTTE
 }
 \keyword{datasets}

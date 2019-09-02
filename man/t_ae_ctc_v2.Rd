@@ -31,7 +31,7 @@ grades, see 'Details'.}
 }
 \description{
 \code{t_ae_ctc_v2} returns adverse events sorted by highest NCI (National Cancer
- Institute) CTCAE (common terminology criteria for adverse avents) grade. It
+ Institute) CTCAE (common terminology criteria for adverse events) grade. It
  corresponds to STREAM template AET01.
 }
 \details{
@@ -39,7 +39,7 @@ grades, see 'Details'.}
  intensity for system organ class (SOC) and overall rows and includes
  percentages based on the total number of patients in the column heading
  (i.e. "N=nnn"). If the intention is to use patients number from subject level
- dataset as N for percentage calculation then adeverse events dataset should
+ dataset as N for percentage calculation then adverse events dataset should
  be left joined to subject level dataset and the \code{col_by} variable should
  be dropped from adverse events dataset, see the example. Otherwise, N will be
  derived using adverse events dataset. At the preferred term (PT) level,
@@ -103,6 +103,7 @@ tbl <- t_ae_ctc_v2(
   total = "All Patients",
   grade_levels = 1:3
 )
+tbl
 
 
 library(random.cdisc.data)
@@ -121,6 +122,7 @@ tbl <- t_ae_ctc_v2(
     total = "All Patients",
     grade_levels = 1:5
   )
+tbl
 }
 }
 \author{

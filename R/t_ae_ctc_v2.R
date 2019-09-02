@@ -2,7 +2,7 @@
 #' Adverse Events Table by Highest NCI CTCAE Grade
 #'
 #' \code{t_ae_ctc_v2} returns adverse events sorted by highest NCI (National Cancer
-#'  Institute) CTCAE (common terminology criteria for adverse avents) grade. It
+#'  Institute) CTCAE (common terminology criteria for adverse events) grade. It
 #'  corresponds to STREAM template AET01.
 #'
 #' @param class system organ class variable.
@@ -25,7 +25,7 @@
 #'  intensity for system organ class (SOC) and overall rows and includes
 #'  percentages based on the total number of patients in the column heading
 #'  (i.e. "N=nnn"). If the intention is to use patients number from subject level
-#'  dataset as N for percentage calculation then adeverse events dataset should
+#'  dataset as N for percentage calculation then adverse events dataset should
 #'  be left joined to subject level dataset and the \code{col_by} variable should
 #'  be dropped from adverse events dataset, see the example. Otherwise, N will be
 #'  derived using adverse events dataset. At the preferred term (PT) level,
@@ -97,6 +97,7 @@
 #'   total = "All Patients",
 #'   grade_levels = 1:3
 #' )
+#' tbl
 #'
 #'
 #' library(random.cdisc.data)
@@ -115,15 +116,20 @@
 #'     total = "All Patients",
 #'     grade_levels = 1:5
 #'   )
+#' tbl
 #' }
 t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5) {
 
   # check argument validity and consitency ----------------------------------
-  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
-  check_col_by(col_by, col_N, min_num_levels = 1)
+  col_n <- tapply(id, col_by, function(x) sum(!duplicated(x)))
+  check_col_by(col_by, col_n, min_num_levels = 1)
 
-  if (any("- Overall -" %in% term)) stop("'- Overall -' is not a valid term, t_ae_ctc_v2 reserves it for derivation")
-  if (any("All Patients" %in% col_by)) stop("'All Patients' is not a valid col_by, t_ae_ctc_v2 derives All Patients column")
+  if (any("- Overall -" %in% term)) {
+    stop("'- Overall -' is not a valid term, t_ae_ctc_v2 reserves it for derivation")
+  }
+  if (any("All Patients" %in% col_by)) {
+    stop("'All Patients' is not a valid col_by, t_ae_ctc_v2 derives All Patients column")
+  }
 
   # data prep ---------------------------------------------------------------
   df <- data.frame(
@@ -134,9 +140,9 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
     col_by = col_by,
     stringsAsFactors = FALSE
   )
-  df <- df %>% arrange(class, term)
+  df <- df %>% dplyr::arrange(class, term)
 
-  df <- df %>% mutate(
+  df <- df %>% dplyr::mutate(
     class = ifelse(class == "", NA, class),
     term = ifelse(term == "", NA, term)
   )
@@ -161,7 +167,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   }
 
   # total N for column header
-  N <- tapply(df$subjid, df$col_by, function(x) (sum(!duplicated(x))))
+  n_total <- tapply(df$subjid, df$col_by, function(x) sum(!duplicated(x)))
 
   # need to remove extra records that came from subject level data
   # when left join was done. also any record that is missing class or term
@@ -182,14 +188,14 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
         grade = df_i$gradev,
         id = df_i$subjid,
         col_by = df_i$col_by,
-        col_N = N,
+        col_N = n_total,
         grade_levels = grade_levels,
         any_grade = "- Any Grade -"
       )
     })
 
     # sort terms by total
-    N_total_any <- vapply(l_t_terms, function(tbl) {
+    n_total_any <- vapply(l_t_terms, function(tbl) {
       a <- 0
       for (i in c(1:n_cols)) {
         a <- a + tbl[1, i][1]
@@ -197,14 +203,14 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
       a
     }, numeric(1))
 
-    l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
+    l_t_terms <- l_t_terms[order(-n_total_any, names(l_t_terms), decreasing = FALSE)]
 
     l_t_terms
   })
 
 
   # now sort tables
-  N_total_overall <- vapply(l_t_class_terms, function(tbl) {
+  n_total_overall <- vapply(l_t_class_terms, function(tbl) {
     a <- 0
     for (i in c(1:n_cols)) {
       a <- a + tbl[[1]][1, i][1]
@@ -212,14 +218,14 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
     a
   }, numeric(1))
 
-  l_t_class_terms <- l_t_class_terms[order(-N_total_overall, names(l_t_class_terms), decreasing = FALSE)]
+  l_t_class_terms <- l_t_class_terms[order(-n_total_overall, names(l_t_class_terms), decreasing = FALSE)]
 
 
   tbl_overall <- t_max_grade_per_id(
     grade = df$gradev,
     id = df$subjid,
     col_by = df$col_by,
-    col_N = N,
+    col_N = n_total,
     grade_levels = grade_levels,
     any_grade = "- Any Grade -"
   )

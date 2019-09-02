@@ -1,5 +1,5 @@
 library(test.nest)
 
 test_lintr()
-test_strict()
+# needs refactoring before: test_strict()
 test_regexp()

@@ -32,6 +32,7 @@
 #' # Example 1
 #' library(random.cdisc.data)
 #' library(dplyr)
+#'
 #' ASL <- rADSL
 #' ARS <- rADRS %>% filter(PARAMCD == "OVRINV")
 #' ANL <- ASL %>% left_join(ARS, by = c("STUDYID", "USUBJID"))
@@ -49,7 +50,7 @@
 #'   marker_color = NULL,
 #'   marker_color_opt = NULL,
 #'   anno_txt = anno_txt,
-#'   yref_line = c(100, 200),
+#'   yref_line = c(50, 100),
 #'   ytick_at = waiver(),
 #'   ylab = "Time from First Treatment (Day)",
 #'   title = "Swimlane Plot"
@@ -74,7 +75,7 @@
 #' ADS <- ASL %>%
 #'   filter(EOSSTT == "Discontinued" | DCSREAS != "") %>%
 #'   select(USUBJID, EOSDY, DCSREAS) %>%
-#'   dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
+#'   rename(ADY = EOSDY, AVALC = DCSREAS)
 #'
 #' # combine ARS with ADS records as one data for markers and join with ASL
 #' ANL <- ASL %>%
@@ -126,7 +127,8 @@ g_swimlane <- function(bar_id,
   if (!is.null(sort_by)) check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
   if (!is.null(col_by)) check_same_N(bar_id = bar_id, bar_length = bar_length, col_by = col_by)
 
-  if (!is.null(marker_id) & length(which(!marker_id %in% bar_id)) > 0) stop("marker_id ", marker_id[which(!marker_id %in% bar_id)], " is not in bar_id")
+  if (!is.null(marker_id) & length(which(!marker_id %in% bar_id)) > 0)
+    stop("marker_id ", marker_id[which(!marker_id %in% bar_id)], " is not in bar_id")
 
   if (!is.null(marker_id) & !is.null(marker_pos)) check_same_N(marker_id = marker_id, marker_pos = marker_pos)
   if (!is.null(marker_id) & !is.null(marker_shape)) check_same_N(marker_id = marker_id, marker_shape = marker_shape)

@@ -52,6 +52,7 @@ patient bar plot with markers of events and patient level annotation
 # Example 1
 library(random.cdisc.data)
 library(dplyr)
+
 ASL <- rADSL
 ARS <- rADRS \%>\% filter(PARAMCD == "OVRINV")
 ANL <- ASL \%>\% left_join(ARS, by = c("STUDYID", "USUBJID"))
@@ -69,7 +70,7 @@ g_swimlane(
   marker_color = NULL,
   marker_color_opt = NULL,
   anno_txt = anno_txt,
-  yref_line = c(100, 200),
+  yref_line = c(50, 100),
   ytick_at = waiver(),
   ylab = "Time from First Treatment (Day)",
   title = "Swimlane Plot"
@@ -94,7 +95,7 @@ ARS <- ASL \%>\%
 ADS <- ASL \%>\%
   filter(EOSSTT == "Discontinued" | DCSREAS != "") \%>\%
   select(USUBJID, EOSDY, DCSREAS) \%>\%
-  dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
+  rename(ADY = EOSDY, AVALC = DCSREAS)
 
 # combine ARS with ADS records as one data for markers and join with ASL
 ANL <- ASL \%>\%
