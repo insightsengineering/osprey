@@ -69,8 +69,6 @@
 #' tbl
 #' # Simple example 2
 #'
-#' data("rADSL")
-#' data("rADAE")
 #' ADSL <- rADSL %>% select(USUBJID, STUDYID, ARM)
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, ARM, AEBODSYS, AEDECOD)
 #' ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
@@ -87,8 +85,8 @@
 t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
   # check input arguments ---------------------------
-  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
-  check_col_by(col_by, col_N, min_num_levels = 1)
+  col_n <- tapply(id, col_by, function(x) sum(!duplicated(x)))
+  check_col_by(col_by, col_n, min_num_levels = 1)
 
   if (any("- Overall -" %in% term)) {
     stop("'- Overall -' is not a valid term, t_ae reserves it for derivation")
@@ -97,8 +95,14 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
     stop("'All Patients' is not a valid col_by, t_ae derives All Patients column")
   }
 
-  check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(col_by)))
-  check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)), ncol(data.frame(col_by)))
+  check_input_length <- c(nrow(data.frame(class)),
+                          nrow(data.frame(term)),
+                          nrow(data.frame(id)),
+                          nrow(data.frame(col_by)))
+  check_input_col <- c(ncol(data.frame(class)),
+                       ncol(data.frame(term)),
+                       ncol(data.frame(id)),
+                       ncol(data.frame(col_by)))
 
   if (length(unique(check_input_length)) > 1) {
     stop("invalid arguments: check that the length of input arguments are identical")
@@ -119,9 +123,9 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
     stringsAsFactors = FALSE
   )
 
-  df <- df %>% arrange(class, term)
+  df <- df %>% dplyr::arrange(class, term)
 
-  df <- df %>% mutate(
+  df <- df %>% dplyr::mutate(
     class = ifelse(class == "", "No Coding Available", class),
     term = ifelse(term == "", "No Coding Available", term)
   )
@@ -143,7 +147,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
   }
 
   # total N for column header (with All Patients)
-  N <- tapply(df$subjid, df$col_by, function(x) (sum(!duplicated(x))))
+  n_total <- tapply(df$subjid, df$col_by, function(x) sum(!duplicated(x)))
 
   # need to remove extra records that came from subject level data
   # when left join was done. also any record that is missing class or term
@@ -171,13 +175,13 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
         row_by = no_by(""),
         col_by = df_id$col_by,
         FUN = count_col_N,
-        col_wise_args = list(n_i = N),
+        col_wise_args = list(n_i = n_total),
         format = "xx"
       )
 
       header(tbl) <- rheader(
         rrowl("", levels(df_id$col_by)),
-        rrowl("", unname(N), format = "(N=xx)")
+        rrowl("", unname(n_total), format = "(N=xx)")
       )
       tbl
     })
@@ -193,13 +197,13 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
         row_by = no_by(""),
         col_by = df_id$col_by,
         FUN = count_perc_col_N,
-        col_wise_args = list(n_i = N),
+        col_wise_args = list(n_i = n_total),
         format = "xx (xx.x%)"
       )
 
       header(tbl) <- rheader(
         rrowl("", levels(df_id$col_by)),
-        rrowl("", unname(N), format = "(N=xx)")
+        rrowl("", unname(n_total), format = "(N=xx)")
       )
       tbl
     })
@@ -208,7 +212,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
     l_t_terms <- c(l_t_terms[2:length(l_t_terms)])
 
     # sort terms by total
-    N_total_any <- vapply(l_t_terms, function(tbl) {
+    n_total_any <- vapply(l_t_terms, function(tbl) {
       a <- 0
       for (i in c(1:n_cols)) {
         a <- a + tbl[1, i][1]
@@ -216,14 +220,14 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
       a
     }, numeric(1))
 
-    l_t_terms <- l_t_terms[order(-N_total_any, names(l_t_terms), decreasing = FALSE)]
+    l_t_terms <- l_t_terms[order(-n_total_any, names(l_t_terms), decreasing = FALSE)]
 
 
     l_t_terms <- c(l_t_summary, l_t_terms)
   }) #---------------------------end class and term chunk
 
   # now sort tables
-  N_total_overall <- vapply(l_t_class_terms, function(tbl) {
+  n_total_overall <- vapply(l_t_class_terms, function(tbl) {
     a <- 0
     for (i in c(1:n_cols)) {
       a <- a + tbl[[1]][1, i][1]
@@ -231,7 +235,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
     a
   }, numeric(1))
 
-  l_t_class_terms <- l_t_class_terms[order(-N_total_overall, names(l_t_class_terms), decreasing = FALSE)]
+  l_t_class_terms <- l_t_class_terms[order(-n_total_overall, names(l_t_class_terms), decreasing = FALSE)]
 
   # Overall: total num patients
   df_patients <- list("Total number of patients with at least one adverse event" = df)
@@ -245,13 +249,13 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
       row_by = no_by(""),
       col_by = df_id$col_by,
       FUN = count_perc_col_N,
-      col_wise_args = list(n_i = N),
+      col_wise_args = list(n_i = n_total),
       format = "xx (xx.x%)"
     )
 
     header(tbl) <- rheader(
       rrowl("", levels(df_id$col_by)),
-      rrowl("", unname(N), format = "(N=xx)")
+      rrowl("", unname(n_total), format = "(N=xx)")
     )
     tbl
   })
@@ -269,13 +273,13 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
       row_by = no_by(""),
       col_by = df_id$col_by,
       FUN = count_col_N,
-      col_wise_args = list(n_i = N),
+      col_wise_args = list(n_i = n_total),
       format = "xx"
     )
 
     header(tbl) <- rheader(
       rrowl("", levels(df_id$col_by)),
-      rrowl("", unname(N), format = "(N=xx)")
+      rrowl("", unname(n_total), format = "(N=xx)")
     )
     tbl
   })
@@ -295,7 +299,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
   tbls_ov <- Map(function(tbls_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables_condense, lt1)
+    t2 <- do.call(stack_rtables_condense, lt1) # nolint
   }, tbls_overview)
 
 

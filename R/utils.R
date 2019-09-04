@@ -1,7 +1,7 @@
 # tabulation function for condition checks
 #' @importFrom utils getFromNamespace
 #' @importFrom rtables rrowl rheader header<- header rcell no_by rtabulate
-t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percent) {
+t_helper_tabulate <- function(df_id, n, checkcol, term, remove_dupl, with_percent) { # nolint
   if (checkcol == "rowcount") {
     tbl <- rtabulate(
       na.omit(df_id),
@@ -21,7 +21,7 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
         row_by = no_by(""),
         col_by = df_id$col_by,
         FUN = count_perc_col_N,
-        col_wise_args = list(n_i = N),
+        col_wise_args = list(n_i = n),
         format = "xx (xx.xx%)"
       )
     } else {
@@ -30,7 +30,7 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
         row_by = no_by(""),
         col_by = df_id$col_by,
         FUN = count_col_N,
-        col_wise_args = list(n_i = N),
+        col_wise_args = list(n_i = n),
         format = "xx"
       )
     }
@@ -46,7 +46,7 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
       row_by = factor(checkcol),
       col_by = df_id$col_by,
       FUN = count_perc_col_N,
-      col_wise_args = list(n_i = N),
+      col_wise_args = list(n_i = n),
       format = "xx (xx.xx%)"
     )
 
@@ -63,13 +63,13 @@ t_helper_tabulate <- function(df_id, N, checkcol, term, remove_dupl, with_percen
 
   header(tbl) <- rheader(
     rrowl("", levels(df_id$col_by)),
-    rrowl("", unname(N), format = "(N=xx)")
+    rrowl("", unname(n), format = "(N=xx)")
   )
   tbl
 }
 
 # checks if there is any case and derives counts, otherwise 0
-count_col_N <- function(x_cell, n_i) {
+count_col_N <- function(x_cell, n_i) { # nolint
   if (n_i > 0) {
     length(x_cell$id) # obtaining the total
   } else {
@@ -92,10 +92,10 @@ shift_label_table_mod <- function(tbl, term, ind_tbl) {
 }
 
 # remove null elements from list
-remove_Null <- function(x) {
+remove_null <- function(x) {
   x <- Filter(Negate(is.null), x)
   lapply(x, function(x) {
-    if (is.list(x) && class(x) != "rtable") remove_Null(x) else x
+    if (is.list(x) && class(x) != "rtable") remove_null(x) else x
   })
 }
 
@@ -109,7 +109,7 @@ recursive_indent <- function(tbl_l, ind_count) {
     }
     t
   } else if (is.list(tbl_l) && class(tbl_l) != "rtable") {
-    odd_ind <- seq(1, length(tbl_l), 2)
+    odd_ind <- seq(1, length(tbl_l), 2) # nolint
     count <- lapply(tbl_l, function(x) {
       if (class(x) == "rtable") {
         ind_count
@@ -119,7 +119,7 @@ recursive_indent <- function(tbl_l, ind_count) {
     })
     count <- unlist(count)
     t0 <- Map(recursive_indent, tbl_l, count)
-    tbl <- do.call(stack_rtables_condense, t0)
+    tbl <- do.call(stack_rtables_condense, t0) # nolint
   }
 }
 
@@ -145,7 +145,7 @@ stack_rtables_condense <- function(..., nrow_pad = 1) {
 
     if (!are(tbls, "rtable")) stop("not all objects are of type rtable")
 
-    header <- attr(tbls[[1]], "header")
+    header <- attr(tbls[[1]], "header") # nolint
     Reduce(
       function(x, y) rbind(x, y),
       tbls
@@ -184,18 +184,18 @@ add_ae_class <- function(tbl, class) {
 #' @examples
 #'
 #' duplicate_with_var(iris, Species = "Total")
-duplicate_with_var <- function(X, ...) {
+duplicate_with_var <- function(x, ...) { # nolint
   dots <- list(...)
   nms <- names(dots)
-  if (length(nms) > 1 && (is.null(nms) || !all(nms %in% names(X)))) {
+  if (length(nms) > 1 && (is.null(nms) || !all(nms %in% names(x)))) {
     stop("not all names in ... are existent or in X")
   }
-  X_copy <- X
-  vl <- var_labels(X)
+  x_copy <- x
+  vl <- var_labels(x)
   for (var in nms) {
-    X_copy[[var]] <- dots[[var]]
+    x_copy[[var]] <- dots[[var]]
   }
-  Y <- rbind(X, X_copy)
-  var_labels(Y) <- vl
-  Y
+  y <- rbind(x, x_copy)
+  var_labels(y) <- vl
+  y
 }

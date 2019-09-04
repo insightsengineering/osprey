@@ -60,8 +60,6 @@ there is no equivalent STREAM output
 \examples{
 library(dplyr)
 
-data("rADSL")
-data("rADAE")
 ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% filter(SEX \%in\% c("F", "M"))
 AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 

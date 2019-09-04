@@ -72,8 +72,6 @@ there is no equivalent STREAM output
 # simple example
 library(dplyr)
 
-data("rADSL")
-data("rADTR")
 ADTR <- rADTR \%>\% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 ADSL <- rADSL \%>\% select(STUDYID, USUBJID, RACE, SEX, ARM)
 ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))

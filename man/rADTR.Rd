@@ -3,15 +3,18 @@
 \docType{data}
 \name{rADTR}
 \alias{rADTR}
-\title{Random XXXX @todo}
+\title{Random data rADTR}
 \format{An object of class \code{data.frame} with 250 rows and 44 columns.}
+\source{
+internal
+}
 \usage{
 data(rADTR)
 }
 \description{
-Random XXXX @todo
+Random data rADTR
 }
 \examples{
-data(rADTR)
+rADTR
 }
 \keyword{datasets}

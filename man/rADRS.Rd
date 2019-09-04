@@ -5,6 +5,9 @@
 \alias{rADRS}
 \title{Random response}
 \format{An object of class \code{data.frame} with 300 rows and 34 columns.}
+\source{
+internal
+}
 \usage{
 data(rADRS)
 }
@@ -12,6 +15,6 @@ data(rADRS)
 Random response
 }
 \examples{
-data(rADRS)
+rADRS
 }
 \keyword{datasets}

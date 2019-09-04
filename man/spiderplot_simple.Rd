@@ -2,10 +2,10 @@
 % Please edit documentation in R/g_spiderplot_simple.R
 \name{spiderplot_simple}
 \alias{spiderplot_simple}
-\title{Create a spiderplot_simple}
+\title{Simple spider plot}
 \usage{
 spiderplot_simple(anl, byvar = "USUBJID", days = "TRTDURD",
-  mesValue = "PARAM", groupCol = "USUBJID", baseday = 0)
+  mes_value = "PARAM", group_col = "USUBJID", baseday = 0)
 }
 \arguments{
 \item{anl}{The analysis data frame (e.g. ATE.sas7bdat on BCE)}
@@ -14,9 +14,9 @@ spiderplot_simple(anl, byvar = "USUBJID", days = "TRTDURD",
 
 \item{days}{Variable with time in days}
 
-\item{mesValue}{Variable with measurement}
+\item{mes_value}{Variable with measurement}
 
-\item{groupCol}{Variable to color the individual lines and id in plot}
+\item{group_col}{Variable to color the individual lines and id in plot}
 
 \item{baseday}{Numeric Value, pts with only smaller values will be cut out}
 }
@@ -28,12 +28,15 @@ Descr of this plot
 }
 \examples{
 library(random.cdisc.data)
+library(dplyr)
 
-atr <- left_join(rADRS, rADSL)
+ADSL <- rADSL
+ADRS <- rADRS
+atr <- left_join(ADSL, ADRS)
 
 atr \%>\%
   filter(PARAMCD == "OVRINV") \%>\%
-  spiderplot_simple(, groupCol = "SEX", days = "ADY", mesValue = "AVAL")
+  spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 }
 \author{
 Mika Maekinen

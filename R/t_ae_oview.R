@@ -49,8 +49,7 @@
 #' @examples
 #' library(dplyr)
 #'
-#' data("rADAE")
-#' ANL <- rADAE
+#' ANL <- osprey::rADAE
 #' flag <- data.frame(
 #'   dthfl = ANL$DTHFL,
 #'   dcsreas = ANL$DCSREAS,
@@ -104,8 +103,8 @@ t_ae_oview <- function(id,
                        total = "All Patients") {
 
   # check input arguments ---------------------------
-  col_N <- tapply(id, col_by, function(x) (sum(!duplicated(x))))
-  check_col_by(col_by, col_N, min_num_levels = 1)
+  col_n <- tapply(id, col_by, function(x) sum(!duplicated(x)))
+  check_col_by(col_by, col_n, min_num_levels = 1)
   possible_names <- c(
     "dthfl",
     "dcsreas",
@@ -130,7 +129,8 @@ t_ae_oview <- function(id,
     stop("invalid arguments: need a dcsreas column in the flags parameter")
   }
   if (length(display_id) > 11) {
-    stop("invalid arguments: the maximum number of defaualt analyses is 11, please add additional analyses to extra_flag")
+    stop("invalid arguments: the maximum number of defaualt analyses is 11,
+         please add additional analyses to extra_flag")
   }
   if (any(is.element(colnames(flags), possible_names) == FALSE)) {
     stop("invalid arguments: check that the column names in flags matches the expected input")
@@ -141,10 +141,17 @@ t_ae_oview <- function(id,
 
   if (!is.null(extra_flag)) {
     extra_flag <- as.data.frame(vapply(extra_flag, toupper, rep(character(1), nrow(extra_flag))))
-    check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(flags)), nrow(extra_flag))
+    check_input_length <- c(nrow(data.frame(class)),
+                            nrow(data.frame(term)),
+                            nrow(data.frame(id)),
+                            nrow(data.frame(flags)),
+                            nrow(extra_flag))
     check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)))
   } else {
-    check_input_length <- c(nrow(data.frame(class)), nrow(data.frame(term)), nrow(data.frame(id)), nrow(data.frame(flags)))
+    check_input_length <- c(nrow(data.frame(class)),
+                            nrow(data.frame(term)),
+                            nrow(data.frame(id)),
+                            nrow(data.frame(flags)))
     check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)))
   }
 
@@ -206,7 +213,7 @@ t_ae_oview <- function(id,
   }
 
   # total N for column header
-  N <- tapply(df$id, df$col_by, function(x) (sum(!duplicated(x))))
+  n_total <- tapply(df$id, df$col_by, function(x) sum(!duplicated(x)))
 
   # need to remove any record that is missing class or term
   df <- na.omit(df)
@@ -258,8 +265,6 @@ t_ae_oview <- function(id,
   }
 
   # start tabulating --------------------------------------------------------
-  n_cols <- nlevels(col_by)
-
   # Overview: total num patients with at least one AE
   df_patients <- list(
     "Total number of patients with at least one AE" = df,
@@ -271,7 +276,7 @@ t_ae_oview <- function(id,
   tbl_overall <- mapply(function(df_i, term, c_col) {
     t_helper_tabulate(
       df_id = df_i,
-      N = N,
+      n = n_total,
       checkcol = c_col,
       term = term,
       remove_dupl = TRUE,
@@ -302,7 +307,7 @@ t_ae_oview <- function(id,
   tbl_ind <- mapply(function(df_i, term, c_col) {
     t_helper_tabulate(
       df_id = df_i,
-      N = N,
+      n = n_total,
       checkcol = c_col,
       term = term,
       remove_dupl = TRUE,
@@ -321,7 +326,7 @@ t_ae_oview <- function(id,
     tbl_extra <- mapply(function(df_i, term, c_col) {
       t_helper_tabulate(
         df_id = df_i,
-        N = N,
+        n = n_total,
         checkcol = c_col,
         term = term,
         remove_dupl = TRUE,
@@ -342,7 +347,7 @@ t_ae_oview <- function(id,
 
   tbls_ov <- Map(function(tbls_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables, lt1)
+    t2 <- do.call(stack_rtables, lt1) # nolint
   }, tbls_overview)
 
   tbls_ind <- c(list("Total number of patients with at least one" = tbl_ind))

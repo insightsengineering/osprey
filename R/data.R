@@ -1,59 +1,89 @@
 #' Meddra data
 #'
+#' @description Meddra data
 #' @docType data
 #'
 #' @usage data(meddra)
 #'
+#' @keywords datasets
+#'
 #' @examples
-#' data(meddra)
+#' meddra
+#' @source internal
+#' @name meddra
 "meddra"
 
 #' Random adverse events
 #'
+#' @description Random adverse events
 #' @docType data
 #'
 #' @usage data(rADAE)
 #'
+#' @keywords datasets
+#'
 #' @examples
-#' data(rADAE)
+#' rADAE
+#' @source internal
+#' @name rADAE
 "rADAE"
 
 #' Random response
 #'
+#' @description Random response
 #' @docType data
 #'
 #' @usage data(rADRS)
 #'
+#' @keywords datasets
+#'
 #' @examples
-#' data(rADRS)
+#' rADRS
+#' @source internal
+#' @name rADRS
 "rADRS"
 
 #' Random patient listing
 #'
+#' @description Random patient listing
 #' @docType data
+#'
+#' @keywords datasets
 #'
 #' @usage data(rADSL)
 #'
 #' @examples
-#' data(rADSL)
+#' rADSL
+#' @source internal
+#' @name rADSL
 "rADSL"
 
-#' Random XXXX @@todo
+#' Random data rADTR
 #'
+#' @description Random data rADTR
 #' @docType data
+#'
+#' @keywords datasets
 #'
 #' @usage data(rADTR)
 #'
 #' @examples
-#' data(rADTR)
+#' rADTR
+#' @source internal
+#' @name rADTR
 "rADTR"
 
 #' Random Time to Event Analysis Dataset
 #'
+#' @description Random Time to Event Analysis Dataset
 #' @docType data
+#'
+#' @keywords datasets
 #'
 #' @usage data(rADTTE)
 #'
 #' @examples
-#' data(rADTTE)
+#' rADTTE
+#' @source internal
+#' @name rADTTE
 "rADTTE"

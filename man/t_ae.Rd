@@ -74,8 +74,6 @@ tbl <- t_ae(
 tbl
 # Simple example 2
 
-data("rADSL")
-data("rADAE")
 ADSL <- rADSL \%>\% select(USUBJID, STUDYID, ARM)
 AAE <- rADAE \%>\% select(USUBJID, STUDYID, ARM, AEBODSYS, AEDECOD)
 ANL <- left_join(AAE, ADSL, by = c("USUBJID", "STUDYID", "ARM"))
