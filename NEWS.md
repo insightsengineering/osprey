@@ -1,7 +1,6 @@
 # osprey current release
-Refactoring package to the NEST standards.
-- including lintr checking
-- including custom regexp checking
+Refactoring package according to the NEST standards.
+- including test.nest tests
 - cleaning dependencies
 - fix tm_g_butterfly faceting error
 
