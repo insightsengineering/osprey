@@ -1,3 +1,9 @@
+# osprey current release
+Refactoring package according to the NEST standards.
+- including test.nest tests
+- cleaning dependencies
+- fix tm_g_butterfly faceting error
+
 # osprey 0.1.0
 
 First versioned release of osprey package, which include the following functions:
