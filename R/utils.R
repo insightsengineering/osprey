@@ -179,6 +179,7 @@ add_ae_class <- function(tbl, class) {
 #' @param ... key=value pairs, where the key refers to a variable in X and value
 #'   is the valueof the variable in modified(X)
 #'
+#' @importFrom tern var_labels 'var_labels<-'
 #' @noRd
 #'
 #' @examples

@@ -89,6 +89,8 @@ getdata_bce <- function(snapshot, area, x = NULL, load = TRUE) {
 #'
 #' @return a pdf file
 #'
+#' @importFrom grid grid.newpage grid.draw
+#'
 #' @export
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
@@ -173,6 +175,9 @@ paper_size <- function(pagesize) {
 #' @return a pdf file
 #'
 #' @export
+#'
+#' @importFrom tern decorate_grob_set
+#' @importFrom grid viewport
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
 #'

@@ -49,8 +49,6 @@
 #' @examples
 #' # simple example
 #' library(dplyr)
-#' data("rADTR")
-#' data("rADSL")
 #'
 #' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 #' ADSL <- rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)

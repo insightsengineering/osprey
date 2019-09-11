@@ -20,8 +20,6 @@
 #' @examples
 #' library(random.cdisc.data)
 #' library(dplyr)
-#' data("rADSL")
-#' data("rADRS")
 #'
 #' ADSL <- rADSL
 #' ADRS <- rADRS

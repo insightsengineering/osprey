@@ -34,7 +34,10 @@
 #' @return ggplot object
 #'
 #' @importFrom plyr ddply
+#' @importFrom stringr str_wrap
 #' @importFrom rlang .data
+#' @importFrom gtable gtable_add_grob
+#' @importFrom grid grid.draw gpar grid.text
 #'
 #' @export
 #'
@@ -43,8 +46,6 @@
 #'
 #' @examples
 #' library(dplyr)
-#' data("rADSL")
-#' data("rADAE")
 #'
 #' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM, RACE) %>% dplyr::filter(SEX %in% c("F", "M"))
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)

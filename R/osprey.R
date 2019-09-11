@@ -2,7 +2,7 @@
 #'
 #' @importFrom grDevices colors dev.off pdf
 #' @importFrom stats na.omit
-#' @import dplyr rocheBCE ggplot2 grid gtable stringr tern
+#' @import dplyr rocheBCE ggplot2
 #' @rawNamespace import(gridExtra, except = combine)
 #' @docType package
 #' @name osprey

@@ -22,6 +22,8 @@
 #'
 #' @template author_qit3
 #'
+#' @importFrom gtable gtable_add_cols gtable_add_grob
+#' @importFrom grid grid.draw grid.newpage
 #'
 #' @return plot object
 #'
@@ -31,8 +33,6 @@
 #' # Example 1
 #' library(random.cdisc.data)
 #' library(dplyr)
-#' data("rADSL")
-#' data("rADRS")
 #'
 #' ASL <- rADSL
 #' ARS <- rADRS %>% dplyr::filter(PARAMCD == "OVRINV")
@@ -59,8 +59,6 @@
 #'
 #' # Example 2
 #' library(dplyr)
-#' data("rADSL")
-#' data("rADRS")
 #'
 #' ASL <- rADSL
 #' ARS <- rADRS

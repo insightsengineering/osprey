@@ -52,8 +52,6 @@ patient bar plot with markers of events and patient level annotation
 # Example 1
 library(random.cdisc.data)
 library(dplyr)
-data("rADSL")
-data("rADRS")
 
 ASL <- rADSL
 ARS <- rADRS \%>\% dplyr::filter(PARAMCD == "OVRINV")
@@ -80,8 +78,6 @@ g_swimlane(
 
 # Example 2
 library(dplyr)
-data("rADSL")
-data("rADRS")
 
 ASL <- rADSL
 ARS <- rADRS

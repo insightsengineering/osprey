@@ -66,8 +66,6 @@
 #'
 #' tbl
 #' # Simple example 2
-#' data("rADSL")
-#' data("rADAE")
 #'
 #' ADSL <- rADSL %>% select(USUBJID, STUDYID, ARM)
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, ARM, AEBODSYS, AEDECOD)
