@@ -65,7 +65,6 @@ this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = 
 }
 \examples{
 # Simple example
-library(tibble)
 library(dplyr)
 
 ASL <- tibble(

@@ -4,7 +4,7 @@
 \alias{g_butterfly}
 \title{Butterfly Plot}
 \usage{
-g_butterfly(category, rightFlag, leftFlag, group_names = NULL,
+g_butterfly(category, right_flag, left_flag, group_names = NULL,
   block_count = "# of patients", block_color = NULL, id,
   facet_rows = NULL, x_label = block_count,
   y_label = "AE Derived Terms", legend_label = "AETOXGR",
@@ -13,9 +13,9 @@ g_butterfly(category, rightFlag, leftFlag, group_names = NULL,
 \arguments{
 \item{category}{vector of y values}
 
-\item{rightFlag}{vector of 1/0 represents right side of barplot}
+\item{right_flag}{vector of 1/0 represents right side of barplot}
 
-\item{leftFlag}{vector of 1/0 represents left side of barplot}
+\item{left_flag}{vector of 1/0 represents left side of barplot}
 
 \item{group_names}{string vector of length 2 with desired names of dichotomization variables
 required format : first name corresponds to the name of the right side
@@ -75,8 +75,8 @@ ANL <- ANL \%>\% filter(AEBODSYS \%in\% c(
 
 g_butterfly(
   category = ANL$AEBODSYS,
-  rightFlag = ANL$flag1,
-  leftFlag = ANL$flag2,
+  right_flag = ANL$flag1,
+  left_flag = ANL$flag2,
   group_names = c("flag1 Asian", "flag2 M"),
   block_count = "# of AEs",
   block_color = ANL$AETOXGR,

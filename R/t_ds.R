@@ -23,8 +23,6 @@
 #'
 #' @template author_zhanc107
 #'
-#' @import tibble
-#' @import dplyr
 #' @examples
 #' # Simple example
 #' library(dplyr)
@@ -178,7 +176,6 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
 
   # start tabulating --------------------------------------------------------
 
-  ### ---------NEED TO MOVE TO UTILS-------------utility functions
   # split class, term, and subterms into lists
   recursive_split <- function(df, name_in, count, max_count) {
     if (nrow(df) == 0) {
@@ -213,7 +210,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
           remove_dupl = TRUE,
           with_percent = TRUE
         )
-      }, split(df, df[, count]), names(split(df, df[, count])), SIMPLIFY = FALSE)
+      }, split(df, df[, count]), names(split(df, df[, count])), SIMPLIFY = FALSE) # nolint
       l_t_terms <- list(l_t_ov, l_t_terms)
       return(l_t_terms)
     } else {
@@ -229,7 +226,6 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
       return(l_out)
     }
   }
-  ############## --------------------------------
 
   # split into lists of lists of subterms
   l_t_class_terms <- mapply(recursive_split,

@@ -49,7 +49,7 @@
 #' @examples
 #' library(dplyr)
 #'
-#' ANL <- osprey::rADAE
+#' ANL <- rADAE
 #' flag <- data.frame(
 #'   dthfl = ANL$DTHFL,
 #'   dcsreas = ANL$DCSREAS,
@@ -282,7 +282,7 @@ t_ae_oview <- function(id,
       remove_dupl = TRUE,
       with_percent = TRUE
     )
-  }, df_patients, names(df_patients), c("uniqueid", "rowcount", "dthfl", "dcsreas"), SIMPLIFY = FALSE)
+  }, df_patients, names(df_patients), c("uniqueid", "rowcount", "dthfl", "dcsreas"), SIMPLIFY = FALSE) # nolint
 
   # Summary table: individual components
   term_label <- c(
@@ -313,7 +313,7 @@ t_ae_oview <- function(id,
       remove_dupl = TRUE,
       with_percent = TRUE
     )
-  }, df_ind, names(df_ind), display_id, SIMPLIFY = FALSE)
+  }, df_ind, names(df_ind), display_id, SIMPLIFY = FALSE) # nolint
 
   # extra flags
   if (!is.null(extra_flag)) {
@@ -332,7 +332,7 @@ t_ae_oview <- function(id,
         remove_dupl = TRUE,
         with_percent = TRUE
       )
-    }, df_extra, names(df_extra), colnames(extra_flag), SIMPLIFY = FALSE)
+    }, df_extra, names(df_extra), colnames(extra_flag), SIMPLIFY = FALSE) # nolint
 
     tbl_ind <- c(tbl_ind, tbl_extra)
   }
@@ -348,14 +348,14 @@ t_ae_oview <- function(id,
   tbls_ov <- Map(function(tbls_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables, lt1) # nolint
-  }, tbls_overview)
+  }, tbls_overview) # nolint
 
   tbls_ind <- c(list("Total number of patients with at least one" = tbl_ind))
   tbls_class <- Map(function(tbls_i, class_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables_condense, lt1)
     add_ae_class(indent_table(t2, 1), class_i)
-  }, tbls_ind, names(tbls_ind))
+  }, tbls_ind, names(tbls_ind)) # nolint
 
   tbl_total <- do.call(stack_rtables_condense, tbls_ov)
   tbl_cl <- do.call(stack_rtables_condense, tbls_class)

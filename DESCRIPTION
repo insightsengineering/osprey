@@ -25,9 +25,7 @@ Imports:
   rlang,
   rocheBCE,
   rtables (>= 0.1.2),
-  stringr,
-  tibble,
-  tidyr
+  stringr
 Suggests:
   random.cdisc.data,
   knitr,
