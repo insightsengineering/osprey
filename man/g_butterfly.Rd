@@ -59,20 +59,23 @@ there is no equivalent STREAM output
 }
 \examples{
 library(dplyr)
+data("rADSL")
+data("rADAE")
 
-ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% filter(SEX \%in\% c("F", "M"))
+ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% dplyr::filter(SEX \%in\% c("F", "M"))
 AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
 ANL <- ANL \%>\%
-  mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\%
-  mutate(flag2 = ifelse(SEX == "M", 1, 0))
+  dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\%
+  dplyr::mutate(flag2 = ifelse(SEX == "M", 1, 0))
 ANL <- na.omit(ANL)
-ANL <- ANL \%>\% filter(AEBODSYS \%in\% c(
+ANL <- ANL \%>\% dplyr::filter(AEBODSYS \%in\% c(
   "Investigations", "Vascular disorders",
   "Musculoskeletal and connective tissue disorders"
 ))
 
+\donttest{
 g_butterfly(
   category = ANL$AEBODSYS,
   right_flag = ANL$flag1,
@@ -87,6 +90,7 @@ g_butterfly(
   sort_by = "count",
   show_legend = TRUE
 )
+}
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

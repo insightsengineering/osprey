@@ -29,13 +29,15 @@ Descr of this plot
 \examples{
 library(random.cdisc.data)
 library(dplyr)
+data("rADSL")
+data("rADRS")
 
 ADSL <- rADSL
 ADRS <- rADRS
 atr <- left_join(ADSL, ADRS)
 
 atr \%>\%
-  filter(PARAMCD == "OVRINV") \%>\%
+  dplyr::filter(PARAMCD == "OVRINV") \%>\%
   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 }
 \author{

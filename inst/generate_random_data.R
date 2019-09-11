@@ -56,7 +56,7 @@ ADSL <- tibble(
   BMK2    = c("Low", "Medium", "High") %>% sample_fct(N),
   SAFFL   = c("Y", "N") %>% sample_fct(N, prob = c(.9, .1)),
   EOSSTT  = c("Completed", "Discontinued", "Ongoing") %>% sample_fct(N, prob = c(.3, .3, .4))
-) %>% mutate(
+) %>% dplyr::mutate(
   ARM         = recode(ARMCD, "ARM A" = "A: Placebo", "ARM B" = "B: Drug X", "ARM C" = "C: Combination"),
   ACTARM      = ARM,
   ACTARMCD    = ARMCD,
@@ -87,13 +87,13 @@ ADSL <- tibble(
 meddra <- read_bce("/opt/BIOSTAT/prod/acp/libraries/meddra_hierarchy.sas7bdat")
 
 meddra <- meddra %>%
-  filter(MEDDRA_VERSION == "21.0") %>%
+  dplyr::filter(MEDDRA_VERSION == "21.0") %>%
   select(-MEDDRA_VERSION, -PRIMARY_PATH) %>%
-  rename(AEDECOD = PT_NAME, AEPTCD = PT_CODE,
-         AESOC = SOC_NAME, AESOCCD = SOC_CODE,
-         AEHLGT = HLGT_NAME, AEHLGTCD = HLGT_CODE,
-         AEHLT = HLT_NAME, AEHLTCD = HLT_CODE) %>%
-  mutate(AEBODSYS = AESOC,
+  dplyr::rename(AEDECOD = PT_NAME, AEPTCD = PT_CODE,
+                AESOC = SOC_NAME, AESOCCD = SOC_CODE,
+                AEHLGT = HLGT_NAME, AEHLGTCD = HLGT_CODE,
+                AEHLT = HLT_NAME, AEHLTCD = HLT_CODE) %>%
+  dplyr::mutate(AEBODSYS = AESOC,
          AEBDSYCD = AESOCCD,
          AETERM   = toupper(AEDECOD))
 
@@ -113,7 +113,7 @@ ADAE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
         sample_char(nae, prob = c(.2, .1, .1, .5,.1)),
       AETOXGR = paste(1:4) %>% sample_char(nae, prob =  c(.4, .3, .2, .1))
     )
-  ) %>% mutate(
+  ) %>% dplyr::mutate(
     AESDTH  = "N",
     TRTEMFL = "Y",
     AREL    = AEREL,
@@ -122,7 +122,7 @@ ADAE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
 
   # Edit last AE record if AE lead to withdrawl according to ADSL$AEWITHFL
   if (pinfo$AEWITHFL == "Y") {
-    AE <- AE %>% mutate(
+    AE <- AE %>% dplyr::mutate(
       AESER = ifelse(AESEQ == nae, "Y", AESER),
       AEACN = ifelse(AESEQ == nae, "DRUG WITHDRAWN", AEACN)
     )
@@ -130,7 +130,7 @@ ADAE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
 
   # Edit last AE record if AE lead to death according to ADSL$DTHCAUS
   if (pinfo$DTHCAUS == "Adverse Event") {
-    AE <- AE %>% mutate(
+    AE <- AE %>% dplyr::mutate(
       AEOUT   = ifelse(AESEQ == nae, "FATAL", AEOUT),
       AESER   = ifelse(AESEQ == nae, "Y", AESER),
       AETOXGR = ifelse(AESEQ == nae, "5", AETOXGR),
@@ -170,9 +170,9 @@ evntdescr_sel <- c(
 
 ADTTE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
 
-  lookup_ADTTE %>% filter(ARMCD == as.character(pinfo$ACTARMCD)) %>%
+  lookup_ADTTE %>% dplyr::filter(ARMCD == as.character(pinfo$ACTARMCD)) %>%
     rowwise() %>%
-    mutate(CNSR = sample(c(0, 1), 1, prob = c(1-CNSR_P, CNSR_P)),
+    dplyr::mutate(CNSR = sample(c(0, 1), 1, prob = c(1-CNSR_P, CNSR_P)),
            AVAL = rexp(1, LAMBDA),
            AVALU = "DAYS",
            EVNTDESC = if (CNSR == 1) sample(evntdescr_sel[-c(1:2)], 1) else sample(evntdescr_sel, 1)
@@ -192,7 +192,7 @@ param_codes <- setNames(1:5, c("CR", "PR", "SD", "PD", "NE"))
 lookup_ADRS <- expand.grid(
   ARMCD = c("ARM A", "ARM B", "ARM C"),
   AVALC = names(param_codes)
-) %>% mutate(
+) %>% dplyr::mutate(
   AVAL = param_codes[AVALC],
   p_c6  = c(c(.25, .2, .45), c(.25, .3, .3), c(.4, .3, .15), c(.1, .2, .05), c(0, 0, .05)),
   p_c12 = c(c(.2, .4, .7), c(.2, .3, .2), c(.4, .15, .03), c(.2, .14, .05), c(.1, .01, .02)),
@@ -203,7 +203,7 @@ lookup_ADRS <- expand.grid(
 ADRS <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
 
   probs <- lookup_ADRS %>%
-    filter(ARMCD == as.character(pinfo$ACTARMCD))
+    dplyr::filter(ARMCD == as.character(pinfo$ACTARMCD))
 
   # 1st response assessment
   ady_c6 <- 42 + floor(runif(1, min = 0, max = 5))
@@ -253,7 +253,7 @@ rm(param_codes, lookup_ADRS)
 lookup_ADTR <- expand.grid(
   ARMCD  = c("ARM A", "ARM B", "ARM C"),
   type = c("mean", "sd")
-) %>% mutate(
+) %>% dplyr::mutate(
   aval_scr = c(c(80, 80, 80), c(20, 22, 25)),
   pchg_c6  = c(c(20, 0, -10), c(20, 20, 20)),
   pchg_c12 = c(c(40, -10, -20), c(20, 25, 30)),
@@ -263,7 +263,7 @@ lookup_ADTR <- expand.grid(
 ADTR <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
 
   probs <- lookup_ADTR %>%
-    filter(ARMCD == as.character(pinfo$ACTARMCD))
+    dplyr::filter(ARMCD == as.character(pinfo$ACTARMCD))
 
   # screening
   aval_scr <- do.call(rnorm, as.list(c(1, probs$aval_scr)))
@@ -297,14 +297,14 @@ ADTR <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
     ANL02FL = c("Y", "", "", "Y"),
     ANL03FL = c("Y", rep("",3)),
     DTYPE   = rep("", 4)
-  ) %>% mutate(
+  ) %>% dplyr::mutate(
     CHG     = BASE * (PCHG/100),
     AVAL    = BASE + CHG,
     AVALC   = as.character(AVAL)
   )
 
   tr_min <- tr %>% slice(which.min(AVAL)) %>%
-    mutate(AVISIT  = "POST-BASELINE MINIMUM",
+    dplyr::mutate(AVISIT  = "POST-BASELINE MINIMUM",
            ANL01FL = "",
            ANL02FL = "",
            ANL03FL = "Y",

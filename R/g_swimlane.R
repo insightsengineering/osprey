@@ -31,9 +31,11 @@
 #' # Example 1
 #' library(random.cdisc.data)
 #' library(dplyr)
+#' data("rADSL")
+#' data("rADRS")
 #'
 #' ASL <- rADSL
-#' ARS <- rADRS %>% filter(PARAMCD == "OVRINV")
+#' ARS <- rADRS %>% dplyr::filter(PARAMCD == "OVRINV")
 #' ANL <- ASL %>% left_join(ARS, by = c("STUDYID", "USUBJID"))
 #' anno_txt <- ASL[, c("ARMCD", "SEX")]
 #'
@@ -57,6 +59,9 @@
 #'
 #' # Example 2
 #' library(dplyr)
+#' data("rADSL")
+#' data("rADRS")
+#'
 #' ASL <- rADSL
 #' ARS <- rADRS
 #'
@@ -67,14 +72,14 @@
 #' ARS <- ASL %>%
 #'   select(USUBJID) %>%
 #'   left_join(ARS, "USUBJID") %>%
-#'   filter(PARAMCD == "OVRINV") %>%
+#'   dplyr::filter(PARAMCD == "OVRINV") %>%
 #'   select(USUBJID, ADY, AVALC)
 #'
 #' # markers from ASL - discontinuation
 #' ADS <- ASL %>%
-#'   filter(EOSSTT == "Discontinued" | DCSREAS != "") %>%
+#'   dplyr::filter(EOSSTT == "Discontinued" | DCSREAS != "") %>%
 #'   select(USUBJID, EOSDY, DCSREAS) %>%
-#'   rename(ADY = EOSDY, AVALC = DCSREAS)
+#'   dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
 #'
 #' # combine ARS with ADS records as one data for markers and join with ASL
 #' ANL <- ASL %>%

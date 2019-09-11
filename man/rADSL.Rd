@@ -14,7 +14,4 @@ data(rADSL)
 \description{
 Random patient listing
 }
-\examples{
-rADSL
-}
 \keyword{datasets}

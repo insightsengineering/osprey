@@ -7,8 +7,6 @@
 #'
 #' @keywords datasets
 #'
-#' @examples
-#' meddra
 #' @source internal
 #' @name meddra
 "meddra"
@@ -22,8 +20,6 @@
 #'
 #' @keywords datasets
 #'
-#' @examples
-#' rADAE
 #' @source internal
 #' @name rADAE
 "rADAE"
@@ -37,8 +33,6 @@
 #'
 #' @keywords datasets
 #'
-#' @examples
-#' rADRS
 #' @source internal
 #' @name rADRS
 "rADRS"
@@ -52,8 +46,6 @@
 #'
 #' @usage data(rADSL)
 #'
-#' @examples
-#' rADSL
 #' @source internal
 #' @name rADSL
 "rADSL"
@@ -67,8 +59,6 @@
 #'
 #' @usage data(rADTR)
 #'
-#' @examples
-#' rADTR
 #' @source internal
 #' @name rADTR
 "rADTR"
@@ -82,8 +72,6 @@
 #'
 #' @usage data(rADTTE)
 #'
-#' @examples
-#' rADTTE
 #' @source internal
 #' @name rADTTE
 "rADTTE"

@@ -14,7 +14,4 @@ data(meddra)
 \description{
 Meddra data
 }
-\examples{
-meddra
-}
 \keyword{datasets}

@@ -14,7 +14,4 @@ data(rADTTE)
 \description{
 Random Time to Event Analysis Dataset
 }
-\examples{
-rADTTE
-}
 \keyword{datasets}

@@ -14,7 +14,4 @@ data(rADRS)
 \description{
 Random response
 }
-\examples{
-rADRS
-}
 \keyword{datasets}
