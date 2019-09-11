@@ -76,8 +76,8 @@
 #' )
 #' }
 g_butterfly <- function(category,
-                        right_flag, #nolint
-                        left_flag, #nolint
+                        right_flag,
+                        left_flag,
                         group_names = NULL,
                         block_count = "# of patients",
                         block_color = NULL,
