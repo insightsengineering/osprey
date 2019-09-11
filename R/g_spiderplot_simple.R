@@ -26,15 +26,15 @@
 #' atr <- left_join(ADSL, ADRS)
 #'
 #' atr %>%
-#'   filter(PARAMCD == "OVRINV") %>%
+#'   dplyr::filter(PARAMCD == "OVRINV") %>%
 #'   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
     mes_value = "PARAM", group_col = "USUBJID", baseday = 0) {
   ### remove patients without post baseline measurement
   anl <- anl %>%
     group_by(!!byvar) %>%
-    mutate(morebase = ifelse(max(!!days, na.rm = TRUE) > baseday, TRUE, FALSE)) %>%
-    filter(.data$morebase == TRUE) %>%
+    dplyr::mutate(morebase = ifelse(max(!!days, na.rm = TRUE) > baseday, TRUE, FALSE)) %>%
+    dplyr::filter(.data$morebase == TRUE) %>%
     ungroup()
   ### find the last measurement
   last_obs <- anl %>%

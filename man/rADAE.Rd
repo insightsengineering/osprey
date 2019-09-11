@@ -14,7 +14,4 @@ data(rADAE)
 \description{
 Random adverse events
 }
-\examples{
-rADAE
-}
 \keyword{datasets}

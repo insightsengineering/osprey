@@ -61,7 +61,7 @@ this is an equivalent of the STREAM output
 \examples{
 library(dplyr)
 
-ANL <- osprey::rADAE
+ANL <- rADAE
 flag <- data.frame(
   dthfl = ANL$DTHFL,
   dcsreas = ANL$DCSREAS,

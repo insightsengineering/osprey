@@ -9,8 +9,8 @@
 #'
 #'
 #' @param category vector of y values
-#' @param rightFlag vector of 1/0 represents right side of barplot
-#' @param leftFlag vector of 1/0 represents left side of barplot
+#' @param right_flag vector of 1/0 represents right side of barplot
+#' @param left_flag vector of 1/0 represents left side of barplot
 #' @param group_names string vector of length 2 with desired names of dichotomization variables
 #' required format : first name corresponds to the name of the right side
 #'                   second name corresponds to name of the left side
@@ -33,9 +33,11 @@
 #'
 #' @return ggplot object
 #'
-#' @import stringr
 #' @importFrom plyr ddply
+#' @importFrom stringr str_wrap
 #' @importFrom rlang .data
+#' @importFrom gtable gtable_add_grob
+#' @importFrom grid grid.draw gpar grid.text
 #'
 #' @export
 #'
@@ -45,23 +47,24 @@
 #' @examples
 #' library(dplyr)
 #'
-#' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM, RACE) %>% filter(SEX %in% c("F", "M"))
+#' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM, RACE) %>% dplyr::filter(SEX %in% c("F", "M"))
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 #'
 #' ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
 #' ANL <- ANL %>%
-#'   mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) %>%
-#'   mutate(flag2 = ifelse(SEX == "M", 1, 0))
+#'   dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) %>%
+#'   dplyr::mutate(flag2 = ifelse(SEX == "M", 1, 0))
 #' ANL <- na.omit(ANL)
-#' ANL <- ANL %>% filter(AEBODSYS %in% c(
+#' ANL <- ANL %>% dplyr::filter(AEBODSYS %in% c(
 #'   "Investigations", "Vascular disorders",
 #'   "Musculoskeletal and connective tissue disorders"
 #' ))
 #'
+#' \donttest{
 #' g_butterfly(
 #'   category = ANL$AEBODSYS,
-#'   rightFlag = ANL$flag1,
-#'   leftFlag = ANL$flag2,
+#'   right_flag = ANL$flag1,
+#'   left_flag = ANL$flag2,
 #'   group_names = c("flag1 Asian", "flag2 M"),
 #'   block_count = "# of AEs",
 #'   block_color = ANL$AETOXGR,
@@ -72,9 +75,10 @@
 #'   sort_by = "count",
 #'   show_legend = TRUE
 #' )
+#' }
 g_butterfly <- function(category,
-                        rightFlag, #nolint
-                        leftFlag, #nolint
+                        right_flag,
+                        left_flag,
                         group_names = NULL,
                         block_count = "# of patients",
                         block_color = NULL,
@@ -88,7 +92,7 @@ g_butterfly <- function(category,
 
   # check validity of input arguments-------------------------
   check_input_length <- c(
-    nrow(data.frame(category)), nrow(data.frame(leftFlag)), nrow(data.frame(rightFlag)),
+    nrow(data.frame(category)), nrow(data.frame(left_flag)), nrow(data.frame(right_flag)),
     nrow(data.frame(id))
   )
   check_input_col <- c(ncol(data.frame(category)), ncol(data.frame(id)))
@@ -102,7 +106,7 @@ g_butterfly <- function(category,
   if (any(check_input_length == 0) || any(check_input_col == 0)) {
     stop("invalid arguments: check that inputs are not null")
   }
-  if (ncol(data.frame(leftFlag)) != 1 || ncol(data.frame(rightFlag)) != 1) {
+  if (ncol(data.frame(left_flag)) != 1 || ncol(data.frame(right_flag)) != 1) {
     stop("invalid arguments: groups must have two columns each representing one dichotomization variable")
   }
 
@@ -118,7 +122,7 @@ g_butterfly <- function(category,
   }
 
   # set up data-------
-  groups <- data.frame(flag1 = rightFlag, flag2 = leftFlag)
+  groups <- data.frame(flag1 = right_flag, flag2 = left_flag)
   if (!is.null(facet_rows)) {
     facet_rows <- interaction(facet_rows)
   }
@@ -145,39 +149,39 @@ g_butterfly <- function(category,
       if (block_count == "# of patients") {
         counts1 <- dat %>%
           group_by(.data$id, .data$y, .data$flag1, .data$flag2) %>%
-          arrange(.data$bar_color) %>%
-          filter(.data$bar_color == last(.data$bar_color)) %>%
+          dplyr::arrange(.data$bar_color) %>%
+          dplyr::filter(.data$bar_color == last(.data$bar_color)) %>%
           distinct() %>%
           group_by(.data$y, .data$flag1, .data$flag2) %>%
           select(-.data$id) %>%
           group_by(.data$y, .data$flag1) %>%
           tally() %>%
-          filter(.data$flag1 == 1) %>%
+          dplyr::filter(.data$flag1 == 1) %>%
           as.data.frame()
         counts2 <- dat %>%
           group_by(.data$id, .data$y, .data$flag1, .data$flag2) %>%
-          arrange(.data$bar_color) %>%
-          filter(.data$bar_color == last(.data$bar_color)) %>%
+          dplyr::arrange(.data$bar_color) %>%
+          dplyr::filter(.data$bar_color == last(.data$bar_color)) %>%
           distinct() %>%
           group_by(.data$y, .data$flag1, .data$flag2) %>%
           select(-.data$id) %>%
           group_by(.data$y, .data$flag2) %>%
           tally() %>%
-          filter(.data$flag2 == 1) %>%
+          dplyr::filter(.data$flag2 == 1) %>%
           as.data.frame()
         in_dat <- data.frame(id = id, y = category, flag1 = groups$flag1, flag2 = groups$flag2, bar_color = block_color)
         temp1 <- in_dat %>%
           select(-.data$flag2) %>%
           group_by(.data$id, .data$y, .data$flag1) %>%
-          arrange(.data$bar_color) %>%
-          filter(.data$bar_color == last(.data$bar_color)) %>%
+          dplyr::arrange(.data$bar_color) %>%
+          dplyr::filter(.data$bar_color == last(.data$bar_color)) %>%
           distinct() %>%
           as.data.frame()
         temp2 <- in_dat %>%
           select(-.data$flag1) %>%
           group_by(.data$id, .data$y, .data$flag2) %>%
-          arrange(.data$bar_color) %>%
-          filter(.data$bar_color == last(.data$bar_color)) %>%
+          dplyr::arrange(.data$bar_color) %>%
+          dplyr::filter(.data$bar_color == last(.data$bar_color)) %>%
           distinct() %>%
           as.data.frame()
         temp1 <- temp1[, -1]
@@ -186,13 +190,13 @@ g_butterfly <- function(category,
         counts1 <- dat %>%
           group_by(.data$y, .data$flag1) %>%
           tally() %>%
-          filter(.data$flag1 == 1) %>%
+          dplyr::filter(.data$flag1 == 1) %>%
           as.data.frame()
 
         counts2 <- dat %>%
           group_by(.data$y, .data$flag2) %>%
           tally() %>%
-          filter(.data$flag2 == 1) %>%
+          dplyr::filter(.data$flag2 == 1) %>%
           as.data.frame()
 
         temp1 <- data.frame(id = id, y = category, flag1 = groups$flag1, bar_color = block_color)
@@ -207,36 +211,36 @@ g_butterfly <- function(category,
       counts2 <- left_join(counts2, temp2, by = c("y", "flag2"))
       max_c <- max(c(counts1$n, counts2$n))
       counts1$n0 <- rep(1, nrow(counts1))
-      counts1 <- counts1 %>% arrange(desc(.data$bar_color))
+      counts1 <- counts1 %>% dplyr::arrange(desc(.data$bar_color))
       counts1 <- ddply(counts1, c("y", "flag1"), transform) %>%
         group_by(.data$y, .data$flag1) %>%
-        mutate(label_ypos = cumsum(.data$n0)) %>%
+        dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       counts1 <- ddply(counts1, c("y", "flag1", "bar_color"), transform, bar_count = sum(.data$n0))
       text_ann1 <- counts1 %>%
-        arrange(.data$bar_color) %>%
-        filter(.data$flag1 == 1) %>%
+        dplyr::arrange(.data$bar_color) %>%
+        dplyr::filter(.data$flag1 == 1) %>%
         group_by(.data$y, .data$flag1, .data$bar_color) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
       total_text_ann1 <- text_ann1 %>%
         group_by(.data$y, .data$flag1) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
 
       counts2$n0 <- rep(1, nrow(counts2))
-      counts2 <- counts2 %>% arrange(desc(.data$bar_color))
+      counts2 <- counts2 %>% dplyr::arrange(desc(.data$bar_color))
       counts2 <- ddply(counts2, c("y", "flag2"), transform) %>%
         group_by(.data$y, .data$flag2) %>%
-        mutate(label_ypos = cumsum(.data$n0)) %>%
+        dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       counts2 <- ddply(counts2, c("y", "flag2", "bar_color"), transform, bar_count = sum(.data$n0))
       text_ann2 <- counts2 %>%
-        arrange(.data$bar_color) %>%
-        filter(.data$flag2 == 1) %>%
+        dplyr::arrange(.data$bar_color) %>%
+        dplyr::filter(.data$flag2 == 1) %>%
         group_by(.data$y, .data$flag2, .data$bar_color) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
       total_text_ann2 <- text_ann2 %>%
         group_by(.data$y, .data$flag2) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
     } else {
       if (length(unique(c(nrow(data.frame(facet_rows)), check_input_length))) > 1) {
         stop("invalid arguments: check that the length of input arguments are identical")
@@ -250,25 +254,25 @@ g_butterfly <- function(category,
       if (block_count == "# of patients") {
         counts1 <- dat %>%
           group_by(.data$id, .data$y, .data$flag1, .data$flag2, .data$f_rows) %>%
-          arrange(.data$bar_color) %>%
-          filter(.data$bar_color == last(.data$bar_color)) %>%
+          dplyr::arrange(.data$bar_color) %>%
+          dplyr::filter(.data$bar_color == last(.data$bar_color)) %>%
           distinct() %>%
           group_by(.data$y, .data$flag1, .data$flag2, .data$f_rows) %>%
           select(-.data$id) %>%
           group_by(.data$y, .data$flag1, .data$f_rows) %>%
           tally() %>%
-          filter(.data$flag1 == 1) %>%
+          dplyr::filter(.data$flag1 == 1) %>%
           as.data.frame()
         counts2 <- dat %>%
           group_by(.data$id, .data$y, .data$flag1, .data$flag2, .data$f_rows) %>%
-          arrange(.data$bar_color) %>%
-          filter(.data$bar_color == last(.data$bar_color)) %>%
+          dplyr::arrange(.data$bar_color) %>%
+          dplyr::filter(.data$bar_color == last(.data$bar_color)) %>%
           distinct() %>%
           group_by(.data$y, .data$flag1, .data$flag2, .data$f_rows) %>%
           select(-.data$id) %>%
           group_by(.data$y, .data$flag2, .data$f_rows) %>%
           tally() %>%
-          filter(.data$flag2 == 1) %>%
+          dplyr::filter(.data$flag2 == 1) %>%
           as.data.frame()
         in_dat <- data.frame(
           id = id, y = category, flag1 = groups$flag1, flag2 = groups$flag2, bar_color = block_color,
@@ -277,15 +281,15 @@ g_butterfly <- function(category,
         temp1 <- in_dat %>%
           select(-.data$flag2) %>%
           group_by(.data$id, .data$y, .data$flag1, .data$f_rows) %>%
-          arrange(.data$bar_color) %>%
-          filter(.data$bar_color == last(.data$bar_color)) %>%
+          dplyr::arrange(.data$bar_color) %>%
+          dplyr::filter(.data$bar_color == last(.data$bar_color)) %>%
           distinct() %>%
           as.data.frame()
         temp2 <- in_dat %>%
           select(-.data$flag1) %>%
           group_by(.data$id, .data$y, .data$flag2, .data$f_rows) %>%
-          arrange(.data$bar_color) %>%
-          filter(.data$bar_color == last(.data$bar_color)) %>%
+          dplyr::arrange(.data$bar_color) %>%
+          dplyr::filter(.data$bar_color == last(.data$bar_color)) %>%
           distinct() %>%
           as.data.frame()
         temp1 <- temp1[, -1]
@@ -294,12 +298,12 @@ g_butterfly <- function(category,
         counts1 <- dat %>%
           group_by(.data$y, .data$flag1, .data$f_rows) %>%
           tally() %>%
-          filter(.data$flag1 == 1) %>%
+          dplyr::filter(.data$flag1 == 1) %>%
           as.data.frame()
         counts2 <- dat %>%
           group_by(.data$y, .data$flag2, .data$f_rows) %>%
           tally() %>%
-          filter(.data$flag2 == 1) %>%
+          dplyr::filter(.data$flag2 == 1) %>%
           as.data.frame()
         temp1 <- data.frame(id = id, y = category, flag1 = groups$flag1, bar_color = block_color, f_rows = facet_rows)
         temp2 <- data.frame(id = id, y = category, flag2 = groups$flag2, bar_color = block_color, f_rows = facet_rows)
@@ -314,36 +318,36 @@ g_butterfly <- function(category,
       max_c <- max(c(counts1$n, counts2$n))
 
       counts1$n0 <- rep(1, nrow(counts1))
-      counts1 <- counts1 %>% arrange(desc(.data$bar_color))
+      counts1 <- counts1 %>% dplyr::arrange(desc(.data$bar_color))
       counts1 <- ddply(counts1, c("y", "flag1", "f_rows"), transform) %>%
         group_by(.data$y, .data$flag1) %>%
-        mutate(label_ypos = cumsum(.data$n0)) %>%
+        dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       counts1 <- ddply(counts1, c("y", "flag1", "bar_color", "f_rows"), transform, bar_count = sum(.data$n0))
       text_ann1 <- counts1 %>%
-        arrange(.data$bar_color) %>%
+        dplyr::arrange(.data$bar_color) %>%
         group_by(.data$y, .data$flag1, .data$bar_color, .data$f_rows) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
       total_text_ann1 <- text_ann1 %>%
-        filter(.data$flag1 == 1) %>%
+        dplyr::filter(.data$flag1 == 1) %>%
         group_by(.data$y, .data$flag1, .data$f_rows) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
 
       counts2$n0 <- rep(1, nrow(counts2))
-      counts2 <- counts2 %>% arrange(desc(.data$bar_color))
+      counts2 <- counts2 %>% dplyr::arrange(desc(.data$bar_color))
       counts2 <- ddply(counts2, c("y", "flag2", "f_rows"), transform) %>%
         group_by(.data$y, .data$flag2) %>%
-        mutate(label_ypos = cumsum(.data$n0)) %>%
+        dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       counts2 <- ddply(counts2, c("y", "flag2", "bar_color", "f_rows"), transform, bar_count = sum(.data$n0))
       text_ann2 <- counts2 %>%
-        arrange(.data$bar_color) %>%
+        dplyr::arrange(.data$bar_color) %>%
         group_by(.data$y, .data$flag2, .data$bar_color, .data$f_rows) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
       total_text_ann2 <- text_ann2 %>%
-        filter(.data$flag2 == 1) %>%
+        dplyr::filter(.data$flag2 == 1) %>%
         group_by(.data$y, .data$flag2, .data$f_rows) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
     }
   } else {
     if (is.null(facet_rows)) {
@@ -357,7 +361,7 @@ g_butterfly <- function(category,
           select(-.data$id) %>%
           group_by(.data$y, .data$flag1) %>%
           tally() %>%
-          filter(.data$flag1 == 1) %>%
+          dplyr::filter(.data$flag1 == 1) %>%
           as.data.frame()
         counts2 <- dat %>%
           group_by(.data$id, .data$y, .data$flag1, .data$flag2) %>%
@@ -366,7 +370,7 @@ g_butterfly <- function(category,
           select(-.data$id) %>%
           group_by(.data$y, .data$flag2) %>%
           tally() %>%
-          filter(.data$flag2 == 1) %>%
+          dplyr::filter(.data$flag2 == 1) %>%
           as.data.frame()
         in_dat <- data.frame(id = id, y = category, flag1 = groups$flag1, flag2 = groups$flag2)
         temp1 <- in_dat %>%
@@ -403,28 +407,28 @@ g_butterfly <- function(category,
       counts1$n0 <- rep(1, nrow(counts1))
       counts1 <- ddply(counts1, c("y", "flag1"), transform) %>%
         group_by(.data$y, .data$flag1) %>%
-        mutate(label_ypos = cumsum(.data$n0)) %>%
+        dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       text_ann1 <- counts1 %>%
-        filter(.data$flag1 == 1) %>%
+        dplyr::filter(.data$flag1 == 1) %>%
         group_by(.data$y, .data$flag1) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
       total_text_ann1 <- text_ann1 %>%
         group_by(.data$y, .data$flag1) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
 
       counts2$n0 <- rep(1, nrow(counts2))
       counts2 <- ddply(counts2, c("y", "flag2"), transform) %>%
         group_by(.data$y, .data$flag2) %>%
-        mutate(label_ypos = cumsum(.data$n0)) %>%
+        dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       text_ann2 <- counts2 %>%
-        filter(.data$flag2 == 1) %>%
+        dplyr::filter(.data$flag2 == 1) %>%
         group_by(.data$y, .data$flag2) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
       total_text_ann2 <- text_ann2 %>%
         group_by(.data$y, .data$flag2) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
     } else {
       if (length(unique(c(nrow(data.frame(facet_rows)), check_input_length))) > 1) {
         stop("invalid arguments: check that the length of input arguments are identical")
@@ -440,7 +444,7 @@ g_butterfly <- function(category,
           select(-.data$id) %>%
           group_by(.data$y, .data$flag1, .data$f_rows) %>%
           tally() %>%
-          filter(.data$flag1 == 1) %>%
+          dplyr::filter(.data$flag1 == 1) %>%
           as.data.frame()
         counts2 <- dat %>%
           group_by(.data$id, .data$y, .data$flag1, .data$flag2, .data$f_rows) %>%
@@ -449,7 +453,7 @@ g_butterfly <- function(category,
           select(-.data$id) %>%
           group_by(.data$y, .data$flag2, .data$f_rows) %>%
           tally() %>%
-          filter(.data$flag2 == 1) %>%
+          dplyr::filter(.data$flag2 == 1) %>%
           as.data.frame()
         in_dat <- data.frame(id = id, y = category, flag1 = groups$flag1, flag2 = groups$flag, f_rows = facet_rows)
         temp1 <- in_dat %>%
@@ -486,33 +490,33 @@ g_butterfly <- function(category,
       counts1$n0 <- rep(1, nrow(counts1))
       counts1 <- ddply(counts1, c("y", "flag1", "f_rows"), transform) %>%
         group_by(.data$y, .data$flag1) %>%
-        mutate(label_ypos = cumsum(.data$n0)) %>%
+        dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       text_ann1 <- counts1 %>%
-        filter(.data$flag1 == 1) %>%
+        dplyr::filter(.data$flag1 == 1) %>%
         group_by(.data$y, .data$flag1, .data$f_rows) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
       total_text_ann1 <- text_ann1 %>%
         group_by(.data$y, .data$flag1, .data$f_rows) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
 
       counts2$n0 <- rep(1, nrow(counts2))
       counts2 <- ddply(counts2, c("y", "flag2", "f_rows"), transform) %>%
         group_by(.data$y, .data$flag2) %>%
-        mutate(label_ypos = cumsum(.data$n0)) %>%
+        dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       text_ann2 <- counts2 %>%
-        filter(.data$flag2 == 1) %>%
+        dplyr::filter(.data$flag2 == 1) %>%
         group_by(.data$y, .data$flag2, .data$f_rows) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
       total_text_ann2 <- text_ann2 %>%
         group_by(.data$y, .data$flag2, .data$f_rows) %>%
-        filter(.data$label_ypos == max(.data$label_ypos))
+        dplyr::filter(.data$label_ypos == max(.data$label_ypos))
     }
   }
 
-  counts1 <- counts1 %>% filter(.data$flag1 == 1)
-  counts2 <- counts2 %>% filter(.data$flag2 == 1)
+  counts1 <- counts1 %>% dplyr::filter(.data$flag1 == 1)
+  counts2 <- counts2 %>% dplyr::filter(.data$flag2 == 1)
 
   counts1$y <- str_wrap(counts1$y, width = 30)
   total_text_ann1$y <- str_wrap(total_text_ann1$y, width = 30)
@@ -529,13 +533,13 @@ g_butterfly <- function(category,
   } else if (sort_by == "count") {
     tot1 <- counts1 %>%
       group_by(.data$y, .data$flag1) %>%
-      filter(.data$label_ypos == last(.data$label_ypos)) %>%
+      dplyr::filter(.data$label_ypos == last(.data$label_ypos)) %>%
       group_by(.data$y) %>%
       tally(n) %>%
       data.frame()
     tot2 <- counts2 %>%
       group_by(.data$y, .data$flag2) %>%
-      filter(.data$label_ypos == last(.data$label_ypos)) %>%
+      dplyr::filter(.data$label_ypos == last(.data$label_ypos)) %>%
       group_by(.data$y) %>%
       tally(n) %>%
       data.frame()
@@ -549,8 +553,8 @@ g_butterfly <- function(category,
   }
 
   if (is.null(group_names)) {
-    g1 <- names(rightFlag)[1]
-    g2 <- names(leftFlag)[2]
+    g1 <- names(right_flag)[1]
+    g2 <- names(left_flag)[2]
   } else {
     g1 <- group_names[1]
     g2 <- group_names[2]

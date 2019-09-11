@@ -16,7 +16,6 @@
 #'
 #' @return dataframe objects
 #'
-#' @import rocheBCE
 #' @export
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@@roche.com}
@@ -52,11 +51,11 @@ getdata_bce <- function(snapshot, area, x = NULL, load = TRUE) {
 
   # Set up paths
   path <- if (area == "sdtm") {
-    paste("/opt/BIOSTAT", area, snapshot, dfname, sep = "/")
+    paste("/opt/BIOSTAT", area, snapshot, dfname, sep = "/") # nolint
   } else if (area %in% c("qa", "prod")) {
-    paste("/opt/BIOSTAT", area, snapshot, "libraries", dfname, sep = "/")
+    paste("/opt/BIOSTAT", area, snapshot, "libraries", dfname, sep = "/") # nolint
   } else if (area == "home") {
-    paste("/opt/BIOSTAT", area, Sys.getenv("LOGNAME"), snapshot, "libraries", dfname, sep = "/")
+    paste("/opt/BIOSTAT", area, Sys.getenv("LOGNAME"), snapshot, "libraries", dfname, sep = "/") # nolint
   } else {
     stop("Please specify a valid snapshot area such as qa, prod, home or sdtm")
   }
@@ -89,6 +88,8 @@ getdata_bce <- function(snapshot, area, x = NULL, load = TRUE) {
 #'   \code{"letter.landscape"} (default)
 #'
 #' @return a pdf file
+#'
+#' @importFrom grid grid.newpage grid.draw
 #'
 #' @export
 #'
@@ -174,6 +175,9 @@ paper_size <- function(pagesize) {
 #' @return a pdf file
 #'
 #' @export
+#'
+#' @importFrom tern decorate_grob_set
+#' @importFrom grid viewport
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
 #'

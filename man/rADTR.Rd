@@ -14,7 +14,4 @@ data(rADTR)
 \description{
 Random data rADTR
 }
-\examples{
-rADTR
-}
 \keyword{datasets}

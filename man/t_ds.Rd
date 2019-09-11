@@ -86,7 +86,7 @@ tbl2
 
 # simple example using osprey dummy dataset
 
-ANL <- osprey::rADSL
+ANL <- rADSL
 
 tbl3 <- t_ds(
   class = ANL$EOSSTT,

@@ -54,11 +54,11 @@
 #' ADSL <- rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)
 #' ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
 #' ANL <- ANL %>%
-#'   filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
-#'   filter(RACE %in% c("WHITE", "ASIAN")) %>%
+#'   dplyr::filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
+#'   dplyr::filter(RACE %in% c("WHITE", "ASIAN")) %>%
 #'   group_by(USUBJID) %>%
-#'   arrange(ADY) %>%
-#'   mutate(
+#'   dplyr::arrange(ADY) %>%
+#'   dplyr::mutate(
 #'     CHG = ifelse(AVISIT == "Screening", 0, CHG),
 #'     PCHG = ifelse(AVISIT == "Screening", 0, PCHG)
 #'   )
@@ -205,9 +205,9 @@ g_spiderplot <- function(marker_x,
                !is.null(datalabel_txt$mrkr_all) &&
                !is.null(datalabel_txt$mrkr_ann)) {
       dat_arrow <- dat %>%
-        filter(id %in% datalabel_txt$mrkr_ann) %>%
+        dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
         group_by(.data$id) %>%
-        filter(.data$x == last(.data$x))
+        dplyr::filter(.data$x == last(.data$x))
       pl <- pl +
         geom_segment(data = dat_arrow,
                      mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
@@ -226,9 +226,9 @@ g_spiderplot <- function(marker_x,
                   show.legend = FALSE)
 
       dat_arrow <- dat %>%
-        filter(id %in% datalabel_txt$mrkr_ann) %>%
+        dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
         group_by(.data$id) %>%
-        filter(.data$x == last(.data$x))
+        dplyr::filter(.data$x == last(.data$x))
       pl <- pl + geom_segment(data = dat_arrow, mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
           arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
           size = 0.4, color = "black", show.legend = FALSE)
@@ -268,7 +268,7 @@ g_spiderplot <- function(marker_x,
   call_color <- function(len) {
     dat_col <- data.frame(color_opt = colors())
     dat_col <- dat_col %>%
-      filter(!grepl("white", .data$color_opt)) %>%
+      dplyr::filter(!grepl("white", .data$color_opt)) %>%
       droplevels()
 
     return(dat_col[1:len, 1])
