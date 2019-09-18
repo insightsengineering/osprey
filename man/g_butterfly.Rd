@@ -82,8 +82,8 @@ g_butterfly(
   block_count = "# of AEs",
   block_color = ANL$AETOXGR,
   id = ANL$USUBJID,
-  x_label = "# of patients",
-  y_label = "AE Derived Terms",
+  x_label = "Number of AEs",
+  y_label = "AE Body System",
   legend_label = "AETOXGR",
   sort_by = "count",
   show_legend = TRUE

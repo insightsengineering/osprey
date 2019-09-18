@@ -69,8 +69,8 @@
 #'   block_count = "# of AEs",
 #'   block_color = ANL$AETOXGR,
 #'   id = ANL$USUBJID,
-#'   x_label = "# of patients",
-#'   y_label = "AE Derived Terms",
+#'   x_label = "Number of AEs",
+#'   y_label = "AE Body System",
 #'   legend_label = "AETOXGR",
 #'   sort_by = "count",
 #'   show_legend = TRUE
@@ -210,13 +210,17 @@ g_butterfly <- function(category,
       counts1 <- left_join(counts1, temp1, by = c("y", "flag1"))
       counts2 <- left_join(counts2, temp2, by = c("y", "flag2"))
       max_c <- max(c(counts1$n, counts2$n))
+
       counts1$n0 <- rep(1, nrow(counts1))
       counts1 <- counts1 %>% dplyr::arrange(desc(.data$bar_color))
       counts1 <- ddply(counts1, c("y", "flag1"), transform) %>%
         group_by(.data$y, .data$flag1) %>%
         dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
-      counts1 <- ddply(counts1, c("y", "flag1", "bar_color"), transform, bar_count = sum(.data$n0))
+      counts1 <- ddply(counts1, c("y", "flag1", "bar_color"), transform) %>%
+        group_by(.data$y, .data$flag1, .data$bar_color) %>%
+        dplyr::mutate(bar_count = sum(.data$n0)) %>%
+        as.data.frame
       text_ann1 <- counts1 %>%
         dplyr::arrange(.data$bar_color) %>%
         dplyr::filter(.data$flag1 == 1) %>%
@@ -232,7 +236,10 @@ g_butterfly <- function(category,
         group_by(.data$y, .data$flag2) %>%
         dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
-      counts2 <- ddply(counts2, c("y", "flag2", "bar_color"), transform, bar_count = sum(.data$n0))
+      counts2 <- ddply(counts2, c("y", "flag2", "bar_color"), transform) %>%
+        group_by(.data$y, .data$flag2, .data$bar_color) %>%
+        dplyr::mutate(bar_count = sum(.data$n0)) %>%
+        as.data.frame
       text_ann2 <- counts2 %>%
         dplyr::arrange(.data$bar_color) %>%
         dplyr::filter(.data$flag2 == 1) %>%
@@ -320,10 +327,13 @@ g_butterfly <- function(category,
       counts1$n0 <- rep(1, nrow(counts1))
       counts1 <- counts1 %>% dplyr::arrange(desc(.data$bar_color))
       counts1 <- ddply(counts1, c("y", "flag1", "f_rows"), transform) %>%
-        group_by(.data$y, .data$flag1) %>%
+        group_by(.data$y, .data$flag1, .data$f_rows) %>%
         dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
-      counts1 <- ddply(counts1, c("y", "flag1", "bar_color", "f_rows"), transform, bar_count = sum(.data$n0))
+      counts1 <- ddply(counts1, c("y", "flag1", "bar_color", "f_rows"), transform) %>%
+        group_by(.data$y, .data$flag1, .data$bar_color, .data$f_rows) %>%
+        dplyr::mutate(bar_count = sum(.data$n0)) %>%
+        as.data.frame
       text_ann1 <- counts1 %>%
         dplyr::arrange(.data$bar_color) %>%
         group_by(.data$y, .data$flag1, .data$bar_color, .data$f_rows) %>%
@@ -336,10 +346,13 @@ g_butterfly <- function(category,
       counts2$n0 <- rep(1, nrow(counts2))
       counts2 <- counts2 %>% dplyr::arrange(desc(.data$bar_color))
       counts2 <- ddply(counts2, c("y", "flag2", "f_rows"), transform) %>%
-        group_by(.data$y, .data$flag2) %>%
+        group_by(.data$y, .data$flag2, .data$f_rows) %>%
         dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
-      counts2 <- ddply(counts2, c("y", "flag2", "bar_color", "f_rows"), transform, bar_count = sum(.data$n0))
+      counts2 <- ddply(counts2, c("y", "flag2", "bar_color", "f_rows"), transform) %>%
+        group_by(.data$y, .data$flag2, .data$bar_color, .data$f_rows) %>%
+        dplyr::mutate(bar_count = sum(.data$n0)) %>%
+        as.data.frame
       text_ann2 <- counts2 %>%
         dplyr::arrange(.data$bar_color) %>%
         group_by(.data$y, .data$flag2, .data$bar_color, .data$f_rows) %>%
@@ -489,7 +502,7 @@ g_butterfly <- function(category,
 
       counts1$n0 <- rep(1, nrow(counts1))
       counts1 <- ddply(counts1, c("y", "flag1", "f_rows"), transform) %>%
-        group_by(.data$y, .data$flag1) %>%
+        group_by(.data$y, .data$flag1, .data$f_rows) %>%
         dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       text_ann1 <- counts1 %>%
@@ -502,7 +515,7 @@ g_butterfly <- function(category,
 
       counts2$n0 <- rep(1, nrow(counts2))
       counts2 <- ddply(counts2, c("y", "flag2", "f_rows"), transform) %>%
-        group_by(.data$y, .data$flag2) %>%
+        group_by(.data$y, .data$flag2, .data$f_rows) %>%
         dplyr::mutate(label_ypos = cumsum(.data$n0)) %>%
         as.data.frame
       text_ann2 <- counts2 %>%
@@ -575,7 +588,7 @@ g_butterfly <- function(category,
                 hjust = 0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
-      labs(x = y_label, y = block_count, fill = legend_label)
+      labs(x = y_label, y = x_label, fill = legend_label)
   } else {
     pl <- ggplot(NULL, aes_string(x = "y")) +
       geom_bar(data = counts1, aes_string(y = "n0"), stat = "identity") +
@@ -588,7 +601,7 @@ g_butterfly <- function(category,
                 hjust = 0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
-      labs(x = y_label, y = block_count, fill = legend_label)
+      labs(x = y_label, y = x_label, fill = legend_label)
   }
 
   if (!is.null(facet_rows)) {

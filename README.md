@@ -18,19 +18,32 @@ There are two versions of webpage manual for this package
 
 Please install package dependencies as follows:
 
-### Stable Release
+### Stable Version
 
 [Web Manual](https://pages.github.roche.com/Rpackages/osprey/)
 
 ```r 
-devtools::install_github(repo = "Roche/rtables", ref = "v0.1.0.5",
+devtools::install_github(
+  repo = "NEST/random.cdisc.data",
+  ref = "master", 
+  host = "https://github.roche.com/api/v3",
+  upgrade_dependencies = FALSE
+)
+
+devtools::install_github("Roche/rtables")
+
+devtools::install_github(
+  repo = "NEST/tern",
+  ref = "master", 
+  host = "https://github.roche.com/api/v3",
+  upgrade_dependencies = FALSE
+)
+
+devtools::install_github(
+  repo = "Rpackages/osprey", 
+  ref = "master", 
+  host = "https://github.roche.com/api/v3", 
   upgrade_dependencies = FALSE)
-
-devtools::install_github(repo = "Rpackages/tern", ref = "v0.5.0.3", 
-  host = "https://github.roche.com/api/v3", upgrade_dependencies = FALSE)
-
-devtools::install_github(repo = "Rpackages/osprey", ref = "v0.1.0", 
-  host = "https://github.roche.com/api/v3", upgrade_dependencies = FALSE)
 ```
 
 ### Development Version
@@ -38,14 +51,19 @@ devtools::install_github(repo = "Rpackages/osprey", ref = "v0.1.0",
 [Web Manual](https://pages.github.roche.com/Rpackages/osprey/dev/)
 
 ```r
-devtools::install_github("Roche/rtables", ref = "master",
+devtools::install_github("Roche/rtables", 
+  ref = "devel",
   upgrade_dependencies = FALSE)
 
-devtools::install_github( repo = "Rpackages/tern", ref = "master", 
-  host = "https://github.roche.com/api/v3", upgrade_dependencies = FALSE )
+devtools::install_github( repo = "Rpackages/tern", 
+  ref = "devel", 
+  host = "https://github.roche.com/api/v3", 
+  upgrade_dependencies = FALSE )
 
-devtools::install_github(repo = "Rpackages/osprey", ref = "master",
-  host = "https://github.roche.com/api/v3", upgrade_dependencies = FALSE) 
+devtools::install_github(repo = "Rpackages/osprey", 
+  ref = "devel",
+  host = "https://github.roche.com/api/v3", 
+  upgrade_dependencies = FALSE) 
 ``` 
 
 
