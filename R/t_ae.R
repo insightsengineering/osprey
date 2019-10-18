@@ -170,7 +170,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
       tbl <- rtabulate(
         df_id,
-        row_by = no_by(""),
+        row_by = by_all(""),
         col_by = df_id$col_by,
         FUN = count_col_N,
         col_wise_args = list(n_i = n_total),
@@ -192,7 +192,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
       tbl <- rtabulate(
         na.omit(df_id),
-        row_by = no_by(""),
+        row_by = by_all(""),
         col_by = df_id$col_by,
         FUN = count_perc_col_N,
         col_wise_args = list(n_i = n_total),
@@ -244,7 +244,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
     tbl <- rtabulate(
       na.omit(df_id),
-      row_by = no_by(""),
+      row_by = by_all(""),
       col_by = df_id$col_by,
       FUN = count_perc_col_N,
       col_wise_args = list(n_i = n_total),
@@ -268,7 +268,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
     tbl <- rtabulate(
       na.omit(df_id),
-      row_by = no_by(""),
+      row_by = by_all(""),
       col_by = df_id$col_by,
       FUN = count_col_N,
       col_wise_args = list(n_i = n_total),
@@ -292,7 +292,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
   tbls_class <- Map(function(tbls_i, class_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables_condense, lt1)
-    add_ae_class(indent_table(t2, 1), class_i)
+    add_ae_class(indent(t2, 1), class_i)
   }, tbls_all, names(tbls_all)) # nolint
 
   tbls_ov <- Map(function(tbls_i) {

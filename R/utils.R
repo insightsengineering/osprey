@@ -1,11 +1,11 @@
 # tabulation function for condition checks
 #' @importFrom utils getFromNamespace
-#' @importFrom rtables rrowl rheader header<- header rcell no_by rtabulate
+#' @importFrom rtables rrowl rheader header<- header rcell by_all rtabulate
 t_helper_tabulate <- function(df_id, n, checkcol, term, remove_dupl, with_percent) { # nolint
   if (checkcol == "rowcount") {
     tbl <- rtabulate(
       na.omit(df_id),
-      row_by = no_by(""),
+      row_by = by_all(""),
       col_by = df_id$col_by,
       FUN = nrow,
       format = "xx"
@@ -18,7 +18,7 @@ t_helper_tabulate <- function(df_id, n, checkcol, term, remove_dupl, with_percen
     if (with_percent) {
       tbl <- rtabulate(
         na.omit(df_id),
-        row_by = no_by(""),
+        row_by = by_all(""),
         col_by = df_id$col_by,
         FUN = count_perc_col_N,
         col_wise_args = list(n_i = n),
@@ -27,7 +27,7 @@ t_helper_tabulate <- function(df_id, n, checkcol, term, remove_dupl, with_percen
     } else {
       tbl <- rtabulate(
         na.omit(df_id),
-        row_by = no_by(""),
+        row_by = by_all(""),
         col_by = df_id$col_by,
         FUN = count_col_N,
         col_wise_args = list(n_i = n),
@@ -87,7 +87,7 @@ shift_label_table_no_grade <- function(tbl, term) {
 # adds row name to rtable
 shift_label_table_mod <- function(tbl, term, ind_tbl) {
   attr(tbl[[1]], "row.name") <- term
-  indent_table(tbl, ind_tbl)
+  indent(tbl, ind_tbl)
   tbl
 }
 
@@ -179,7 +179,6 @@ add_ae_class <- function(tbl, class) {
 #' @param ... key=value pairs, where the key refers to a variable in X and value
 #'   is the valueof the variable in modified(X)
 #'
-#' @importFrom tern var_labels 'var_labels<-'
 #' @noRd
 #'
 #' @examples

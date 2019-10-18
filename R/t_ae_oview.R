@@ -354,7 +354,7 @@ t_ae_oview <- function(id,
   tbls_class <- Map(function(tbls_i, class_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables_condense, lt1)
-    add_ae_class(indent_table(t2, 1), class_i)
+    add_ae_class(indent(t2, 1), class_i)
   }, tbls_ind, names(tbls_ind)) # nolint
 
   tbl_total <- do.call(stack_rtables_condense, tbls_ov)
