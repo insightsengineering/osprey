@@ -7,6 +7,10 @@ to_n <- getFromNamespace("to_n", "tern")
 t_max_grade_per_id <- getFromNamespace("t_max_grade_per_id", "tern")
 shift_label_table <- getFromNamespace("shift_label_table", "tern")
 
+# rtables functions
+var_labels <- getFromNamespace("var_labels", "rtables")
+`var_labels<-` <- getFromNamespace("var_labels<-", "rtables")
+indent <- getFromNamespace("indent", "rtables")
 
 stack_rtables <- function(...) {
   rbind(..., gap = 1)
