@@ -43,7 +43,8 @@ t_helper_tabulate <- function(df_id, n, checkcol, term, remove_dupl, with_percen
 
     tbl <- rtabulate(
       na.omit(df_id),
-      row_by = factor(checkcol),
+      # row_by = factor(checkcol),
+      row_by = as.factor(df_id[[checkcol]]),
       col_by = df_id$col_by,
       FUN = count_perc_col_N,
       col_wise_args = list(n_i = n),

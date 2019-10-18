@@ -104,7 +104,7 @@ t_ae_oview <- function(id,
 
   # check input arguments ---------------------------
   col_n <- tapply(id, col_by, function(x) sum(!duplicated(x)))
-  check_col_by(col_by, col_n, min_num_levels = 1)
+  check_col_by(class, col_by_to_matrix(col_by), col_n, min_num_levels = 1)
   possible_names <- c(
     "dthfl",
     "dcsreas",
