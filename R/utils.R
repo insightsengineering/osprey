@@ -130,6 +130,17 @@ tot_column <- function(choice = c("All Patients")) {
   return(choice)
 }
 
+#' Stack rtables
+#'
+#' @param ... rtable objects
+#'
+#' @return rtable object
+#' @noRd
+#'
+stack_rtables <- function(...) {
+  rbind(..., gap = 1)
+}
+
 #' Stack rtables with rbind
 #'
 #' @param ... rtbale objects
@@ -181,6 +192,8 @@ add_ae_class <- function(tbl, class) {
 #'   is the valueof the variable in modified(X)
 #'
 #' @noRd
+#'
+#' @importFrom rtables var_labels var_labels<-
 #'
 #' @examples
 #'
