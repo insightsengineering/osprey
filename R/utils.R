@@ -420,4 +420,3 @@ grobs2pdf <- function(grobs,
     pagesize = pagesize
   )
 }
-
