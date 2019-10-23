@@ -18,14 +18,13 @@ LazyData: true
 Depends:
   R (>= 3.3),
   tern (>= 0.6.2),
-  dplyr
+  dplyr (>= 0.8.3), 
+  ggplot2 (>= 2.0.0)
 Imports:
-  ggplot2 (>= 2.0.0),
   gridExtra,
   gtable,
   plyr,
   rlang,
-  rocheBCE,
   rtables (>= 0.1.2),
   stringr
 Suggests:

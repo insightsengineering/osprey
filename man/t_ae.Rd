@@ -70,8 +70,8 @@ tbl <- t_ae(
   col_by = factor(ANL$ARM),
   total = "All Patients"
 )
-
 tbl
+
 # Simple example 2
 
 ADSL <- rADSL \%>\% select(USUBJID, STUDYID, ARM)
@@ -86,6 +86,7 @@ tbl2 <- t_ae(
   col_by = factor(ANL$ARM),
   total = NULL
 )
+tbl
 
 }
 \author{

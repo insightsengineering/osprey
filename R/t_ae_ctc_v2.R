@@ -119,7 +119,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
 
   # check argument validity and consitency ----------------------------------
   col_n <- tapply(id, col_by, function(x) sum(!duplicated(x)))
-  check_col_by(col_by, col_n, min_num_levels = 1)
+  check_col_by(class, col_by_to_matrix(col_by), col_n, min_num_levels = 1)
 
   if (any("- Overall -" %in% term)) {
     stop("'- Overall -' is not a valid term, t_ae_ctc_v2 reserves it for derivation")
@@ -182,7 +182,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
 
     l_t_terms <- lapply(df_s_cl_term, function(df_i) {
       t_max_grade_per_id(
-        grade = df_i$gradev,
+        grade = as.factor(df_i$gradev),
         id = df_i$subjid,
         col_by = df_i$col_by,
         col_N = n_total,
@@ -195,7 +195,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
     n_total_any <- vapply(l_t_terms, function(tbl) {
       a <- 0
       for (i in c(1:n_cols)) {
-        a <- a + tbl[1, i][1]
+        a <- a + tbl[1, i + 1][1]
       }
       a
     }, numeric(1)) # nolint
@@ -210,7 +210,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   n_total_overall <- vapply(l_t_class_terms, function(tbl) {
     a <- 0
     for (i in c(1:n_cols)) {
-      a <- a + tbl[[1]][1, i][1]
+      a <- a + tbl[[1]][1, i + 1][1]
     }
     a
   }, numeric(1)) # nolint
@@ -219,7 +219,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
 
 
   tbl_overall <- t_max_grade_per_id(
-    grade = df$gradev,
+    grade = as.factor(df$gradev),
     id = df$subjid,
     col_by = df$col_by,
     col_N = n_total,
@@ -235,7 +235,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   tbls_class <- Map(function(tbls_i, class_i) {
     lt1 <- Map(shift_label_table, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables, lt1)
-    add_ae_class(indent_table(t2, 1), class_i)
+    add_ae_class(indent(t2, 1), class_i)
   }, tbls_all, names(tbls_all)) # nolint
 
 

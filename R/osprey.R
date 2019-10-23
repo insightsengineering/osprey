@@ -2,7 +2,9 @@
 #'
 #' @importFrom grDevices colors dev.off pdf
 #' @importFrom stats na.omit
-#' @import dplyr rocheBCE ggplot2
+#' @importFrom tern t_max_grade_per_id
+#' @importFrom rtables indent
+#' @import dplyr ggplot2
 #' @rawNamespace import(gridExtra, except = combine)
 #' @docType package
 #' @name osprey
