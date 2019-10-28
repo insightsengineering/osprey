@@ -66,7 +66,7 @@
 #'   right_flag = ANL$r_flag,
 #'   left_flag = ANL$l_flag,
 #'   group_names = c("r_flag Asian", "l_flag M"),
-#'   block_count = "# of AEs",
+#'   block_count = "# of patients",
 #'   block_color = ANL$AETOXGR,
 #'   id = ANL$USUBJID,
 #'   x_label = "# of patients",
