@@ -76,9 +76,9 @@
 #'   show_legend = TRUE
 #' )
 #' }
-g_butterfly <- function(category = NULL,
-                        right_flag = NULL,
-                        left_flag = NULL,
+g_butterfly <- function(category,
+                        right_flag,
+                        left_flag,
                         id = NULL,
                         group_names = NULL,
                         block_count = "# of patients",
@@ -93,9 +93,8 @@ g_butterfly <- function(category = NULL,
     list(!is.empty(category), "missing argument: category must be specified"),
     list(!is.empty(right_flag), "missing argument: right_flag must be specified"),
     list(!is.empty(left_flag), "missing argument: left_flag must be specified"),
-    list(!is.empty(id), "missing argument: id must be specified"),
 
-    list(length(unique(vapply(list(category, right_flag, left_flag, id), length, integer(1)))) == 1,
+    list(length(unique(vapply(list(category, right_flag, left_flag), length, integer(1)))) == 1,
          "invalid arguments: check that the length of input arguments are identical"),
 
     list(length(unique(right_flag)) == 2 && length(unique(left_flag)),
@@ -103,6 +102,14 @@ g_butterfly <- function(category = NULL,
 
     list(is.null(block_color) || length(block_color) == length(category),
          "invalid arguments: check that the length of block_color is equal as other inputs"),
+
+    list(block_count %in% c("# of patients", "# of AEs"),
+         'invalid arguments: sort_by should be "# of patients" or "# of AEs"'),
+    list(!(block_count == "# of patients" && is.null(id)),
+         "invalid arguments: for '# of patients' id have to be specified"),
+    list(is.null(id) || length(id) == length(category),
+         "invalid arguments: check that the length of block_color is equal as other inputs"),
+
 
     list(is.null(facet_rows) || length(facet_rows) == length(category),
          "invalid arguments: check that the length of block_color is equal as other inputs"),
@@ -112,22 +119,24 @@ g_butterfly <- function(category = NULL,
     list(is.character.single(legend_label), "invalid arguments: check that legend_label is of type character"),
     list(is.character.single(sort_by), "invalid arguments: check that sort_by is of type character"),
 
-    list(sort_by %in% c("count", "alphabetical"), 'invalid arguments: sort_by should be "count" or "alphabetical"'),
-    list(block_count %in% c("# of patients", "# of AEs"),
-         'invalid arguments: sort_by should be "# of patients" or "# of AEs"')
+    list(sort_by %in% c("count", "alphabetical"), 'invalid arguments: sort_by should be "count" or "alphabetical"')
   )
 
   # set up data-------
-  dat <- data.frame(id = id, y = str_wrap(category, width = 30), r_flag = right_flag, l_flag = left_flag)
+  dat <- data.frame(y = str_wrap(category, width = 30), r_flag = right_flag, l_flag = left_flag)
 
   groups <- "y"
+
+  if (!is.null(id)) {
+    dat$id <- id
+  }
   if (!is.null(facet_rows)) {
     facet_rows <- interaction(facet_rows)
-    dat <- mutate(dat, f_rows = facet_rows)
+    dat$f_rows <- facet_rows
     groups <- c(groups, "f_rows")
   }
   if (!is.null(block_color)) {
-    dat <- mutate(dat, bar_color = block_color)
+    dat$bar_color <- block_color
     groups <- c(groups, "bar_color")
   }
 
@@ -146,11 +155,15 @@ g_butterfly <- function(category = NULL,
 
   } else if (block_count == "# of AEs") {
     counts_r <- dat %>%
+      filter(.data$r_flag == 1) %>%
+      group_by_(.dots = groups) %>%
       summarize(n_i = sum(r_flag)) %>%
       mutate(label_ypos = rev(cumsum(rev(n_i))))
 
     counts_l <- dat %>%
-      summarize(n_i = sum(l_flag)) %>%
+      filter(.data$l_flag == 1) %>%
+      group_by_(.dots = groups) %>%
+      summarize(n_i = sum(r_flag)) %>%
       mutate(label_ypos = rev(cumsum(rev(n_i))))
   }
 
