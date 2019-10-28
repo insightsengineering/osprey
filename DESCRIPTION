@@ -24,7 +24,10 @@ Imports:
   plyr,
   rlang,
   rtables (>= 0.1.2),
-  stringr
+  stringr,
+  utils.nest,
+  teal,
+  teal.devel
 Suggests:
   random.cdisc.data,
   knitr,
