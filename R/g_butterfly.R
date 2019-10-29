@@ -110,8 +110,9 @@ g_butterfly <- function(category,
     list(is.null(id) || length(id) == length(category),
          "invalid arguments: check that the length of block_color is equal as other inputs"),
 
-
-    list(is.null(facet_rows) || length(facet_rows) == length(category),
+    list(is.null(facet_rows) ||
+        (length(facet_rows) == length(category)) ||
+        (is.data.frame(facet_rows) && nrow(facet_rows) == length(category)),
          "invalid arguments: check that the length of block_color is equal as other inputs"),
 
     list(is.character.single(x_label), "invalid arguments: check that x_label is of type character"),
@@ -140,57 +141,52 @@ g_butterfly <- function(category,
     groups <- c(groups, "bar_color")
   }
 
-  if (block_count == "# of patients") {
-    counts_r <- dat %>%
-      filter(.data$r_flag == 1) %>%
-      group_by_(.dots = groups) %>%
-      summarize(n_i = length(unique(.data$id))) %>%
-      mutate(label_ypos = rev(cumsum(rev(n_i))))
+  counts_r <- dat %>%
+    filter(.data$r_flag == 1) %>%
+    group_by_(.dots = groups) %>%
+    summarize(n_i = if (block_count == "# of patients") {
+      length(unique(id))
+    } else if (block_count == "# of AEs") {
+      sum(.data$r_flag)
+    }) %>%
+    mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
-    counts_l <- dat %>%
-      filter(.data$l_flag == 1) %>%
-      group_by_(.dots = groups) %>%
-      summarize(n_i = length(unique(.data$id))) %>%
-      mutate(label_ypos = rev(cumsum(rev(n_i))))
 
-  } else if (block_count == "# of AEs") {
-    counts_r <- dat %>%
-      filter(.data$r_flag == 1) %>%
-      group_by_(.dots = groups) %>%
-      summarize(n_i = sum(r_flag)) %>%
-      mutate(label_ypos = rev(cumsum(rev(n_i))))
+  counts_l <- dat %>%
+    filter(.data$l_flag == 1) %>%
+    group_by_(.dots = groups) %>%
+    summarize(n_i = if (block_count == "# of patients") {
+      length(unique(id))
+    } else if (block_count == "# of AEs") {
+      sum(.data$l_flag)
+    }) %>%
+    mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
-    counts_l <- dat %>%
-      filter(.data$l_flag == 1) %>%
-      group_by_(.dots = groups) %>%
-      summarize(n_i = sum(r_flag)) %>%
-      mutate(label_ypos = rev(cumsum(rev(n_i))))
-  }
 
   total_text_ann_r <- counts_r %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = sum(n_i)) %>%
+    summarize(n = sum(.data$n_i)) %>%
     ungroup()
 
   total_text_ann_l <- counts_l %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = sum(n_i)) %>%
+    summarize(n = sum(.data$n_i)) %>%
     ungroup()
 
-  max_c <- max(c(total_text_ann_r$n, total_text_ann_l$n))
 
   if (sort_by == "alphabetical") {
-    counts <- data.frame(y = c(as.character(counts_r$y), as.character(counts_l$y)))
-    counts_r$y <- factor(counts_r$y, levels = sort(total_text_ann_r$y))
-    counts_l$y <- factor(counts_l$y, levels = total_text_ann_l$y)
+    counts_r$y <- factor(counts_r$y, levels = unique(sort(as.character(counts_r$y))))
+    counts_l$y <- factor(counts_l$y, levels = unique(sort(as.character(counts_l$y))))
   } else if (sort_by == "count") {
     tot <- bind_rows(total_text_ann_r, total_text_ann_l) %>%
-      group_by(y) %>%
+      group_by(.data$y) %>%
       summarize(n = max(n))
 
     counts_r$y <- factor(counts_r$y, levels = tot$y[order(tot$n)])
     counts_l$y <- factor(counts_l$y, levels = tot$y[order(tot$n)])
   }
+
+  max_c <- max(c(total_text_ann_r$n, total_text_ann_l$n))
 
   if (is.null(group_names)) {
     g_r <- names(right_flag)[1]
