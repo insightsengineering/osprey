@@ -140,38 +140,45 @@ g_butterfly <- function(category,
     dat$bar_color <- block_color
     groups <- c(groups, "bar_color")
   }
+  get_counts <- function(block_count, .data) {
+    if (block_count == "# of patients") {
+      length(unique(.data$id))
+    } else if (lock_count == "# of AEs") {
+      nrow(.data)
+    }
+  }
 
   counts_r <- dat %>%
     filter(.data$r_flag == 1) %>%
     group_by_(.dots = groups) %>%
-    summarize(n_i = if (block_count == "# of patients") {
-      length(unique(id))
-    } else if (block_count == "# of AEs") {
-      sum(.data$r_flag)
-    }) %>%
+    summarize(n_i = get_counts(block_count, .data)) %>%
     mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
-
 
   counts_l <- dat %>%
     filter(.data$l_flag == 1) %>%
     group_by_(.dots = groups) %>%
-    summarize(n_i = if (block_count == "# of patients") {
-      length(unique(id))
-    } else if (block_count == "# of AEs") {
-      sum(.data$l_flag)
-    }) %>%
+    summarize(n_i = get_counts(block_count, .data)) %>%
     mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
-
-  total_text_ann_r <- counts_r %>%
+  total_label_pos_r <- counts_r %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = sum(.data$n_i)) %>%
-    ungroup()
+    summarize(label_ypos = max(label_ypos))
 
-  total_text_ann_l <- counts_l %>%
+  total_label_pos_l <- counts_l %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = sum(.data$n_i)) %>%
-    ungroup()
+    summarize(label_ypos = max(label_ypos))
+
+  total_text_ann_r <- dat %>%
+    filter(.data$r_flag == 1) %>%
+    group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    summarize(n = get_counts(block_count, .data)) %>%
+    left_join(total_label_pos_r)
+
+  total_text_ann_l <- dat %>%
+    filter(.data$l_flag == 1) %>%
+    group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    summarize(n = get_counts(block_count, .data)) %>%
+    left_join(total_label_pos_l)
 
 
   if (sort_by == "alphabetical") {
@@ -186,7 +193,7 @@ g_butterfly <- function(category,
     counts_l$y <- factor(counts_l$y, levels = tot$y[order(tot$n)])
   }
 
-  max_c <- max(c(total_text_ann_r$n, total_text_ann_l$n))
+  max_c <- max(c(total_text_ann_r$label_ypos, total_text_ann_l$label_ypos))
 
   if (is.null(group_names)) {
     g_r <- names(right_flag)[1]
@@ -201,11 +208,11 @@ g_butterfly <- function(category,
     pl <- ggplot(NULL, aes_string(x = "y")) +
       geom_bar(data = counts_r, aes_string(y = "n_i", fill = "bar_color"), stat = "identity") +
       geom_bar(data = counts_l, aes_string(y = "-n_i", fill = "bar_color"), stat = "identity") +
-      geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
       geom_text(data = counts_r, aes_string(y = "label_ypos - 0.2", label = "n_i"), hjust = 1) +
+      geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
       geom_text(data = counts_l, aes_string(y = "-label_ypos", label = "n_i"), hjust = -0.9) +
-      geom_text(data = total_text_ann_r, aes_string(y = "n", label = "n"), fontface = "bold", hjust = -1) +
-      geom_text(data = total_text_ann_l, aes_string(y = "-n - 0.4", label = "n"), fontface = "bold", hjust = 0.9) +
+      geom_text(data = total_text_ann_r, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
+      geom_text(data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"), fontface = "bold", hjust = 0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
@@ -214,8 +221,8 @@ g_butterfly <- function(category,
       geom_bar(data = counts_r, aes_string(y = "n_i"), stat = "identity") +
       geom_bar(data = counts_l, aes_string(y = "-n_i"), stat = "identity") +
       geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
-      geom_text(data = total_text_ann_r, aes_string(y = "n", label = "n"), fontface = "bold", hjust = -1) +
-      geom_text(data = total_text_ann_l, aes_string(y = "-n - 0.4", label = "n"),
+      geom_text(data = total_text_ann_r, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
+      geom_text(data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"),
                 fontface = "bold", hjust = 0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
