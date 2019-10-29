@@ -140,11 +140,12 @@ g_butterfly <- function(category,
     dat$bar_color <- block_color
     groups <- c(groups, "bar_color")
   }
+
   get_counts <- function(block_count, .data) {
     if (block_count == "# of patients") {
       length(unique(.data$id))
-    } else if (lock_count == "# of AEs") {
-      nrow(.data)
+    } else if (block_count == "# of AEs") {
+      n()
     }
   }
 
@@ -152,12 +153,14 @@ g_butterfly <- function(category,
     filter(.data$r_flag == 1) %>%
     group_by_(.dots = groups) %>%
     summarize(n_i = get_counts(block_count, .data)) %>%
+    group_by_(.dots = setdiff(groups, "bar_color")) %>%
     mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   counts_l <- dat %>%
     filter(.data$l_flag == 1) %>%
     group_by_(.dots = groups) %>%
     summarize(n_i = get_counts(block_count, .data)) %>%
+    group_by_(.dots = setdiff(groups, "bar_color")) %>%
     mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   total_label_pos_r <- counts_r %>%
@@ -172,18 +175,18 @@ g_butterfly <- function(category,
     filter(.data$r_flag == 1) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
     summarize(n = get_counts(block_count, .data)) %>%
-    left_join(total_label_pos_r)
+    left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
 
   total_text_ann_l <- dat %>%
     filter(.data$l_flag == 1) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
     summarize(n = get_counts(block_count, .data)) %>%
-    left_join(total_label_pos_l)
+    left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
 
 
   if (sort_by == "alphabetical") {
-    counts_r$y <- factor(counts_r$y, levels = unique(sort(as.character(counts_r$y))))
-    counts_l$y <- factor(counts_l$y, levels = unique(sort(as.character(counts_l$y))))
+    counts_r$y <- factor(counts_r$y, levels = unique(sort(as.character(counts_r$y), decreasing = TRUE)))
+    counts_l$y <- factor(counts_l$y, levels = unique(sort(as.character(counts_l$y), decreasing = TRUE)))
   } else if (sort_by == "count") {
     tot <- bind_rows(total_text_ann_r, total_text_ann_l) %>%
       group_by(.data$y) %>%
@@ -208,11 +211,11 @@ g_butterfly <- function(category,
     pl <- ggplot(NULL, aes_string(x = "y")) +
       geom_bar(data = counts_r, aes_string(y = "n_i", fill = "bar_color"), stat = "identity") +
       geom_bar(data = counts_l, aes_string(y = "-n_i", fill = "bar_color"), stat = "identity") +
-      geom_text(data = counts_r, aes_string(y = "label_ypos - 0.2", label = "n_i"), hjust = 1) +
-      geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
+      geom_text(data = counts_r, aes_string(y = "label_ypos", label = "n_i"), hjust = 0.9) +
       geom_text(data = counts_l, aes_string(y = "-label_ypos", label = "n_i"), hjust = -0.9) +
       geom_text(data = total_text_ann_r, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
       geom_text(data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"), fontface = "bold", hjust = 0.9) +
+      geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
