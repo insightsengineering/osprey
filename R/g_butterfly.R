@@ -165,11 +165,11 @@ g_butterfly <- function(category,
 
   total_label_pos_r <- counts_r %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(label_ypos = max(label_ypos))
+    summarize(label_ypos = max(.data$label_ypos))
 
   total_label_pos_l <- counts_l %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(label_ypos = max(label_ypos))
+    summarize(label_ypos = max(.data$label_ypos))
 
   total_text_ann_r <- dat %>%
     filter(.data$r_flag == 1) %>%
@@ -214,7 +214,8 @@ g_butterfly <- function(category,
       geom_text(data = counts_r, aes_string(y = "label_ypos", label = "n_i"), hjust = 0.9) +
       geom_text(data = counts_l, aes_string(y = "-label_ypos", label = "n_i"), hjust = -0.9) +
       geom_text(data = total_text_ann_r, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
-      geom_text(data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"), fontface = "bold", hjust = 0.9) +
+      geom_text(data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"),
+                fontface = "bold", hjust = 0.9) +
       geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
