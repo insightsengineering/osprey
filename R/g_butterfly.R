@@ -33,7 +33,6 @@
 #'
 #' @return ggplot object
 #'
-#' @importFrom plyr ddply
 #' @importFrom stringr str_wrap
 #' @importFrom rlang .data
 #' @importFrom gtable gtable_add_grob
