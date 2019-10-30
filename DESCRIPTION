@@ -25,7 +25,6 @@ Imports:
   rtables (>= 0.1.2),
   stringr,
   utils.nest,
-  teal,
   teal.devel
 Suggests:
   random.cdisc.data,
