@@ -40,10 +40,11 @@ devtools::install_github(
 )
 
 devtools::install_github(
-  repo = "Rpackages/osprey", 
+  repo = "NEST/osprey", 
   ref = "master", 
   host = "https://github.roche.com/api/v3", 
-  upgrade_dependencies = FALSE)
+  upgrade_dependencies = FALSE
+)
 ```
 
 ### Development Version
@@ -51,19 +52,32 @@ devtools::install_github(
 [Web Manual](https://pages.github.roche.com/Rpackages/osprey/dev/)
 
 ```r
-devtools::install_github("Roche/rtables", 
-  ref = "devel",
-  upgrade_dependencies = FALSE)
+devtools::install_github(
+  repo = "NEST/random.cdisc.data",
+  ref = "master", 
+  host = "https://github.roche.com/api/v3",
+  upgrade_dependencies = FALSE
+)
 
-devtools::install_github( repo = "Rpackages/tern", 
+devtools::install_github(
+  repo = "Roche/rtables", 
+  ref = "devel",
+  upgrade_dependencies = FALSE
+)
+
+devtools::install_github(
+  repo = "NEST/tern", 
   ref = "devel", 
   host = "https://github.roche.com/api/v3", 
-  upgrade_dependencies = FALSE )
+  upgrade_dependencies = FALSE
+)
 
-devtools::install_github(repo = "Rpackages/osprey", 
+devtools::install_github(
+  repo = "NEST/osprey", 
   ref = "devel",
   host = "https://github.roche.com/api/v3", 
-  upgrade_dependencies = FALSE) 
+  upgrade_dependencies = FALSE
+) 
 ``` 
 
 
