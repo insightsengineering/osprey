@@ -4,9 +4,9 @@
 \alias{g_butterfly}
 \title{Butterfly Plot}
 \usage{
-g_butterfly(category, right_flag, left_flag, group_names = NULL,
-  block_count = "# of patients", block_color = NULL, id,
-  facet_rows = NULL, x_label = block_count,
+g_butterfly(category, right_flag, left_flag, id = NULL,
+  group_names = NULL, block_count = "# of patients",
+  block_color = NULL, facet_rows = NULL, x_label = block_count,
   y_label = "AE Derived Terms", legend_label = "AETOXGR",
   sort_by = "alphabetical", show_legend = TRUE)
 }
@@ -17,6 +17,8 @@ g_butterfly(category, right_flag, left_flag, group_names = NULL,
 
 \item{left_flag}{vector of 1/0 represents left side of barplot}
 
+\item{id}{unique subject identifier variable.}
+
 \item{group_names}{string vector of length 2 with desired names of dichotomization variables
 required format : first name corresponds to the name of the right side
                   second name corresponds to name of the left side
@@ -25,8 +27,6 @@ default: will extract column names from group}
 \item{block_count}{string - what to count by (ex: # of AEs or # of patients)}
 
 \item{block_color}{vector - color coding of bar segments}
-
-\item{id}{unique subject identifier variable.}
 
 \item{facet_rows}{vector defines what variable is used to split the
 plot into rows, default here is NULL}
@@ -65,8 +65,8 @@ AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
 ANL <- ANL \%>\%
-  dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\%
-  dplyr::mutate(flag2 = ifelse(SEX == "M", 1, 0))
+  dplyr::mutate(r_flag = ifelse(RACE == "ASIAN", 1, 0)) \%>\%
+  dplyr::mutate(l_flag = ifelse(SEX == "M", 1, 0))
 ANL <- na.omit(ANL)
 ANL <- ANL \%>\% dplyr::filter(AEBODSYS \%in\% c(
   "Investigations", "Vascular disorders",
@@ -76,10 +76,10 @@ ANL <- ANL \%>\% dplyr::filter(AEBODSYS \%in\% c(
 \donttest{
 g_butterfly(
   category = ANL$AEBODSYS,
-  right_flag = ANL$flag1,
-  left_flag = ANL$flag2,
-  group_names = c("flag1 Asian", "flag2 M"),
-  block_count = "# of AEs",
+  right_flag = ANL$r_flag,
+  left_flag = ANL$l_flag,
+  group_names = c("r_flag Asian", "l_flag M"),
+  block_count = "# of patients",
   block_color = ANL$AETOXGR,
   id = ANL$USUBJID,
   x_label = "# of patients",

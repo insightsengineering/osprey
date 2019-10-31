@@ -21,10 +21,11 @@ Depends:
 Imports:
   gridExtra,
   gtable,
-  plyr,
   rlang,
   rtables (>= 0.1.2),
-  stringr
+  stringr,
+  utils.nest,
+  teal.devel
 Suggests:
   random.cdisc.data,
   knitr,

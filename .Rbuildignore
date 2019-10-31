@@ -7,3 +7,4 @@
 _pkgdown.yaml
 README.md
 ^man-roxygen$
+Jenkinsfile
