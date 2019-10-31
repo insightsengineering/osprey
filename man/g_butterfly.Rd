@@ -4,7 +4,7 @@
 \alias{g_butterfly}
 \title{Butterfly Plot}
 \usage{
-g_butterfly(category, rightFlag, leftFlag, group_names = NULL,
+g_butterfly(category, right_flag, left_flag, group_names = NULL,
   block_count = "# of patients", block_color = NULL, id,
   facet_rows = NULL, x_label = block_count,
   y_label = "AE Derived Terms", legend_label = "AETOXGR",
@@ -13,9 +13,9 @@ g_butterfly(category, rightFlag, leftFlag, group_names = NULL,
 \arguments{
 \item{category}{vector of y values}
 
-\item{rightFlag}{vector of 1/0 represents right side of barplot}
+\item{right_flag}{vector of 1/0 represents right side of barplot}
 
-\item{leftFlag}{vector of 1/0 represents left side of barplot}
+\item{left_flag}{vector of 1/0 represents left side of barplot}
 
 \item{group_names}{string vector of length 2 with desired names of dichotomization variables
 required format : first name corresponds to the name of the right side
@@ -34,6 +34,8 @@ plot into rows, default here is NULL}
 \item{x_label}{string of text for x axis label, default is block_count}
 
 \item{y_label}{string of text for y axis label, default is AE Derived Terms}
+
+\item{legend_label}{\code{character} for legend label, default is AETOXGR}
 
 \item{sort_by}{character string that defines the ordering of the class and term
 variables in the output table,
@@ -58,30 +60,35 @@ there is no equivalent STREAM output
 \examples{
 library(dplyr)
 
-data("rADSL")
-data("rADAE")
-ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% filter(SEX \%in\% c("F", "M"))
+ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% dplyr::filter(SEX \%in\% c("F", "M"))
 AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
-ANL <- ANL \%>\% mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\% mutate(flag2 = ifelse(SEX == "M", 1, 0))
+ANL <- ANL \%>\%
+  dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\%
+  dplyr::mutate(flag2 = ifelse(SEX == "M", 1, 0))
 ANL <- na.omit(ANL)
-ANL <- ANL \%>\% filter(AEBODSYS \%in\% c("Investigations", "Vascular disorders", "Musculoskeletal and connective tissue disorders"))
+ANL <- ANL \%>\% dplyr::filter(AEBODSYS \%in\% c(
+  "Investigations", "Vascular disorders",
+  "Musculoskeletal and connective tissue disorders"
+))
 
-g_butterfly(category = ANL$AEBODSYS,
-            rightFlag = ANL$flag1,
-            leftFlag = ANL$flag2,
-            group_names = c("flag1 Asian", "flag2 M"),
-            block_count = "# of AEs",
-            block_color = ANL$AETOXGR,
-            id = ANL$USUBJID,
-            x_label = "# of patients",
-            y_label = "AE Derived Terms",
-            legend_label = "AETOXGR",
-            sort_by = "count",
-            show_legend = TRUE
-            )
-
+\donttest{
+g_butterfly(
+  category = ANL$AEBODSYS,
+  right_flag = ANL$flag1,
+  left_flag = ANL$flag2,
+  group_names = c("flag1 Asian", "flag2 M"),
+  block_count = "# of AEs",
+  block_color = ANL$AETOXGR,
+  id = ANL$USUBJID,
+  x_label = "# of patients",
+  y_label = "AE Derived Terms",
+  legend_label = "AETOXGR",
+  sort_by = "count",
+  show_legend = TRUE
+)
+}
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

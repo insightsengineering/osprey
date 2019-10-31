@@ -15,7 +15,7 @@ stream_filter_index(string1, string2)
 \code{boolean} indicator
 }
 \description{
-Assumuption is that use in filters is to only resolve true vs false
+Assumption is that use in filters is to only resolve true vs false
 Primarily for use with stream_filter and releated stream_filter_convwhere functions
 }
 \examples{
