@@ -4,7 +4,7 @@
 #' @importFrom stats na.omit
 #' @importFrom tern t_max_grade_per_id
 #' @importFrom rtables indent
-#' @import dplyr ggplot2
+#' @import dplyr ggplot2 utils.nest
 #' @rawNamespace import(gridExtra, except = combine)
 #' @docType package
 #' @name osprey
