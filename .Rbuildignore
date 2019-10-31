@@ -2,6 +2,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$
+^_pkgdown\.yaml$
 ^docs$
 ^\.github$
 README.*
