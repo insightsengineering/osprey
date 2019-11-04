@@ -140,25 +140,36 @@ g_butterfly <- function(category,
     groups <- c(groups, "bar_color")
   }
 
-  get_counts <- function(block_count, .data) {
+  get_counts <- function(.data, block_count) {
     if (block_count == "# of patients") {
       length(unique(.data$id))
     } else if (block_count == "# of AEs") {
       n()
     }
   }
+  highest_grade <- function(.data, block_count) {
+    if (block_count == "# of patients") {
+      .data %>%
+      dplyr::group_by(.data$y, .data$id) %>%
+        filter((1:n()) == n())
+    } else {
+      .data
+    }
+  }
 
   counts_r <- dat %>%
     filter(.data$r_flag == 1) %>%
+    highest_grade(block_count) %>%
     group_by_(.dots = groups) %>%
-    summarize(n_i = get_counts(block_count, .data)) %>%
+    summarize(n_i = get_counts(.data, block_count)) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
     mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   counts_l <- dat %>%
     filter(.data$l_flag == 1) %>%
+    highest_grade(block_count) %>%
     group_by_(.dots = groups) %>%
-    summarize(n_i = get_counts(block_count, .data)) %>%
+    summarize(n_i = get_counts(.data, block_count)) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
     mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
@@ -173,13 +184,13 @@ g_butterfly <- function(category,
   total_text_ann_r <- dat %>%
     filter(.data$r_flag == 1) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = get_counts(block_count, .data)) %>%
+    summarize(n = get_counts(.data, block_count)) %>%
     left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
 
   total_text_ann_l <- dat %>%
     filter(.data$l_flag == 1) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = get_counts(block_count, .data)) %>%
+    summarize(n = get_counts(.data, block_count)) %>%
     left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
 
 
