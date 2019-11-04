@@ -16,7 +16,7 @@ LazyData: true
 Depends:
   R (>= 3.3),
   tern (>= 0.6.3),
-  dplyr (>= 0.8.3), 
+  dplyr (>= 0.8.0), 
   ggplot2 (>= 2.0.0)
 Imports:
   gridExtra,
