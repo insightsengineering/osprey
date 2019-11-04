@@ -15,7 +15,7 @@ Encoding: UTF-8
 LazyData: true
 Depends:
   R (>= 3.3),
-  tern (>= 0.6.2),
+  tern (>= 0.6.3),
   dplyr (>= 0.8.3), 
   ggplot2 (>= 2.0.0)
 Imports:
@@ -24,11 +24,11 @@ Imports:
   rlang,
   rtables (>= 0.1.2),
   stringr,
-  utils.nest,
-  teal.devel
+  utils.nest (>= 0.2.0)
 Suggests:
-  random.cdisc.data,
   knitr,
+  random.cdisc.data (>= 0.3.0),
+  test.nest (>= 0.2.0),
   testthat
 RoxygenNote: 6.1.1
 URL:
