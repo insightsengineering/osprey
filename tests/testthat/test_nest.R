@@ -1,5 +1,5 @@
 library(test.nest)
 
 test_lintr()
-# needs refactoring before: test_strict()
+# need to remove data before: test_strict()
 test_regexp()

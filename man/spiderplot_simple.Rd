@@ -32,11 +32,12 @@ library(dplyr)
 
 ADSL <- rADSL
 ADRS <- rADRS
-atr <- left_join(ADSL, ADRS)
+ANL <- left_join(ADSL, ADRS)
 
-atr \%>\%
+ANL \%>\%
   dplyr::filter(PARAMCD == "OVRINV") \%>\%
   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
+
 }
 \author{
 Mika Maekinen

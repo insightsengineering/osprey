@@ -23,11 +23,12 @@
 #'
 #' ADSL <- rADSL
 #' ADRS <- rADRS
-#' atr <- left_join(ADSL, ADRS)
+#' ANL <- left_join(ADSL, ADRS)
 #'
-#' atr %>%
+#' ANL %>%
 #'   dplyr::filter(PARAMCD == "OVRINV") %>%
 #'   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
+#'
 spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
     mes_value = "PARAM", group_col = "USUBJID", baseday = 0) {
   ### remove patients without post baseline measurement

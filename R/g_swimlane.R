@@ -31,7 +31,6 @@
 #'
 #' @examples
 #' # Example 1
-#' library(random.cdisc.data)
 #' library(dplyr)
 #'
 #' ASL <- rADSL
