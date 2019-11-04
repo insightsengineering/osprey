@@ -233,7 +233,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   )
 
   tbls_class <- Map(function(tbls_i, class_i) {
-    lt1 <- Map(shift_label_table, tbls_i, names(tbls_i))
+    lt1 <- Map(shift_label_table_t_ae_ctc_v2, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables, lt1)
     add_ae_class(indent(t2, 1), class_i)
   }, tbls_all, names(tbls_all)) # nolint

@@ -50,7 +50,6 @@ patient bar plot with markers of events and patient level annotation
 }
 \examples{
 # Example 1
-library(random.cdisc.data)
 library(dplyr)
 
 ASL <- rADSL

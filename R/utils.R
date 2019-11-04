@@ -92,6 +92,12 @@ shift_label_table_mod <- function(tbl, term, ind_tbl) {
   tbl
 }
 
+# shifts labels - used only in t_ae_ctc_v2
+shift_label_table_t_ae_ctc_v2 <- function(tbl, term) {
+  attr(tbl[[1]], "row.name") <- term
+  tbl
+}
+
 # remove null elements from list
 remove_null <- function(x) {
   x <- Filter(Negate(is.null), x)
