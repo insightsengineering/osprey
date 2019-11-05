@@ -33,8 +33,11 @@
 #' # Example 1
 #' library(dplyr)
 #'
-#' ASL <- rADSL
-#' ARS <- rADRS %>% dplyr::filter(PARAMCD == "OVRINV")
+#' ASL <- rADSL[1:20, ]
+#' ARS <- ASL %>%
+#'   select(USUBJID) %>%
+#'   left_join(rADRS, "USUBJID") %>%
+#'   dplyr::filter(PARAMCD == "OVRINV")
 #' ANL <- ASL %>% left_join(ARS, by = c("STUDYID", "USUBJID"))
 #' anno_txt <- ASL[, c("ARMCD", "SEX")]
 #'
@@ -59,7 +62,7 @@
 #' # Example 2
 #' library(dplyr)
 #'
-#' ASL <- rADSL
+#' ASL <- rADSL[1:20, ]
 #' ARS <- rADRS
 #'
 #' anno_txt_vars <- c("ARMCD", "SEX", "COUNTRY")
@@ -83,11 +86,11 @@
 #'   inner_join(rbind(ARS, ADS), "USUBJID")
 #'
 #' g_swimlane(
-#'   bar_id = ASL$USUBJID,
+#'   bar_id = sub('.*-', '', ASL$USUBJID),
 #'   bar_length = ASL$TRTDURD,
 #'   sort_by = NULL,
 #'   col_by = ASL$ARMCD,
-#'   marker_id = ANL$USUBJID,
+#'   marker_id = sub('.*-', '', ANL$USUBJID),
 #'   marker_pos = ANL$ADY,
 #'   marker_shape = ANL$AVALC,
 #'   marker_shape_opt <- c(
@@ -155,11 +158,11 @@ g_swimlane <- function(bar_id,
   # if sort by a variable, reorder bar_id by sort var and then bar length; otherwise sort by bar length
   if (!is.null(sort_by)) {
     bar_data$bar_id <- factor(bar_data$bar_id,
-      levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by, -bar_data$bar_length)]))
+                              levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by, -bar_data$bar_length)]))
     )
   } else {
     bar_data$bar_id <- factor(bar_data$bar_id,
-      levels = rev(unique(bar_data$bar_id[order(-bar_data$bar_length)]))
+                              levels = rev(unique(bar_data$bar_id[order(-bar_data$bar_length)]))
     )
   }
 
@@ -186,10 +189,12 @@ g_swimlane <- function(bar_id,
   } else {
     p <- p + guides(fill = guide_legend("Bar Color", order = 1, ncol = 1)) +
       theme(
-        legend.title = element_text(size = 9),
-        legend.text = element_text(size = 9),
-        legend.key = element_rect(fill = NA)
-      )
+        legend.title = element_text(size = 8),
+        legend.text = element_text(size = 8),
+        legend.key = element_rect(fill = NA),
+        legend.key.size = unit(1, "line"),
+        legend.spacing.y = unit(0, "cm"),
+        legend.key.height = unit(1, "line"))
   }
 
 
@@ -242,7 +247,6 @@ g_swimlane <- function(bar_id,
     }
   }
 
-
   # plot reference lines
   if (!is.null(yref_line)) {
     p <- p + geom_hline(yintercept = yref_line, linetype = "dashed", color = "red")
@@ -259,12 +263,12 @@ g_swimlane <- function(bar_id,
   # create annotation as a separate table plot
   if (is.null(anno_txt)) {
     t <- data.frame(bar_id, bar_length,
-      sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length))
+                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length))
     )
   } else {
     t <- data.frame(bar_id, bar_length,
-      sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
-      anno_txt
+                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
+                    anno_txt
     )
   }
 

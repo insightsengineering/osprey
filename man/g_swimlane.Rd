@@ -52,8 +52,11 @@ patient bar plot with markers of events and patient level annotation
 # Example 1
 library(dplyr)
 
-ASL <- rADSL
-ARS <- rADRS \%>\% dplyr::filter(PARAMCD == "OVRINV")
+ASL <- rADSL[1:20, ]
+ARS <- ASL \%>\%
+  select(USUBJID) \%>\%
+  left_join(rADRS, "USUBJID") \%>\%
+  dplyr::filter(PARAMCD == "OVRINV")
 ANL <- ASL \%>\% left_join(ARS, by = c("STUDYID", "USUBJID"))
 anno_txt <- ASL[, c("ARMCD", "SEX")]
 
@@ -78,7 +81,7 @@ g_swimlane(
 # Example 2
 library(dplyr)
 
-ASL <- rADSL
+ASL <- rADSL[1:20, ]
 ARS <- rADRS
 
 anno_txt_vars <- c("ARMCD", "SEX", "COUNTRY")
@@ -102,11 +105,11 @@ ANL <- ASL \%>\%
   inner_join(rbind(ARS, ADS), "USUBJID")
 
 g_swimlane(
-  bar_id = ASL$USUBJID,
+  bar_id = sub('.*-', '', ASL$USUBJID),
   bar_length = ASL$TRTDURD,
   sort_by = NULL,
   col_by = ASL$ARMCD,
-  marker_id = ANL$USUBJID,
+  marker_id = sub('.*-', '', ANL$USUBJID),
   marker_pos = ANL$ADY,
   marker_shape = ANL$AVALC,
   marker_shape_opt <- c(
