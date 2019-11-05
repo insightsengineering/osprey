@@ -39,7 +39,7 @@ plot into rows, default here is NULL}
 
 \item{sort_by}{character string that defines the ordering of the class and term
 variables in the output table,
-options: "alphabetical" or "count", default here is set to "count"}
+options: "alphabetical", "count", "left", "right", default here is set to "count"}
 
 \item{show_legend}{boolean of whether color coding legend is included,
 default here is FALSE}
