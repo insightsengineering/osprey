@@ -207,8 +207,7 @@ g_butterfly <- function(category,
     counts_r$y <- factor(counts_r$y, levels = tot$y)
     counts_l$y <- factor(counts_l$y, levels = tot$y)
   } else if (sort_by == "right") {
-    browser()
-    tot <- full_join(total_text_ann_r, total_text_ann_l %>% select(-n), by = "y") %>%
+    tot <- full_join(total_text_ann_r, select(total_text_ann_l, -n), by = "y") %>%
       group_by(.data$y) %>%
       summarize(n = sum(n, na.rm = TRUE)) %>%
       arrange(n)
@@ -216,7 +215,7 @@ g_butterfly <- function(category,
     counts_r$y <- factor(counts_r$y, levels = tot$y)
     counts_l$y <- factor(counts_l$y, levels = tot$y)
   } else if (sort_by == "left") {
-    tot <- full_join(total_text_ann_l, total_text_ann_r %>% select(-n), by = "y") %>%
+    tot <- full_join(total_text_ann_l, select(total_text_ann_r, -n), by = "y") %>%
       group_by(.data$y) %>%
       summarize(n = sum(n, na.rm = TRUE)) %>%
       arrange(n)
