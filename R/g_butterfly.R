@@ -25,7 +25,7 @@
 #' @param legend_label \code{character} for legend label, default is AETOXGR
 #' @param sort_by character string that defines the ordering of the class and term
 #' variables in the output table,
-#' options: "alphabetical" or "count", default here is set to "count"
+#' options: "alphabetical", "count", "left", "right", default here is set to "count"
 #' @param show_legend boolean of whether color coding legend is included,
 #' default here is FALSE
 #'
@@ -119,7 +119,8 @@ g_butterfly <- function(category,
     list(is.character.single(legend_label), "invalid arguments: check that legend_label is of type character"),
     list(is.character.single(sort_by), "invalid arguments: check that sort_by is of type character"),
 
-    list(sort_by %in% c("count", "alphabetical"), 'invalid arguments: sort_by should be "count" or "alphabetical"')
+    list(sort_by %in% c("count", "alphabetical", "right", "left"),
+         'invalid arguments: sort_by should be "count" or "alphabetical"')
   )
 
   # set up data-------
@@ -201,6 +202,23 @@ g_butterfly <- function(category,
     tot <- bind_rows(total_text_ann_r, total_text_ann_l) %>%
       group_by(.data$y) %>%
       summarize(n = sum(n)) %>%
+      arrange(n)
+
+    counts_r$y <- factor(counts_r$y, levels = tot$y)
+    counts_l$y <- factor(counts_l$y, levels = tot$y)
+  } else if (sort_by == "right") {
+    browser()
+    tot <- full_join(total_text_ann_r, total_text_ann_l %>% select(-n), by = "y") %>%
+      group_by(.data$y) %>%
+      summarize(n = sum(n, na.rm = TRUE)) %>%
+      arrange(n)
+
+    counts_r$y <- factor(counts_r$y, levels = tot$y)
+    counts_l$y <- factor(counts_l$y, levels = tot$y)
+  } else if (sort_by == "left") {
+    tot <- full_join(total_text_ann_l, total_text_ann_r %>% select(-n), by = "y") %>%
+      group_by(.data$y) %>%
+      summarize(n = sum(n, na.rm = TRUE)) %>%
       arrange(n)
 
     counts_r$y <- factor(counts_r$y, levels = tot$y)
