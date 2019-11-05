@@ -80,7 +80,7 @@ anno_txt_vars <- c("TRTDURD", "BESRSPI", "OBJRSPI", "SEX", "BMK2")
 
 g_waterfall(
   bar_height = ANL$PCHG,
-  bar_id = sub('.*-', '', ANL$USUBJID),
+  bar_id = sub(".*-", "", ANL$USUBJID),
   col_by = ANL$SEX,
   sort_by = ANL$ARM,
   # bar_color_opt = c("F" = "red", "M" = "green", "U" = "blue"),
@@ -99,7 +99,7 @@ g_waterfall(
 anno_txt_vars <- c("BESRSPI", "OBJRSPI")
 
 g_waterfall(
-  bar_id = sub('.*-', '', ANL$USUBJID),
+  bar_id = sub(".*-", "", ANL$USUBJID),
   bar_height = ANL$PCHG,
   sort_by = ANL$COUNTRY,
   col_by = ANL$SEX,
@@ -123,7 +123,7 @@ ANL$BESRSPI[5] <- "PD"
 ANL$BESRSPI[7] <- "PD"
 
 g_waterfall(
-  bar_id = sub('.*-', '', ANL$USUBJID),
+  bar_id = sub(".*-", "", ANL$USUBJID),
   bar_height = ANL$PCHG,
   sort_by = ANL$ARM,
   col_by = ANL$SEX,
