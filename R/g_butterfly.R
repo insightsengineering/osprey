@@ -148,10 +148,10 @@ g_butterfly <- function(category,
     }
   }
   highest_grade <- function(.data, block_count) {
-    if (block_count == "# of patients") {
+    if (block_count == "# of patients" && "bar_color" %in% colnames(.data)) {
       .data %>%
       dplyr::group_by(.data$y, .data$id) %>%
-        filter((1:n()) == n())
+        filter(.data$bar_color == max(.data$bar_color, na.rm = TRUE))
     } else {
       .data
     }
@@ -200,10 +200,11 @@ g_butterfly <- function(category,
   } else if (sort_by == "count") {
     tot <- bind_rows(total_text_ann_r, total_text_ann_l) %>%
       group_by(.data$y) %>%
-      summarize(n = max(n))
+      summarize(n = sum(n)) %>%
+      arrange(n)
 
-    counts_r$y <- factor(counts_r$y, levels = tot$y[order(tot$n)])
-    counts_l$y <- factor(counts_l$y, levels = tot$y[order(tot$n)])
+    counts_r$y <- factor(counts_r$y, levels = tot$y)
+    counts_l$y <- factor(counts_l$y, levels = tot$y)
   }
 
   max_c <- max(c(total_text_ann_r$label_ypos, total_text_ann_l$label_ypos))
