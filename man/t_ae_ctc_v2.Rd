@@ -108,7 +108,6 @@ tbl
 library(random.cdisc.data)
 library(dplyr)
 
-\dontrun{
 ASL <- radsl(N = 10, seed = 1)
 AAE <- radae(ASL, seed = 1)
 
@@ -122,7 +121,7 @@ tbl <- t_ae_ctc_v2(
     grade_levels = 1:5
   )
 tbl
-}
+
 }
 \author{
 Edgar Manukya

@@ -100,7 +100,6 @@
 #' library(random.cdisc.data)
 #' library(dplyr)
 #'
-#' \dontrun{
 #' ASL <- radsl(N = 10, seed = 1)
 #' AAE <- radae(ASL, seed = 1)
 #'
@@ -114,7 +113,7 @@
 #'     grade_levels = 1:5
 #'   )
 #' tbl
-#' }
+#'
 t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", grade_levels = 1:5) {
 
   # check argument validity and consitency ----------------------------------
