@@ -44,7 +44,7 @@
 #' @template author_qit3
 #'
 #' @examples
-#' library(osprey)
+#' library(dplyr)
 #'
 #' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM, RACE) %>% dplyr::filter(SEX %in% c("F", "M"))
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
