@@ -140,25 +140,36 @@ g_butterfly <- function(category,
     groups <- c(groups, "bar_color")
   }
 
-  get_counts <- function(block_count, .data) {
+  get_counts <- function(.data, block_count) {
     if (block_count == "# of patients") {
       length(unique(.data$id))
     } else if (block_count == "# of AEs") {
       n()
     }
   }
+  highest_grade <- function(.data, block_count) {
+    if (block_count == "# of patients" && "bar_color" %in% colnames(.data)) {
+      .data %>%
+      dplyr::group_by(.data$y, .data$id) %>%
+        filter(.data$bar_color == max(.data$bar_color, na.rm = TRUE))
+    } else {
+      .data
+    }
+  }
 
   counts_r <- dat %>%
     filter(.data$r_flag == 1) %>%
+    highest_grade(block_count) %>%
     group_by_(.dots = groups) %>%
-    summarize(n_i = get_counts(block_count, .data)) %>%
+    summarize(n_i = get_counts(.data, block_count)) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
     mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   counts_l <- dat %>%
     filter(.data$l_flag == 1) %>%
+    highest_grade(block_count) %>%
     group_by_(.dots = groups) %>%
-    summarize(n_i = get_counts(block_count, .data)) %>%
+    summarize(n_i = get_counts(.data, block_count)) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
     mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
@@ -173,13 +184,13 @@ g_butterfly <- function(category,
   total_text_ann_r <- dat %>%
     filter(.data$r_flag == 1) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = get_counts(block_count, .data)) %>%
+    summarize(n = get_counts(.data, block_count)) %>%
     left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
 
   total_text_ann_l <- dat %>%
     filter(.data$l_flag == 1) %>%
     group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = get_counts(block_count, .data)) %>%
+    summarize(n = get_counts(.data, block_count)) %>%
     left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
 
 
@@ -189,10 +200,11 @@ g_butterfly <- function(category,
   } else if (sort_by == "count") {
     tot <- bind_rows(total_text_ann_r, total_text_ann_l) %>%
       group_by(.data$y) %>%
-      summarize(n = max(n))
+      summarize(n = sum(n)) %>%
+      arrange(n)
 
-    counts_r$y <- factor(counts_r$y, levels = tot$y[order(tot$n)])
-    counts_l$y <- factor(counts_l$y, levels = tot$y[order(tot$n)])
+    counts_r$y <- factor(counts_r$y, levels = tot$y)
+    counts_l$y <- factor(counts_l$y, levels = tot$y)
   }
 
   max_c <- max(c(total_text_ann_r$label_ypos, total_text_ann_l$label_ypos))
