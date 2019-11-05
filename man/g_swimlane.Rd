@@ -105,11 +105,11 @@ ANL <- ASL \%>\%
   inner_join(rbind(ARS, ADS), "USUBJID")
 
 g_swimlane(
-  bar_id = sub(".*-", ", ASL$USUBJID),
+  bar_id = sub(".*-", "", ASL$USUBJID),
   bar_length = ASL$TRTDURD,
   sort_by = NULL,
   col_by = ASL$ARMCD,
-  marker_id = sub(".*-", ", ANL$USUBJID),
+  marker_id = sub(".*-", "", ANL$USUBJID),
   marker_pos = ANL$ADY,
   marker_shape = ANL$AVALC,
   marker_shape_opt <- c(
