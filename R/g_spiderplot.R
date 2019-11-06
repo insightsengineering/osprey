@@ -171,12 +171,15 @@ g_spiderplot <- function(marker_x,
   pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 1)
 
 
-  # line color
-  if (!is.null(line_colby)) {
-    pl <- pl + geom_line(aes_string(color = "l_col"), size = 1, alpha = 0.5, show.legend = show_legend)
-  } else {
-    pl <- pl + geom_line(size = 1, alpha = 0.5, show.legend = show_legend)
-  }
+  pl <- pl +
+    geom_line(mapping = if (!is.null(line_colby)) {
+        aes_string(color = "l_col")
+      } else {
+        NULL
+      },
+      size = 1,
+      alpha = 0.5,
+      show.legend = show_legend)
 
   # marker shape------------ this section can be condensed later
   if (!is.null(marker_shape)) {
