@@ -127,8 +127,8 @@ g_butterfly <- function(category,
          "invalid arguments: check that the length of block_color is equal as other inputs"),
 
     list(is.null(facet_rows) ||
-        (length(facet_rows) == length(category)) ||
-        (is.data.frame(facet_rows) && nrow(facet_rows) == length(category)),
+           (length(facet_rows) == length(category)) ||
+           (is.data.frame(facet_rows) && nrow(facet_rows) == length(category)),
          "invalid arguments: check that the length of block_color is equal as other inputs"),
 
     list(is.character.single(x_label), "invalid arguments: check that x_label is of type character"),
@@ -168,74 +168,74 @@ g_butterfly <- function(category,
   highest_grade <- function(.data, block_count) {
     if (block_count == "# of patients" && "bar_color" %in% colnames(.data)) {
       .data %>%
-      dplyr::group_by(.data$y, .data$id) %>%
-        filter(.data$bar_color == sort(.data$bar_color, decreasing = TRUE)[1])
+        dplyr::group_by(.data$y, .data$id) %>%
+        dplyr::filter(.data$bar_color == sort(.data$bar_color, decreasing = TRUE)[1])
     } else {
       .data
     }
   }
 
   counts_r <- dat %>%
-    filter(.data$r_flag == 1) %>%
+    dplyr::filter(.data$r_flag == 1) %>%
     highest_grade(block_count) %>%
-    group_by_(.dots = groups) %>%
-    summarize(n_i = get_counts(.data, block_count)) %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
+    dplyr::group_by_(.dots = groups) %>%
+    dplyr::summarize(n_i = get_counts(.data, block_count)) %>%
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   counts_l <- dat %>%
     filter(.data$l_flag == 1) %>%
     highest_grade(block_count) %>%
-    group_by_(.dots = groups) %>%
-    summarize(n_i = get_counts(.data, block_count)) %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
+    dplyr::group_by_(.dots = groups) %>%
+    dplyr::summarize(n_i = get_counts(.data, block_count)) %>%
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   total_label_pos_r <- counts_r %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(label_ypos = max(.data$label_ypos))
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::summarize(label_ypos = max(.data$label_ypos))
 
   total_label_pos_l <- counts_l %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(label_ypos = max(.data$label_ypos))
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::summarize(label_ypos = max(.data$label_ypos))
 
   total_text_ann_r <- dat %>%
-    filter(.data$r_flag == 1) %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = get_counts(.data, block_count)) %>%
-    left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
+    dplyr::filter(.data$r_flag == 1) %>%
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::summarize(n = get_counts(.data, block_count)) %>%
+    dplyr::left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
 
   total_text_ann_l <- dat %>%
-    filter(.data$l_flag == 1) %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = get_counts(.data, block_count)) %>%
-    left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
+    dplyr::filter(.data$l_flag == 1) %>%
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::summarize(n = get_counts(.data, block_count)) %>%
+    dplyr::left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
 
 
   if (sort_by == "alphabetical") {
     counts_r$y <- factor(counts_r$y, levels = unique(sort(as.character(counts_r$y), decreasing = TRUE)))
     counts_l$y <- factor(counts_l$y, levels = unique(sort(as.character(counts_l$y), decreasing = TRUE)))
   } else if (sort_by == "count") {
-    tot <- bind_rows(total_text_ann_r, total_text_ann_l) %>%
-      group_by(.data$y) %>%
-      summarize(n = sum(n)) %>%
-      arrange(n)
+    tot <- dplyr::bind_rows(total_text_ann_r, total_text_ann_l) %>%
+      dplyr::group_by(.data$y) %>%
+      dplyr::summarize(n = sum(n)) %>%
+      dplyr::arrange(n)
 
     counts_r$y <- factor(counts_r$y, levels = tot$y)
     counts_l$y <- factor(counts_l$y, levels = tot$y)
   } else if (sort_by == "right") {
-    tot <- full_join(total_text_ann_r, select(total_text_ann_l, -n), by = "y") %>%
-      group_by(.data$y) %>%
-      summarize(n = sum(n, na.rm = TRUE)) %>%
-      arrange(n)
+    tot <- dplyr::full_join(total_text_ann_r, select(total_text_ann_l, -n), by = "y") %>%
+      dplyr::group_by(.data$y) %>%
+      dplyr::summarize(n = sum(n, na.rm = TRUE)) %>%
+      dplyr::arrange(n)
 
     counts_r$y <- factor(counts_r$y, levels = tot$y)
     counts_l$y <- factor(counts_l$y, levels = tot$y)
   } else if (sort_by == "left") {
-    tot <- full_join(total_text_ann_l, select(total_text_ann_r, -n), by = "y") %>%
-      group_by(.data$y) %>%
-      summarize(n = sum(n, na.rm = TRUE)) %>%
-      arrange(n)
+    tot <- dplyr::full_join(total_text_ann_l, select(total_text_ann_r, -n), by = "y") %>%
+      dplyr::group_by(.data$y) %>%
+      dplyr::summarize(n = sum(n, na.rm = TRUE)) %>%
+      dplyr::arrange(n)
 
     counts_r$y <- factor(counts_r$y, levels = tot$y)
     counts_l$y <- factor(counts_l$y, levels = tot$y)
@@ -303,7 +303,11 @@ g_butterfly <- function(category,
 
   g_1 <- gtable_add_grob(
     g_0,
-    grid.text(str_wrap(g_r, width = 30), x = 1, just = "center", hjust = 1, gp = gpar(fontsize = 11)),
+    grid.text(str_wrap(g_r, width = 30),
+              x = 1,
+              just = "center",
+              hjust = 1,
+              gp = gpar(fontsize = 11)),
     t = 1.5, l = g_0$layout[grep("axis-r", g_0$layout$name)[1], 2], b = 3, name = "right-title", clip = "off"
   )
   g_2 <- gtable_add_grob(

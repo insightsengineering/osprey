@@ -147,9 +147,12 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
   term_label <- attr(term, "label")
   grade_label <- attr(grade, "label")
 
-  if (is.null(class_label)) class_label <- deparse(substitute(class))
-  if (is.null(term_label)) term_label <- deparse(substitute(term))
-  if (is.null(grade_label)) grade_label <- deparse(substitute(grade))
+  if (is.null(class_label))
+    class_label <- deparse(substitute(class))
+  if (is.null(term_label))
+    term_label <- deparse(substitute(term))
+  if (is.null(grade_label))
+    grade_label <- deparse(substitute(grade))
 
   if (!is.null(total)) {
     total <- tot_column(total)
@@ -197,7 +200,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
         a <- a + tbl[1, i + 1][1]
       }
       a
-    }, numeric(1)) # nolint
+    }, numeric(1))
 
     l_t_terms <- l_t_terms[order(-n_total_any, names(l_t_terms), decreasing = FALSE)]
 
@@ -212,7 +215,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
       a <- a + tbl[[1]][1, i + 1][1]
     }
     a
-  }, numeric(1)) # nolint
+  }, numeric(1))
 
   l_t_class_terms <- l_t_class_terms[order(-n_total_overall, names(l_t_class_terms), decreasing = FALSE)]
 
@@ -235,7 +238,7 @@ t_ae_ctc_v2 <- function(class, term, id, grade, col_by, total = "All Patients", 
     lt1 <- Map(shift_label_table_t_ae_ctc_v2, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables, lt1)
     add_ae_class(indent(t2, 1), class_i)
-  }, tbls_all, names(tbls_all)) # nolint
+  }, tbls_all, names(tbls_all))
 
 
   tbl <- do.call(stack_rtables, tbls_class)

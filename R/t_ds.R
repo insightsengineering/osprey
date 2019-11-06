@@ -208,7 +208,7 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
           remove_dupl = TRUE,
           with_percent = TRUE
         )
-      }, split(df, df[, count]), names(split(df, df[, count])), SIMPLIFY = FALSE) # nolint
+      }, split(df, df[, count]), names(split(df, df[, count])), SIMPLIFY = FALSE)
       l_t_terms <- list(l_t_ov, l_t_terms)
       return(l_t_terms)
     } else {

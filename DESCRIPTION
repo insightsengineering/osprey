@@ -2,6 +2,7 @@ Package: osprey
 Type: Package
 Title: R package to create TLGs
 Version: 0.1.1
+Date: 2019-11-06
 Authors@R: c(
   person("Nina", "Qi", email = "qi.ting@gene.com", role = c("aut", "cre")),
   person("Chendi", "Liao", email = "chendi.liao@roche.com", role = c("aut")),

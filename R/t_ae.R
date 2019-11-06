@@ -132,8 +132,10 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
   class_label <- attr(class, "label")
   term_label <- attr(term, "label")
 
-  if (is.null(class_label)) class_label <- deparse(substitute(class))
-  if (is.null(term_label)) term_label <- deparse(substitute(term))
+  if (is.null(class_label))
+    class_label <- deparse(substitute(class))
+  if (is.null(term_label))
+    term_label <- deparse(substitute(term))
 
   # adding All Patients
   if (!is.null(total)) {
@@ -298,8 +300,8 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
   tbls_ov <- Map(function(tbls_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables_condense, lt1) # nolint
-  }, tbls_overview) # nolint
+    do.call(stack_rtables_condense, lt1) # nolint
+  }, tbls_overview)
 
 
   tbl_cl <- do.call(stack_rtables, tbls_class)

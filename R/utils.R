@@ -43,7 +43,6 @@ t_helper_tabulate <- function(df_id, n, checkcol, term, remove_dupl, with_percen
 
     tbl <- rtabulate(
       na.omit(df_id),
-      # row_by = factor(checkcol),
       row_by = as.factor(df_id[[checkcol]]),
       col_by = df_id$col_by,
       FUN = count_perc_col_N,
@@ -116,7 +115,6 @@ recursive_indent <- function(tbl_l, ind_count) {
     }
     t
   } else if (is.list(tbl_l) && class(tbl_l) != "rtable") {
-    odd_ind <- seq(1, length(tbl_l), 2) # nolint
     count <- lapply(tbl_l, function(x) {
       if (class(x) == "rtable") {
         ind_count
@@ -160,10 +158,10 @@ stack_rtables_condense <- function(..., nrow_pad = 1) {
   if (length(tbls) > 0) {
 
     are <- getFromNamespace("are", pos = "package:rtables")
+    if (!are(tbls, "rtable")) {
+      stop("not all objects are of type rtable")
+    }
 
-    if (!are(tbls, "rtable")) stop("not all objects are of type rtable")
-
-    header <- attr(tbls[[1]], "header") # nolint
     Reduce(
       function(x, y) rbind(x, y),
       tbls
@@ -283,10 +281,10 @@ paper_size <- function(pagesize) {
     paper_height <- 8.3
   } else if (pagesize == "a4.portrait") {
     paper_width <- 8.3
-    paper_height <<- 11.7
+    paper_height <- 11.7
   } else if (pagesize == "letter.portrait") {
     paper_width <- 8.5
-    paper_height <<- 11
+    paper_height <- 11
   } else if (pagesize == "letter.landscape") {
     paper_width <- 11
     paper_height <- 8.5
@@ -411,7 +409,8 @@ grobs2pdf <- function(grobs,
     gp_footnotes = gpar(fontsize = fontsize - 1, fontface = 1, lineheight = 1),
     gp = gpar(fontsize = fontsize),
     vp = viewport(
-      x = unit(left_margin, "inches"), y = unit(bottom_margin, "inches"),
+      x = unit(left_margin, "inches"),
+      y = unit(bottom_margin, "inches"),
       width = unit(paper_width - left_margin - right_margin, "inches"),
       height = unit(paper_height - top_margin - bottom_margin, "inches"),
       just = c("left", "bottom"),
