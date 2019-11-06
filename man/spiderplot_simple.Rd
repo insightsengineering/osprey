@@ -27,7 +27,6 @@ ggplot object
 Descr of this plot
 }
 \examples{
-library(random.cdisc.data)
 library(dplyr)
 
 ADSL <- rADSL
