@@ -183,18 +183,21 @@ g_spiderplot <- function(marker_x,
 
   # marker shape------------ this section can be condensed later
   if (!is.null(marker_shape)) {
-    if (!is.null(line_colby)) {
-      pl <- pl + geom_point(aes_string(shape = "sh", color = "l_col"), size = marker_size, show.legend = show_legend)
-    } else {
-      pl <- pl + geom_point(aes_string(shape = "sh"), size = marker_size, show.legend = show_legend)
-    }
+      pl <- pl +
+        geom_point(mapping = if (!is.null(line_colby)) {
+            aes_string(shape = "sh", color = "l_col")
+          } else {
+            aes_string(shape = "sh")
+          }, size = marker_size, show.legend = show_legend)
+
   } else if (is.null(marker_shape)) {
-    if (!is.null(line_colby)) {
-      pl <- pl + geom_point(aes_string(color = "l_col"), size = 3, show.legend = show_legend)
-    } else {
-      pl <- pl + geom_point(size = 3, show.legend = show_legend)
+      pl <- pl +
+        geom_point(mapping = if (!is.null(line_colby)) {
+            aes_string(color = "l_col")
+          } else {
+            NULL
+          }, size = 3, show.legend = show_legend)
     }
-  }
 
   # label at last data point---------
   if (!is.null(datalabel_txt)) {
@@ -232,9 +235,14 @@ g_spiderplot <- function(marker_x,
         dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
         group_by(.data$id) %>%
         dplyr::filter(.data$x == last(.data$x))
-      pl <- pl + geom_segment(data = dat_arrow, mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
-          arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
-          size = 0.4, color = "black", show.legend = FALSE)
+
+      pl <- pl +
+        geom_segment(data = dat_arrow,
+                     mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+                     arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+                     size = 0.4,
+                     color = "black",
+                     show.legend = FALSE)
     }
   }
 
@@ -327,7 +335,8 @@ g_spiderplot <- function(marker_x,
   if (is.numeric(marker_x)) {
     pl <- pl + xlim(min(marker_x), max(marker_x) * 1.3)
   } else {
-    pl <- pl + scale_x_discrete(expand = c(0.3, 0)) +
+    pl <- pl +
+      scale_x_discrete(expand = c(0.3, 0)) +
       theme(axis.text.x = element_text(angle = 90))
   }
 
