@@ -128,15 +128,20 @@ g_swimlane <- function(bar_id,
                        title) {
 
   # check data
-  if (!is.null(sort_by)) check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
-  if (!is.null(col_by)) check_same_N(bar_id = bar_id, bar_length = bar_length, col_by = col_by)
+  if (!is.null(sort_by))
+    check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
+  if (!is.null(col_by))
+    check_same_N(bar_id = bar_id, bar_length = bar_length, col_by = col_by)
 
   if (!is.null(marker_id) & length(which(!marker_id %in% bar_id)) > 0)
     stop("marker_id ", marker_id[which(!marker_id %in% bar_id)], " is not in bar_id")
 
-  if (!is.null(marker_id) & !is.null(marker_pos)) check_same_N(marker_id = marker_id, marker_pos = marker_pos)
-  if (!is.null(marker_id) & !is.null(marker_shape)) check_same_N(marker_id = marker_id, marker_shape = marker_shape)
-  if (!is.null(marker_id) & !is.null(marker_color)) check_same_N(marker_id = marker_id, marker_color = marker_color)
+  if (!is.null(marker_id) & !is.null(marker_pos))
+    check_same_N(marker_id = marker_id, marker_pos = marker_pos)
+  if (!is.null(marker_id) & !is.null(marker_shape))
+    check_same_N(marker_id = marker_id, marker_shape = marker_shape)
+  if (!is.null(marker_id) & !is.null(marker_color))
+    check_same_N(marker_id = marker_id, marker_color = marker_color)
 
   # data for plot
   bar_data <- data.frame(
@@ -187,7 +192,8 @@ g_swimlane <- function(bar_id,
   if (is.null(col_by)) {
     p <- p + guides(fill = FALSE)
   } else {
-    p <- p + guides(fill = guide_legend("Bar Color", order = 1, ncol = 1)) +
+    p <- p +
+      guides(fill = guide_legend("Bar Color", order = 1, ncol = 1)) +
       theme(
         legend.title = element_text(size = 8),
         legend.text = element_text(size = 8),
@@ -202,7 +208,8 @@ g_swimlane <- function(bar_id,
   if (!is.null(marker_pos)) {
     p <- p + geom_point(
       data = marker_data,
-      aes(x = marker_id, y = marker_pos, shape = marker_shape, color = marker_color), size = 2.5, na.rm = T
+      aes(x = marker_id, y = marker_pos, shape = marker_shape, color = marker_color),
+      size = 2.5, na.rm = T
     ) +
       scale_y_continuous(limits = c(0, max(bar_length, marker_pos) + 5), breaks = ytick_at, expand = c(0, 0))
 
@@ -218,33 +225,21 @@ g_swimlane <- function(bar_id,
       p <- p + guides(color = FALSE)
     }
 
-    if (!is.null(marker_shape_opt)) {
-      p <- p + scale_shape_manual(
-        name = "Marker Shape",
-        breaks = marker_data$marker_shape,
-        values = marker_shape_opt
-      )
-    } else {
-      p <- p + scale_shape_manual(
-        name = "Marker Shape",
-        breaks = marker_data$marker_shape,
-        values = c(15:25, 0:14)
-      )
-    }
 
-    if (!is.null(marker_color_opt)) {
-      p <- p + scale_color_manual(
+    p <- p +
+      scale_shape_manual(
+        name = "Marker Shape",
+        breaks = marker_data$marker_shape,
+        values = if (!is.null(marker_shape_opt)) marker_shape_opt else c(15:25, 0:14)
+      )
+
+    p <- p +
+      scale_color_manual(
         name = "Marker Color",
         breaks = marker_data$marker_color,
-        values = marker_color_opt
+        values =     if (!is.null(marker_color_opt)) marker_color_opt else 1:25
       )
-    } else {
-      p <- p + scale_color_manual(
-        name = "Marker Shape",
-        breaks = marker_data$marker_color,
-        values = c(1:25)
-      )
-    }
+
   }
 
   # plot reference lines
