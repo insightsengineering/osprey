@@ -42,53 +42,58 @@
 #'
 #' @export
 #'
+#' @importFrom rlang .data
+#'
 #' @template author_zhanc107
 #'
 #' @examples
 #' # simple example
 #' library(dplyr)
 #'
-#' data("rADSL")
-#' data("rADTR")
 #' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 #' ADSL <- rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)
 #' ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
-#' ANL <- ANL %>% filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
-#'        filter(RACE %in% c("WHITE", "ASIAN")) %>%
-#'        group_by(USUBJID) %>%
-#'        arrange(ADY) %>%
-#'        mutate(CHG = ifelse(AVISIT == "Screening", 0, CHG),
-#'               PCHG = ifelse(AVISIT == "Screening", 0, PCHG))
+#' ANL <- ANL %>%
+#'   dplyr::filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
+#'   dplyr::filter(RACE %in% c("WHITE", "ASIAN")) %>%
+#'   group_by(USUBJID) %>%
+#'   dplyr::arrange(ADY) %>%
+#'   dplyr::mutate(
+#'     CHG = ifelse(AVISIT == "Screening", 0, CHG),
+#'     PCHG = ifelse(AVISIT == "Screening", 0, PCHG)
+#'   )
 #' ANL$USUBJID <- substr(ANL$USUBJID, 14, 18)
 #'
 #' # Plot 1 - default color and shape mapping
-#' g_spiderplot(marker_x = ANL$ADY,
-#'              marker_id = ANL$USUBJID,
-#'              marker_y = ANL$PCHG,
-#'              line_colby = ANL$USUBJID,
-#'              marker_shape = ANL$USUBJID,
-#'              #marker_size = 5,
-#'              datalabel_txt = list(txt_ann = ANL$USUBJID),
-#'              #facet_rows = data.frame(sex = ANL$SEX),
-#'              #facet_columns = data.frame(arm = ANL$ARM),
-#'              vref_line = c(42, 86),
-#'              href_line = c(-20, 20),
-#'              x_label = "Time (Days)",
-#'              y_label = "Change (%) from Baseline",
-#'              show_legend = TRUE)
+#' g_spiderplot(
+#'   marker_x = ANL$ADY,
+#'   marker_id = ANL$USUBJID,
+#'   marker_y = ANL$PCHG,
+#'   line_colby = ANL$USUBJID,
+#'   marker_shape = ANL$USUBJID,
+#'   # marker_size = 5,
+#'   datalabel_txt = list(txt_ann = ANL$USUBJID),
+#'   # facet_rows = data.frame(sex = ANL$SEX),
+#'   # facet_columns = data.frame(arm = ANL$ARM),
+#'   vref_line = c(42, 86),
+#'   href_line = c(-20, 20),
+#'   x_label = "Time (Days)",
+#'   y_label = "Change (%) from Baseline",
+#'   show_legend = TRUE
+#' )
 #'
-#' #Plot 2 - with line color mapping
-#' g_spiderplot(marker_x = ANL$AVISIT,
-#'                   marker_id = ANL$USUBJID,
-#'                   marker_y = ANL$CHG,
-#'                   line_colby = ANL$RACE,
-#'                   line_color_opt = c("WHITE" = "red", "ASIAN" = "blue"),
-#'                   marker_shape = ANL$USUBJID,
-#'                   x_label = "Visit",
-#'                   y_label = "Change from Baseline",
-#'                   show_legend = TRUE)
-#'
-#'
+#' # Plot 2 - with line color mapping
+#' g_spiderplot(
+#'   marker_x = ANL$AVISIT,
+#'   marker_id = ANL$USUBJID,
+#'   marker_y = ANL$CHG,
+#'   line_colby = ANL$RACE,
+#'   line_color_opt = c("WHITE" = "red", "ASIAN" = "blue"),
+#'   marker_shape = ANL$USUBJID,
+#'   x_label = "Visit",
+#'   y_label = "Change from Baseline",
+#'   show_legend = TRUE
+#' )
 g_spiderplot <- function(marker_x,
                          marker_id,
                          marker_y,
@@ -97,200 +102,244 @@ g_spiderplot <- function(marker_x,
                          marker_shape = NULL,
                          marker_shape_opt = NULL,
                          marker_size = 3,
-                         datalabel_txt = NULL,#USUBJID default
+                         datalabel_txt = NULL, # USUBJID default
                          facet_rows = NULL,
                          facet_columns = NULL,
                          vref_line = NULL,
                          href_line = NULL,
                          x_label = "Time (Days)",
                          y_label = "Change (%) from Baseline",
-                         show_legend = FALSE,
-                         draw = TRUE,
-                         newpage = TRUE){
-
+                         show_legend = FALSE) {
   check_input_length <- c(nrow(data.frame(marker_x)), nrow(data.frame(marker_id)), nrow(data.frame(marker_y)))
 
-  if(length(unique(check_input_length)) > 1)
+  if (length(unique(check_input_length)) > 1) {
     stop("invalid arguments: check that the length of input arguments are identical")
-  if(any(check_input_length == 0))
+  }
+  if (any(check_input_length == 0)) {
     stop("invalid arguments: check that inputs are not null")
+  }
 
-  #set up data-------
+  # set up data-------
   dat <- data.frame(x = marker_x, y = marker_y, group = marker_id)
 
-  if(!is.null(marker_shape)){
-    if(length(unique(c(nrow(marker_shape), check_input_length))) != 1)
+  if (!is.null(marker_shape)) {
+    if (length(unique(c(nrow(marker_shape), check_input_length))) != 1) {
       stop("invalid arguments: check that the length of input arguments are identical")
+    }
     dat$sh <- marker_shape
   }
-  if(!is.null(facet_rows)){
-    if(length(unique(c(nrow(facet_rows), check_input_length))) != 1)
+  if (!is.null(facet_rows)) {
+    if (length(unique(c(nrow(facet_rows), check_input_length))) != 1) {
       stop("invalid arguments: check that the length of input arguments are identical")
+    }
     dat$f_rows <- interaction(facet_rows)
-
   }
-  if(!is.null(facet_columns)){
-    if(length(unique(c(nrow(facet_columns), check_input_length))) != 1)
+  if (!is.null(facet_columns)) {
+    if (length(unique(c(nrow(facet_columns), check_input_length))) != 1) {
       stop("invalid arguments: check that the length of input arguments are identical")
+    }
     dat$f_columns <- interaction(facet_columns)
   }
-  if(!is.null(line_colby)){
-    if(length(unique(c(nrow(line_colby), check_input_length))) != 1)
+  if (!is.null(line_colby)) {
+    if (length(unique(c(nrow(line_colby), check_input_length))) != 1) {
       stop("invalid arguments: check that the length of input arguments are identical")
+    }
     dat$l_col <- line_colby
   }
-  if(!is.null(datalabel_txt$txt_ann)){
+  if (!is.null(datalabel_txt$txt_ann)) {
     dat$lbl_all <- datalabel_txt$txt_ann
 
     dat <- dat %>%
-      group_by(lbl_all) %>%
-      mutate(lab = ifelse(x == last(x), as.character(lbl_all), " "))
+      group_by(.data$lbl_all) %>%
+      dplyr::mutate(lab = ifelse(.data$x == last(.data$x), as.character(.data$lbl_all), " "))
   }
-  if(!is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)){
-    if(length(unique(c(nrow(datalabel_txt$mrkr_all), check_input_length))) != 1)
+  if (!is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
+    if (length(unique(c(nrow(datalabel_txt$mrkr_all), check_input_length))) != 1) {
       stop("invalid arguments: check that the length of input arguments are identical")
+    }
     dat$id <- datalabel_txt$mrkr_all
   }
 
   dat <- dat %>% as.data.frame()
 
-  #plot spider plot----------------- this section can be condensed later
-  pl <- ggplot(data = dat, aes(x = x, y = y, group = group)) +
+  # plot spider plot----------------- this section can be condensed later
+  pl <- ggplot(data = dat, aes_string(x = "x", y = "y", group = "group")) +
     xlab(x_label) +
     ylab(y_label) +
-    theme(legend.position="top", legend.title = element_blank())
+    theme(legend.position = "top", legend.title = element_blank())
 
   pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 1)
 
 
-  #line color
-  if(!is.null(line_colby)){
-    pl <- pl + geom_line(aes(color = l_col), size = 1, alpha = 0.5, show.legend = show_legend)
-  } else{
-    pl <- pl + geom_line(size = 1, alpha = 0.5, show.legend = show_legend)
-  }
+  pl <- pl +
+    geom_line(mapping = if (!is.null(line_colby)) {
+        aes_string(color = "l_col")
+      } else {
+        NULL
+      },
+      size = 1,
+      alpha = 0.5,
+      show.legend = show_legend)
 
-  #marker shape------------ this section can be condensed later
-  if(!is.null(marker_shape)){
-    if(!is.null(line_colby)){
-      pl <- pl + geom_point(aes(shape = sh, color = l_col), size = marker_size, show.legend = show_legend)
-    } else{
-      pl <- pl + geom_point(aes(shape = sh), size = marker_size, show.legend = show_legend)
+  # marker shape------------ this section can be condensed later
+  if (!is.null(marker_shape)) {
+      pl <- pl +
+        geom_point(mapping = if (!is.null(line_colby)) {
+            aes_string(shape = "sh", color = "l_col")
+          } else {
+            aes_string(shape = "sh")
+          }, size = marker_size, show.legend = show_legend)
+
+  } else if (is.null(marker_shape)) {
+      pl <- pl +
+        geom_point(mapping = if (!is.null(line_colby)) {
+            aes_string(color = "l_col")
+          } else {
+            NULL
+          }, size = 3, show.legend = show_legend)
     }
 
-  } else if(is.null(marker_shape)){
-    if(!is.null(line_colby)){
-      pl <- pl + geom_point(aes(color = l_col), size = 3, show.legend = show_legend)
-    } else{
-      pl <- pl + geom_point(size = 3, show.legend = show_legend)
-    }
-
-  }
-
-  #label at last data point---------
-  if(!is.null(datalabel_txt)){
-
-    if(!is.null(datalabel_txt$txt_ann) && is.null(datalabel_txt$mrkr_all) && is.null(datalabel_txt$mrkr_ann)){
-      pl <- pl + geom_text(data = dat, aes(x = x, y =  y, label= lab), hjust = -0.3, size = 4, show.legend = FALSE)
-    } else if(is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)){
+  # label at last data point---------
+  if (!is.null(datalabel_txt)) {
+    if (!is.null(datalabel_txt$txt_ann) && is.null(datalabel_txt$mrkr_all) && is.null(datalabel_txt$mrkr_ann)) {
+      pl <- pl +
+        geom_text(data = dat,
+                  aes_string(x = "x", y = "y", label = "lab"), hjust = -0.3,
+                  size = 4,
+                  show.legend = FALSE)
+    } else if (is.null(datalabel_txt$txt_ann) &&
+               !is.null(datalabel_txt$mrkr_all) &&
+               !is.null(datalabel_txt$mrkr_ann)) {
+      dat_arrow <- dat %>%
+        dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
+        group_by(.data$id) %>%
+        dplyr::filter(.data$x == last(.data$x))
+      pl <- pl +
+        geom_segment(data = dat_arrow,
+                     mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+                     arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+                     size = 0.4,
+                     color = "black",
+                     show.legend = FALSE)
+    } else if (!is.null(datalabel_txt$txt_ann) &&
+               !is.null(datalabel_txt$mrkr_all) &&
+               !is.null(datalabel_txt$mrkr_ann)) {
+      pl <- pl +
+        geom_text(data = dat,
+                  aes_string(x = "x", y = "y", label = "lab"),
+                  hjust = -0.45,
+                  size = 4,
+                  show.legend = FALSE)
 
       dat_arrow <- dat %>%
-        filter(id %in% datalabel_txt$mrkr_ann) %>%
-        group_by(id) %>%
-        filter(x == last(x))
-      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = x, y = y, xend = x, yend = y), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
+        dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
+        group_by(.data$id) %>%
+        dplyr::filter(.data$x == last(.data$x))
 
-    } else if(!is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)){
-      pl <- pl + geom_text(data = dat, aes(x = x, y =  y, label= lab), hjust = -0.45, size = 4, show.legend = FALSE)
-
-      dat_arrow <- dat %>%
-        filter(id %in% datalabel_txt$mrkr_ann) %>%
-        group_by(id) %>%
-        filter(x == last(x))
-      pl <- pl + geom_segment(data = dat_arrow, mapping = aes(x = x, y = y, xend = x, yend = y), arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"), size = 0.4, color = "black", show.legend = FALSE)
-
+      pl <- pl +
+        geom_segment(data = dat_arrow,
+                     mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+                     arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+                     size = 0.4,
+                     color = "black",
+                     show.legend = FALSE)
     }
   }
 
-  #vertical and horizontal reference lines
-  if(!is.null(href_line)){
+  # vertical and horizontal reference lines
+  if (!is.null(href_line)) {
     pl <- pl + geom_hline(yintercept = href_line, linetype = "dotted", color = "black")
   }
 
-  if(!is.null(vref_line)){
-    for(i in 1:length(vref_line)){
-      pl <- pl + annotate("segment", x = vref_line[i], y = -Inf, xend = vref_line[i], yend = Inf, linetype = "dotted", color = "black")
+  if (!is.null(vref_line)) {
+    for (i in 1:length(vref_line)) {
+      pl <- pl +
+        annotate("segment",
+                 x = vref_line[i],
+                 y = -Inf,
+                 xend = vref_line[i],
+                 yend = Inf,
+                 linetype = "dotted",
+                 color = "black")
     }
   }
 
-  #facets---------------
-  if(is.null(facet_rows) && is.null(facet_columns)){
+  # facets---------------
+  if (is.null(facet_rows) && is.null(facet_columns)) {
     pl
-  } else if(is.null(facet_rows) && !is.null(facet_columns)){
-    pl <- pl + facet_grid(.~ f_columns)
-  } else if(is.null(facet_columns) && !is.null(facet_rows)){
-    pl <- pl + facet_grid(f_rows ~.)
-  } else{
+  } else if (is.null(facet_rows) && !is.null(facet_columns)) {
+    pl <- pl + facet_grid(. ~ f_columns)
+  } else if (is.null(facet_columns) && !is.null(facet_rows)) {
+    pl <- pl + facet_grid(f_rows ~ .)
+  } else {
     pl <- pl + facet_grid(f_rows ~ f_columns)
   }
 
   # simple function to call a vector of color values
-  call_color <- function(len){
-    datCol <- data.frame(color_opt = colors())
-    datCol <- datCol %>% filter(!grepl("white",color_opt)) %>% droplevels
+  call_color <- function(len) {
+    dat_col <- data.frame(color_opt = colors())
+    dat_col <- dat_col %>%
+      dplyr::filter(!grepl("white", .data$color_opt)) %>%
+      droplevels()
 
-    return(datCol[1:len, 1])
+    return(dat_col[1:len, 1])
   }
 
-  #remove marker from color legend
-  if(!is.null(line_colby)){
+  # remove marker from color legend
+  if (!is.null(line_colby)) {
     pl <- pl + guides(color = guide_legend(override.aes = list(shape = rep(NA, length(unique(dat$l_col))))))
 
-    if(!is.null(line_color_opt)){
-      pl <- pl + scale_color_manual(name = "Color",
-                                    breaks = dat$l_col,
-                                    values = line_color_opt)
+    if (!is.null(line_color_opt)) {
+      pl <- pl + scale_color_manual(
+        name = "Color",
+        breaks = dat$l_col,
+        values = line_color_opt
+      )
     }
   }
 
-  if(!is.null(marker_shape) && is.null(marker_shape_opt)){
+  if (!is.null(marker_shape) && is.null(marker_shape_opt)) {
     symbol_val <- c(15:18, 1:14)
     len <- length(unique(dat$sh))
-    symbol_val <- rep(symbol_val, ceiling(len/26))
+    symbol_val <- rep(symbol_val, ceiling(len / 26))
 
-    pl <- pl + scale_shape_manual(name = "Shape",
-                                  breaks = sort(dat$sh),
-                                  values = symbol_val[1:len],
-                                  guide = guide_legend(override.aes = list(linetype = rep("blank", len)))
-                                  )
+    pl <- pl + scale_shape_manual(
+      name = "Shape",
+      breaks = sort(dat$sh),
+      values = symbol_val[1:len],
+      guide = guide_legend(override.aes = list(linetype = rep("blank", len)))
+    )
   }
 
-  if(!is.null(marker_shape_opt)){
-    pl <- pl + scale_shape_manual(name = "Shape",
-                                  breaks = dat$sh,
-                                  values = marker_shape_opt)
+  if (!is.null(marker_shape_opt)) {
+    pl <- pl + scale_shape_manual(
+      name = "Shape",
+      breaks = dat$sh,
+      values = marker_shape_opt
+    )
   }
 
-  #modify background color
-  pl <- pl + annotate("segment", x=-Inf, xend=Inf, y=-Inf, yend=-Inf)+
-    annotate("segment", x=-Inf, xend=-Inf, y=-Inf, yend=Inf) +
+  # modify background color
+  pl <- pl + annotate("segment", x = -Inf, xend = Inf, y = -Inf, yend = -Inf) +
+    annotate("segment", x = -Inf, xend = -Inf, y = -Inf, yend = Inf) +
     theme_bw() +
-    theme(strip.background = element_rect(linetype = "blank", fill = "white"),
-          text = element_text(size = 16),
-          axis.text = element_text(color = "black"),
-          legend.text=element_text(size=7),
-          legend.title = element_text(size = 7)) +
-    labs(shape = "Shape", color = "Color")# +
-    #guides(colour = FALSE)
+    theme(
+      strip.background = element_rect(linetype = "blank", fill = "white"),
+      text = element_text(size = 16),
+      axis.text = element_text(color = "black"),
+      legend.text = element_text(size = 7),
+      legend.title = element_text(size = 7)
+    ) +
+    labs(shape = "Shape", color = "Color") # +
 
-  if(is.numeric(marker_x)){
-    pl <- pl + xlim(min(marker_x), max(marker_x)*1.3)
-  }else{
-    pl <- pl + scale_x_discrete(expand = c(0.3, 0)) +
+  if (is.numeric(marker_x)) {
+    pl <- pl + xlim(min(marker_x), max(marker_x) * 1.3)
+  } else {
+    pl <- pl +
+      scale_x_discrete(expand = c(0.3, 0)) +
       theme(axis.text.x = element_text(angle = 90))
   }
 
   grid.draw(pl)
   invisible(pl)
-
 }

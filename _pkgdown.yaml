@@ -15,10 +15,14 @@ navbar:
 
 
 reference:
+  - title: Package
+    contents:
+      - osprey
   - title: Graphs
     desc: Graphs
     contents:
       - starts_with("g_")
+      - spiderplot_simple
   - title: Tables
     desc: some useful tables
     contents:
@@ -29,4 +33,17 @@ reference:
       - as_pdf
       - getdata_bce
       - grobs2pdf
-
+  - title: Utility
+    contents:
+      - add_ae_class
+      - meddra
+      - stream_filter
+      - stream_filter_convwhere
+      - stream_filter_index
+  - title: Data
+    contents:
+      - rADAE
+      - rADRS
+      - rADSL
+      - rADTR
+      - rADTTE

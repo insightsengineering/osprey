@@ -1,51 +1,52 @@
-
-
-#' Create a spiderplot_simple
+#' Simple spider plot
 #'
 #' Descr of this plot
 #'
+#' @param anl The analysis data frame (e.g. ATE.sas7bdat on BCE)
 #' @param byvar Analysis dataset
 #' @param days Variable with time in days
-#' @param mesValue Variable with measurement
-#' @param groupCol Variable to color the individual lines and id in plot
+#' @param mes_value Variable with measurement
+#' @param group_col Variable to color the individual lines and id in plot
 #' @param baseday Numeric Value, pts with only smaller values will be cut out
 #'
 #'
 #' @return ggplot object
 #'
+#' @importFrom rlang .data
 #' @export
 #'
 #' @author Mika Maekinen
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(dplyr)
 #'
+#' ADSL <- rADSL
+#' ADRS <- rADRS
+#' ANL <- left_join(ADSL, ADRS)
 #'
-#' atr <- left_join(radam("ATR", N=10),radam("ADSL", N=10))
+#' ANL %>%
+#'   dplyr::filter(PARAMCD == "OVRINV") %>%
+#'   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 #'
-#'
-#' spiderplot_simple(atr %>% filter(PARAMCD == "SUMTGLES"), groupCol=SEX)
-#'
+spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
+    mes_value = "PARAM", group_col = "USUBJID", baseday = 0) {
+  ### remove patients without post baseline measurement
+  anl <- anl %>%
+    group_by(!!byvar) %>%
+    dplyr::mutate(morebase = ifelse(max(!!days, na.rm = TRUE) > baseday, TRUE, FALSE)) %>%
+    dplyr::filter(.data$morebase == TRUE) %>%
+    ungroup()
+  ### find the last measurement
+  last_obs <- anl %>%
+    group_by(!!as.symbol(byvar)) %>%
+    slice(which.max(!!as.symbol(days)))
 
-spiderplot_simple <- function(anl, byvar=USUBJID, days=TUDY, mesValue=PCHG, groupCol=USUBJID, baseday= 0) {
-  byvar <- enquo(byvar)
-  days <- enquo(days)
-  mesValue <- enquo(mesValue)
-  groupCol <- enquo(groupCol)
-  ###remove patients without post baseline measurement
-  anl <- anl %>% group_by(!! byvar) %>%
-    mutate(morebase = ifelse(max(!! days, na.rm=TRUE) > baseday, TRUE, FALSE)) %>%
-    filter(morebase == TRUE) %>% ungroup()
-  ###find the last measurement
-  lastObs <- anl  %>%  group_by(!! byvar) %>% slice(which.max(!! days))
-
-  #plotr
-  ggplot(data=anl, mapping = aes_(x = days, y = mesValue, group = byvar, colour= groupCol),size=2, alpha = 1) +
-  geom_point(size=3) + geom_line(size=2, alpha=0.7) +
-  geom_text(aes_(x = days, y =  mesValue, label= byvar), data=lastObs, hjust = 0) +
-  geom_hline(aes(yintercept = 0), linetype="dotted" , color = "black") +
-  xlab("Time (Days)") +
-  ylab("Change(%) from Baseline") +
-  expand_limits(anl, x = select_(anl, mesValue) * 1.2)
+  # plotr
+  ggplot(data = anl, mapping = aes_string(x = days, y = mes_value, group = byvar, colour = group_col),
+          size = 2, alpha = 1) +
+    geom_point(size = 3) + geom_line(size = 2, alpha = 0.7) +
+    geom_text(aes_string(x = days, y = mes_value, label = byvar), data = last_obs, hjust = 0) +
+    geom_hline(aes(yintercept = 0), linetype = "dotted", color = "black") +
+    xlab("Time (Days)") +
+    ylab("Change(%) from Baseline")
 }
-

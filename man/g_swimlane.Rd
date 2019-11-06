@@ -50,77 +50,86 @@ patient bar plot with markers of events and patient level annotation
 }
 \examples{
 # Example 1
-library(random.cdisc.data)
 library(dplyr)
-ASL <- radam("ASL", N=50, start_with = list(TRTDUR = rexp(50, 1/100)))
-ARS <- radam("ARS", ADSL = ASL,
-start_with = list(
-      ADY = rexp(nrow(ASL), 1/80)
-   )) \%>\% filter(PARAMCD == "OVRINV")
+
+ASL <- rADSL[1:20, ]
+ARS <- ASL \%>\%
+  select(USUBJID) \%>\%
+  left_join(rADRS, "USUBJID") \%>\%
+  dplyr::filter(PARAMCD == "OVRINV")
 ANL <- ASL \%>\% left_join(ARS, by = c("STUDYID", "USUBJID"))
 anno_txt <- ASL[, c("ARMCD", "SEX")]
 
-g_swimlane(bar_id = ASL$USUBJID,
-bar_length = ASL$TRTDUR,
-sort_by = ASL$ARM,
-col_by = ASL$ARM,
-marker_id = ANL$USUBJID,
-marker_pos = ANL$ADY,
-marker_shape = ANL$AVALC,
-marker_shape_opt = c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 4),
-marker_color = NULL,
-marker_color_opt = NULL,
-anno_txt = anno_txt,
-yref_line = c(100, 200),
-ytick_at = waiver(),
-ylab = "Time from First Treatment (Day)",
-title = "Swimlane Plot")
+g_swimlane(
+  bar_id = ASL$USUBJID,
+  bar_length = ASL$TRTDURD,
+  sort_by = ASL$ARM,
+  col_by = ASL$ARM,
+  marker_id = ANL$USUBJID,
+  marker_pos = ANL$ADY,
+  marker_shape = ANL$AVALC,
+  marker_shape_opt = c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 4),
+  marker_color = NULL,
+  marker_color_opt = NULL,
+  anno_txt = anno_txt,
+  yref_line = c(50, 100),
+  ytick_at = waiver(),
+  ylab = "Time from First Treatment (Day)",
+  title = "Swimlane Plot"
+)
 
 # Example 2
 library(dplyr)
-ASL <- rADSL
+
+ASL <- rADSL[1:20, ]
 ARS <- rADRS
 
 anno_txt_vars <- c("ARMCD", "SEX", "COUNTRY")
 anno_txt <- ASL[, anno_txt_vars]
 
 # markers from ARS
-ARS <- ASL \%>\% select(USUBJID) \%>\%
-left_join(ARS, "USUBJID") \%>\%
-filter(PARAMCD == "OVRINV") \%>\%
-select(USUBJID, ADY, AVALC)
+ARS <- ASL \%>\%
+  select(USUBJID) \%>\%
+  left_join(ARS, "USUBJID") \%>\%
+  dplyr::filter(PARAMCD == "OVRINV") \%>\%
+  select(USUBJID, ADY, AVALC)
 
 # markers from ASL - discontinuation
 ADS <- ASL \%>\%
-filter(EOSSTT == "Discontinued" | DCSREAS != "") \%>\%
-select(USUBJID, EOSDY, DCSREAS) \%>\%
-dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
+  dplyr::filter(EOSSTT == "Discontinued" | DCSREAS != "") \%>\%
+  select(USUBJID, EOSDY, DCSREAS) \%>\%
+  dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
 
 # combine ARS with ADS records as one data for markers and join with ASL
 ANL <- ASL \%>\%
-inner_join(rbind(ARS, ADS), "USUBJID")
+  inner_join(rbind(ARS, ADS), "USUBJID")
 
-g_swimlane(bar_id = ASL$USUBJID,
-bar_length = ASL$TRTDURD,
-sort_by = NULL,
-col_by = ASL$ARMCD,
-marker_id = ANL$USUBJID,
-marker_pos = ANL$ADY,
-marker_shape = ANL$AVALC,
-marker_shape_opt <- c("CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 0,
-"Adverse Event" = 7, "Death" = 8, "Physician Decision" = 9, "Progressive Disease" = 10,
-"Symptomatic Deterioation" = 11, "Withdrawal by Subject" = 12),
-marker_color = ANL$AVALC,
-marker_color_opt <- c("CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
-"NE" = "grey", "Adverse Event" = "orange", "Death" = "black", "Physician Decision" = "navy",
-"Progressive Disease" = "purple", "Symptomatic Deterioation" = "cyan",
-"Withdrawal by Subject" = "darkred"),
-anno_txt = anno_txt,
-yref_line = c(50, 100),
-ytick_at = waiver(),
-ylab = "Time from First Treatment (Day)",
-title = "Swimlane Plot")
-
+g_swimlane(
+  bar_id = sub(".*-", "", ASL$USUBJID),
+  bar_length = ASL$TRTDURD,
+  sort_by = NULL,
+  col_by = ASL$ARMCD,
+  marker_id = sub(".*-", "", ANL$USUBJID),
+  marker_pos = ANL$ADY,
+  marker_shape = ANL$AVALC,
+  marker_shape_opt <- c(
+    "CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 0,
+    "Adverse Event" = 7, "Death" = 8, "Physician Decision" = 9, "Progressive Disease" = 10,
+    "Symptomatic Deterioation" = 11, "Withdrawal by Subject" = 12
+  ),
+  marker_color = ANL$AVALC,
+  marker_color_opt <- c(
+    "CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
+    "NE" = "grey", "Adverse Event" = "orange", "Death" = "black", "Physician Decision" = "navy",
+    "Progressive Disease" = "purple", "Symptomatic Deterioation" = "cyan",
+    "Withdrawal by Subject" = "darkred"
+  ),
+  anno_txt = anno_txt,
+  yref_line = c(50, 100),
+  ytick_at = waiver(),
+  ylab = "Time from First Treatment (Day)",
+  title = "Swimlane Plot"
+)
 }
 \author{
 Ting Qi (qit3) \email{qit3@gene.com}

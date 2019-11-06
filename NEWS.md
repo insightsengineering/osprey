@@ -1,3 +1,12 @@
+# osprey 0.1.1
+Refactoring package according to the NEST standards.
+
+- including test.nest tests
+- cleaning dependencies
+- fix tm_g_butterfly faceting error
+- add sorting by right or left wing
+- adding g_watterfall
+
 # osprey 0.1.0
 
 First versioned release of osprey package, which include the following functions:

@@ -5,7 +5,7 @@
 \title{Adverse Events Table by Highest NCI CTCAE Grade}
 \usage{
 t_ae_ctc_v2(class, term, id, grade, col_by, total = "All Patients",
-  grade_levels = 1:5, ...)
+  grade_levels = 1:5)
 }
 \arguments{
 \item{class}{system organ class variable.}
@@ -31,7 +31,7 @@ grades, see 'Details'.}
 }
 \description{
 \code{t_ae_ctc_v2} returns adverse events sorted by highest NCI (National Cancer
- Institute) CTCAE (common terminology criteria for adverse avents) grade. It
+ Institute) CTCAE (common terminology criteria for adverse events) grade. It
  corresponds to STREAM template AET01.
 }
 \details{
@@ -39,7 +39,7 @@ grades, see 'Details'.}
  intensity for system organ class (SOC) and overall rows and includes
  percentages based on the total number of patients in the column heading
  (i.e. "N=nnn"). If the intention is to use patients number from subject level
- dataset as N for percentage calculation then adeverse events dataset should
+ dataset as N for percentage calculation then adverse events dataset should
  be left joined to subject level dataset and the \code{col_by} variable should
  be dropped from adverse events dataset, see the example. Otherwise, N will be
  derived using adverse events dataset. At the preferred term (PT) level,
@@ -65,67 +65,61 @@ this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = 
 }
 \examples{
 # Simple example
-library(tibble)
 library(dplyr)
 
 ASL <- tibble(
   USUBJID = paste0("id-", 1:10),
-  ARM = paste("ARM", LETTERS[rep(c(1,2), c(3,7))])
+  ARM = paste("ARM", LETTERS[rep(c(1, 2), c(3, 7))])
 )
 
 
 ae_lookup <- tribble(
-~CLASS,         ~TERM,   ~GRADE,
-"cl A",   "trm A_1/2",        1,
-"cl A",   "trm A_2/2",        2,
-"cl B",   "trm B_1/3",        2,
-"cl B",   "trm B_2/3",        3,
-"cl B",   "trm B_3/3",        1,
-"cl C",   "trm C_1/1",        1
+  ~CLASS, ~TERM, ~GRADE,
+  "cl A", "trm A_1/2", 1,
+  "cl A", "trm A_2/2", 2,
+  "cl B", "trm B_1/3", 2,
+  "cl B", "trm B_2/3", 3,
+  "cl B", "trm B_3/3", 1,
+  "cl C", "trm C_1/1", 1
 )
 
 AAE <- cbind(
   tibble(
-    USUBJID = ASL$USUBJID[c(2,2,2,3,3,4,4,4,4,5,6,6,7,7)]
+    USUBJID = ASL$USUBJID[c(2, 2, 2, 3, 3, 4, 4, 4, 4, 5, 6, 6, 7, 7)]
   ),
-  ae_lookup[c(1,1,2,6,4,2,2,3,4,2,1,5,4,6),]
+  ae_lookup[c(1, 1, 2, 6, 4, 2, 2, 3, 4, 2, 1, 5, 4, 6), ]
 )
 
 ANL <- left_join(ASL, AAE, by = "USUBJID")
 
+
 tbl <- t_ae_ctc_v2(
   class = ANL$CLASS,
-  term =  ANL$TERM,
+  term = ANL$TERM,
   id = ANL$USUBJID,
   grade = ANL$GRADE,
   col_by = factor(ANL$ARM),
   total = "All Patients",
   grade_levels = 1:3
 )
-
 tbl
 
 
 library(random.cdisc.data)
 library(dplyr)
 
-ASL <- radam("ASL", N = 10)
-AAE <- radam("AAE", ADSL = ASL)
+ASL <- radsl(N = 10, seed = 1)
+AAE <- radae(ASL, seed = 1)
 
-ANL <- left_join(AAE, ASL \%>\% select(USUBJID, STUDYID, ARM), by = c("STUDYID", "USUBJID"))
-
-tbl <- with(ANL,
-            t_ae_ctc_v2(
-              class = AEBODSYS,
-              term =  AEDECOD,
-              id = USUBJID,
-              grade = AETOXGR,
-              col_by = factor(ARM),
-              total = "All Patients",
-              grade_levels = 1:5
-            )
-)
-
+tbl <- t_ae_ctc_v2(
+    class = AAE$AEBODSYS,
+    term = AAE$AEDECOD,
+    id = AAE$USUBJID,
+    grade = AAE$AETOXGR,
+    col_by = factor(AAE$ARM),
+    total = "All Patients",
+    grade_levels = 1:5
+  )
 tbl
 
 }

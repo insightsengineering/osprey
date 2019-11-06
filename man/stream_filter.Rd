@@ -28,20 +28,23 @@ One of slref or anl need to be specified. The conversion from SAS code in filter
 In case of failure a sensible error message should be returned.
 }
 \examples{
-ASL <- random.cdisc.data::rasl()
-ATE <- random.cdisc.data::rate(ASL)
-filters <- as.data.frame(rbind(c(ID =  "IT",  FLTTARGET = "SLREF", FLTWHERE = "where 1 eq 1"),
-                               c(ID =  "BIO", FLTTARGET = "SLREF", FLTWHERE = "where BMRKR1 ge 4.3"),
-                               c(ID =  "M",   FLTTARGET = "SLREF", FLTWHERE = "where SEX eq 'M'"),
-                               c(ID =  "PFS", FLTTARGET = "ANL",   FLTWHERE = "where PARAMCD eq 'PFS'"),
-                               c(ID =  "OS",  FLTTARGET = "ANL",   FLTWHERE = "where PARAMCD eq 'OS'"))
+library(random.cdisc.data)
+ASL <- radsl()
+ATE <- radaette(ASL)
+filters <- as.data.frame(rbind(
+  c(ID = "IT", FLTTARGET = "SLREF", FLTWHERE = "where 1 eq 1"),
+  c(ID = "BIO", FLTTARGET = "SLREF", FLTWHERE = "where BMRKR1 ge 4.3"),
+  c(ID = "M", FLTTARGET = "SLREF", FLTWHERE = "where SEX eq 'M'"),
+  c(ID = "PFS", FLTTARGET = "ANL", FLTWHERE = "where PARAMCD eq 'PFS'"),
+  c(ID = "OS", FLTTARGET = "ANL", FLTWHERE = "where PARAMCD eq 'OS'")
+))
+
+ANL <- stream_filter(
+  slref = ASL,
+  anl = ATE,
+  suffix = "IT_PFS_BIO",
+  filters = filters
 )
-
-ANL <- stream_filter(slref = ASL,
-                     anl = ATE,
-                     suffix = "IT_PFS_BIO",
-                     filters = filters)
-
 }
 \author{
 Iain Bennett
