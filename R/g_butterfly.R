@@ -169,7 +169,7 @@ g_butterfly <- function(category,
     if (block_count == "# of patients" && "bar_color" %in% colnames(.data)) {
       .data %>%
       dplyr::group_by(.data$y, .data$id) %>%
-        filter(.data$bar_color == max(.data$bar_color, na.rm = TRUE))
+        filter(.data$bar_color == sort(.data$bar_color, decreasing = TRUE)[1])
     } else {
       .data
     }
