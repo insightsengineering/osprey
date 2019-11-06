@@ -237,7 +237,7 @@ g_swimlane <- function(bar_id,
       scale_color_manual(
         name = "Marker Color",
         breaks = marker_data$marker_color,
-        values =     if (!is.null(marker_color_opt)) marker_color_opt else 1:25
+        values = if (!is.null(marker_color_opt)) marker_color_opt else 1:25
       )
 
   }
