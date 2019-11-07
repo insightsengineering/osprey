@@ -228,32 +228,54 @@ t_ae_oview <- function(id,
   df$dthfl <- factor(if_else(df$dthfl == "Y", 1, 0))
   df$dcsreas <- factor(if_else(df$dcsreas == "ADVERSE EVENT", 1, 0))
 
-  if ("fatal" %in% display_id) df_flags$fatal <- factor(if_else(df_flags$aesdth == "Y", 1, 0))
-  if ("ser" %in% display_id) df_flags$ser <- factor(if_else(df_flags$aeser == "Y", 1, 0))
+  if ("fatal" %in% display_id) {
+    df_flags$fatal <- factor(if_else(df_flags$aesdth == "Y", 1, 0))
+  }
+
+  if ("ser" %in% display_id) {
+    df_flags$ser <- factor(if_else(df_flags$aeser == "Y", 1, 0))
+  }
+
   if ("serwd" %in% display_id) {
     df_flags$serwd <- factor(if_else(df_flags$aeser == "Y" &
       df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
   }
+
   if ("serdsm" %in% display_id) {
     df_flags$serdsm <- factor(if_else(df_flags$aeser == "Y" &
       df_flags$aeacn %in% dsm, 1, 0))
   }
+
   if ("relser" %in% display_id) {
     df_flags$relser <- factor(if_else(df_flags$aeser == "Y" &
       df_flags$aerel == "Y", 1, 0))
   }
-  if ("wd" %in% display_id) df_flags$wd <- factor(if_else(df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
-  if ("dsm" %in% display_id) df_flags$dsm <- factor(if_else(df_flags$aeacn %in% dsm, 1, 0))
-  if ("rel" %in% display_id) df_flags$rel <- factor(if_else(df_flags$aerel == "Y", 1, 0))
+
+  if ("wd" %in% display_id) {
+    df_flags$wd <- factor(if_else(df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
+  }
+
+  if ("dsm" %in% display_id) {
+    df_flags$dsm <- factor(if_else(df_flags$aeacn %in% dsm, 1, 0))
+  }
+
+  if ("rel" %in% display_id) {
+    df_flags$rel <- factor(if_else(df_flags$aerel == "Y", 1, 0))
+  }
+
   if ("relwd" %in% display_id) {
     df_flags$relwd <- factor(if_else(df_flags$aerel == "Y" &
       df_flags$aeacn == "DRUG WITHDRAWN", 1, 0))
   }
+
   if ("reldsm" %in% display_id) {
     df_flags$reldsm <- factor(if_else(df_flags$aerel == "Y" &
       df_flags$aeacn %in% dsm, 1, 0))
   }
-  if ("ctc35" %in% display_id) df_flags$ctc35 <- factor(if_else(df_flags$aetoxgr %in% c("3", "4", "5"), 1, 0))
+
+  if ("ctc35" %in% display_id) {
+    df_flags$ctc35 <- factor(if_else(df_flags$aetoxgr %in% c("3", "4", "5"), 1, 0))
+  }
 
   # for extra flags
   if (!is.null(extra_flag)) {
@@ -282,7 +304,7 @@ t_ae_oview <- function(id,
       remove_dupl = TRUE,
       with_percent = TRUE
     )
-  }, df_patients, names(df_patients), c("uniqueid", "rowcount", "dthfl", "dcsreas"), SIMPLIFY = FALSE) # nolint
+  }, df_patients, names(df_patients), c("uniqueid", "rowcount", "dthfl", "dcsreas"), SIMPLIFY = FALSE)
 
   # Summary table: individual components
   term_label <- c(
@@ -313,7 +335,7 @@ t_ae_oview <- function(id,
       remove_dupl = TRUE,
       with_percent = TRUE
     )
-  }, df_ind, names(df_ind), display_id, SIMPLIFY = FALSE) # nolint
+  }, df_ind, names(df_ind), display_id, SIMPLIFY = FALSE)
 
   # extra flags
   if (!is.null(extra_flag)) {
@@ -332,7 +354,7 @@ t_ae_oview <- function(id,
         remove_dupl = TRUE,
         with_percent = TRUE
       )
-    }, df_extra, names(df_extra), colnames(extra_flag), SIMPLIFY = FALSE) # nolint
+    }, df_extra, names(df_extra), colnames(extra_flag), SIMPLIFY = FALSE)
 
     tbl_ind <- c(tbl_ind, tbl_extra)
   }
@@ -348,14 +370,14 @@ t_ae_oview <- function(id,
   tbls_ov <- Map(function(tbls_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables, lt1) # nolint
-  }, tbls_overview) # nolint
+  }, tbls_overview)
 
   tbls_ind <- c(list("Total number of patients with at least one" = tbl_ind))
   tbls_class <- Map(function(tbls_i, class_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables_condense, lt1)
     add_ae_class(indent(t2, 1), class_i)
-  }, tbls_ind, names(tbls_ind)) # nolint
+  }, tbls_ind, names(tbls_ind))
 
   tbl_total <- do.call(stack_rtables_condense, tbls_ov)
   tbl_cl <- do.call(stack_rtables_condense, tbls_class)

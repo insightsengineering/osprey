@@ -79,7 +79,7 @@
 #'   col_by = factor(ANL$ARM),
 #'   total = NULL
 #' )
-#' tbl
+#' tbl2
 #'
 t_ae <- function(class, term, id, col_by, total = "All Patients") {
 
@@ -132,8 +132,10 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
   class_label <- attr(class, "label")
   term_label <- attr(term, "label")
 
-  if (is.null(class_label)) class_label <- deparse(substitute(class))
-  if (is.null(term_label)) term_label <- deparse(substitute(term))
+  if (is.null(class_label))
+    class_label <- deparse(substitute(class))
+  if (is.null(term_label))
+    term_label <- deparse(substitute(term))
 
   # adding All Patients
   if (!is.null(total)) {
@@ -217,13 +219,13 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
         a <- a + tbl[1, i][1]
       }
       a
-    }, numeric(1)) # nolint
+    }, numeric(1))
 
     l_t_terms <- l_t_terms[order(-n_total_any, names(l_t_terms), decreasing = FALSE)]
 
 
     l_t_terms <- c(l_t_summary, l_t_terms)
-  }) #---------------------------end class and term chunk
+  })
 
   # now sort tables
   n_total_overall <- vapply(l_t_class_terms, function(tbl) {
@@ -232,7 +234,7 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
       a <- a + tbl[[1]][1, i][1]
     }
     a
-  }, numeric(1)) # nolint
+  }, numeric(1))
 
   l_t_class_terms <- l_t_class_terms[order(-n_total_overall, names(l_t_class_terms), decreasing = FALSE)]
 
@@ -294,12 +296,12 @@ t_ae <- function(class, term, id, col_by, total = "All Patients") {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
     t2 <- do.call(stack_rtables_condense, lt1)
     add_ae_class(indent(t2, 1), class_i)
-  }, tbls_all, names(tbls_all)) # nolint
+  }, tbls_all, names(tbls_all))
 
   tbls_ov <- Map(function(tbls_i) {
     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables_condense, lt1) # nolint
-  }, tbls_overview) # nolint
+    do.call(stack_rtables_condense, lt1) # nolint
+  }, tbls_overview)
 
 
   tbl_cl <- do.call(stack_rtables, tbls_class)

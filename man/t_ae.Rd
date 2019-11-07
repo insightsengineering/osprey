@@ -86,7 +86,7 @@ tbl2 <- t_ae(
   col_by = factor(ANL$ARM),
   total = NULL
 )
-tbl
+tbl2
 
 }
 \author{

@@ -1,12 +1,15 @@
 Package: osprey
 Type: Package
 Title: R package to create TLGs
-Version: 0.1.0
+Version: 0.1.1
+Date: 2019-11-06
 Authors@R: c(
-  person("Mika", "Maekinen", email = "mika.maekinen@roche.com", role = c("aut", "cre")),
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut")),
+  person("Nina", "Qi", email = "qi.ting@gene.com", role = c("aut", "cre")),
   person("Chendi", "Liao", email = "chendi.liao@roche.com", role = c("aut")),
-  person("Nina", "Qi", email = "qit3@gene.com", role = c("aut")),
+  person("Mahdi", "About", email = "mahdi.about@roche.com", role = c("aut")),
+  person("Fei", "Wang", email = "fei.wang.fw6@roche.com", role = c("aut")),
+  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut")),
+  person("Mika", "Maekinen", email = "mika.maekinen@roche.com", role = c("aut")),
   person("Carolyn", "Zhang", email = "carolyn.zhang@duke.edu", role = c("aut"))
   )
 Description: Community effort to collect TLG code and create a catalogue.
@@ -19,6 +22,7 @@ Depends:
   dplyr (>= 0.8.0), 
   ggplot2 (>= 2.0.0)
 Imports:
+  grid,
   gridExtra,
   gtable,
   rlang,
@@ -29,6 +33,7 @@ Suggests:
   knitr,
   random.cdisc.data (>= 0.3.0),
   test.nest (>= 0.2.0),
+  tidyr,
   testthat
 RoxygenNote: 6.1.1
 URL:
