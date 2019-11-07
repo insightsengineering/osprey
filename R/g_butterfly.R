@@ -106,9 +106,9 @@ g_butterfly <- function(category,
                         sort_by = "alphabetical",
                         show_legend = TRUE) {
   stop_if_not(
-    list(!is.empty(category), "missing argument: category must be specified"),
-    list(!is.empty(right_flag), "missing argument: right_flag must be specified"),
-    list(!is.empty(left_flag), "missing argument: left_flag must be specified"),
+    list(!is_empty(category), "missing argument: category must be specified"),
+    list(!is_empty(right_flag), "missing argument: right_flag must be specified"),
+    list(!is_empty(left_flag), "missing argument: left_flag must be specified"),
 
     list(length(unique(vapply(list(category, right_flag, left_flag), length, integer(1)))) == 1,
          "invalid arguments: check that the length of input arguments are identical"),
@@ -131,10 +131,10 @@ g_butterfly <- function(category,
            (is.data.frame(facet_rows) && nrow(facet_rows) == length(category)),
          "invalid arguments: check that the length of block_color is equal as other inputs"),
 
-    list(is.character.single(x_label), "invalid arguments: check that x_label is of type character"),
-    list(is.character.single(y_label), "invalid arguments: check that y_label is of type character"),
-    list(is.character.single(legend_label), "invalid arguments: check that legend_label is of type character"),
-    list(is.character.single(sort_by), "invalid arguments: check that sort_by is of type character"),
+    list(is_character_single(x_label), "invalid arguments: check that x_label is of type character"),
+    list(is_character_single(y_label), "invalid arguments: check that y_label is of type character"),
+    list(is_character_single(legend_label), "invalid arguments: check that legend_label is of type character"),
+    list(is_character_single(sort_by), "invalid arguments: check that sort_by is of type character"),
 
     list(sort_by %in% c("count", "alphabetical", "right", "left"),
          'invalid arguments: sort_by should be "count" or "alphabetical"')
