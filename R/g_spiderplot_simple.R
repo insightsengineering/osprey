@@ -18,7 +18,6 @@
 #' @author Mika Maekinen
 #'
 #' @examples
-#' library(random.cdisc.data)
 #' library(dplyr)
 #'
 #' ADSL <- rADSL
@@ -49,6 +48,5 @@ spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
     geom_text(aes_string(x = days, y = mes_value, label = byvar), data = last_obs, hjust = 0) +
     geom_hline(aes(yintercept = 0), linetype = "dotted", color = "black") +
     xlab("Time (Days)") +
-    ylab("Change(%) from Baseline")# + # nolint
-    # expand_limits(anl, x = select_(anl, mesValue) * 1.2) # nolint
+    ylab("Change(%) from Baseline")
 }

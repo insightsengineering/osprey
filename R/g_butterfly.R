@@ -25,7 +25,7 @@
 #' @param legend_label \code{character} for legend label, default is AETOXGR
 #' @param sort_by character string that defines the ordering of the class and term
 #' variables in the output table,
-#' options: "alphabetical" or "count", default here is set to "count"
+#' options: "alphabetical", "count", "left", "right", default here is set to "count"
 #' @param show_legend boolean of whether color coding legend is included,
 #' default here is FALSE
 #'
@@ -51,22 +51,39 @@
 #'
 #' ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
 #' ANL <- ANL %>%
-#'   dplyr::mutate(r_flag = ifelse(RACE == "ASIAN", 1, 0)) %>%
-#'   dplyr::mutate(l_flag = ifelse(SEX == "M", 1, 0))
+#'   dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) %>%
+#'   dplyr::mutate(flag2 = ifelse(SEX == "M", 1, 0))
 #' ANL <- na.omit(ANL)
 #' ANL <- ANL %>% dplyr::filter(AEBODSYS %in% c(
 #'   "Investigations", "Vascular disorders",
 #'   "Musculoskeletal and connective tissue disorders"
 #' ))
 #'
-#' \donttest{
+#' # Example 1, # of AEs
 #' g_butterfly(
 #'   category = ANL$AEBODSYS,
-#'   right_flag = ANL$r_flag,
-#'   left_flag = ANL$l_flag,
-#'   group_names = c("r_flag Asian", "l_flag M"),
+#'   right_flag = ANL$flag1,
+#'   left_flag = ANL$flag2,
+#'   group_names = c("flag1 Asian", "flag2 M"),
+#'   block_count = "# of AEs",
+#'   block_color = ANL$AETOXGR,
+#'   id = ANL$USUBJID,
+#'   x_label = "# of AEs",
+#'   y_label = "AE Body System",
+#'   legend_label = "AETOXGR",
+#'   sort_by = "count",
+#'   show_legend = TRUE
+#' )
+#'
+#' # Example 2, # of patients with facet
+#' g_butterfly(
+#'   category = ANL$AEBODSYS,
+#'   right_flag = ANL$flag1,
+#'   left_flag = ANL$flag2,
+#'   group_names = c("flag1 Asian", "flag2 M"),
 #'   block_count = "# of patients",
 #'   block_color = ANL$AETOXGR,
+#'   facet_rows = ANL$ARM,
 #'   id = ANL$USUBJID,
 #'   x_label = "# of patients",
 #'   y_label = "AE Derived Terms",
@@ -74,7 +91,7 @@
 #'   sort_by = "count",
 #'   show_legend = TRUE
 #' )
-#' }
+#'
 g_butterfly <- function(category,
                         right_flag,
                         left_flag,
@@ -89,9 +106,9 @@ g_butterfly <- function(category,
                         sort_by = "alphabetical",
                         show_legend = TRUE) {
   stop_if_not(
-    list(!is.empty(category), "missing argument: category must be specified"),
-    list(!is.empty(right_flag), "missing argument: right_flag must be specified"),
-    list(!is.empty(left_flag), "missing argument: left_flag must be specified"),
+    list(!is_empty(category), "missing argument: category must be specified"),
+    list(!is_empty(right_flag), "missing argument: right_flag must be specified"),
+    list(!is_empty(left_flag), "missing argument: left_flag must be specified"),
 
     list(length(unique(vapply(list(category, right_flag, left_flag), length, integer(1)))) == 1,
          "invalid arguments: check that the length of input arguments are identical"),
@@ -110,16 +127,17 @@ g_butterfly <- function(category,
          "invalid arguments: check that the length of block_color is equal as other inputs"),
 
     list(is.null(facet_rows) ||
-        (length(facet_rows) == length(category)) ||
-        (is.data.frame(facet_rows) && nrow(facet_rows) == length(category)),
+           (length(facet_rows) == length(category)) ||
+           (is.data.frame(facet_rows) && nrow(facet_rows) == length(category)),
          "invalid arguments: check that the length of block_color is equal as other inputs"),
 
-    list(is.character.single(x_label), "invalid arguments: check that x_label is of type character"),
-    list(is.character.single(y_label), "invalid arguments: check that y_label is of type character"),
-    list(is.character.single(legend_label), "invalid arguments: check that legend_label is of type character"),
-    list(is.character.single(sort_by), "invalid arguments: check that sort_by is of type character"),
+    list(is_character_single(x_label), "invalid arguments: check that x_label is of type character"),
+    list(is_character_single(y_label), "invalid arguments: check that y_label is of type character"),
+    list(is_character_single(legend_label), "invalid arguments: check that legend_label is of type character"),
+    list(is_character_single(sort_by), "invalid arguments: check that sort_by is of type character"),
 
-    list(sort_by %in% c("count", "alphabetical"), 'invalid arguments: sort_by should be "count" or "alphabetical"')
+    list(sort_by %in% c("count", "alphabetical", "right", "left"),
+         'invalid arguments: sort_by should be "count" or "alphabetical"')
   )
 
   # set up data-------
@@ -140,59 +158,87 @@ g_butterfly <- function(category,
     groups <- c(groups, "bar_color")
   }
 
-  get_counts <- function(block_count, .data) {
+  get_counts <- function(.data, block_count) {
     if (block_count == "# of patients") {
       length(unique(.data$id))
     } else if (block_count == "# of AEs") {
       n()
     }
   }
+  highest_grade <- function(.data, block_count) {
+    if (block_count == "# of patients" && "bar_color" %in% colnames(.data)) {
+      .data %>%
+        dplyr::group_by(.data$y, .data$id) %>%
+        dplyr::filter(.data$bar_color == sort(.data$bar_color, decreasing = TRUE)[1])
+    } else {
+      .data
+    }
+  }
 
   counts_r <- dat %>%
-    filter(.data$r_flag == 1) %>%
-    group_by_(.dots = groups) %>%
-    summarize(n_i = get_counts(block_count, .data)) %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
+    dplyr::filter(.data$r_flag == 1) %>%
+    highest_grade(block_count) %>%
+    dplyr::group_by_(.dots = groups) %>%
+    dplyr::summarize(n_i = get_counts(.data, block_count)) %>%
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   counts_l <- dat %>%
     filter(.data$l_flag == 1) %>%
-    group_by_(.dots = groups) %>%
-    summarize(n_i = get_counts(block_count, .data)) %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
+    highest_grade(block_count) %>%
+    dplyr::group_by_(.dots = groups) %>%
+    dplyr::summarize(n_i = get_counts(.data, block_count)) %>%
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   total_label_pos_r <- counts_r %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(label_ypos = max(.data$label_ypos))
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::summarize(label_ypos = max(.data$label_ypos))
 
   total_label_pos_l <- counts_l %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(label_ypos = max(.data$label_ypos))
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::summarize(label_ypos = max(.data$label_ypos))
 
   total_text_ann_r <- dat %>%
-    filter(.data$r_flag == 1) %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = get_counts(block_count, .data)) %>%
-    left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
+    dplyr::filter(.data$r_flag == 1) %>%
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::summarize(n = get_counts(.data, block_count)) %>%
+    dplyr::left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
 
   total_text_ann_l <- dat %>%
-    filter(.data$l_flag == 1) %>%
-    group_by_(.dots = setdiff(groups, "bar_color")) %>%
-    summarize(n = get_counts(block_count, .data)) %>%
-    left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
+    dplyr::filter(.data$l_flag == 1) %>%
+    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::summarize(n = get_counts(.data, block_count)) %>%
+    dplyr::left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
 
 
   if (sort_by == "alphabetical") {
     counts_r$y <- factor(counts_r$y, levels = unique(sort(as.character(counts_r$y), decreasing = TRUE)))
     counts_l$y <- factor(counts_l$y, levels = unique(sort(as.character(counts_l$y), decreasing = TRUE)))
   } else if (sort_by == "count") {
-    tot <- bind_rows(total_text_ann_r, total_text_ann_l) %>%
-      group_by(.data$y) %>%
-      summarize(n = max(n))
+    tot <- dplyr::bind_rows(total_text_ann_r, total_text_ann_l) %>%
+      dplyr::group_by(.data$y) %>%
+      dplyr::summarize(n = sum(n)) %>%
+      dplyr::arrange(n)
 
-    counts_r$y <- factor(counts_r$y, levels = tot$y[order(tot$n)])
-    counts_l$y <- factor(counts_l$y, levels = tot$y[order(tot$n)])
+    counts_r$y <- factor(counts_r$y, levels = tot$y)
+    counts_l$y <- factor(counts_l$y, levels = tot$y)
+  } else if (sort_by == "right") {
+    tot <- dplyr::full_join(total_text_ann_r, select(total_text_ann_l, -n), by = "y") %>%
+      dplyr::group_by(.data$y) %>%
+      dplyr::summarize(n = sum(n, na.rm = TRUE)) %>%
+      dplyr::arrange(n)
+
+    counts_r$y <- factor(counts_r$y, levels = tot$y)
+    counts_l$y <- factor(counts_l$y, levels = tot$y)
+  } else if (sort_by == "left") {
+    tot <- dplyr::full_join(total_text_ann_l, select(total_text_ann_r, -n), by = "y") %>%
+      dplyr::group_by(.data$y) %>%
+      dplyr::summarize(n = sum(n, na.rm = TRUE)) %>%
+      dplyr::arrange(n)
+
+    counts_r$y <- factor(counts_r$y, levels = tot$y)
+    counts_l$y <- factor(counts_l$y, levels = tot$y)
   }
 
   max_c <- max(c(total_text_ann_r$label_ypos, total_text_ann_l$label_ypos))
@@ -257,7 +303,11 @@ g_butterfly <- function(category,
 
   g_1 <- gtable_add_grob(
     g_0,
-    grid.text(str_wrap(g_r, width = 30), x = 1, just = "center", hjust = 1, gp = gpar(fontsize = 11)),
+    grid.text(str_wrap(g_r, width = 30),
+              x = 1,
+              just = "center",
+              hjust = 1,
+              gp = gpar(fontsize = 11)),
     t = 1.5, l = g_0$layout[grep("axis-r", g_0$layout$name)[1], 2], b = 3, name = "right-title", clip = "off"
   )
   g_2 <- gtable_add_grob(

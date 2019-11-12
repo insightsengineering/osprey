@@ -62,8 +62,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
 
     # find filter meta data
 
-    this_filter_df <- dplyr::filter(filters, .data$ID == this_filter) %>%
-      unique()
+    this_filter_df <- unique(dplyr::filter(filters, .data$ID == this_filter))
 
     if (nrow(this_filter_df) == 0) {
       stop(paste("Filter", this_filter, "not found in filters"))
@@ -71,8 +70,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
 
     if (nrow(this_filter_df) > 1) {
       warning(paste("Filter", this_filter, "is duplicated in filters"))
-      this_filter_df <- this_filter_df %>%
-        slice(1)
+      this_filter_df <- slice(this_filter_df, 1)
     }
 
     # try and convert where clause from sas to R
@@ -109,10 +107,10 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
       msg2 <- paste0("\n", nrow(new_df), " of ", nrow(this_df),
                      " observations selected from ", this_filter_df$FLTTARGET)
       cat(paste("\nFilter", this_filter, "applied", msg1, msg2, "\n"))
-      if (is.null(actual_suffix)) {
-        actual_suffix <- this_filter
+      actual_suffix <- if (is.null(actual_suffix)) {
+         this_filter
       } else {
-        actual_suffix <- paste(actual_suffix, this_filter, sep = "_")
+        paste(actual_suffix, this_filter, sep = "_")
       }
     }
 
@@ -126,11 +124,10 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
 
   # finished filtering - combine results data
   # what variables to keep from SLREF?
-  if (is.null(slref_keep)) {
-    slref_keep <- usubjid
+  slref_keep <- if (is.null(slref_keep)) {
+    usubjid
   } else {
-    slref_keep <- c(slref_keep, usubjid) %>%
-      unique()
+    unique(c(slref_keep, usubjid))
   }
 
   # keep these variables only
@@ -228,10 +225,7 @@ stream_filter_convwhere <- function(x) {
   # collapse back to have quoted
   this_rclause <- paste(this_rclause_quotes, collapse = "'")
 
-
-
   # if contains an in  statement need to ensure commas exist
-
   if (grepl(" %in% c", this_rclause, fixed = TRUE)) {
 
     # get the clause (assume only 1 per filter...)
@@ -240,6 +234,7 @@ stream_filter_convwhere <- function(x) {
 
     if (length(temp1_str) != 2) {
       stop("ERROR - function can't handle multiple IN operators.")
+
     } else {
       left_str <- temp1_str[1]
       in_right_str <- temp1_str[2]
