@@ -1,3 +1,6 @@
+# osprey development version
+- to edit
+
 # osprey 0.1.1
 Refactoring package according to the NEST standards.
 
