@@ -526,6 +526,8 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #' @examples
 #' library(osprey)
+#' library(random.cdisc.data)
+#' library(utils.nest)
 #'
 #' #Data preparation
 #' sl_start_date <- "TRTSDT"
