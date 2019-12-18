@@ -112,33 +112,8 @@
 #'   & is.na(ADCM$ASTDY) == FALSE), ]
 #' }
 #'
-#' ## ADEX
-#' rADEX <- radex(cached = TRUE) # nolint
 #'
-#' ADEX <- left_join(ADSL, rADEX)
-#'
-#' ADEX <- ADEX %>% # nolint
-#'   filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) %>%
-#'  filter(!is.na(ASTDTM)) %>%
-#'   mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "%d-%b-%y") -
-#'   as.Date(eval(parse(text = sl_start_date)), "%d%b%Y")) + 1) %>%
-#'   select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT, ASTDT_dur)
-#'
-#' ADEX <- split(ADEX, ADEX$USUBJID) %>% # nolint
-#'   lapply(function(pinfo) {
-#'     pinfo %>%
-#'       arrange(PARCAT2, PARAMCD) %>%
-#'       ungroup %>%
-#'       mutate(diff = c(0, diff(AVAL, lag = 1))) %>%
-#'       mutate(Modification = case_when(diff < 0 ~ "Decrease",
-#'                                       diff > 0 ~ "Increase",
-#'                                       diff == 0 ~ "None")) %>%
-#'       mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "%d-%b-%y") -
-#'                                       as.Date(eval(parse(text = sl_start_date)), "%d%b%Y")) + 1)
-#'   })  %>%
-#'   Reduce(rbind, .) %>%
-#'   as.data.frame
-#'
+#' ADEX <- NULL
 #'
 #' ## ADLB
 #' rADLB <- radlb(cached = TRUE) # nolint
