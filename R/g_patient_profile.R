@@ -71,7 +71,7 @@
 #'
 #' ## ADAE
 #' rADAE <- radae(cached = TRUE) # nolint
-#' ADAE <- inner_join(rADAE, ADSL, by = intersect(names(ADSL), names(rADAE))) %>% as.data.frame() # nolint
+#' ADAE <- merge(rADAE, ADSL, by = c("USUBJID", "STUDYID")) %>% as.data.frame() # nolint
 #'
 #' ADAE <- ADAE %>% # nolint
 #'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
@@ -83,7 +83,7 @@
 #' ## ADRS
 #' rADRS <- radrs(cached = TRUE) #nolint
 #' # ADRS
-#' ADRS <- suppressWarnings(inner_join(ADSL, rADRS, by = intersect(names(ADSL), names(rADRS)))) %>% as.data.frame() # nolint
+#' ADRS <- merge(ADSL, rADRS, by = c("USUBJID", "STUDYID")) %>% as.data.frame() # nolint
 #' ADRS <- ADRS %>% # nolint
 #'   mutate(ADY = ceiling(as.numeric(difftime(ADTM,
 #'   as.Date(eval(parse(text = sl_start_date))), units = "days")))) %>%
@@ -97,7 +97,7 @@
 #' ## ADCM
 #' rADCM <- radcm(cached = TRUE) # nolint
 #' # ADCM
-#' ADCM <- suppressWarnings(inner_join(ADSL, rADCM, by = intersect(names(ADSL), names(rADCM)))) %>% as.data.frame() #nolint
+#' ADCM <- merge(ADSL, rADCM, by = c("USUBJID", "STUDYID")) %>% as.data.frame() #nolint
 #' ADCM <- ADCM %>% # nolint
 #'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
 #'                                              units = "days"))),
@@ -112,7 +112,7 @@
 #'
 #' ## ADEX
 #' rADEX <- radex(cached = TRUE) # nolint
-#' ADEX <- suppressWarnings(inner_join(ADSL, rADEX, by = intersect(names(ADSL), names(rADEX)))) %>% as.data.frame() # nolint
+#' ADEX <- merge(ADSL, rADEX, by = c("USUBJID", "STUDYID")) %>% as.data.frame() # nolint
 #' ADEX <- ADEX %>% # nolint
 #'   filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) %>%
 #'   mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "%d-%b-%y") -
@@ -137,7 +137,7 @@
 #'
 #' ## ADLB
 #' rADLB <- radlb(cached = TRUE) # nolint
-#' ADLB <- suppressWarnings(inner_join(ADSL, rADLB, by = intersect(names(ADSL), names(rADLB)))) %>% as.data.frame() # nolint
+#' ADLB <- merge(ADSL, rADLB, by = c("USUBJID", "STUDYID")) %>% as.data.frame() # nolint
 #' ADLB <- ADLB %>% # nolint
 #'   group_by(USUBJID) %>%
 #'   mutate(LBSTRESC = as.numeric(.data$LBSTRESC),
