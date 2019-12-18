@@ -72,24 +72,39 @@
 #'
 #' ## ADAE
 #' rADAE <- radae(cached = TRUE) # nolint
+#' ADAE <- left_join(ADSL, rADAE)
 #'
-#' ADAE <- rADAE %>%
-#'   filter(USUBJID == ADSL$USUBJID) %>%
+#' ADAE <- ADAE %>% # nolint
+#'   filter(!is.na(ASTDTM)) %>%
+#'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
+#'  filter(!is.na(AENDTM)) %>%
+#'  mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
 #'   select(USUBJID, AESOC, AEDECOD, AESER, AETOXGR, AREL, ASTDY, AENDY)
 #'
 #' ## ADRS
 #' rADRS <- radrs(cached = TRUE) #nolint
 #'
-#' ADRS <- rADRS %>% # nolint
-#'   filter(USUBJID == ADSL$USUBJID) %>%
+#' ADRS <- left_join(ADSL, rADRS)
+#'
+#' ADRS <- ADRS %>% # nolint
+#'   mutate(ADY = ceiling(as.numeric(difftime(ADTM,
+#'   as.Date(eval(parse(text = sl_start_date))), units = "days")))) %>%
 #'   select(USUBJID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM) %>%
 #'   filter(is.na(ADY) == FALSE)
 #'
 #'
 #' ## ADCM
 #' rADCM <- radcm(cached = TRUE) # nolint
-#' ADCM <- rADCM %>% # nolint
-#'   filter(USUBJID == ADSL$USUBJID) %>%
+#' ADCM <- left_join(ADSL, rADCM)
+#' ADCM <- ADCM %>% # nolint
+#'   filter(!is.na(ASTDTM)) %>%
+#'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
+#'  filter(!is.na(AENDTM)) %>%
+#'   mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
 #'   select(USUBJID, CMDECOD, ASTDTM, AENDTM, ASTDY, AENDY)
 #'
 #' if (length(unique(ADCM$USUBJID)) > 0) {
@@ -100,12 +115,14 @@
 #' ## ADEX
 #' rADEX <- radex(cached = TRUE) # nolint
 #'
-#' ADEX <- rADEX %>% # nolint
-#'   filter(USUBJID == ADSL$USUBJID) %>%
+#' ADEX <- left_join(ADSL, rADEX)
+#'
+#' ADEX <- ADEX %>% # nolint
 #'   filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) %>%
-#'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y"),
-#'          max_date = max(as.Date(.data$LSTALVDT, "%d%b%Y"), as.Date(.data$DTHDT, "%d%b%Y"))) %>%
-#'   select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT)
+#'  filter(!is.na(ASTDTM)) %>%
+#'   mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "%d-%b-%y") -
+#'   as.Date(eval(parse(text = sl_start_date)), "%d%b%Y")) + 1) %>%
+#'   select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT, ASTDT_dur)
 #'
 #' ADEX <- split(ADEX, ADEX$USUBJID) %>% # nolint
 #'   lapply(function(pinfo) {
@@ -126,13 +143,18 @@
 #' ## ADLB
 #' rADLB <- radlb(cached = TRUE) # nolint
 #'
-#' ADLB <- rADLB %>% # nolint
-#'   filter(USUBJID == ADSL$USUBJID) %>%
-#'   select(USUBJID,PARAM,PARAMCD,LBCAT, LBTESTCD, LBSTRESC, ADY, ANRIND) %>%
+#' ADLB <- left_join(ADSL, rADLB)
+#'
+#' ADLB <- ADLB %>% # nolint
+#'   group_by(USUBJID) %>%
 #'   mutate(LBSTRESC = as.numeric(.data$LBSTRESC),
 #'          ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) %>%
 #'   filter(is.na(.data$LBSTRESC) == FALSE & is.na(.data$ANRIND) == FALSE) %>%
 #'   as.data.frame
+#' ADLB <- ADLB %>%  # nolint
+#'   mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM,
+#'                                            as.Date(eval(parse(text = sl_start_date))),
+#'                                            units = "days"))))
 #'
 #'
 #'
@@ -525,9 +547,9 @@ patient_domain_profile <- function(domain = NULL,
 #' @export
 #'
 #' @examples
-#' library(osprey)
 #' library(random.cdisc.data)
 #' library(utils.nest)
+#' library(tern)
 #'
 #' #Data preparation
 #' sl_start_date <- "TRTSDT"
@@ -547,24 +569,39 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #' ## ADAE
 #' rADAE <- radae(cached = TRUE) # nolint
+#' ADAE <- left_join(ADSL, rADAE)
 #'
-#' ADAE <- rADAE %>%
-#'   filter(USUBJID == ADSL$USUBJID) %>%
+#' ADAE <- ADAE %>% # nolint
+#'   filter(!is.na(ASTDTM)) %>%
+#'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
+#'  filter(!is.na(AENDTM)) %>%
+#'  mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
 #'   select(USUBJID, AESOC, AEDECOD, AESER, AETOXGR, AREL, ASTDY, AENDY)
 #'
 #' ## ADRS
 #' rADRS <- radrs(cached = TRUE) #nolint
 #'
-#' ADRS <- rADRS %>% # nolint
-#'   filter(USUBJID == ADSL$USUBJID) %>%
+#' ADRS <- left_join(ADSL, rADRS)
+#'
+#' ADRS <- ADRS %>% # nolint
+#'   mutate(ADY = ceiling(as.numeric(difftime(ADTM,
+#'   as.Date(eval(parse(text = sl_start_date))), units = "days")))) %>%
 #'   select(USUBJID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM) %>%
 #'   filter(is.na(ADY) == FALSE)
 #'
 #'
 #' ## ADCM
 #' rADCM <- radcm(cached = TRUE) # nolint
-#' ADCM <- rADCM %>% # nolint
-#'   filter(USUBJID == ADSL$USUBJID) %>%
+#' ADCM <- left_join(ADSL, rADCM)
+#' ADCM <- ADCM %>% # nolint
+#'   filter(!is.na(ASTDTM)) %>%
+#'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
+#'  filter(!is.na(AENDTM)) %>%
+#'   mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
 #'   select(USUBJID, CMDECOD, ASTDTM, AENDTM, ASTDY, AENDY)
 #'
 #' if (length(unique(ADCM$USUBJID)) > 0) {
@@ -575,12 +612,14 @@ patient_domain_profile <- function(domain = NULL,
 #' ## ADEX
 #' rADEX <- radex(cached = TRUE) # nolint
 #'
-#' ADEX <- rADEX %>% # nolint
-#'   filter(USUBJID == ADSL$USUBJID) %>%
+#' ADEX <- left_join(ADSL, rADEX)
+#'
+#' ADEX <- ADEX %>% # nolint
 #'   filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) %>%
-#'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y"),
-#'          max_date = max(as.Date(.data$LSTALVDT, "%d%b%Y"), as.Date(.data$DTHDT, "%d%b%Y"))) %>%
-#'   select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT)
+#'  filter(!is.na(ASTDTM)) %>%
+#'   mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "%d-%b-%y") -
+#'   as.Date(eval(parse(text = sl_start_date)), "%d%b%Y")) + 1) %>%
+#'   select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT, ASTDT_dur)
 #'
 #' ADEX <- split(ADEX, ADEX$USUBJID) %>% # nolint
 #'   lapply(function(pinfo) {
@@ -594,18 +633,25 @@ patient_domain_profile <- function(domain = NULL,
 #'       mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "%d-%b-%y") -
 #'                                       as.Date(eval(parse(text = sl_start_date)), "%d%b%Y")) + 1)
 #'   })  %>%
-#'   Reduce(rbind, .)
+#'   Reduce(rbind, .) %>%
+#'   as.data.frame
 #'
 #'
 #' ## ADLB
 #' rADLB <- radlb(cached = TRUE) # nolint
 #'
-#' ADLB <- rADLB %>% # nolint
-#'   filter(USUBJID == ADSL$USUBJID) %>%
-#'   select(USUBJID,PARAM,PARAMCD,LBCAT, LBTESTCD, LBSTRESC, ADY, ANRIND) %>%
+#' ADLB <- left_join(ADSL, rADLB)
+#'
+#' ADLB <- ADLB %>% # nolint
+#'   group_by(USUBJID) %>%
 #'   mutate(LBSTRESC = as.numeric(.data$LBSTRESC),
 #'          ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) %>%
-#'   filter(is.na(.data$LBSTRESC) == FALSE & is.na(.data$ANRIND) == FALSE)
+#'   filter(is.na(.data$LBSTRESC) == FALSE & is.na(.data$ANRIND) == FALSE) %>%
+#'   as.data.frame
+#' ADLB <- ADLB %>%  # nolint
+#'   mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM,
+#'                                            as.Date(eval(parse(text = sl_start_date))),
+#'                                            units = "days"))))
 #'
 #' # Example Patient Profile plot 5 domains
 #' g_patient_profile(select_ex = TRUE,
