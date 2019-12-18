@@ -81,6 +81,7 @@ all requested domain plots into one patient profile.
 
 library(random.cdisc.data)
 library(utils.nest)
+library(tern)
 
 #Data preparation
 sl_start_date <- "TRTSDT"
@@ -90,7 +91,7 @@ rADSL <- radsl(cached = TRUE) # nolint
 ADSL <-  rADSL \%>\% # nolint
   group_by(.data$USUBJID) \%>\%
   mutate(TRTSDT = as.Date(.data$TRTSDTM, "\%d\%b\%Y"),
-         max_date = max(as.Date(.data$LSTALVDT, "\%d\%b\%Y"), as.Date(.data$DTHDT, "\%d\%b\%Y"), na.rm=TRUE),
+         max_date = max(as.Date(.data$LSTALVDT, "\%d\%b\%Y"), as.Date(.data$DTHDT, "\%d\%b\%Y")),
   ) \%>\%
   mutate(max_day = as.numeric(as.Date(.data$max_date) -
   as.Date(eval(parse(text = sl_start_date)))) + 1) \%>\%
@@ -113,7 +114,7 @@ ADAE <- ADAE \%>\% # nolint
 
 ## ADRS
 rADRS <- radrs(cached = TRUE) #nolint
-# ADRS
+
 ADRS <- left_join(ADSL, rADRS)
 
 ADRS <- ADRS \%>\% # nolint
@@ -122,13 +123,9 @@ ADRS <- ADRS \%>\% # nolint
   select(USUBJID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM) \%>\%
   filter(is.na(ADY) == FALSE)
 
-#ADRS_var <- c("OVR", "BOR", "CBOR")
-#ADRS <- ADRS \%>\%
-#filter(PARAMCD \%in\% ADRS_var)
 
 ## ADCM
 rADCM <- radcm(cached = TRUE) # nolint
-# ADCM
 ADCM <- left_join(ADSL, rADCM)
 ADCM <- ADCM \%>\% # nolint
   filter(!is.na(ASTDTM)) \%>\%
@@ -144,35 +141,12 @@ if (length(unique(ADCM$USUBJID)) > 0) {
   & is.na(ADCM$ASTDY) == FALSE), ]
 }
 
-## ADEX
-rADEX <- radex(cached = TRUE) # nolint
-ADEX <- left_join(ADSL, rADEX)
 
-ADEX <- ADEX \%>\% # nolint
-  filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) \%>\%
- filter(!is.na(ASTDTM)) \%>\%
-  mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "\%d-\%b-\%y") -
-  as.Date(eval(parse(text = sl_start_date)), "\%d\%b\%Y")) + 1) \%>\%
-  select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT, ASTDT_dur)
-
-ADEX <- split(ADEX, ADEX$USUBJID) \%>\% # nolint
-  lapply(function(pinfo) {
-    pinfo \%>\%
-      arrange(PARCAT2, PARAMCD) \%>\%
-      ungroup \%>\%
-      mutate(diff = c(0, diff(AVAL, lag = 1))) \%>\%
-      mutate(Modification = case_when(diff < 0 ~ "Decrease",
-                                      diff > 0 ~ "Increase",
-                                      diff == 0 ~ "None")) \%>\%
-      mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "\%d-\%b-\%y") -
-                                      as.Date(eval(parse(text = sl_start_date)), "\%d\%b\%Y")) + 1)
-  })  \%>\%
-  Reduce(rbind, .) \%>\%
-  as.data.frame
-
+ADEX <- NULL
 
 ## ADLB
 rADLB <- radlb(cached = TRUE) # nolint
+
 ADLB <- left_join(ADSL, rADLB)
 
 ADLB <- ADLB \%>\% # nolint
@@ -185,7 +159,6 @@ ADLB <- ADLB \%>\%  # nolint
   mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM,
                                            as.Date(eval(parse(text = sl_start_date))),
                                            units = "days"))))
-
 
 
 

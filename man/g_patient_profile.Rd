@@ -78,7 +78,88 @@ If there is a missing dataset, assign a NULL value to it. ie) ADRS <- NULL
 prior to running the patient profile plot.
 }
 \examples{
-library(osprey)
+library(random.cdisc.data)
+library(utils.nest)
+library(tern)
+
+#Data preparation
+sl_start_date <- "TRTSDT"
+
+## ADSL
+rADSL <- radsl(cached = TRUE) # nolint
+ADSL <-  rADSL \%>\% # nolint
+  group_by(.data$USUBJID) \%>\%
+  mutate(TRTSDT = as.Date(.data$TRTSDTM, "\%d\%b\%Y"),
+         max_date = max(as.Date(.data$LSTALVDT, "\%d\%b\%Y"), as.Date(.data$DTHDT, "\%d\%b\%Y")),
+  ) \%>\%
+  mutate(max_day = as.numeric(as.Date(.data$max_date) -
+  as.Date(eval(parse(text = sl_start_date)))) + 1) \%>\%
+  filter(USUBJID == rADSL$USUBJID[1])
+
+
+
+## ADAE
+rADAE <- radae(cached = TRUE) # nolint
+ADAE <- left_join(ADSL, rADAE)
+
+ADAE <- ADAE \%>\% # nolint
+  filter(!is.na(ASTDTM)) \%>\%
+  mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
+                                             units = "days")))) \%>\%
+ filter(!is.na(AENDTM)) \%>\%
+ mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+                                             units = "days")))) \%>\%
+  select(USUBJID, AESOC, AEDECOD, AESER, AETOXGR, AREL, ASTDY, AENDY)
+
+## ADRS
+rADRS <- radrs(cached = TRUE) #nolint
+
+ADRS <- left_join(ADSL, rADRS)
+
+ADRS <- ADRS \%>\% # nolint
+  mutate(ADY = ceiling(as.numeric(difftime(ADTM,
+  as.Date(eval(parse(text = sl_start_date))), units = "days")))) \%>\%
+  select(USUBJID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM) \%>\%
+  filter(is.na(ADY) == FALSE)
+
+
+## ADCM
+rADCM <- radcm(cached = TRUE) # nolint
+ADCM <- left_join(ADSL, rADCM)
+ADCM <- ADCM \%>\% # nolint
+  filter(!is.na(ASTDTM)) \%>\%
+  mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
+                                             units = "days")))) \%>\%
+ filter(!is.na(AENDTM)) \%>\%
+  mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+                                             units = "days")))) \%>\%
+  select(USUBJID, CMDECOD, ASTDTM, AENDTM, ASTDY, AENDY)
+
+if (length(unique(ADCM$USUBJID)) > 0) {
+  ADCM <- ADCM[which(ADCM$AENDY >= -28 | is.na(ADCM$AENDY) == TRUE
+  & is.na(ADCM$ASTDY) == FALSE), ]
+}
+
+## ADEX
+ADEX <- NULL
+
+
+
+## ADLB
+rADLB <- radlb(cached = TRUE) # nolint
+
+ADLB <- left_join(ADSL, rADLB)
+
+ADLB <- ADLB \%>\% # nolint
+  group_by(USUBJID) \%>\%
+  mutate(LBSTRESC = as.numeric(.data$LBSTRESC),
+         ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) \%>\%
+  filter(is.na(.data$LBSTRESC) == FALSE & is.na(.data$ANRIND) == FALSE) \%>\%
+  as.data.frame
+ADLB <- ADLB \%>\%  # nolint
+  mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM,
+                                           as.Date(eval(parse(text = sl_start_date))),
+                                           units = "days"))))
 
 # Example Patient Profile plot 5 domains
 g_patient_profile(select_ex = TRUE,
