@@ -28,7 +28,8 @@ Imports:
   rlang,
   rtables (>= 0.1.2),
   stringr,
-  utils.nest (>= 0.2.0)
+  utils.nest (>= 0.2.0),
+  cowplot
 Suggests:
   knitr,
   random.cdisc.data (>= 0.3.0),

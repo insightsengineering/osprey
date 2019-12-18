@@ -61,7 +61,7 @@
 #' ADSL <-  rADSL %>% # nolint
 #'   group_by(.data$USUBJID) %>%
 #'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y"),
-#'          max_date = max(as.Date(.data$LSTALVDT, "%d%b%Y"), as.Date(.data$DTHDT, "%d%b%Y")),
+#'          max_date = max(as.Date(.data$LSTALVDT, "%d%b%Y"), as.Date(.data$DTHDT, "%d%b%Y"), na.rm=TRUE),
 #'   ) %>%
 #'   mutate(max_day = as.numeric(as.Date(.data$max_date) -
 #'   as.Date(eval(parse(text = sl_start_date)))) + 1) %>%
@@ -71,19 +71,22 @@
 #'
 #' ## ADAE
 #' rADAE <- radae(cached = TRUE) # nolint
-#' ADAE <- merge(rADAE, ADSL, by = c("USUBJID", "STUDYID")) %>% as.data.frame() # nolint
+#' ADAE <- left_join(ADSL, rADAE)
 #'
 #' ADAE <- ADAE %>% # nolint
+#'   filter(!is.na(ASTDTM)) %>%
 #'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
-#'                                              units = "days"))),
-#'          AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
+#'  filter(!is.na(AENDTM)) %>%
+#'  mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
 #'                                              units = "days")))) %>%
 #'   select(USUBJID, AESOC, AEDECOD, AESER, AETOXGR, AREL, ASTDY, AENDY)
 #'
 #' ## ADRS
 #' rADRS <- radrs(cached = TRUE) #nolint
 #' # ADRS
-#' ADRS <- merge(ADSL, rADRS, by = c("USUBJID", "STUDYID")) %>% as.data.frame() # nolint
+#' ADRS <- left_join(ADSL, rADRS)
+#'
 #' ADRS <- ADRS %>% # nolint
 #'   mutate(ADY = ceiling(as.numeric(difftime(ADTM,
 #'   as.Date(eval(parse(text = sl_start_date))), units = "days")))) %>%
@@ -97,11 +100,13 @@
 #' ## ADCM
 #' rADCM <- radcm(cached = TRUE) # nolint
 #' # ADCM
-#' ADCM <- merge(ADSL, rADCM, by = c("USUBJID", "STUDYID")) %>% as.data.frame() #nolint
+#' ADCM <- left_join(ADSL, rADCM)
 #' ADCM <- ADCM %>% # nolint
+#'   filter(!is.na(ASTDTM)) %>%
 #'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
-#'                                              units = "days"))),
-#'          AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+#'                                              units = "days")))) %>%
+#'  filter(!is.na(AENDTM)) %>%
+#'   mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
 #'                                              units = "days")))) %>%
 #'   select(USUBJID, CMDECOD, ASTDTM, AENDTM, ASTDY, AENDY)
 #'
@@ -112,9 +117,11 @@
 #'
 #' ## ADEX
 #' rADEX <- radex(cached = TRUE) # nolint
-#' ADEX <- merge(ADSL, rADEX, by = c("USUBJID", "STUDYID")) %>% as.data.frame() # nolint
+#' ADEX <- left_join(ADSL, rADEX)
+#'
 #' ADEX <- ADEX %>% # nolint
 #'   filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) %>%
+#'  filter(!is.na(ASTDTM)) %>%
 #'   mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "%d-%b-%y") -
 #'   as.Date(eval(parse(text = sl_start_date)), "%d%b%Y")) + 1) %>%
 #'   select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT, ASTDT_dur)
@@ -137,7 +144,8 @@
 #'
 #' ## ADLB
 #' rADLB <- radlb(cached = TRUE) # nolint
-#' ADLB <- merge(ADSL, rADLB, by = c("USUBJID", "STUDYID")) %>% as.data.frame() # nolint
+#' ADLB <- left_join(ADSL, rADLB)
+#'
 #' ADLB <- ADLB %>% # nolint
 #'   group_by(USUBJID) %>%
 #'   mutate(LBSTRESC = as.numeric(.data$LBSTRESC),
@@ -307,9 +315,12 @@ patient_domain_profile <- function(domain = NULL,
                                    title = NULL) {
 
   marker_data <- data.frame(var_names,
-                            marker_pos = if (is.null(marker_pos)) tern:::to_n("x", length(var_names)) else marker_pos,
-                            marker_shape = if (is.null(marker_shape)) tern:::to_n("x", length(var_names)) else marker_shape,
-                            marker_color = if (is.null(marker_color)) tern:::to_n("x", length(var_names)) else marker_color)
+                            marker_pos = if (is.null(marker_pos))
+                              tern:::to_n("x", length(var_names)) else marker_pos,
+                            marker_shape = if (is.null(marker_shape))
+                              tern:::to_n("x", length(var_names)) else marker_shape,
+                            marker_color = if (is.null(marker_color))
+                              tern:::to_n("x", length(var_names)) else marker_color)
 
   # plot lines
   if (length(dim(marker_pos)) == 2) {
@@ -319,18 +330,19 @@ patient_domain_profile <- function(domain = NULL,
                             line_end = marker_pos[, 2],
                             line_min = rep(ylim[1], length(var_names)),
                             line_max = rep(arrow_end + no_enddate_extention, length(var_names)))
-    #names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
+    names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
+
 
     p <- ggplot() +
       geom_segment(data = line_data[is.na(line_data$line_end) == FALSE, ],
-                   aes(x = var_names, y = .data$line_start, xend = var_names, yend = .data$line_end, color = line_col),
+                   aes(x = var_names, y = line_start, xend = var_names, yend = line_end, color = line_col),
                    lineend = "round", linejoin = "round",
                    size = line_width, arrow = NULL, show.legend = NA) +
       scale_y_continuous(limits = ylim, breaks = ytick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       geom_segment(data = line_data[is.na(line_data$line_end) == TRUE, ],
-                   aes(x = var_names, y = pmax(.data$line_start, .data$line_min, na.rm = TRUE),
-                       xend = var_names, yend = .data$line_max, color = line_col),
+                   aes(x = var_names, y = pmax(line_start, line_min, na.rm = TRUE),
+                       xend = var_names, yend = line_max, color = line_col),
                    lineend = "round", linejoin = "round",
                    size = line_width, show.legend = FALSE,
                    arrow = arrow(length = unit(arrow_size, "inches")))
@@ -496,7 +508,8 @@ patient_domain_profile <- function(domain = NULL,
 #' function \code{g_patient_profile} assembles
 #' all requested domain plots into one patient profile.
 #'
-#' ADSL, ADEX, ADAE, ADRS, ADCM and ADLB data must be provided. If there is a missing dataset, assign a NULL value to it. ie) ADRS <- NULL
+#' ADSL, ADEX, ADAE, ADRS, ADCM and ADLB data must be provided.
+#' If there is a missing dataset, assign a NULL value to it. ie) ADRS <- NULL
 #' prior to running the patient profile plot.
 #'
 #' @param select_ex boolean value for showing EX domain plot, default is \code{TRUE}
@@ -623,31 +636,36 @@ g_patient_profile <- function(select_ex = TRUE,
   show_title[min(which(select_list == TRUE))] <- TRUE
 
   # Domain "ADEX"
-  p1 <- patient_domain_profile(domain = "Exposure (ADEX)",
-                               var_names = ex_var_names,
-                               marker_pos = ex_data$ASTDT_dur,
-                               arrow_end = arrow_end_day,
-                               ytick_at = waiver(),
-                               line_col = NULL,
-                               line_col_legend = NULL,
-                               line_col_opt = NULL,
-                               line_width = 1,
-                               arrow_size = 0.1,
-                               no_enddate_extention = 0,
-                               marker_color = factor(ex_data$Modification),
-                               marker_color_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
-                               marker_color_legend = NULL,
-                               marker_shape = factor(ex_data$Modification),
-                               marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
-                               marker_shape_legend = "Dose Modification",
-                               show_days_label = show_days_label[1],
-                               ylim = ylim,
-                               ylab = ylab,
-                               show_title = show_title[1],
-                               title = title)
+  if (select_ex == TRUE) {
+    p1 <- patient_domain_profile(domain = "Exposure (ADEX)",
+                                 var_names = ex_var_names,
+                                 marker_pos = ex_data$ASTDT_dur,
+                                 arrow_end = arrow_end_day,
+                                 ytick_at = waiver(),
+                                 line_col = NULL,
+                                 line_col_legend = NULL,
+                                 line_col_opt = NULL,
+                                 line_width = 1,
+                                 arrow_size = 0.1,
+                                 no_enddate_extention = 0,
+                                 marker_color = factor(ex_data$Modification),
+                                 marker_color_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
+                                 marker_color_legend = NULL,
+                                 marker_shape = factor(ex_data$Modification),
+                                 marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
+                                 marker_shape_legend = "Dose Modification",
+                                 show_days_label = show_days_label[1],
+                                 ylim = ylim,
+                                 ylab = ylab,
+                                 show_title = show_title[1],
+                                 title = title)
+
+  } else {
+    p1 <- NULL
+  }
 
   # Domain "ADAE"
-  if(select_ae == TRUE){
+  if (select_ae == TRUE) {
     p2 <- patient_domain_profile(domain = "Adverse Event (ADAE)",
                                  var_names = ae_var_names,
                                  marker_pos = ae_data[, c("ASTDY", "AENDY")],
@@ -677,7 +695,7 @@ g_patient_profile <- function(select_ex = TRUE,
 
 
   # Domain "ADRS"
-  if(select_rs == TRUE){
+  if (select_rs == TRUE) {
     p3 <- patient_domain_profile(domain = "Tumor Response (ADRS)",
                                  var_names = rs_var_names,
                                  marker_pos = rs_data$ADY,
@@ -708,7 +726,7 @@ g_patient_profile <- function(select_ex = TRUE,
 
 
   # Domain "ADCM"
-  if (select_cm == TRUE){
+  if (select_cm == TRUE) {
     p4 <- patient_domain_profile(domain = "Concomitant Med (ADCM)",
                                  var_names = cm_var_names,
                                  marker_pos = cm_data[, c("ASTDY", "AENDY")],
@@ -736,7 +754,7 @@ g_patient_profile <- function(select_ex = TRUE,
   }
 
   # Domain "ADLB"
-  if (select_lb == TRUE){
+  if (select_lb == TRUE) {
     p5 <- patient_domain_profile(domain = "Laboratory (ADLB)",
                                  var_names = lb_var_names,
                                  marker_pos = lb_data$ADY,
