@@ -1,5 +1,7 @@
-# osprey development version
-- to edit
+# osprey 0.1.2.9000
+
+# osprey 0.1.2
+- Refactor due to changes in `utils.nest`
 
 # osprey 0.1.1
 Refactoring package according to the NEST standards.
