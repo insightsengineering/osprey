@@ -9,7 +9,7 @@ Authors@R: c(
   person("Mahdi", "About", email = "mahdi.about@roche.com", role = c("aut")),
   person("Fei", "Wang", email = "fei.wang.fw6@roche.com", role = c("aut")),
   person("Mika", "Maekinen", email = "mika.maekinen@roche.com", role = c("aut"))
-)
+  )
 Description: Community effort to collect TLG code and create a catalogue.
 License: file LICENSE
 Encoding: UTF-8
