@@ -4,13 +4,11 @@ Title: R package to create TLGs
 Version: 0.1.2.9000
 Date: 2019-12-30
 Authors@R: c(
-  person("Nina", "Qi", email = "qi.ting@gene.com", role = c("aut", "cre")),
+  person("Nina", "Qi", email = "qit3@gene.com", role = c("aut", "cre")),
   person("Chendi", "Liao", email = "chendi.liao@roche.com", role = c("aut")),
   person("Mahdi", "About", email = "mahdi.about@roche.com", role = c("aut")),
   person("Fei", "Wang", email = "fei.wang.fw6@roche.com", role = c("aut")),
-  person("Adrian", "Waddell", email = "adrian.waddell@roche.com", role = c("aut")),
-  person("Mika", "Maekinen", email = "mika.maekinen@roche.com", role = c("aut")),
-  person("Carolyn", "Zhang", email = "carolyn.zhang@duke.edu", role = c("aut"))
+  person("Mika", "Maekinen", email = "mika.maekinen@roche.com", role = c("aut"))
   )
 Description: Community effort to collect TLG code and create a catalogue.
 License: file LICENSE
@@ -19,7 +17,7 @@ LazyData: true
 Depends:
   R (>= 3.3),
   tern (>= 0.6.4),
-  dplyr (>= 0.8.0), 
+  dplyr (>= 0.8.0),
   ggplot2 (>= 2.0.0)
 Imports:
   grid,
