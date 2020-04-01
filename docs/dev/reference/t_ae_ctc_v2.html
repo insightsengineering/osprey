@@ -80,7 +80,7 @@
         <li>
   <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
-     
+
   </a>
 </li>
 <li>
@@ -94,16 +94,16 @@
         <li>
   <a href="https://github.roche.com/Rpackages/osprey">
     <span class="fa fa-github"></span>
-     
+
   </a>
 </li>
       </ul>
-      
+
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-      
+
 
       </header>
 
@@ -111,7 +111,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Adverse Events Table by Highest NCI CTCAE Grade</h1>
-    
+
     <div class="hidden name"><code>t_ae_ctc_v2.Rd</code></div>
     </div>
 
@@ -186,7 +186,7 @@ grades, see 'Details'.</p></td>
 in case there was no AEs reported for particular <code>col_by</code> and/or
 <code>grade</code> category. Use <code>grade_levels</code> to modify the range of existing
 grades. If data does not have any records with <code>grade</code> 5 and the intent
-is to show only grades 1-4 rows then use <code>grade_levels = 1:4</code>.</p>
+is to show only grades 1-4 rows then use <code>grade_levels = as.factor(1:4)</code>.</p>
 <p>this is an equivalent of the STREAM output <code>%stream_t_summary(templates = aet04)</code>
   (<a href='http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html'>http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html</a>)</p>
 
@@ -229,61 +229,61 @@ is to show only grades 1-4 rows then use <code>grade_levels = 1:4</code>.</p>
   <span class='kw'>total</span> <span class='kw'>=</span> <span class='st'>"All Patients"</span>,
   <span class='kw'>grade_levels</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>
 )
-<span class='no'>tbl</span></div><div class='output co'>#&gt; ANL$CLASS                                              ARM A                ARM B            All Patients 
-#&gt;   ANL$TERM                      ANL$GRADE              (N=3)                (N=7)               (N=10)    
+<span class='no'>tbl</span></div><div class='output co'>#&gt; ANL$CLASS                                              ARM A                ARM B            All Patients
+#&gt;   ANL$TERM                      ANL$GRADE              (N=3)                (N=7)               (N=10)
 #&gt; ----------------------------------------------------------------------------------------------------------
 #&gt; - Any adverse events -
-#&gt;   - Overall -                 - Any Grade -          2 (66.7%)            4 (57.1%)             6 (60%)   
-#&gt;                                     1                 0 (0%)              1 (14.3%)             1 (10%)   
-#&gt;                                     2                1 (33.3%)            1 (14.3%)             2 (20%)   
-#&gt;                                     3                1 (33.3%)            2 (28.6%)             3 (30%)   
-#&gt; 
+#&gt;   - Overall -                 - Any Grade -          2 (66.7%)            4 (57.1%)             6 (60%)
+#&gt;                                     1                 0 (0%)              1 (14.3%)             1 (10%)
+#&gt;                                     2                1 (33.3%)            1 (14.3%)             2 (20%)
+#&gt;                                     3                1 (33.3%)            2 (28.6%)             3 (30%)
+#&gt;
 #&gt; cl A
-#&gt;   - Overall -                 - Any Grade -          1 (33.3%)            3 (42.9%)             4 (40%)   
-#&gt;                                     1                 0 (0%)              1 (14.3%)             1 (10%)   
-#&gt;                                     2                1 (33.3%)            2 (28.6%)             3 (30%)   
-#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)    
-#&gt; 
-#&gt;   trm A_2/2                   - Any Grade -          1 (33.3%)            2 (28.6%)             3 (30%)   
-#&gt;                                     1                 0 (0%)               0 (0%)               0 (0%)    
-#&gt;                                     2                1 (33.3%)            2 (28.6%)             3 (30%)   
-#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)    
-#&gt; 
-#&gt;   trm A_1/2                   - Any Grade -          1 (33.3%)            1 (14.3%)             2 (20%)   
-#&gt;                                     1                1 (33.3%)            1 (14.3%)             2 (20%)   
-#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)    
-#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)    
-#&gt; 
+#&gt;   - Overall -                 - Any Grade -          1 (33.3%)            3 (42.9%)             4 (40%)
+#&gt;                                     1                 0 (0%)              1 (14.3%)             1 (10%)
+#&gt;                                     2                1 (33.3%)            2 (28.6%)             3 (30%)
+#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)
+#&gt;
+#&gt;   trm A_2/2                   - Any Grade -          1 (33.3%)            2 (28.6%)             3 (30%)
+#&gt;                                     1                 0 (0%)               0 (0%)               0 (0%)
+#&gt;                                     2                1 (33.3%)            2 (28.6%)             3 (30%)
+#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)
+#&gt;
+#&gt;   trm A_1/2                   - Any Grade -          1 (33.3%)            1 (14.3%)             2 (20%)
+#&gt;                                     1                1 (33.3%)            1 (14.3%)             2 (20%)
+#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)
+#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)
+#&gt;
 #&gt; cl B
-#&gt;   - Overall -                 - Any Grade -          1 (33.3%)            3 (42.9%)             4 (40%)   
-#&gt;                                     1                 0 (0%)              1 (14.3%)             1 (10%)   
-#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)    
-#&gt;                                     3                1 (33.3%)            2 (28.6%)             3 (30%)   
-#&gt; 
-#&gt;   trm B_2/3                   - Any Grade -          1 (33.3%)            2 (28.6%)             3 (30%)   
-#&gt;                                     1                 0 (0%)               0 (0%)               0 (0%)    
-#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)    
-#&gt;                                     3                1 (33.3%)            2 (28.6%)             3 (30%)   
-#&gt; 
-#&gt;   trm B_1/3                   - Any Grade -           0 (0%)              1 (14.3%)             1 (10%)   
-#&gt;                                     1                 0 (0%)               0 (0%)               0 (0%)    
-#&gt;                                     2                 0 (0%)              1 (14.3%)             1 (10%)   
-#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)    
-#&gt; 
-#&gt;   trm B_3/3                   - Any Grade -           0 (0%)              1 (14.3%)             1 (10%)   
-#&gt;                                     1                 0 (0%)              1 (14.3%)             1 (10%)   
-#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)    
-#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)    
-#&gt; 
+#&gt;   - Overall -                 - Any Grade -          1 (33.3%)            3 (42.9%)             4 (40%)
+#&gt;                                     1                 0 (0%)              1 (14.3%)             1 (10%)
+#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)
+#&gt;                                     3                1 (33.3%)            2 (28.6%)             3 (30%)
+#&gt;
+#&gt;   trm B_2/3                   - Any Grade -          1 (33.3%)            2 (28.6%)             3 (30%)
+#&gt;                                     1                 0 (0%)               0 (0%)               0 (0%)
+#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)
+#&gt;                                     3                1 (33.3%)            2 (28.6%)             3 (30%)
+#&gt;
+#&gt;   trm B_1/3                   - Any Grade -           0 (0%)              1 (14.3%)             1 (10%)
+#&gt;                                     1                 0 (0%)               0 (0%)               0 (0%)
+#&gt;                                     2                 0 (0%)              1 (14.3%)             1 (10%)
+#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)
+#&gt;
+#&gt;   trm B_3/3                   - Any Grade -           0 (0%)              1 (14.3%)             1 (10%)
+#&gt;                                     1                 0 (0%)              1 (14.3%)             1 (10%)
+#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)
+#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)
+#&gt;
 #&gt; cl C
-#&gt;   - Overall -                 - Any Grade -          1 (33.3%)            1 (14.3%)             2 (20%)   
-#&gt;                                     1                1 (33.3%)            1 (14.3%)             2 (20%)   
-#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)    
-#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)    
-#&gt; 
-#&gt;   trm C_1/1                   - Any Grade -          1 (33.3%)            1 (14.3%)             2 (20%)   
-#&gt;                                     1                1 (33.3%)            1 (14.3%)             2 (20%)   
-#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)    
+#&gt;   - Overall -                 - Any Grade -          1 (33.3%)            1 (14.3%)             2 (20%)
+#&gt;                                     1                1 (33.3%)            1 (14.3%)             2 (20%)
+#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)
+#&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)
+#&gt;
+#&gt;   trm C_1/1                   - Any Grade -          1 (33.3%)            1 (14.3%)             2 (20%)
+#&gt;                                     1                1 (33.3%)            1 (14.3%)             2 (20%)
+#&gt;                                     2                 0 (0%)               0 (0%)               0 (0%)
 #&gt;                                     3                 0 (0%)               0 (0%)               0 (0%)    </div><div class='input'>
 
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>random.cdisc.data</span>)
@@ -333,7 +333,7 @@ is to show only grades 1-4 rows then use <code>grade_levels = 1:4</code>.</p>
       </footer>
    </div>
 
-  
+
 
 
   </body>

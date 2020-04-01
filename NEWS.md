@@ -1,3 +1,6 @@
+# osprey 0.1.3
+* bug fixes
+
 # osprey 0.1.2
 - Refactor due to changes in `utils.nest`
 
