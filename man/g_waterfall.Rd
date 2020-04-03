@@ -4,11 +4,22 @@
 \alias{g_waterfall}
 \title{Waterfall Plot}
 \usage{
-g_waterfall(bar_id, bar_height, sort_by = NULL, col_by = NULL,
-  bar_color_opt = NULL, anno_txt = NULL, href_line = NULL,
-  facet_by = NULL, show_datavalue = TRUE, add_label = NULL,
-  gap_point = NULL, ytick_at = 20,
-  y_label = "Best \% Change from Baseline", title = "Waterfall Plot")
+g_waterfall(
+  bar_id,
+  bar_height,
+  sort_by = NULL,
+  col_by = NULL,
+  bar_color_opt = NULL,
+  anno_txt = NULL,
+  href_line = NULL,
+  facet_by = NULL,
+  show_datavalue = TRUE,
+  add_label = NULL,
+  gap_point = NULL,
+  ytick_at = 20,
+  y_label = "Best \% Change from Baseline",
+  title = "Waterfall Plot"
+)
 }
 \arguments{
 \item{bar_id}{vector of IDs to identify each bar}

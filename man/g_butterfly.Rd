@@ -4,11 +4,21 @@
 \alias{g_butterfly}
 \title{Butterfly Plot}
 \usage{
-g_butterfly(category, right_flag, left_flag, id = NULL,
-  group_names = NULL, block_count = "# of patients",
-  block_color = NULL, facet_rows = NULL, x_label = block_count,
-  y_label = "AE Derived Terms", legend_label = "AETOXGR",
-  sort_by = "alphabetical", show_legend = TRUE)
+g_butterfly(
+  category,
+  right_flag,
+  left_flag,
+  id = NULL,
+  group_names = NULL,
+  block_count = "# of patients",
+  block_color = NULL,
+  facet_rows = NULL,
+  x_label = block_count,
+  y_label = "AE Derived Terms",
+  legend_label = "AETOXGR",
+  sort_by = "alphabetical",
+  show_legend = TRUE
+)
 }
 \arguments{
 \item{category}{vector of y values}
