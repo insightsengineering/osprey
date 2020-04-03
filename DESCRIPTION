@@ -32,8 +32,8 @@ Suggests:
   random.cdisc.data (>= 0.3.2),
   test.nest (>= 0.2.2),
   tidyr,
-  testthat
-RoxygenNote: 6.1.1
+  testthat (>= 2.0)
+RoxygenNote: 7.0.2
 URL:
   https://pages.github.roche.com/Rpackages/osprey/,
   https://github.roche.com/Rpackages/osprey/

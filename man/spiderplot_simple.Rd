@@ -4,8 +4,14 @@
 \alias{spiderplot_simple}
 \title{Simple spider plot}
 \usage{
-spiderplot_simple(anl, byvar = "USUBJID", days = "TRTDURD",
-  mes_value = "PARAM", group_col = "USUBJID", baseday = 0)
+spiderplot_simple(
+  anl,
+  byvar = "USUBJID",
+  days = "TRTDURD",
+  mes_value = "PARAM",
+  group_col = "USUBJID",
+  baseday = 0
+)
 }
 \arguments{
 \item{anl}{The analysis data frame (e.g. ATE.sas7bdat on BCE)}
