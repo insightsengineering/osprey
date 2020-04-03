@@ -32,7 +32,7 @@ Suggests:
   random.cdisc.data (>= 0.3.2),
   test.nest (>= 0.2.2),
   tidyr,
-  testthat
+  testthat (>= 2.0)
 RoxygenNote: 6.1.1
 URL:
   https://pages.github.roche.com/Rpackages/osprey/,
