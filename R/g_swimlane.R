@@ -233,12 +233,22 @@ g_swimlane <- function(bar_id,
         values = if (!is.null(marker_shape_opt)) marker_shape_opt else c(15:25, 0:14)
       )
 
-    p <- p +
-      scale_color_manual(
+    if (!is.null(marker_color_opt) || all(marker_data$marker_color == "x")) {
+      p <- p + scale_color_manual(
         name = "Marker Color",
         breaks = marker_data$marker_color,
-        values = if (!is.null(marker_color_opt)) marker_color_opt else 1:25
+        values = if (!is.null(marker_color_opt)) {
+          marker_color_opt
+        } else {
+          c("x" = "black")
+        }
       )
+    } else {
+      p <- p + scale_color_discrete(
+        name = "Marker Color",
+        breaks = marker_data$marker_color
+      )
+    }
 
   }
 
