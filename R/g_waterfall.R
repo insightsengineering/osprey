@@ -6,7 +6,8 @@
 #'
 #' @param bar_id vector of IDs to identify each bar
 #' @param bar_height numeric vector to be plotted as height of each bar
-#' @param sort_by vector to sort bars, default is \code{NULL}
+#' @param sort_by vector to sort bars, default is \code{NULL} in which case bars are ordered
+#'   by decreasing height
 #' @param col_by vector to color bars, default is \code{NULL}
 #' @param bar_color_opt aesthetic values to map color values (named vector to map color values to each name).
 #'   If not \code{NULL}, please make sure this contains all posible values for \code{col_by} values,
@@ -37,6 +38,11 @@
 #'
 #' @examples
 #' library(tidyr)
+#'
+#' g_waterfall(
+#'   bar_id = letters[1:3], bar_height = c(3, 5, -1),
+#'   bar_color_opt = c("red", "green", "red")
+#' )
 #'
 #' # Example 1
 #' ADSL <- rADSL[1:15,]
@@ -145,13 +151,17 @@ g_waterfall <- function(bar_id,
   if (any(check_input_length == 0))
     stop("invalid arguments: check that inputs are not null")
 
-  if (!is.null(col_by) & !is.null(bar_color_opt)){
-    ls1 <- levels(factor(col_by))
-    ls2 <- names(bar_color_opt)
-    if (length(intersect(ls1, ls2)) == 0){
-      stop("invalid argument: check that the col_by and bar_color_opt have overlapping categories")
-    } else if (length(ls2) < length(ls1)){
-      stop("invalid argument: More categories in col_by than the ones listed in bar_color_opt")
+  if (!is.null(bar_color_opt)) {
+    if (is.null(col_by)) {
+      col_by <- bar_id
+    } else {
+      ls1 <- levels(factor(col_by))
+      ls2 <- names(bar_color_opt)
+      if (length(intersect(ls1, ls2)) == 0){
+        stop("invalid argument: check that the col_by and bar_color_opt have overlapping categories")
+      } else if (length(ls2) < length(ls1)){
+        stop("invalid argument: More categories in col_by than the ones listed in bar_color_opt")
+      }
     }
   }
 
