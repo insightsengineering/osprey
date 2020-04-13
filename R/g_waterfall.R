@@ -1,4 +1,3 @@
-
 #' Waterfall Plot
 #'
 #' Waterfall plot is often used in Early Development (ED) to present each individual patient’s best
@@ -9,7 +8,7 @@
 #' @param sort_by vector to sort bars, default is \code{NULL} in which case bars are ordered
 #'   by decreasing height
 #' @param col_by vector to color bars, default is \code{NULL} in which case bar_id is taken if
-#'   the argument `bar_color_opt` is provided
+#'   the argument \code{bar_color_opt} is provided
 #' @param bar_color_opt aesthetic values to map color values (named vector to map color values to each name).
 #'   If not \code{NULL}, please make sure this contains all posible values for \code{col_by} values,
 #'   otherwise default ggplot color will be assigned, please note that \code{NULL} needs to be specified
@@ -26,7 +25,6 @@
 #' @param ytick_at optional bar height axis interval, default is 20
 #' @param y_label label for bar height axis, default is "Best \% Change from Baseline"
 #' @param title string to be displayed as plot title, default is "Waterfall Plot"
-#' @md
 #'
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
 #' @template author_qit3

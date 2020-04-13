@@ -4,8 +4,15 @@
 \alias{t_ae_ctc_v2}
 \title{Adverse Events Table by Highest NCI CTCAE Grade}
 \usage{
-t_ae_ctc_v2(class, term, id, grade, col_by, total = "All Patients",
-  grade_levels = as.factor(1:5))
+t_ae_ctc_v2(
+  class,
+  term,
+  id,
+  grade,
+  col_by,
+  total = "All Patients",
+  grade_levels = as.factor(1:5)
+)
 }
 \arguments{
 \item{class}{system organ class variable.}

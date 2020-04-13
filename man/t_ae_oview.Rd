@@ -4,9 +4,17 @@
 \alias{t_ae_oview}
 \title{AE Overview Summary Table}
 \usage{
-t_ae_oview(id, class, term, flags, display_id = c("fatal", "ser",
-  "serwd", "serdsm", "relser", "wd", "dsm", "rel", "relwd", "reldsm",
-  "ctc35"), extra_flag = NULL, col_by, total = "All Patients")
+t_ae_oview(
+  id,
+  class,
+  term,
+  flags,
+  display_id = c("fatal", "ser", "serwd", "serdsm", "relser", "wd", "dsm", "rel",
+    "relwd", "reldsm", "ctc35"),
+  extra_flag = NULL,
+  col_by,
+  total = "All Patients"
+)
 }
 \arguments{
 \item{id}{unique subject identifier variable. If a particular subject has no

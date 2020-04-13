@@ -4,7 +4,9 @@
 \name{rADAE}
 \alias{rADAE}
 \title{Random adverse events}
-\format{An object of class \code{data.frame} with 297 rows and 48 columns.}
+\format{
+An object of class \code{data.frame} with 297 rows and 48 columns.
+}
 \source{
 internal
 }
