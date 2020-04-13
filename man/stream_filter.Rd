@@ -4,14 +4,8 @@
 \alias{stream_filter}
 \title{Applies STREAM style filtering to datasets}
 \usage{
-stream_filter(
-  slref = NULL,
-  anl = NULL,
-  filters,
-  suffix,
-  slref_keep = NULL,
-  usubjid = "USUBJID"
-)
+stream_filter(slref = NULL, anl = NULL, filters, suffix,
+  slref_keep = NULL, usubjid = "USUBJID")
 }
 \arguments{
 \item{slref}{The subject level data frame (typically ASL.sas7bdat on BCE)}

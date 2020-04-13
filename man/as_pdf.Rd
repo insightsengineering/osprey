@@ -36,7 +36,7 @@ g <- with(iris, {
 
 # output to pdf
 g \%>\% as_pdf("~/example_aspdf1.pdf")
-decorate_grob_set(grobs = g, titles = "Hello\nOne\ntwo", footnotes = "This is a footnote") \%>\%
+decorate_grob_set(grobs = g, titles = "Hello\\nOne\\ntwo", footnotes = "This is a footnote") \%>\%
   as_pdf("~/example_aspdf2.pdf")
 }
 }

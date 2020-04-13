@@ -3,6 +3,7 @@
 \docType{package}
 \name{osprey}
 \alias{osprey}
+\alias{osprey-package}
 \title{osprey: Additional general TLGs to tern}
 \description{
 osprey: Additional general TLGs to tern

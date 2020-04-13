@@ -4,15 +4,8 @@
 \alias{grobs2pdf}
 \title{Decorate grob (gTree) objects then outputs as IDM compatible PDF}
 \usage{
-grobs2pdf(
-  grobs,
-  titles,
-  footnotes,
-  progpath,
-  outpath,
-  fontsize = 9,
-  pagesize = "letter.landscape"
-)
+grobs2pdf(grobs, titles, footnotes, progpath, outpath, fontsize = 9,
+  pagesize = "letter.landscape")
 }
 \arguments{
 \item{grobs}{A grid grob (gTree) object, optionally \code{NULL} if only a
