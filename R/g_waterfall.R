@@ -38,10 +38,11 @@
 #'
 #' @examples
 #' library(tidyr)
+#' library(dplyr)
 #'
 #' g_waterfall(
 #'   bar_id = letters[1:3], bar_height = c(3, 5, -1),
-#'   bar_color_opt = c("red", "green", "red")
+#'   bar_color_opt = c("red", "green", "blue")
 #' )
 #'
 #' # Example 1

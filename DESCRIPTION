@@ -33,7 +33,7 @@ Suggests:
   test.nest (>= 0.2.2),
   tidyr,
   testthat (>= 2.0)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.0.2
 URL:
   https://pages.github.roche.com/Rpackages/osprey/,
   https://github.roche.com/Rpackages/osprey/

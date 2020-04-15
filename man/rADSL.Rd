@@ -4,9 +4,7 @@
 \name{rADSL}
 \alias{rADSL}
 \title{Random patient listing}
-\format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 50 rows and 27 columns.
-}
+\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 50 rows and 27 columns.}
 \source{
 internal
 }

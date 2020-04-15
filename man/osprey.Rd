@@ -4,3 +4,6 @@
 \name{osprey}
 \alias{osprey}
 \title{osprey: Additional general TLGs to tern}
+\description{
+osprey: Additional general TLGs to tern
+}

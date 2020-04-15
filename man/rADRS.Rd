@@ -4,9 +4,7 @@
 \name{rADRS}
 \alias{rADRS}
 \title{Random response}
-\format{
-An object of class \code{data.frame} with 300 rows and 34 columns.
-}
+\format{An object of class \code{data.frame} with 300 rows and 34 columns.}
 \source{
 internal
 }

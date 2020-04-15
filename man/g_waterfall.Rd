@@ -54,7 +54,7 @@ others, default is \code{NULL}}
 
 \item{ytick_at}{optional bar height axis interval, default is 20}
 
-\item{y_label}{label for bar height axis, default is "Best \\% Change from Baseline"}
+\item{y_label}{label for bar height axis, default is "Best \% Change from Baseline"}
 
 \item{title}{string to be displayed as plot title, default is "Waterfall Plot"}
 }
@@ -67,10 +67,11 @@ response to a particular drug based on a parameter.
 }
 \examples{
 library(tidyr)
+library(dplyr)
 
 g_waterfall(
   bar_id = letters[1:3], bar_height = c(3, 5, -1),
-  bar_color_opt = c("red", "green", "red")
+  bar_color_opt = c("red", "green", "blue")
 )
 
 # Example 1
