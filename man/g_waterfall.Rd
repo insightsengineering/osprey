@@ -26,9 +26,11 @@ g_waterfall(
 
 \item{bar_height}{numeric vector to be plotted as height of each bar}
 
-\item{sort_by}{vector to sort bars, default is \code{NULL}}
+\item{sort_by}{vector to sort bars, default is \code{NULL} in which case bars are ordered
+by decreasing height}
 
-\item{col_by}{vector to color bars, default is \code{NULL}}
+\item{col_by}{vector to color bars, default is \code{NULL} in which case bar_id is taken if
+the argument \code{bar_color_opt} is provided}
 
 \item{bar_color_opt}{aesthetic values to map color values (named vector to map color values to each name).
 If not \code{NULL}, please make sure this contains all posible values for \code{col_by} values,
@@ -65,6 +67,12 @@ response to a particular drug based on a parameter.
 }
 \examples{
 library(tidyr)
+library(dplyr)
+
+g_waterfall(
+  bar_id = letters[1:3], bar_height = c(3, 5, -1),
+  bar_color_opt = c("red", "green", "blue")
+)
 
 # Example 1
 ADSL <- rADSL[1:15,]
