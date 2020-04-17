@@ -426,6 +426,7 @@ grobs2pdf <- function(grobs,
   )
 }
 
+#' @importFrom rtables cbind_rtables rrow rtablel
 shift_label_table <- function(tbl, term) {
   t_grade <- rtablel(rheader(rrow("", "."), rrow("", "Grade")), c(lapply(row.names(tbl), function(xi) rrow("", xi))))
   attr(t_grade[[1]], "row.name") <- term
