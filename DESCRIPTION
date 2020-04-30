@@ -35,8 +35,7 @@ Suggests:
   testthat (>= 2.0)
 RoxygenNote: 7.0.2
 URL:
-  https://pages.github.roche.com/Rpackages/osprey/,
-  https://github.roche.com/Rpackages/osprey/
+  https://github.roche.com/NEST/osprey/
 BugReports:
-  https://github.roche.com/Rpackages/osprey/issues
+  https://github.roche.com/NEST/osprey/issues
 VignetteBuilder: knitr
