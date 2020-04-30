@@ -39,10 +39,4 @@ URL:
   https://github.roche.com/Rpackages/osprey/
 BugReports:
   https://github.roche.com/Rpackages/osprey/issues
-Additional_repositories:
-  https://github.com/Roche/rtables,
-  https://github.roche.com/NEST/teal,
-  https://github.roche.com/NEST/tern,
-  https://github.roche.com/NEST/teal.modules.clinical,
-  https://github.roche.com/NEST/random.cdisc.data
 VignetteBuilder: knitr
