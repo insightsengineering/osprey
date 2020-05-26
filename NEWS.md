@@ -1,5 +1,11 @@
-# osprey development version
-- to edit
+# osprey 0.1.3.9000
+
+
+# osprey 0.1.3
+* force `grade_levels` argument in `t_ae_ctc_v2` function to be a factor
+
+# osprey 0.1.2
+- Refactor due to changes in `utils.nest`
 
 # osprey 0.1.1
 Refactoring package according to the NEST standards.

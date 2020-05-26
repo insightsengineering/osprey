@@ -4,8 +4,7 @@
 \alias{t_ae_ctc_v2}
 \title{Adverse Events Table by Highest NCI CTCAE Grade}
 \usage{
-t_ae_ctc_v2(class, term, id, grade, col_by, total = "All Patients",
-  grade_levels = 1:5)
+t_ae_ctc_v2(class, term, id, grade, col_by, total = "All Patients")
 }
 \arguments{
 \item{class}{system organ class variable.}
@@ -16,7 +15,8 @@ t_ae_ctc_v2(class, term, id, grade, col_by, total = "All Patients",
 adverse event then the subject \code{id} should be listed where
 \code{class} and \code{term} should be set to missing (i.e. \code{NA}).}
 
-\item{grade}{grade of adverse event variable.}
+\item{grade}{grade of adverse event.
+For factors, it is assumed that intensity corresponds to the order of the factor levels.}
 
 \item{col_by}{group variable that will be used for a column header. \code{col_by}
 has to be a factor and can not be missing. See 'Examples'.}
@@ -24,10 +24,6 @@ has to be a factor and can not be missing. See 'Examples'.}
 \item{total}{character string that will be used as a label for a column with
 pooled total population, default is "All Patients", if set to \code{NULL} then
 the "All Patients" column is suppressed.}
-
-\item{grade_levels}{ordered values of possible of grades in a form of
-\code{x:y}, default is \code{1:5}. This assures a proper fill in for
-grades, see 'Details'.}
 }
 \description{
 \code{t_ae_ctc_v2} returns adverse events sorted by highest NCI (National Cancer
@@ -56,9 +52,7 @@ grades, see 'Details'.}
 
 \code{t_ae_ctc_v2} fills in \code{col_by} and \code{grade} with \code{0} value
 in case there was no AEs reported for particular \code{col_by} and/or
-\code{grade} category. Use \code{grade_levels} to modify the range of existing
-grades. If data does not have any records with \code{grade} 5 and the intent
-is to show only grades 1-4 rows then use \code{grade_levels = 1:4}.
+\code{grade} category.
 
 this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = aet04)}
   (\url{http://bioportal.roche.com/stream_doc/2_05/um/report_outputs_aet04.html})
@@ -99,8 +93,7 @@ tbl <- t_ae_ctc_v2(
   id = ANL$USUBJID,
   grade = ANL$GRADE,
   col_by = factor(ANL$ARM),
-  total = "All Patients",
-  grade_levels = 1:3
+  total = "All Patients"
 )
 tbl
 
@@ -117,8 +110,7 @@ tbl <- t_ae_ctc_v2(
     id = AAE$USUBJID,
     grade = AAE$AETOXGR,
     col_by = factor(AAE$ARM),
-    total = "All Patients",
-    grade_levels = 1:5
+    total = "All Patients"
   )
 tbl
 

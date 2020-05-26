@@ -22,10 +22,10 @@ Please install package dependencies as follows:
 
 [Web Manual](https://pages.github.roche.com/Rpackages/osprey/)
 
-```r 
+```r
 devtools::install_github(
   repo = "NEST/random.cdisc.data",
-  ref = "master", 
+  ref = "master",
   host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
 )
@@ -34,15 +34,15 @@ devtools::install_github("Roche/rtables")
 
 devtools::install_github(
   repo = "NEST/tern",
-  ref = "master", 
+  ref = "master",
   host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
-  repo = "NEST/osprey", 
-  ref = "master", 
-  host = "https://github.roche.com/api/v3", 
+  repo = "NEST/osprey",
+  ref = "master",
+  host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
 )
 ```
@@ -54,31 +54,31 @@ devtools::install_github(
 ```r
 devtools::install_github(
   repo = "NEST/random.cdisc.data",
-  ref = "master", 
+  ref = "master",
   host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
-  repo = "Roche/rtables", 
+  repo = "Roche/rtables",
   ref = "devel",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
-  repo = "NEST/tern", 
-  ref = "devel", 
-  host = "https://github.roche.com/api/v3", 
+  repo = "NEST/tern",
+  ref = "devel",
+  host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
-  repo = "NEST/osprey", 
+  repo = "NEST/osprey",
   ref = "devel",
-  host = "https://github.roche.com/api/v3", 
+  host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
-) 
-``` 
+)
+```
 
 
 ## Development
@@ -89,10 +89,10 @@ Everyone is welcome to share their R functions in `opsrey`.
 
 To qualify to `osprey` package, TLG code has to:
 
-1. Be a function that produces a output 
-2. Have working example 
-3. Use [roxygen documentation](http://r-pkgs.had.co.nz/man.html) for creation of Help 
-4. Have help page 
+1. Be a function that produces a output
+2. Have working example
+3. Use [roxygen documentation](http://r-pkgs.had.co.nz/man.html) for creation of Help
+4. Have help page
 5. Be compatible with pkgdown (should be when points 1-4 are OK)
 
 ### Instructions
@@ -105,12 +105,21 @@ package](https://streamingmedia.roche.com/media/Adding+TLG+functions+to+the+Ospr
 
 That is, follow the following steps:
 
-1. Clone the opsrey repository 
-2. Create branch 
-3. Develop a function 
-4. Create roxygen comments (ctrl+shift+alt+R or copy from earlier) 
-5. Document (ctrl+shift+D) 
-6. Install and Restart 
+1. Clone the opsrey repository
+2. Create branch
+3. Develop a function
+4. Create roxygen comments (ctrl+shift+alt+R or copy from earlier)
+5. Document (ctrl+shift+D)
+6. Install and Restart
 7. Test your function with working example
-8. Create webpage (in console: `pkgdown::build_site()`) 
+8. Create webpage (in console: `pkgdown::build_site()`)
 9. When everything works, make pull request.
+
+# Contributers:
+
+- **Nina Qi (qit3@gene.com)**
+- Chendi Liao (chendi.liao@roche.com)
+- Mahdi About (mahdi.about@roche.com)
+- Fei Wang (fei.wang.fw6@roche.com)
+- Mika Maekinen (mika.maekinen@roche.com)
+- Carolyn Zhang (zhang.carolyn@gene.com)

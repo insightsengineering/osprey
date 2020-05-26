@@ -4,14 +4,30 @@
 \alias{patient_domain_profile}
 \title{Patient Profile Plot}
 \usage{
-patient_domain_profile(domain = NULL, var_names, marker_pos, arrow_end,
-  ytick_at = 40, line_col = NULL, line_col_legend = NULL,
-  line_col_opt = NULL, line_width = 1, arrow_size = 0.1,
-  no_enddate_extention = 0, marker_color = NULL,
-  marker_color_opt = NULL, marker_color_legend = NULL,
-  marker_shape = NULL, marker_shape_opt = NULL,
-  marker_shape_legend = NULL, show_days_label = TRUE, ylim = c(-28,
-  max(marker_pos) + 5), ylab = NULL, show_title = TRUE, title = NULL)
+patient_domain_profile(
+  domain = NULL,
+  var_names,
+  marker_pos,
+  arrow_end,
+  ytick_at = 40,
+  line_col = NULL,
+  line_col_legend = NULL,
+  line_col_opt = NULL,
+  line_width = 1,
+  arrow_size = 0.1,
+  no_enddate_extention = 0,
+  marker_color = NULL,
+  marker_color_opt = NULL,
+  marker_color_legend = NULL,
+  marker_shape = NULL,
+  marker_shape_opt = NULL,
+  marker_shape_legend = NULL,
+  show_days_label = TRUE,
+  ylim = c(-28, max(marker_pos) + 5),
+  ylab = NULL,
+  show_title = TRUE,
+  title = NULL
+)
 }
 \arguments{
 \item{domain}{string of domain name to be shown as x-axis label, default is \code{NULL}}
@@ -94,67 +110,81 @@ rADSL <- radsl(cached = TRUE) # nolint
 ADSL <-  rADSL \%>\% # nolint
   group_by(.data$USUBJID) \%>\%
   mutate(TRTSDT = as.Date(.data$TRTSDTM, "\%d\%b\%Y"),
+        # if there are missing LSTALVDT or DTHDT, use max_date = max(as.Date(.data$LSTALVDT, "\%d\%b\%Y"), as.Date(.data$DTHDT, "\%d\%b\%Y"), na.rm=TRUE)
          max_date = max(as.Date(.data$LSTALVDT, "\%d\%b\%Y"), as.Date(.data$DTHDT, "\%d\%b\%Y")),
   ) \%>\%
   mutate(max_day = as.numeric(as.Date(.data$max_date) -
-  as.Date(eval(parse(text = sl_start_date)))) + 1) \%>\%
+  as.Date(eval(parse(text = sl_start_date)), "\%d\%b\%Y")) + 1) \%>\%
   filter(USUBJID == rADSL$USUBJID[1])
-
-
 
 ## ADAE
 rADAE <- radae(cached = TRUE) # nolint
-ADAE <- left_join(ADSL, rADAE)
+
+if("TRTSDT" \%in\% names(rADAE)){
+ADAE <- left_join(ADSL, rADAE, by = c("USUBJID", "STUDYID", "TRTSDT"))
+} else {
+  ADAE <- left_join(ADSL, rADAE, by = c("USUBJID", "STUDYID"))
+}
 
 ADAE <- ADAE \%>\% # nolint
   filter(!is.na(ASTDTM)) \%>\%
-  mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
+  mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
                                              units = "days")))) \%>\%
- filter(!is.na(AENDTM)) \%>\%
- mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+  filter(!is.na(AENDTM)) \%>\%
+  mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
                                              units = "days")))) \%>\%
   select(USUBJID, AESOC, AEDECOD, AESER, AETOXGR, AREL, ASTDY, AENDY)
 
 ## ADRS
 rADRS <- radrs(cached = TRUE) #nolint
 
-ADRS <- left_join(ADSL, rADRS)
+if("TRTSDT" \%in\% names(rADRS)){
+  ADRS <- left_join(ADSL, rADRS, by = c("USUBJID", "STUDYID", "TRTSDT"))
+} else {
+  ADRS <- left_join(ADSL, rADRS, by = c("USUBJID", "STUDYID"))
+}
 
 ADRS <- ADRS \%>\% # nolint
   mutate(ADY = ceiling(as.numeric(difftime(ADTM,
-  as.Date(eval(parse(text = sl_start_date))), units = "days")))) \%>\%
+                                           as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)), units = "days")))) \%>\%
   select(USUBJID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM) \%>\%
   filter(is.na(ADY) == FALSE)
 
-
 ## ADCM
 rADCM <- radcm(cached = TRUE) # nolint
-ADCM <- left_join(ADSL, rADCM)
+if("TRTSDT" \%in\% names(rADCM)){
+  ADCM <- left_join(ADSL, rADCM, by = c("USUBJID", "STUDYID", "TRTSDT"))
+} else {
+  ADCM <- left_join(ADSL, rADCM, by = c("USUBJID", "STUDYID"))
+}
+
 ADCM <- ADCM \%>\% # nolint
   filter(!is.na(ASTDTM)) \%>\%
-  mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(eval(parse(text = sl_start_date))),
+  mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
                                              units = "days")))) \%>\%
- filter(!is.na(AENDTM)) \%>\%
-  mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(eval(parse(text = sl_start_date))),
+  filter(!is.na(AENDTM)) \%>\%
+  mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
                                              units = "days")))) \%>\%
   select(USUBJID, CMDECOD, ASTDTM, AENDTM, ASTDY, AENDY)
 
 if (length(unique(ADCM$USUBJID)) > 0) {
   ADCM <- ADCM[which(ADCM$AENDY >= -28 | is.na(ADCM$AENDY) == TRUE
-  & is.na(ADCM$ASTDY) == FALSE), ]
+                     & is.na(ADCM$ASTDY) == FALSE), ]
 }
 
 #ADEX
 rADEX <- radex(cached = TRUE) # nolint
 
-ADEX <- left_join(ADSL, rADEX)
+if("TRTSDT" \%in\% names(rADEX)){
+  ADEX <- left_join(ADSL, rADEX, by = c("USUBJID", "STUDYID", "TRTSDT"))
+} else {
+  ADEX <- left_join(ADSL, rADEX, by = c("USUBJID", "STUDYID"))
+}
 
 ADEX <- ADEX \%>\% # nolint
   filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) \%>\%
- filter(!is.na(ASTDTM)) \%>\%
-  mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "\%d-\%b-\%y") -
-  as.Date(eval(parse(text = sl_start_date)), "\%d\%b\%Y")) + 1) \%>\%
-  select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT, ASTDT_dur)
+  filter(!is.na(ASTDTM)) \%>\%
+  select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT)
 
 ADEX <- split(ADEX, ADEX$USUBJID) \%>\% # nolint
   lapply(function(pinfo) {
@@ -165,28 +195,34 @@ ADEX <- split(ADEX, ADEX$USUBJID) \%>\% # nolint
       mutate(Modification = case_when(diff < 0 ~ "Decrease",
                                       diff > 0 ~ "Increase",
                                       diff == 0 ~ "None")) \%>\%
-      mutate(ASTDT_dur = as.numeric(as.Date(ASTDTM, "\%d-\%b-\%y") -
-                                      as.Date(eval(parse(text = sl_start_date)), "\%d\%b\%Y")) + 1)
+      mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
+                                      as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10))) + 1)
   })  \%>\%
   Reduce(rbind, .) \%>\%
-  as.data.frame
+  as.data.frame \%>\%
+  select(-diff)
 
 ## ADLB
 rADLB <- radlb(cached = TRUE) # nolint
 
-ADLB <- left_join(ADSL, rADLB)
+if("TRTSDT" \%in\% names(rADLB)){
+  ADLB <- left_join(ADSL, rADLB, by = c("USUBJID", "STUDYID", "TRTSDT"))
+} else {
+  ADLB <- left_join(ADSL, rADLB, by = c("USUBJID", "STUDYID"))
+}
 
 ADLB <- ADLB \%>\% # nolint
   group_by(USUBJID) \%>\%
   mutate(LBSTRESC = as.numeric(.data$LBSTRESC),
          ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) \%>\%
   filter(is.na(.data$LBSTRESC) == FALSE & is.na(.data$ANRIND) == FALSE) \%>\%
-  as.data.frame
+  as.data.frame \%>\%
+  select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, TRTSDT, LBTESTCD, ANRIND)
+
 ADLB <- ADLB \%>\%  # nolint
   mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM,
-                                           as.Date(eval(parse(text = sl_start_date))),
+                                           as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
                                            units = "days"))))
-
 
 
 # Example 1 "ADEX"
@@ -218,28 +254,6 @@ p1
 # Note that ASTDY is represented by a circle and AENDY is represented by a square.
 # If AENDY and ASTDY occur on the same day only AENDY will be shown.
 
-p2 <- patient_domain_profile(domain = "ADAE",
-                             var_names = ADAE$AEDECOD,
-                             marker_pos = ADAE[, c("ASTDY", "AENDY")],
-                             arrow_end = ADSL$max_day,
-                             ytick_at = waiver(),
-                             line_col = factor(ADAE$AESER),
-                             line_col_legend = "Serious",
-                             line_col_opt = c("Y" = "red", "N" = "blue"),
-                             line_width = 1,
-                             arrow_size = 0.1,
-                             no_enddate_extention = 50,
-                             marker_color = factor(ADAE$AETOXGR),
-                             marker_color_opt = c("1" = "green", "2" = "blue",
-                                                  "3" = "yellow", "4" = "orange", "5" = "red"),
-                             marker_color_legend = "Grade",
-                             marker_shape = NULL,
-                             marker_shape_opt = NULL,
-                             marker_shape_legend = NULL,
-                             show_days_label = TRUE,
-                             ylim = c(-28, 250),
-                             ylab = "Study Days",
-                             title = paste("Patient Profile: ", ADSL$USUBJID))
 p2
 
 # Example 3 "ADRS"
