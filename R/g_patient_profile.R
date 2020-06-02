@@ -56,132 +56,63 @@
 #' library(random.cdisc.data)
 #' library(utils.nest)
 #' library(tern)
+#' library(dplyr)
 #'
-#' #Data preparation
-#' sl_start_date <- "TRTSDT"
-#'
-#' ## ADSL
-#' rADSL <- radsl(cached = TRUE) # nolint
-#' ADSL <-  rADSL %>% # nolint
+#' # ADSL
+#' rADSL <- radsl(cached = TRUE)
+#' ADSL <-  rADSL %>%
 #'   group_by(.data$USUBJID) %>%
-#'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y"),
-#'         # if there are missing LSTALVDT or DTHDT, use max_date = max(as.Date(.data$LSTALVDT, "%d%b%Y"), as.Date(.data$DTHDT, "%d%b%Y"), na.rm=TRUE)
-#'          max_date = max(as.Date(.data$LSTALVDT, "%d%b%Y"), as.Date(.data$DTHDT, "%d%b%Y")),
-#'   ) %>%
-#'   mutate(max_day = as.numeric(as.Date(.data$max_date) -
-#'   as.Date(eval(parse(text = sl_start_date)), "%d%b%Y")) + 1) %>%
+#'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y",tz="PST8PDT"),
+#'          max_date = max(as.Date(.data$LSTALVDT), as.Date(.data$DTHDT)),
+#'          max_day = as.numeric(as.Date(.data$max_date) - as.Date(.data$TRTSDT)) + 1) %>%
+#'   select(USUBJID, STUDYID, TRTSDT , max_day) %>%
 #'   filter(USUBJID == rADSL$USUBJID[1])
 #'
-#' ## ADAE
-#' rADAE <- radae(cached = TRUE) # nolint
+#' # Exposure ADEX
+#' rADEX <- radex(cached = TRUE)
+#' ADEX <- rADEX %>% select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
+#' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 #'
-#' if("TRTSDT" %in% names(rADAE)){
-#' ADAE <- left_join(ADSL, rADAE, by = c("USUBJID", "STUDYID", "TRTSDT"))
-#' } else {
-#'   ADAE <- left_join(ADSL, rADAE, by = c("USUBJID", "STUDYID"))
-#' }
+#' ADEX <- ADEX %>%
+#'   filter(PARAMCD == "DOSE") %>%
+#'   arrange(PARCAT2, PARAMCD) %>%
+#'   mutate(diff = c(0, diff(AVAL, lag = 1))) %>%
+#'   mutate(Modification = case_when(diff < 0 ~ "Decrease",
+#'                                   diff > 0 ~ "Increase",
+#'                                   diff == 0 ~ "None")) %>%
+#'   mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
+#'                                 as.Date(TRTSDT) + 1))
 #'
-#' ADAE <- ADAE %>% # nolint
-#'   filter(!is.na(ASTDTM)) %>%
-#'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                              units = "days")))) %>%
-#'   filter(!is.na(AENDTM)) %>%
-#'   mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                              units = "days")))) %>%
-#'   select(USUBJID, AESOC, AEDECOD, AESER, AETOXGR, AREL, ASTDY, AENDY)
+#' # Adverse Event ADAE
+#' rADAE <- radae(cached = TRUE)
+#' ADAE <- rADAE %>% select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
+#' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 #'
-#' ## ADRS
-#' rADRS <- radrs(cached = TRUE) #nolint
+#' # Tumor Response ADRS
+#' rADRS <- radrs(cached = TRUE)
+#' ADRS <- rADRS %>% select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
+#' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
-#' if("TRTSDT" %in% names(rADRS)){
-#'   ADRS <- left_join(ADSL, rADRS, by = c("USUBJID", "STUDYID", "TRTSDT"))
-#' } else {
-#'   ADRS <- left_join(ADSL, rADRS, by = c("USUBJID", "STUDYID"))
-#' }
+#' ADRS <- ADRS %>%
+#'         mutate(ADY = ceiling(as.numeric(difftime(ADTM, as.Date(TRTSDT), units = "days"))))
+#' # Concomitant Med ADCM
+#' rADCM <- radcm(cached = TRUE)
+#' ADCM <- rADCM %>% select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
+#' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 #'
-#' ADRS <- ADRS %>% # nolint
-#'   mutate(ADY = ceiling(as.numeric(difftime(ADTM,
-#'                                            as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)), units = "days")))) %>%
-#'   select(USUBJID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM) %>%
-#'   filter(is.na(ADY) == FALSE)
+#' # Laboratory ADLB
+#' rADLB <- radlb(cached = TRUE)
+#' ADLB <- rADLB %>% select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
-#' ## ADCM
-#' rADCM <- radcm(cached = TRUE) # nolint
-#' if("TRTSDT" %in% names(rADCM)){
-#'   ADCM <- left_join(ADSL, rADCM, by = c("USUBJID", "STUDYID", "TRTSDT"))
-#' } else {
-#'   ADCM <- left_join(ADSL, rADCM, by = c("USUBJID", "STUDYID"))
-#' }
-#'
-#' ADCM <- ADCM %>% # nolint
-#'   filter(!is.na(ASTDTM)) %>%
-#'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                              units = "days")))) %>%
-#'   filter(!is.na(AENDTM)) %>%
-#'   mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                              units = "days")))) %>%
-#'   select(USUBJID, CMDECOD, ASTDTM, AENDTM, ASTDY, AENDY)
-#'
-#' if (length(unique(ADCM$USUBJID)) > 0) {
-#'   ADCM <- ADCM[which(ADCM$AENDY >= -28 | is.na(ADCM$AENDY) == TRUE
-#'                      & is.na(ADCM$ASTDY) == FALSE), ]
-#' }
-#'
-#' #ADEX
-#' rADEX <- radex(cached = TRUE) # nolint
-#'
-#' if("TRTSDT" %in% names(rADEX)){
-#'   ADEX <- left_join(ADSL, rADEX, by = c("USUBJID", "STUDYID", "TRTSDT"))
-#' } else {
-#'   ADEX <- left_join(ADSL, rADEX, by = c("USUBJID", "STUDYID"))
-#' }
-#'
-#' ADEX <- ADEX %>% # nolint
-#'   filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) %>%
-#'   filter(!is.na(ASTDTM)) %>%
-#'   select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, TRTSDT)
-#'
-#' ADEX <- split(ADEX, ADEX$USUBJID) %>% # nolint
-#'   lapply(function(pinfo) {
-#'     pinfo %>%
-#'       arrange(PARCAT2, PARAMCD) %>%
-#'       ungroup %>%
-#'       mutate(diff = c(0, diff(AVAL, lag = 1))) %>%
-#'       mutate(Modification = case_when(diff < 0 ~ "Decrease",
-#'                                       diff > 0 ~ "Increase",
-#'                                       diff == 0 ~ "None")) %>%
-#'       mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
-#'                                       as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10))) + 1)
-#'   })  %>%
-#'   Reduce(rbind, .) %>%
-#'   as.data.frame %>%
-#'   select(-diff)
-#'
-#' ## ADLB
-#' rADLB <- radlb(cached = TRUE) # nolint
-#'
-#' if("TRTSDT" %in% names(rADLB)){
-#'   ADLB <- left_join(ADSL, rADLB, by = c("USUBJID", "STUDYID", "TRTSDT"))
-#' } else {
-#'   ADLB <- left_join(ADSL, rADLB, by = c("USUBJID", "STUDYID"))
-#' }
-#'
-#' ADLB <- ADLB %>% # nolint
-#'   group_by(USUBJID) %>%
-#'   mutate(LBSTRESC = as.numeric(.data$LBSTRESC),
-#'          ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) %>%
-#'   filter(is.na(.data$LBSTRESC) == FALSE & is.na(.data$ANRIND) == FALSE) %>%
-#'   as.data.frame %>%
-#'   select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, TRTSDT, LBTESTCD, ANRIND)
-#'
-#' ADLB <- ADLB %>%  # nolint
-#'   mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM,
-#'                                            as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                            units = "days"))))
+#' ADLB <- ADLB %>%
+#'         group_by(USUBJID) %>%
+#'         mutate(ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) %>%
+#'         mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM, as.Date(TRTSDT), units = "days"))))
 #'
 #'
 #' # Example 1 "ADEX"
-#' p1 <- patient_domain_profile(domain = "ADEX",
+#' p1 <- patient_domain_profile(domain = "Exposure (ADEX)",
 #'                              var_names = ADEX$PARCAT2,
 #'                              marker_pos = ADEX$ASTDT_dur,
 #'                              arrow_end = ADSL$max_day,
@@ -200,7 +131,7 @@
 #'                              marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
 #'                              marker_shape_legend = "Dose Modification",
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-28, 250),
+#'                              ylim = c(-28, ADSL$max_day),
 #'                              ylab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p1
@@ -209,11 +140,32 @@
 #' # Note that ASTDY is represented by a circle and AENDY is represented by a square.
 #' # If AENDY and ASTDY occur on the same day only AENDY will be shown.
 #'
-
+#' p2 <- patient_domain_profile(domain = "Adverse Event (ADAE)",
+#'                              var_names = ADAE$AEDECOD,
+#'                              marker_pos = ADAE[, c("ASTDY", "AENDY")],
+#'                              arrow_end = ADSL$max_day,
+#'                              ytick_at = waiver(),
+#'                              line_col = ADAE$AESER,
+#'                              line_col_legend = "Serious",
+#'                              line_col_opt = NULL,
+#'                              line_width = 1,
+#'                              arrow_size = 0.1,
+#'                              no_enddate_extention = 0,
+#'                              marker_color = factor(ADAE$AETOXGR),
+#'                              marker_color_opt =  c("3" = "green", "4" = "yellow"),
+#'                              marker_color_legend = NULL,
+#'                              marker_shape = NULL,
+#'                              marker_shape_opt = NULL,
+#'                              marker_shape_legend = "Grade",
+#'                              show_days_label = TRUE,
+#'                              ylim = c(-28, ADSL$max_day),
+#'                              ylab = "Study Days",
+#'                              title = paste("Patient Profile: ", ADSL$USUBJID))
+#'
 #'p2
 #'
 #' # Example 3 "ADRS"
-#' p3 <- patient_domain_profile(domain = "ADRS",
+#' p3 <- patient_domain_profile(domain = "Tumor Response (ADRS)",
 #'                              var_names = ADRS$PARAMCD,
 #'                              marker_pos = ADRS$ADY,
 #'                              arrow_end = ADSL$max_day,
@@ -235,13 +187,13 @@
 #'                              "Y" = 11, "N" = 8),
 #'                             marker_shape_legend = "Response",
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-28, 250),
+#'                              ylim = c(-28, ADSL$max_day),
 #'                              ylab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p3
 #'
 #' # Example 4 "ADCM"
-#' p4 <- patient_domain_profile(domain = "ADCM",
+#' p4 <- patient_domain_profile(domain = "Concomitant Med (ADCM)",
 #'                              var_names = ADCM$CMDECOD,
 #'                              marker_pos = ADCM[, c("ASTDY", "AENDY")],
 #'                              arrow_end = ADSL$max_day,
@@ -259,13 +211,13 @@
 #'                              marker_shape_opt = NULL,
 #'                              marker_shape_legend = NULL,
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-28, 250),
+#'                              ylim = c(-28, ADSL$max_day),
 #'                              ylab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p4
 #'
 #' # Example 5 "ADLB"
-#' p5 <- patient_domain_profile(domain = "ADLB",
+#' p5 <- patient_domain_profile(domain = "Laboratoy (ADLB)",
 #'                              var_names = ADLB$LBTESTCD,
 #'                              marker_pos = ADLB$ADY,
 #'                              arrow_end = ADSL$max_day,
@@ -285,7 +237,7 @@
 #'                                                   "NORMAL" = 23, "NA" = 23),
 #'                              marker_shape_legend = "Labs Abnormality",
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-30, 250),
+#'                              ylim = c(-30, ADSL$max_day),
 #'                              ylab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p5
@@ -550,128 +502,60 @@ patient_domain_profile <- function(domain = NULL,
 #' library(random.cdisc.data)
 #' library(utils.nest)
 #' library(tern)
+#' library(dplyr)
 #'
-#' #Data preparation
-#' sl_start_date <- "TRTSDT"
-#'
-#' ## ADSL
-#' rADSL <- radsl(cached = TRUE) # nolint
-#' ADSL <-  rADSL %>% # nolint
+#' # ADSL
+#' rADSL <- radsl(cached = TRUE)
+#' ADSL <-  rADSL %>%
 #'   group_by(.data$USUBJID) %>%
-#'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y"),
-#'         # if there are missing LSTALVDT or DTHDT, use max_date = max(as.Date(.data$LSTALVDT, "%d%b%Y"), as.Date(.data$DTHDT, "%d%b%Y"), na.rm=TRUE)
-#'          max_date = max(as.Date(.data$LSTALVDT, "%d%b%Y"), as.Date(.data$DTHDT, "%d%b%Y")),
-#'   ) %>%
-#'   mutate(max_day = as.numeric(as.Date(.data$max_date) -
-#'   as.Date(eval(parse(text = sl_start_date)), "%d%b%Y")) + 1) %>%
+#'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y",tz="PST8PDT"),
+#'          max_date = max(as.Date(.data$LSTALVDT), as.Date(.data$DTHDT)),
+#'          max_day = as.numeric(as.Date(.data$max_date) - as.Date(.data$TRTSDT)) + 1) %>%
+#'   select(USUBJID, STUDYID, TRTSDT, max_day) %>%
 #'   filter(USUBJID == rADSL$USUBJID[1])
 #'
-#' ## ADAE
-#' rADAE <- radae(cached = TRUE) # nolint
-#'
-#' if(sl_start_date %in% names(rADAE)){
-#' ADAE <- left_join(ADSL, rADAE, by = c("USUBJID", "STUDYID", sl_start_date))
-#' } else {
-#'   ADAE <- left_join(ADSL, rADAE, by = c("USUBJID", "STUDYID"))
-#' }
-#'
-#' ADAE <- ADAE %>% # nolint
-#'   filter(!is.na(ASTDTM)) %>%
-#'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                              units = "days")))) %>%
-#'   filter(!is.na(AENDTM)) %>%
-#'   mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                              units = "days")))) %>%
-#'   select(USUBJID, AESOC, AEDECOD, AESER, AETOXGR, AREL, ASTDY, AENDY)
-#'
-#' ## ADRS
-#' rADRS <- radrs(cached = TRUE) #nolint
-#'
-#' if(sl_start_date %in% names(rADRS)){
-#'   ADRS <- left_join(ADSL, rADRS, by = c("USUBJID", "STUDYID", sl_start_date))
-#' } else {
-#'   ADRS <- left_join(ADSL, rADRS, by = c("USUBJID", "STUDYID"))
-#' }
-#'
-#' ADRS <- ADRS %>% # nolint
-#'   mutate(ADY = ceiling(as.numeric(difftime(ADTM,
-#'                                            as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)), units = "days")))) %>%
-#'   select(USUBJID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM) %>%
-#'   filter(is.na(ADY) == FALSE)
-#'
-#' ## ADCM
-#' rADCM <- radcm(cached = TRUE) # nolint
-#' if(sl_start_date %in% names(rADCM)){
-#'   ADCM <- left_join(ADSL, rADCM, by = c("USUBJID", "STUDYID", sl_start_date))
-#' } else {
-#'   ADCM <- left_join(ADSL, rADCM, by = c("USUBJID", "STUDYID"))
-#' }
-#'
-#' ADCM <- ADCM %>% # nolint
-#'   filter(!is.na(ASTDTM)) %>%
-#'   mutate(ASTDY = ceiling(as.numeric(difftime(ASTDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                              units = "days")))) %>%
-#'   filter(!is.na(AENDTM)) %>%
-#'   mutate(AENDY = ceiling(as.numeric(difftime(AENDTM, as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                              units = "days")))) %>%
-#'   select(USUBJID, CMDECOD, ASTDTM, AENDTM, ASTDY, AENDY)
-#'
-#' if (length(unique(ADCM$USUBJID)) > 0) {
-#'   ADCM <- ADCM[which(ADCM$AENDY >= -28 | is.na(ADCM$AENDY) == TRUE
-#'                      & is.na(ADCM$ASTDY) == FALSE), ]
-#' }
-#'
 #' #ADEX
-#' rADEX <- radex(cached = TRUE) # nolint
+#' rADEX <- radex(cached = TRUE)
+#' ADEX <- rADEX %>% select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
+#' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 #'
-#' if(sl_start_date %in% names(rADEX)){
-#'   ADEX <- left_join(ADSL, rADEX, by = c("USUBJID", "STUDYID", sl_start_date))
-#' } else {
-#'   ADEX <- left_join(ADSL, rADEX, by = c("USUBJID", "STUDYID"))
-#' }
+#' ADEX <- ADEX %>%
+#'   filter(PARAMCD == "DOSE") %>%
+#'   arrange(PARCAT2, PARAMCD) %>%
+#'   mutate(diff = c(0, diff(AVAL, lag = 1))) %>%
+#'   mutate(Modification = case_when(diff < 0 ~ "Decrease",
+#'                                   diff > 0 ~ "Increase",
+#'                                   diff == 0 ~ "None")) %>%
+#'   mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
+#'                                 as.Date(TRTSDT) + 1)) %>%
+#'   as.data.frame()
 #'
-#' ADEX <- ADEX %>% # nolint
-#'   filter(PARCAT1 == "INDIVIDUAL" & PARAMCD == "DOSE" & !is.na(AVAL)) %>%
-#'   filter(!is.na(ASTDTM)) %>%
-#'   select(USUBJID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD, !!quo(sl_start_date))
+#' # ADAE
+#' rADAE <- radae(cached = TRUE)
+#' ADAE <- rADAE %>% select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
+#' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 #'
-#' ADEX <- split(ADEX, ADEX$USUBJID) %>% # nolint
-#'   lapply(function(pinfo) {
-#'     pinfo %>%
-#'       arrange(PARCAT2, PARAMCD) %>%
-#'       ungroup %>%
-#'       mutate(diff = c(0, diff(AVAL, lag = 1))) %>%
-#'       mutate(Modification = case_when(diff < 0 ~ "Decrease",
-#'                                       diff > 0 ~ "Increase",
-#'                                       diff == 0 ~ "None")) %>%
-#'       mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
-#'                                       as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10))) + 1)
-#'   })  %>%
-#'   Reduce(rbind, .) %>%
-#'   as.data.frame %>%
-#'   select(-diff)
+#' # ADRS
+#' rADRS <- radrs(cached = TRUE)
+#' ADRS <- rADRS %>% select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
+#' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
-#' ## ADLB
-#' rADLB <- radlb(cached = TRUE) # nolint
+#' ADRS <- ADRS %>%
+#'         mutate(ADY = ceiling(as.numeric(difftime(ADTM, as.Date(TRTSDT), units = "days"))))
+#' # ADCM
+#' rADCM <- radcm(cached = TRUE)
+#' ADCM <- rADCM %>% select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
+#' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 #'
-#' if(sl_start_date %in% names(rADLB)){
-#'   ADLB <- left_join(ADSL, rADLB, by = c("USUBJID", "STUDYID", sl_start_date))
-#' } else {
-#'   ADLB <- left_join(ADSL, rADLB, by = c("USUBJID", "STUDYID"))
-#' }
+#' # ADLB
+#' rADLB <- radlb(cached = TRUE)
+#' ADLB <- rADLB %>% select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
-#' ADLB <- ADLB %>% # nolint
-#'   group_by(USUBJID) %>%
-#'   mutate(LBSTRESC = as.numeric(.data$LBSTRESC),
-#'          ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) %>%
-#'   filter(is.na(.data$LBSTRESC) == FALSE & is.na(.data$ANRIND) == FALSE) %>%
-#'   as.data.frame %>%
-#'   select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, !!quo(sl_start_date), LBTESTCD, ANRIND)
-#'
-#' ADLB <- ADLB %>%  # nolint
-#'   mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM,
-#'                                            as.Date(substr(as.character(eval(parse(text = sl_start_date))), 1, 10)),
-#'                                            units = "days"))))
+#' ADLB <- ADLB %>%
+#'         group_by(USUBJID) %>%
+#'         mutate(ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) %>%
+#'         mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM, as.Date(TRTSDT), units = "days"))))
 #'
 #' # Example Patient Profile plot 5 domains
 #'
@@ -694,37 +578,10 @@ patient_domain_profile <- function(domain = NULL,
 #'                   lb_data = ADLB,
 #'                   lb_var_names = ADLB$LBTESTCD,
 #'                   arrow_end_day = ADSL$max_day,
-#'                   ylim = c(-28, 250),
+#'                   ylim = c(-28, ADSL$max_day),
 #'                   ylab = "Study Days",
 #'                   title = paste("Patient Profile: ", ADSL$USUBJID))
 #'
-#' # Example Patient Profile with no ADRS dataset
-#'
-#' ADRS <- NULL
-#'
-#' g_patient_profile(select_ex = TRUE,
-#'                   select_ae = TRUE,
-#'                   select_rs = FALSE,
-#'                   select_cm = TRUE,
-#'                   select_lb = TRUE,
-#'                   ex_data = ADEX,
-#'                   ex_var_names = ADEX$PARCAT2,
-#'                   ae_data = ADAE,
-#'                   ae_var_names = ADAE$AEDECOD,
-#'                   ae_line_col = factor(ADAE$AESER),
-#'                   ae_line_col_legend = "Serious",
-#'                   ae_line_col_opt = c("Y" = "red", "N" = "blue"),
-#'                   rs_data = ADRS,
-#'                   rs_var_names = ADRS$PARAMCD,
-#'                   cm_data = ADCM,
-#'                   cm_var_names = ADCM$CMDECOD,
-#'                   lb_data = ADLB,
-#'                   lb_var_names = ADLB$LBTESTCD,
-#'                   arrow_end_day = ADSL$max_day,
-#'                   ylim = c(-28, 250),
-#'                   ylab = "Study Days",
-#'                   title = paste("Patient Profile: ", ADSL$USUBJID))
-
 
 g_patient_profile <- function(select_ex = TRUE,
                               select_ae = TRUE,
@@ -750,29 +607,29 @@ g_patient_profile <- function(select_ex = TRUE,
                               title = "Patient Profile") {
 
   #Check if we have data for each of these plots
-  if (dim(ADEX)[1] == 0 || is.null(ADEX)) {
+  if (dim(ex_data)[1] == 0 || is.null(ex_data)) {
     select_ex <- FALSE
     warning("No AEX data for this subject")
 
   }
 
-  if (dim(ADAE)[1] == 0 || is.null(ADAE)) {
+  if (dim(ae_data)[1] == 0 || is.null(ae_data)) {
     select_ae <- FALSE
     warning("No AAE data for this subject")
 
   }
 
-  if (dim(ADRS)[1] == 0 || is.null(ADRS)) {
+  if (dim(rs_data)[1] == 0 || is.null(rs_data)) {
     select_rs <- FALSE
     warning("No ARS data for this subject")
 
   }
 
-  if (dim(ADCM)[1] == 0 || is.null(ADCM)) {
+  if (dim(cm_data)[1] == 0 || is.null(cm_data)) {
     select_cm <- FALSE
     warning("No ACM data for this subject")
   }
-  if (dim(ADLB)[1] == 0 || is.null(ADLB)) {
+  if (dim(lb_data)[1] == 0 || is.null(lb_data)) {
     select_lb <- FALSE
     warning("No ALB data for this subject")
   }
