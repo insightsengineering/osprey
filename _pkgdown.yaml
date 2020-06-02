@@ -40,6 +40,9 @@ reference:
       - stream_filter
       - stream_filter_convwhere
       - stream_filter_index
+  - title: Elementary Tables
+    contents:
+      - patient_domain_profile
   - title: Data
     contents:
       - rADAE

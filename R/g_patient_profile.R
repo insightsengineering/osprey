@@ -792,53 +792,23 @@ g_patient_profile <- function(select_ex = TRUE,
 
   # Assemble domain plots into patient profile plot
   n_domain <- sum(select_ex, select_ae, select_rs, select_cm, select_lb)
-
+  # add plots to a list
   plot_list <- list(p1, p2, p3, p4, p5)
 
-  nline_ex <- length(unique(ex_var_names))
-  if (nline_ex <= 10 & nline_ex > 0) {
-    nline_ex <- 10
-  }
+  plot_list <- plot_list[select_list]
+  # distribute space by number of levels in each domain
+  var_list <- list(ex_var_names,ae_var_names,rs_var_names,cm_var_names,lb_var_names)
+  var_list <- var_list %>%
+    lapply(unique) %>%
+    lapply(length) %>%
+    unlist %>%
+    cbind(.data,select_list) %>%
+    as.data.frame() %>%
+    #keep the selected domains
+    dplyr::filter(select_list == TRUE) %>%
+    dplyr::mutate(nline_dat = ifelse(. <= 10 & . >0, 10, .)) %>%
+    #relative height
+    dplyr::mutate(sbplt_ht = nline_dat/sum(nline_dat))
 
-  nline_ae <- length(unique(ae_var_names))
-  if (nline_ae <= 10 & nline_ae > 0) {
-    nline_ae <- 10
-  }
-
-  nline_rs <- length(unique(rs_var_names))
-  if (nline_rs <= 10 & nline_rs > 0) {
-    nline_rs <- 10
-  }
-
-  nline_cm <- length(unique(cm_var_names))
-  if (nline_cm <= 10 & nline_cm > 0) {
-    nline_cm <- 10
-  }
-
-  nline_lb <- length(unique(lb_var_names))
-  if (nline_lb <= 10 & nline_lb > 0) {
-    nline_lb <- 10
-  }
-
-  nline_total <- sum(nline_ex, nline_ae, nline_rs, nline_cm, nline_lb, na.rm = TRUE)
-
-  sbplt_ht <- c(nline_ex / nline_total,
-                nline_ae / nline_total,
-                nline_rs / nline_total,
-                nline_cm / nline_total,
-                nline_lb / nline_total)
-
-  p_list <- rep(list(NA), n_domain)
-  subplot_height <- rep(NA, n_domain)
-
-  j <- 1
-  for (i in seq_len(length(select_list))) {
-    if (select_list[i] == TRUE) {
-      p_list[[j]] <- plot_list[[i]]
-      subplot_height[j] <- sbplt_ht[i]
-      j <- j + 1
-    }
-  }
-
-  cowplot::plot_grid(plotlist = p_list, nrow = j - 1, align = "v", axis = "lr", rel_heights = subplot_height)
+  cowplot::plot_grid(plotlist = plot_list, nrow = nrow(var_list), align = "v", axis = "lr", rel_heights = var_list$sbplt_ht)
 }
