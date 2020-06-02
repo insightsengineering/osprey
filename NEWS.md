@@ -1,5 +1,6 @@
-# osprey 0.1.3.9000
+# osprey 0.1.4
 
+* Work on `g_swimlane`, `g_waterfall`, `t_ae_ctct_v2`, and `utils`
 
 # osprey 0.1.3
 * force `grade_levels` argument in `t_ae_ctc_v2` function to be a factor
