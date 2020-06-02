@@ -113,7 +113,7 @@ g_butterfly <- function(category,
     list(length(unique(vapply(list(category, right_flag, left_flag), length, integer(1)))) == 1,
          "invalid arguments: check that the length of input arguments are identical"),
 
-    list(length(unique(right_flag)) == 2 && length(unique(left_flag)),
+    list(length(unique(right_flag)) == 2 && length(unique(left_flag)) == 2,
          "invalid arguments: groups can only have 2 unique values"),
 
     list(is.null(block_color) || length(block_color) == length(category),
