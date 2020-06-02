@@ -840,5 +840,5 @@ g_patient_profile <- function(select_ex = TRUE,
     }
   }
 
-  plot_grid(plotlist = p_list, nrow = j - 1, align = "v", axis = "lr", rel_heights = subplot_height)
+  cowplot::plot_grid(plotlist = p_list, nrow = j - 1, align = "v", axis = "lr", rel_heights = subplot_height)
 }
