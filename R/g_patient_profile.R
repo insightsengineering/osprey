@@ -10,11 +10,11 @@
 #' If there is a missing dataset, assign a NULL value to it. ie) ADRS <- NULL
 #' prior to running the patient profile plot.
 #'
-#' @param domain string of domain name to be shown as x-axis label, default is \code{NULL}
+#' @param domain string of domain name to be shown as y-axis label, default is \code{NULL}
 #' @param var_names vector to identify each lane
 #' @param marker_pos numeric vector for EX, LB and RS domain, numeric data frame with two columns for AE or CM domain
 #' @param arrow_end numeric value indicates the end of arrow when arrows are requested
-#' @param ytick_at optional break interval of bar length axis
+#' @param xtick_at optional break interval of bar length axis
 #' @param line_col factor vector to specify color for segments, default is \code{NULL}
 #' @param line_col_legend string to be displayed as line color legend title, default is \code{NULL}
 #' @param line_col_opt aesthetic values to map color values (named vector to map color values to each name).
@@ -37,7 +37,7 @@
 #' @param show_days_label boolean value for showing y-axis label, default is \code{TRUE}
 #' @param xlim numeric vector for x-axis limit, default is
 #'     \code{xlim = c(-28, max(marker_pos) + 5)}
-#' @param xlab string to be shown as x-axis label, default is \code{NULL}
+#' @param xlab string to be shown as x-axis label, default is \code{"Study Days"}
 #' @param show_title boolean value for showing title of the plot, default is \code{TRUE}
 #' @param title string to be shown as title of the plot, default is \code{NULL}
 #'
@@ -116,7 +116,7 @@
 #'                              var_names = ADEX$PARCAT2,
 #'                              marker_pos = ADEX$ASTDT_dur,
 #'                              arrow_end = ADSL$max_day,
-#'                              ytick_at = waiver(),
+#'                              xtick_at = waiver(),
 #'                              line_col = NULL,
 #'                              line_col_legend = NULL,
 #'                              line_col_opt = NULL,
@@ -144,7 +144,7 @@
 #'                              var_names = ADAE$AEDECOD,
 #'                              marker_pos = ADAE[, c("ASTDY", "AENDY")],
 #'                              arrow_end = ADSL$max_day,
-#'                              ytick_at = waiver(),
+#'                              xtick_at = waiver(),
 #'                              line_col = ADAE$AESER,
 #'                              line_col_legend = "Serious",
 #'                              line_col_opt = NULL,
@@ -169,7 +169,7 @@
 #'                              var_names = ADRS$PARAMCD,
 #'                              marker_pos = ADRS$ADY,
 #'                              arrow_end = ADSL$max_day,
-#'                              ytick_at = waiver(),
+#'                              xtick_at = waiver(),
 #'                              line_col = NULL,
 #'                              line_col_legend = NULL,
 #'                              line_col_opt = NULL,
@@ -197,7 +197,7 @@
 #'                              var_names = ADCM$CMDECOD,
 #'                              marker_pos = ADCM[, c("ASTDY", "AENDY")],
 #'                              arrow_end = ADSL$max_day,
-#'                              ytick_at = waiver(),
+#'                              xtick_at = waiver(),
 #'                              line_col = NULL,
 #'                              line_col_legend = NULL,
 #'                              line_col_opt = "orange",
@@ -221,7 +221,7 @@
 #'                              var_names = ADLB$LBTESTCD,
 #'                              marker_pos = ADLB$ADY,
 #'                              arrow_end = ADSL$max_day,
-#'                              ytick_at = waiver(),
+#'                              xtick_at = waiver(),
 #'                              line_col = NULL,
 #'                              line_col_legend = NULL,
 #'                              line_col_opt = NULL,
@@ -246,7 +246,7 @@ patient_domain_profile <- function(domain = NULL,
                                    var_names,
                                    marker_pos,
                                    arrow_end,
-                                   ytick_at = 40,
+                                   xtick_at = waiver(),
                                    line_col = NULL,
                                    line_col_legend = NULL,
                                    line_col_opt = NULL,
@@ -264,6 +264,26 @@ patient_domain_profile <- function(domain = NULL,
                                    xlab = NULL,
                                    show_title = TRUE,
                                    title = NULL) {
+
+  #check user input
+  stop_if_not(
+    list(!is_empty(var_names), "missing argument: var_names must be specified"),
+    list(!is_empty(marker_pos), "missing argument: marker_pos must be specified"),
+    list(!is_empty(arrow_end), "missing argument: arrow_end must be specified"),
+
+    list(length(unique(nrow(data.frame(var_names)),nrow(data.frame(marker_pos)),nrow(data.frame(arrow_end)))) == 1,
+         "invalid arguments: check that the length of input arguments are identical"),
+    list(ncol(data.frame(marker_pos))<=2,
+         "invalid argument: check that marker_pos is either a vector or a data frame with two columns"),
+    list(is.null(line_col) || length(line_col) == length(var_names),
+         "invalid arguments: check that the length of line_col is equal as other inputs"),
+    list(is.null(marker_color) || length(marker_color) == length(var_names),
+         "invalid arguments: check that the length of marker_color is equal as other inputs"),
+    list(is.null(marker_shape) || length(marker_shape) == length(var_names),
+         "invalid arguments: check that the length of marker_shape is equal as other inputs"),
+    list(is_numeric_vector(xlim,min_length = 2, max_length = 2),
+         "invalid arguments: check that xlim is of type numeric vector")
+  )
 
   marker_data <- data.frame(var_names,
                             marker_pos = if (is.null(marker_pos))
@@ -289,7 +309,7 @@ patient_domain_profile <- function(domain = NULL,
                    aes(x = var_names, y = line_start, xend = var_names, yend = line_end, color = line_col),
                    lineend = "round", linejoin = "round",
                    size = line_width, arrow = NULL, show.legend = NA) +
-      scale_y_continuous(limits = xlim, breaks = ytick_at, expand = c(0, 0)) +
+      scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       geom_segment(data = line_data[is.na(line_data$line_end) == TRUE, ],
                    aes(x = var_names, y = pmax(line_start, line_min, na.rm = TRUE),
@@ -366,7 +386,7 @@ patient_domain_profile <- function(domain = NULL,
                                          shape = marker_shape,
                                          fill = marker_color),
                  size = 3, na.rm = TRUE) +
-      scale_y_continuous(limits = xlim, breaks = ytick_at, expand = c(0, 0)) +
+      scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       theme_bw() +
       theme(
@@ -605,6 +625,12 @@ g_patient_profile <- function(select_ex = TRUE,
                               xlim = c(-28, 250),
                               xlab = "Study Days",
                               title = "Patient Profile") {
+  stop_if_not(
+    list(lapply(list(select_ex, select_ae, select_rs, select_cm, select_lb), rlang::is_bool) %>%
+           unlist %>%
+           all,
+         "invalid argument: check that the select arguments are boolean")
+  )
 
   #Check if we have data for each of these plots
   if (dim(ex_data)[1] == 0 || is.null(ex_data)) {
@@ -649,7 +675,7 @@ g_patient_profile <- function(select_ex = TRUE,
                                  var_names = ex_var_names,
                                  marker_pos = ex_data$ASTDT_dur,
                                  arrow_end = arrow_end_day,
-                                 ytick_at = waiver(),
+                                 xtick_at = waiver(),
                                  line_col = NULL,
                                  line_col_legend = NULL,
                                  line_col_opt = NULL,
@@ -678,7 +704,7 @@ g_patient_profile <- function(select_ex = TRUE,
                                  var_names = ae_var_names,
                                  marker_pos = ae_data[, c("ASTDY", "AENDY")],
                                  arrow_end = arrow_end_day,
-                                 ytick_at = waiver(),
+                                 xtick_at = waiver(),
                                  line_col = ae_line_col,
                                  line_col_legend = ae_line_col_legend,
                                  line_col_opt = ae_line_col_opt,
@@ -708,7 +734,7 @@ g_patient_profile <- function(select_ex = TRUE,
                                  var_names = rs_var_names,
                                  marker_pos = rs_data$ADY,
                                  arrow_end = arrow_end_day,
-                                 ytick_at = waiver(),
+                                 xtick_at = waiver(),
                                  line_col = NULL,
                                  line_col_legend = NULL,
                                  line_col_opt = NULL,
@@ -739,7 +765,7 @@ g_patient_profile <- function(select_ex = TRUE,
                                  var_names = cm_var_names,
                                  marker_pos = cm_data[, c("ASTDY", "AENDY")],
                                  arrow_end = arrow_end_day,
-                                 ytick_at = waiver(),
+                                 xtick_at = waiver(),
                                  line_col = NULL,
                                  line_col_legend = NULL,
                                  line_col_opt = "orange",
@@ -767,7 +793,7 @@ g_patient_profile <- function(select_ex = TRUE,
                                  var_names = lb_var_names,
                                  marker_pos = lb_data$ADY,
                                  arrow_end = arrow_end_day,
-                                 ytick_at = waiver(),
+                                 xtick_at = waiver(),
                                  line_col = NULL,
                                  line_col_legend = NULL,
                                  line_col_opt = NULL,
