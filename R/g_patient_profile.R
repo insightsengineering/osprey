@@ -35,9 +35,9 @@
 #'      otherwise shape will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified
 #' @param marker_shape_legend string to be displayed as marker shape legend title, default is \code{NULL}
 #' @param show_days_label boolean value for showing y-axis label, default is \code{TRUE}
-#' @param ylim numeric vector for y-axis limit, default is
-#'     \code{ylim = c(-28, max(marker_pos) + 5)}
-#' @param ylab string to be shown as y-axis label, default is \code{NULL}
+#' @param xlim numeric vector for x-axis limit, default is
+#'     \code{xlim = c(-28, max(marker_pos) + 5)}
+#' @param xlab string to be shown as x-axis label, default is \code{NULL}
 #' @param show_title boolean value for showing title of the plot, default is \code{TRUE}
 #' @param title string to be shown as title of the plot, default is \code{NULL}
 #'
@@ -131,8 +131,8 @@
 #'                              marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
 #'                              marker_shape_legend = "Dose Modification",
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-28, ADSL$max_day),
-#'                              ylab = "Study Days",
+#'                              xlim = c(-28, ADSL$max_day),
+#'                              xlab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p1
 #'
@@ -158,8 +158,8 @@
 #'                              marker_shape_opt = NULL,
 #'                              marker_shape_legend = "Grade",
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-28, ADSL$max_day),
-#'                              ylab = "Study Days",
+#'                              xlim = c(-28, ADSL$max_day),
+#'                              xlab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'
 #'p2
@@ -187,8 +187,8 @@
 #'                              "Y" = 11, "N" = 8),
 #'                             marker_shape_legend = "Response",
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-28, ADSL$max_day),
-#'                              ylab = "Study Days",
+#'                              xlim = c(-28, ADSL$max_day),
+#'                              xlab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p3
 #'
@@ -211,8 +211,8 @@
 #'                              marker_shape_opt = NULL,
 #'                              marker_shape_legend = NULL,
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-28, ADSL$max_day),
-#'                              ylab = "Study Days",
+#'                              xlim = c(-28, ADSL$max_day),
+#'                              xlab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p4
 #'
@@ -237,8 +237,8 @@
 #'                                                   "NORMAL" = 23, "NA" = 23),
 #'                              marker_shape_legend = "Labs Abnormality",
 #'                              show_days_label = TRUE,
-#'                              ylim = c(-30, ADSL$max_day),
-#'                              ylab = "Study Days",
+#'                              xlim = c(-30, ADSL$max_day),
+#'                              xlab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p5
 
@@ -260,8 +260,8 @@ patient_domain_profile <- function(domain = NULL,
                                    marker_shape_opt = NULL,
                                    marker_shape_legend = NULL,
                                    show_days_label = TRUE,
-                                   ylim = c(-28, max(marker_pos) + 5),
-                                   ylab = NULL,
+                                   xlim = c(-28, max(marker_pos) + 5),
+                                   xlab = NULL,
                                    show_title = TRUE,
                                    title = NULL) {
 
@@ -279,7 +279,7 @@ patient_domain_profile <- function(domain = NULL,
                             line_col = if (is.null(line_col)) tern:::to_n("x", length(var_names)) else line_col,
                             line_start = marker_pos[, 1],
                             line_end = marker_pos[, 2],
-                            line_min = rep(ylim[1], length(var_names)),
+                            line_min = rep(xlim[1], length(var_names)),
                             line_max = rep(arrow_end + no_enddate_extention, length(var_names)))
     names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
 
@@ -289,7 +289,7 @@ patient_domain_profile <- function(domain = NULL,
                    aes(x = var_names, y = line_start, xend = var_names, yend = line_end, color = line_col),
                    lineend = "round", linejoin = "round",
                    size = line_width, arrow = NULL, show.legend = NA) +
-      scale_y_continuous(limits = ylim, breaks = ytick_at, expand = c(0, 0)) +
+      scale_y_continuous(limits = xlim, breaks = ytick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       geom_segment(data = line_data[is.na(line_data$line_end) == TRUE, ],
                    aes(x = var_names, y = pmax(line_start, line_min, na.rm = TRUE),
@@ -340,7 +340,7 @@ patient_domain_profile <- function(domain = NULL,
         panel.grid = element_blank(),
         axis.line = element_line(colour = "black")
       ) +
-      ylab(ylab) + xlab(domain)
+      ylab(xlab) + xlab(domain)
 
     if (!is.null(marker_color)) {
       p <- p + guides(fill = guide_legend(marker_color_legend, order = 2))
@@ -366,7 +366,7 @@ patient_domain_profile <- function(domain = NULL,
                                          shape = marker_shape,
                                          fill = marker_color),
                  size = 3, na.rm = TRUE) +
-      scale_y_continuous(limits = ylim, breaks = ytick_at, expand = c(0, 0)) +
+      scale_y_continuous(limits = xlim, breaks = ytick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       theme_bw() +
       theme(
@@ -374,7 +374,7 @@ patient_domain_profile <- function(domain = NULL,
         panel.grid = element_blank(),
         axis.line = element_line(colour = "black")
       ) +
-      ylab(ylab) + xlab(domain)
+      ylab(xlab) + xlab(domain)
 
     if (is.null(marker_color_legend)) {
       if (length(setdiff(marker_color, marker_shape)) == 0) {
@@ -484,9 +484,9 @@ patient_domain_profile <- function(domain = NULL,
 #' @param lb_data dataframe for LB domain dataset
 #' @param lb_var_names vector to identify each lane of LB domain plot
 #' @param arrow_end_day numeric value indicates the end of arrow when arrows are requested
-#' @param ylim numeric vector for y-axis limit that will be shared by all domain plots, default is
-#'      \code{ylim = c(-28, 250)}
-#' @param ylab string to be shown as y-axis label, default is \code{"Study Days"}
+#' @param xlim numeric vector for x-axis limit that will be shared by all domain plots, default is
+#'      \code{xlim = c(-28, 250)}
+#' @param xlab string to be shown as x-axis label, default is \code{"Study Days"}
 #' @param title string to be shown as title of the plot, default is \code{"Patient Profile"}
 #'
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
@@ -578,8 +578,8 @@ patient_domain_profile <- function(domain = NULL,
 #'                   lb_data = ADLB,
 #'                   lb_var_names = ADLB$LBTESTCD,
 #'                   arrow_end_day = ADSL$max_day,
-#'                   ylim = c(-28, ADSL$max_day),
-#'                   ylab = "Study Days",
+#'                   xlim = c(-28, ADSL$max_day),
+#'                   xlab = "Study Days",
 #'                   title = paste("Patient Profile: ", ADSL$USUBJID))
 #'
 
@@ -602,8 +602,8 @@ g_patient_profile <- function(select_ex = TRUE,
                               lb_data,
                               lb_var_names,
                               arrow_end_day,
-                              ylim = c(-28, 250),
-                              ylab = "Study Days",
+                              xlim = c(-28, 250),
+                              xlab = "Study Days",
                               title = "Patient Profile") {
 
   #Check if we have data for each of these plots
@@ -663,8 +663,8 @@ g_patient_profile <- function(select_ex = TRUE,
                                  marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
                                  marker_shape_legend = "Dose Modification",
                                  show_days_label = show_days_label[1],
-                                 ylim = ylim,
-                                 ylab = ylab,
+                                 xlim = xlim,
+                                 xlab = xlab,
                                  show_title = show_title[1],
                                  title = title)
 
@@ -693,8 +693,8 @@ g_patient_profile <- function(select_ex = TRUE,
                                  marker_shape_opt = NULL,
                                  marker_shape_legend = NULL,
                                  show_days_label = show_days_label[2],
-                                 ylim = ylim,
-                                 ylab = ylab,
+                                 xlim = xlim,
+                                 xlab = xlab,
                                  show_title = show_title[2],
                                  title = title)
   } else{
@@ -724,8 +724,8 @@ g_patient_profile <- function(select_ex = TRUE,
                                                       "Y" = 11, "N" = 8),
                                  marker_shape_legend = "Response",
                                  show_days_label = show_days_label[3],
-                                 ylim = ylim,
-                                 ylab = ylab,
+                                 xlim = xlim,
+                                 xlab = xlab,
                                  show_title = show_title[3],
                                  title = title)
   } else {
@@ -753,8 +753,8 @@ g_patient_profile <- function(select_ex = TRUE,
                                  marker_shape_opt = NULL,
                                  marker_shape_legend = NULL,
                                  show_days_label = show_days_label[4],
-                                 ylim = ylim,
-                                 ylab = ylab,
+                                 xlim = xlim,
+                                 xlab = xlab,
                                  show_title = show_title[4],
                                  title = title)
   } else {
@@ -782,8 +782,8 @@ g_patient_profile <- function(select_ex = TRUE,
                                  marker_shape_opt = c("HIGH" = 24, "LOW" = 25, "NORMAL" = 23),
                                  marker_shape_legend = "Labs Abnormality",
                                  show_days_label = show_days_label[5],
-                                 ylim = ylim,
-                                 ylab = ylab,
+                                 xlim = xlim,
+                                 xlab = xlab,
                                  show_title = show_title[5],
                                  title = title)
   } else {
