@@ -1,37 +1,35 @@
 # osprey 0.1.4
 
-* Work on `g_swimlane`, `g_waterfall`, `t_ae_ctct_v2`, and `utils`
+* Work on `g_swimlane`, `g_waterfall`, `t_ae_ctct_v2`, and `utils`.
 
 # osprey 0.1.3
-* force `grade_levels` argument in `t_ae_ctc_v2` function to be a factor
+* Force `grade_levels` argument in `t_ae_ctc_v2` function to be a factor.
 
 # osprey 0.1.2
-- Refactor due to changes in `utils.nest`
+* Refactor due to changes in `utils.nest`.
 
 # osprey 0.1.1
-Refactoring package according to the NEST standards.
 
-- including test.nest tests
-- cleaning dependencies
-- fix tm_g_butterfly faceting error
-- add sorting by right or left wing
-- adding g_watterfall
+* Refactoring package according to the NEST standards:
+  - Including test.nest tests.
+  - Cleaning dependencies.
+  - Fix tm_g_butterfly faceting error.
+  - Add sorting by right or left wing.
+  - Adding g_watterfall.
 
 # osprey 0.1.0
 
-First versioned release of osprey package, which include the following functions:
+* First versioned release of osprey package, which include the following seven new TLG analysis functions:
+  - AE overview summary table.
+  - AE summary table by preferred terms.
+  - AE summary table by highest NCI-CTCAE grade.
+  - AE butterfly plot.
+  - Disposition table.
+  - Swimlane plot.
+  - Spiderplot.
 
-Seven new TLG analysis functions
-- AE overview summary table
-- AE summary table by preferred terms
-- AE summary table by highest NCI-CTCAE grade
-- AE butterfly plot
-- Disposition table
-- Swimlane plot
-- Spiderplot
-
-Few utility functions for working in BCE
-- Function to quickly load snapshot data from BCE
-- Function to output graphic objects in PDF
-- Formatting graphic objects and outputting PDF that is IDM-compatible
+* Few utility functions for working in BCE:
+  - Function to quickly load snapshot data from BCE.
+  - Function to output graphic objects in PDF.
+  - Formatting graphic objects and outputting PDF that is IDM-compatible.
 
