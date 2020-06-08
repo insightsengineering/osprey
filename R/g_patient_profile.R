@@ -70,7 +70,8 @@
 #'
 #' # Exposure ADEX
 #' rADEX <- radex(cached = TRUE)
-#' ADEX <- rADEX %>% select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
+#' ADEX <- rADEX %>%
+#'         select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 #' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 #'
 #' ADEX <- ADEX %>%
@@ -85,24 +86,28 @@
 #'
 #' # Adverse Event ADAE
 #' rADAE <- radae(cached = TRUE)
-#' ADAE <- rADAE %>% select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
+#' ADAE <- rADAE %>%
+#'         select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 #' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 #'
 #' # Tumor Response ADRS
 #' rADRS <- radrs(cached = TRUE)
-#' ADRS <- rADRS %>% select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
+#' ADRS <- rADRS %>%
+#'         select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
 #' ADRS <- ADRS %>%
 #'         mutate(ADY = ceiling(as.numeric(difftime(ADTM, as.Date(TRTSDT), units = "days"))))
 #' # Concomitant Med ADCM
 #' rADCM <- radcm(cached = TRUE)
-#' ADCM <- rADCM %>% select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
+#' ADCM <- rADCM %>%
+#'         select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 #' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 #'
 #' # Laboratory ADLB
 #' rADLB <- radlb(cached = TRUE)
-#' ADLB <- rADLB %>% select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#' ADLB <- rADLB %>%
+#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
@@ -271,9 +276,9 @@ patient_domain_profile <- function(domain = NULL,
     list(!is_empty(marker_pos), "missing argument: marker_pos must be specified"),
     list(!is_empty(arrow_end), "missing argument: arrow_end must be specified"),
 
-    list(length(unique(nrow(data.frame(var_names)),nrow(data.frame(marker_pos)),nrow(data.frame(arrow_end)))) == 1,
+    list(length(unique(nrow(data.frame(var_names)), nrow(data.frame(marker_pos)), nrow(data.frame(arrow_end)))) == 1,
          "invalid arguments: check that the length of input arguments are identical"),
-    list(ncol(data.frame(marker_pos))<=2,
+    list(ncol(data.frame(marker_pos)) <= 2,
          "invalid argument: check that marker_pos is either a vector or a data frame with two columns"),
     list(is.null(line_col) || length(line_col) == length(var_names),
          "invalid arguments: check that the length of line_col is equal as other inputs"),
@@ -281,7 +286,7 @@ patient_domain_profile <- function(domain = NULL,
          "invalid arguments: check that the length of marker_color is equal as other inputs"),
     list(is.null(marker_shape) || length(marker_shape) == length(var_names),
          "invalid arguments: check that the length of marker_shape is equal as other inputs"),
-    list(is_numeric_vector(xlim,min_length = 2, max_length = 2),
+    list(is_numeric_vector(xlim, min_length = 2, max_length = 2),
          "invalid arguments: check that xlim is of type numeric vector")
   )
 
@@ -552,24 +557,28 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #' # ADAE
 #' rADAE <- radae(cached = TRUE)
-#' ADAE <- rADAE %>% select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
+#' ADAE <- rADAE %>%
+#'         select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 #' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADRS
 #' rADRS <- radrs(cached = TRUE)
-#' ADRS <- rADRS %>% select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
+#' ADRS <- rADRS %>%
+#'         select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
 #' ADRS <- ADRS %>%
 #'         mutate(ADY = ceiling(as.numeric(difftime(ADTM, as.Date(TRTSDT), units = "days"))))
 #' # ADCM
 #' rADCM <- radcm(cached = TRUE)
-#' ADCM <- rADCM %>% select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
+#' ADCM <- rADCM %>%
+#'         select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 #' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADLB
 #' rADLB <- radlb(cached = TRUE)
-#' ADLB <- rADLB %>% select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#' ADLB <- rADLB %>%
+#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
@@ -817,24 +826,24 @@ g_patient_profile <- function(select_ex = TRUE,
   }
 
   # Assemble domain plots into patient profile plot
-  n_domain <- sum(select_ex, select_ae, select_rs, select_cm, select_lb)
-  # add plots to a list
   plot_list <- list(p1, p2, p3, p4, p5)
 
   plot_list <- plot_list[select_list]
   # distribute space by number of levels in each domain
-  var_list <- list(ex_var_names,ae_var_names,rs_var_names,cm_var_names,lb_var_names)
+  var_list <- list(ex_var_names, ae_var_names, rs_var_names,
+                   cm_var_names, lb_var_names)
   var_list <- var_list %>%
     lapply(unique) %>%
     lapply(length) %>%
     unlist %>%
-    cbind(.data,select_list) %>%
+    cbind(.data, select_list) %>%
     as.data.frame() %>%
     #keep the selected domains
     dplyr::filter(select_list == TRUE) %>%
-    dplyr::mutate(nline_dat = ifelse(. <= 10 & . >0, 10, .)) %>%
+    dplyr::mutate(nline_dat = ifelse(. <= 10 & . > 0, 10, .)) %>%
     #relative height
-    dplyr::mutate(sbplt_ht = nline_dat/sum(nline_dat))
+    dplyr::mutate(sbplt_ht = nline_dat / sum(nline_dat))
 
-  cowplot::plot_grid(plotlist = plot_list, nrow = nrow(var_list), align = "v", axis = "lr", rel_heights = var_list$sbplt_ht)
+  cowplot::plot_grid(plotlist = plot_list, nrow = nrow(var_list),
+                     align = "v", axis = "lr", rel_heights = var_list$sbplt_ht)
 }
