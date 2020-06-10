@@ -313,7 +313,8 @@ patient_domain_profile <- function(domain = NULL,
       geom_segment(data = line_data[is.na(line_data$line_end) == FALSE, ],
                    aes(x = var_names, y = line_start, xend = var_names, yend = line_end, color = line_col),
                    lineend = "round", linejoin = "round",
-                   size = line_width, arrow = NULL, show.legend = NA) +
+                   size = line_width, arrow = NULL, show.legend = NA,
+                   na.rm = TRUE) +
       scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       geom_segment(data = line_data[is.na(line_data$line_end) == TRUE, ],
@@ -321,14 +322,17 @@ patient_domain_profile <- function(domain = NULL,
                        xend = var_names, yend = line_max, color = line_col),
                    lineend = "round", linejoin = "round",
                    size = line_width, show.legend = FALSE,
-                   arrow = arrow(length = unit(arrow_size, "inches")))
+                   arrow = arrow(length = unit(arrow_size, "inches")),
+                   na.rm = TRUE)
 
     if (!is.null(line_col_opt)) {
       p <- p + scale_color_manual(breaks = line_data$line_col,
-                                  values = line_col_opt)
+                                  values = line_col_opt,
+                                  limits = levels(line_data$line_col))
     } else{
       p <- p + scale_color_manual(breaks = line_data$line_col,
-                                  values = c(1:25))
+                                  values = c(1:25),
+                                  limits = levels(line_data$line_col))
     }
 
     if (!is.null(line_col)) {
@@ -842,7 +846,7 @@ g_patient_profile <- function(select_ex = TRUE,
     dplyr::filter(select_list == TRUE) %>%
     dplyr::mutate(nline_dat = ifelse(. <= 10 & . > 0, 10, .)) %>%
     #relative height
-    dplyr::mutate(sbplt_ht = nline_dat / sum(nline_dat))
+    dplyr::mutate(sbplt_ht = unlist(nline_dat) / sum(unlist(nline_dat)))
 
   cowplot::plot_grid(plotlist = plot_list, nrow = nrow(var_list),
                      align = "v", axis = "lr", rel_heights = var_list$sbplt_ht)
