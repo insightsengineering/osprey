@@ -126,24 +126,28 @@ ADEX <- ADEX \%>\%
 
 # ADAE
 rADAE <- radae(cached = TRUE)
-ADAE <- rADAE \%>\% select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
+ADAE <- rADAE \%>\%
+        select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
 # ADRS
 rADRS <- radrs(cached = TRUE)
-ADRS <- rADRS \%>\% select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
+ADRS <- rADRS \%>\%
+        select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 
 ADRS <- ADRS \%>\%
         mutate(ADY = ceiling(as.numeric(difftime(ADTM, as.Date(TRTSDT), units = "days"))))
 # ADCM
 rADCM <- radcm(cached = TRUE)
-ADCM <- rADCM \%>\% select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
+ADCM <- rADCM \%>\%
+        select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 
 # ADLB
 rADLB <- radlb(cached = TRUE)
-ADLB <- rADLB \%>\% select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
+ADLB <- rADLB \%>\%
+        select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
 ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 
 ADLB <- ADLB \%>\%

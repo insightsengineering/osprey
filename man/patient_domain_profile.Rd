@@ -115,7 +115,8 @@ ADSL <-  rADSL \%>\%
 
 # Exposure ADEX
 rADEX <- radex(cached = TRUE)
-ADEX <- rADEX \%>\% select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
+ADEX <- rADEX \%>\%
+        select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 
 ADEX <- ADEX \%>\%
@@ -130,24 +131,28 @@ ADEX <- ADEX \%>\%
 
 # Adverse Event ADAE
 rADAE <- radae(cached = TRUE)
-ADAE <- rADAE \%>\% select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
+ADAE <- rADAE \%>\%
+        select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
 # Tumor Response ADRS
 rADRS <- radrs(cached = TRUE)
-ADRS <- rADRS \%>\% select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
+ADRS <- rADRS \%>\%
+        select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 
 ADRS <- ADRS \%>\%
         mutate(ADY = ceiling(as.numeric(difftime(ADTM, as.Date(TRTSDT), units = "days"))))
 # Concomitant Med ADCM
 rADCM <- radcm(cached = TRUE)
-ADCM <- rADCM \%>\% select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
+ADCM <- rADCM \%>\%
+        select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 
 # Laboratory ADLB
 rADLB <- radlb(cached = TRUE)
-ADLB <- rADLB \%>\% select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
+ADLB <- rADLB \%>\%
+        select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
 ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 
 ADLB <- ADLB \%>\%
@@ -288,7 +293,7 @@ p5 <- patient_domain_profile(domain = "Laboratoy (ADLB)",
 p5
 }
 \author{
-Xuefeng Hou (houx14) \email{houx14@gene.com} Tina Cho (chot) \email{tina.cho@roche.com}
+Xuefeng Hou (houx14) \email{houx14@gene.com} Tina Cho (chot) \email{tina.cho@roche.com} Molly He (hey59) \email{hey59@gene.com}
 
 Ting Qi (qit3) \email{qit3@gene.com}
 }

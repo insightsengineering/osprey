@@ -41,7 +41,7 @@
 #' @param show_title boolean value for showing title of the plot, default is \code{TRUE}
 #' @param title string to be shown as title of the plot, default is \code{NULL}
 #'
-#' @author Xuefeng Hou (houx14) \email{houx14@gene.com} Tina Cho (chot) \email{tina.cho@roche.com}
+#' @author Xuefeng Hou (houx14) \email{houx14@gene.com} Tina Cho (chot) \email{tina.cho@roche.com} Molly He (hey59) \email{hey59@gene.com}
 #' @template author_qit3
 #'
 #'
