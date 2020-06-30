@@ -123,7 +123,7 @@ g_spiderplot <- function(marker_x,
   dat <- data.frame(x = marker_x, y = marker_y, group = marker_id)
 
   if (!is.null(marker_shape)) {
-    if (length(unique(c(nrow(marker_shape), check_input_length))) != 1) {
+    if (length(unique(c(nrow(data.frame(marker_shape)), check_input_length))) != 1) {
       stop("invalid arguments: check that the length of input arguments are identical")
     }
     dat$sh <- marker_shape
@@ -141,7 +141,7 @@ g_spiderplot <- function(marker_x,
     dat$f_columns <- interaction(facet_columns)
   }
   if (!is.null(line_colby)) {
-    if (length(unique(c(nrow(line_colby), check_input_length))) != 1) {
+    if (length(unique(c(nrow(data.frame(line_colby)), check_input_length))) != 1) {
       stop("invalid arguments: check that the length of input arguments are identical")
     }
     dat$l_col <- line_colby
