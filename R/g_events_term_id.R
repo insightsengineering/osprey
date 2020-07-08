@@ -39,7 +39,7 @@
 #' @importFrom rlang !! sym :=
 #' @import ggplot2
 #' @importFrom gridExtra arrangeGrob
-#' @importFrom tidyr spread gather
+#' @importFrom tidyr spread gather expand_grid replace_na pivot_wider pivot_longer
 #' @importFrom grid textGrob unit unit.c
 #' @import checkmate
 #' @importFrom DescTools BinomDiffCI
@@ -153,7 +153,7 @@ g_events_term_id <- function(term,
   df_risk <- df %>%
     select(term, count, arm) %>%
     full_join(df_ref, by = c("term", "arm")) %>%
-    replace_na(list(count = 0)) %>%
+    tidyr::replace_na(list(count = 0)) %>%
     mutate(tmp = 1) %>%
     pivot_wider(values_from = "count", names_from = "arm", values_fill = list("count" = 0), names_prefix = "count__") %>%
     left_join(n %>%

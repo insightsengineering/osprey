@@ -432,3 +432,55 @@ shift_label_table <- function(tbl, term) {
   attr(t_grade[[1]], "row.name") <- term
   cbind_rtables(t_grade, tbl)
 }
+
+#' Extract specific part of a ggplot or grob
+#'
+#' @param gplot ggplot or grob object
+#' @param part name of the part to be extracted. NA will return zeroGrob()
+#' @export
+#'
+grob_part <- function(gplot_grob, part) {
+  if (is.na(part)) {
+    return(zeroGrob())
+  }
+  stopifnot(length(part) == 1 & is.character(part))
+  index <- match(part, gplot_grob$layout$name)
+  if (is.na(index)) {
+    stop(c(part, " not in plot object. Allowed parts are ",
+           paste(gplot_grob$layout$name, collapse = ", ")))
+  }
+  grob <- gplot_grob$grobs[[index]]
+  return(grob)
+}
+
+#' Add padding to grob
+#' @param grob grob object
+#' @param pad_v padding to add vertically
+#' @param pad_h padding to add horizontally
+#' @importFrom gtable gtable_add_grob gtable
+#'
+grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
+  ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v),
+                widths = unit.c(pad_h, unit(1, "null"), pad_h))
+  ret <- gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
+  ret <- gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
+  return(ret)
+}
+
+
+
+# this theme is used across many figures. can be safely removed if update the theme in each function
+theme_osprey <- function(axis_side = "left", fontsize = 4, ygrid = element_line(colour = "grey50", linetype = 2)){
+  theme(panel.background = element_rect(fill = "white", colour = "white"),
+        panel.grid.major.y = element_line(colour = "grey50", linetype = 2),
+        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "bottom",
+        axis.ticks.y = element_blank(),
+        axis.text = element_text(color = "black", size = fontsize * .pt),
+        axis.text.y = element_text(hjust = ifelse(axis_side == "left", 1, 0)),
+        text = element_text(size = fontsize * .pt, face = "bold", color = "black"),
+        legend.text = element_text(size = fontsize * .pt),
+        plot.title = element_text(hjust = 0.5))
+}
