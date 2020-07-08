@@ -100,14 +100,15 @@ g_events_term_id <- function(term,
   assert_numeric(rate_range, len = 2)
   assert_numeric(diff_range, len = 2)
   assert_logical(reversed, len = 1)
-  assert_choice(cimethod, c('wald', 'waldcc', 'ac', 'scorecc', 'score', 'mn', 'mee', 'blj', 'ha'))
+  assert_choice(cimethod, c("wald", "waldcc", "ac",
+                            "scorecc", "score", "mn",
+                            "mee", "blj", "ha"))
   assert_number(conf_level, lower = 0.5, upper = 1)
   assert_character(color, len = 2)
   assert_vector(shape, len = 2)
   assert_number(fontsize, lower = 0)
   assert_string(title)
   assert_string(foot)
-
 
   arms <- c(trt, ref)
 
@@ -155,15 +156,19 @@ g_events_term_id <- function(term,
     full_join(df_ref, by = c("term", "arm")) %>%
     tidyr::replace_na(list(count = 0)) %>%
     mutate(tmp = 1) %>%
-    pivot_wider(values_from = "count", names_from = "arm", values_fill = list("count" = 0), names_prefix = "count__") %>%
+    pivot_wider(values_from = "count", names_from = "arm",
+                values_fill = list("count" = 0), names_prefix = "count__") %>%
     left_join(n %>%
                 select(arm, total) %>%
-                pivot_wider(names_from = "arm", values_from = "total", names_prefix = "total__") %>%
+                pivot_wider(names_from = "arm", values_from = "total",
+                            names_prefix = "total__") %>%
                 mutate(tmp = 1), by = "tmp") %>%
     select(-tmp) %>%
     group_by(term) %>%
-    mutate(lower = BinomDiffCI(!!x1, !!n1, !!x2, !!n2, conf_level, method = cimethod)[2],
-           upper = BinomDiffCI(!!x1, !!n1, !!x2, !!n2, conf_level, method = cimethod)[3],
+    mutate(lower = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
+                               conf_level, method = cimethod)[2],
+           upper = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
+                               conf_level, method = cimethod)[3],
            !!r1 := !!x1 / !!n1,
            !!r2 := !!x2 / !!n2,
            riskdiff = !!r1 - !!r2,
@@ -175,7 +180,7 @@ g_events_term_id <- function(term,
     grid.draw(textGrob("All Observations are filtered out"))
     return(NULL)
   }
-  if (sort_by != "term" ) {
+  if (sort_by != "term") {
     sort_var <- sym(sort_by)
     df_risk <-  df_risk %>%
       arrange(!!sort_var)
@@ -193,7 +198,8 @@ g_events_term_id <- function(term,
 
 
   terms_needed <- terms_needed
-  terms_label <- sapply(lapply(terms_needed, strwrap, width = 30), paste, collapse = "\n")
+  terms_label <- sapply(lapply(terms_needed, strwrap, width = 30),
+                        paste, collapse = "\n")
 
   df_risk <- df_risk %>%
     pivot_longer(matches("__"), names_to = c(".value", "arm"), names_sep = "__")
@@ -203,7 +209,8 @@ g_events_term_id <- function(term,
   labels <- n$label
   names(labels) <- n$arm
 
-  y_axis <- scale_y_discrete(limits = terms_needed, breaks = terms_needed, labels = terms_label, position = axis_side)
+  y_axis <- scale_y_discrete(limits = terms_needed, breaks = terms_needed,
+                             labels = terms_label, position = axis_side)
 
   p1 <- ggplot(df_risk) +
     geom_point(aes(y = term, x = risk, group = arm,
@@ -254,7 +261,7 @@ g_events_term_id <- function(term,
   axis_b2 <- grob_part(p2_parts, "axis-b")
 
   grobs <- list(title1, title2,
-                axis, panel1,panel2,
+                axis, panel1, panel2,
                 axis_b1, axis_b2,
                 mylegend, risk_label)
 
@@ -263,16 +270,20 @@ g_events_term_id <- function(term,
                            c(3, 4, NA, 5),
                            c(NA, 6, NA, 7),
                            c(8, 8, NA, 9))
-    widths <- unit.c(grobWidth(axis), unit(c(1, 2 * fontsize, 1), c("null", "pt", "null")))
+    widths <- unit.c(grobWidth(axis), unit(c(1, 2 * fontsize, 1),
+                                           c("null", "pt", "null")))
 
   } else{
     layout_matrix <- rbind(c(1, NA, 2, NA),
                            c(4, NA, 5, 3),
                            c(6, NA, 7, NA),
                            c(8, NA, 9, NA))
-    widths <- unit.c(unit(c(1, 10, 1), c("null", "pt", "null")), grobWidth(axis))
+    widths <- unit.c(unit(c(1, 10, 1),
+                          c("null", "pt", "null")),
+                     grobWidth(axis))
   }
-  heights <- unit.c(grobHeight(title1), unit(1, "null"), grobHeight(axis_b1), max(grobHeight(mylegend), grobHeight(more_risk)))
+  heights <- unit.c(grobHeight(title1), unit(1, "null"), grobHeight(axis_b1),
+                    max(grobHeight(mylegend), grobHeight(more_risk)))
 
   boldfont <-  gpar(fontsize = fontsize * 4,
                     fontface = "bold",
