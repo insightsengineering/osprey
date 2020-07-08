@@ -437,7 +437,6 @@ shift_label_table <- function(tbl, term) {
 #'
 #' @param gplot ggplot or grob object
 #' @param part name of the part to be extracted. NA will return zeroGrob()
-#' @export
 #'
 grob_part <- function(gplot_grob, part) {
   if (is.na(part)) {
