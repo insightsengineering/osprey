@@ -44,15 +44,12 @@
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com} Tina Cho (chot) \email{tina.cho@roche.com}
 #' @template author_qit3
 #'
-#'
 #' @return plot object
-#' @import dplyr
 #' @importFrom rlang .data
 #'
 #' @export
 #'
 #' @examples
-#'
 #' library(random.cdisc.data)
 #' library(utils.nest)
 #' library(tern)
@@ -61,10 +58,10 @@
 #' # ADSL
 #' rADSL <- radsl(cached = TRUE)
 #' ADSL <-  rADSL %>%
-#'   group_by(.data$USUBJID) %>%
-#'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y",tz="PST8PDT"),
-#'          max_date = max(as.Date(.data$LSTALVDT), as.Date(.data$DTHDT)),
-#'          max_day = as.numeric(as.Date(.data$max_date) - as.Date(.data$TRTSDT)) + 1) %>%
+#'   group_by(USUBJID) %>%
+#'   mutate(TRTSDT = as.Date(TRTSDTM),
+#'          max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
+#'          max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) %>%
 #'   select(USUBJID, STUDYID, TRTSDT , max_day) %>%
 #'   filter(USUBJID == rADSL$USUBJID[1])
 #'
@@ -96,8 +93,6 @@
 #'         select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
-#' ADRS <- ADRS %>%
-#'         mutate(ADY = ceiling(as.numeric(difftime(ADTM, as.Date(TRTSDT), units = "days"))))
 #' # Concomitant Med ADCM
 #' rADCM <- radcm(cached = TRUE)
 #' ADCM <- rADCM %>%
@@ -107,13 +102,12 @@
 #' # Laboratory ADLB
 #' rADLB <- radlb(cached = TRUE)
 #' ADLB <- rADLB %>%
-#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
 #'         group_by(USUBJID) %>%
-#'         mutate(ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) %>%
-#'         mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM, as.Date(TRTSDT), units = "days"))))
+#'         mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
 #'
 #'
 #' # Example 1 "ADEX"
@@ -139,7 +133,7 @@
 #'                              xlim = c(-28, ADSL$max_day),
 #'                              xlab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
-#'p1
+#' p1
 #'
 #' # Example 2 "ADAE"
 #' # Note that ASTDY is represented by a circle and AENDY is represented by a square.
@@ -157,7 +151,7 @@
 #'                              arrow_size = 0.1,
 #'                              no_enddate_extention = 0,
 #'                              marker_color = factor(ADAE$AETOXGR),
-#'                              marker_color_opt =  c("3" = "green", "4" = "yellow"),
+#'                              marker_color_opt =  c("3" = "yellow", "4" = "red"),
 #'                              marker_color_legend = NULL,
 #'                              marker_shape = NULL,
 #'                              marker_shape_opt = NULL,
@@ -167,7 +161,7 @@
 #'                              xlab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'
-#'p2
+#' p2
 #'
 #' # Example 3 "ADRS"
 #' p3 <- patient_domain_profile(domain = "Tumor Response (ADRS)",
@@ -219,7 +213,7 @@
 #'                              xlim = c(-28, ADSL$max_day),
 #'                              xlab = "Study Days",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
-#'p4
+#' p4
 #'
 #' # Example 5 "ADLB"
 #' p5 <- patient_domain_profile(domain = "Laboratoy (ADLB)",
@@ -536,16 +530,17 @@ patient_domain_profile <- function(domain = NULL,
 #' # ADSL
 #' rADSL <- radsl(cached = TRUE)
 #' ADSL <-  rADSL %>%
-#'   group_by(.data$USUBJID) %>%
-#'   mutate(TRTSDT = as.Date(.data$TRTSDTM, "%d%b%Y",tz="PST8PDT"),
-#'          max_date = max(as.Date(.data$LSTALVDT), as.Date(.data$DTHDT)),
-#'          max_day = as.numeric(as.Date(.data$max_date) - as.Date(.data$TRTSDT)) + 1) %>%
-#'   select(USUBJID, STUDYID, TRTSDT, max_day) %>%
+#'   group_by(USUBJID) %>%
+#'   mutate(TRTSDT = as.Date(TRTSDTM),
+#'          max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
+#'          max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) %>%
+#'   select(USUBJID, STUDYID, TRTSDT , max_day) %>%
 #'   filter(USUBJID == rADSL$USUBJID[1])
 #'
-#' #ADEX
+#' # ADEX
 #' rADEX <- radex(cached = TRUE)
-#' ADEX <- rADEX %>% select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
+#' ADEX <- rADEX %>%
+#'         select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 #' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 #'
 #' ADEX <- ADEX %>%
@@ -556,8 +551,7 @@ patient_domain_profile <- function(domain = NULL,
 #'                                   diff > 0 ~ "Increase",
 #'                                   diff == 0 ~ "None")) %>%
 #'   mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
-#'                                 as.Date(TRTSDT) + 1)) %>%
-#'   as.data.frame()
+#'                                 as.Date(TRTSDT) + 1))
 #'
 #' # ADAE
 #' rADAE <- radae(cached = TRUE)
@@ -571,8 +565,6 @@ patient_domain_profile <- function(domain = NULL,
 #'         select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
-#' ADRS <- ADRS %>%
-#'         mutate(ADY = ceiling(as.numeric(difftime(ADTM, as.Date(TRTSDT), units = "days"))))
 #' # ADCM
 #' rADCM <- radcm(cached = TRUE)
 #' ADCM <- rADCM %>%
@@ -582,16 +574,14 @@ patient_domain_profile <- function(domain = NULL,
 #' # ADLB
 #' rADLB <- radlb(cached = TRUE)
 #' ADLB <- rADLB %>%
-#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
 #'         group_by(USUBJID) %>%
-#'         mutate(ANRIND = factor(.data$ANRIND, levels = c("HIGH", "LOW", "NORMAL"))) %>%
-#'         mutate(ADY = ceiling(as.numeric(difftime(.data$ADTM, as.Date(TRTSDT), units = "days"))))
+#'         mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
 #'
 #' # Example Patient Profile plot 5 domains
-#'
 #' g_patient_profile(select_ex = TRUE,
 #'                   select_ae = TRUE,
 #'                   select_rs = TRUE,
