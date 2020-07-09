@@ -17,7 +17,7 @@
 #' @param diff_range Range for rate difference
 #' @param reversed Whether to sort_by on reversed variable. Default set to FALSE.
 #' @param conf_level The confidence interval level, default set to 0.95.
-#' @param cimethod The method used to calculate confidence interval. Defalt is "wald".
+#' @param ci_method The method used to calculate confidence interval. Defalt is "wald".
 #' Possible choices are methods supported in `DescTools::BinomDiffCI`.
 #' @param axis_side the side of the axis label, "left" or "right". Default set to "left".
 #' @param color Color for the plot. Vector of length 2. Color for arms seperately.
@@ -41,7 +41,6 @@
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom tidyr spread gather expand_grid replace_na pivot_wider pivot_longer
 #' @importFrom grid textGrob unit unit.c
-#' @import checkmate
 #' @importFrom DescTools BinomDiffCI
 #' @export
 #'
@@ -73,7 +72,7 @@ g_events_term_id <- function(term,
                              diff_range = c(-1, 1),
                              reversed = FALSE,
                              conf_level = 0.95,
-                             cimethod = "wald",
+                             ci_method = "wald",
                              axis_side = "left",
                              color = c("red", "blue"),
                              shape = c(16, 17),
@@ -84,34 +83,55 @@ g_events_term_id <- function(term,
   # argument validation
   possible_sort <- c("term", "riskdiff", "meanrisk")
   possible_axis <- c("left", "right")
+
   if (is.null(term_selected)) {
     term_selected <- unique(term)
   }
-  l <- length(id)
-  assert_vector(id, min.len = 1)
-  assert_character(term, len = l)
-  assert_character(arm, len = l)
-  assert_vector(arm_sl, min.len = 2)
-  arm_unique <- unique(arm)
-  assert_choice(trt, arm_unique)
-  assert_choice(ref, arm_unique)
-  assert_choice(sort_by, possible_sort)
-  assert_subset(term_selected, unique(term))
-  assert_numeric(rate_range, len = 2)
-  assert_numeric(diff_range, len = 2)
-  assert_logical(reversed, len = 1)
-  assert_choice(cimethod, c("wald", "waldcc", "ac",
-                            "scorecc", "score", "mn",
-                            "mee", "blj", "ha"))
-  assert_number(conf_level, lower = 0.5, upper = 1)
-  assert_character(color, len = 2)
-  assert_vector(shape, len = 2)
-  assert_number(fontsize, lower = 0)
-  assert_string(title)
-  assert_string(foot)
+  stop_if_not(
+    list(!is_empty(term), "missing argument: term must be specified"),
+    list(!is_empty(id), "missing argument: id must be specified"),
+    list(!is_empty(arm), "missing argument: arm must be specified"),
+    list(!is_empty(arm_sl), "missing argument: arm_sl must be specified"),
+
+    list(length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1,
+         "invalid arguments: check that the length of id, term and arm are identical"),
+
+    list(is_character_vector(arm_sl, min_length = 2),
+         "invalid argument: check that arm_sl is a character vector with length >= 2"),
+    list(all(c(trt, ref) %in% unique(arm)),
+         "invalid arguments: trt and ref need to be from arm"),
+    list(sort_by %in% possible_sort,
+         "invalid argument: sort_by should be 'term', 'riskdiff' or 'meanrisk'"),
+    list(axis_side %in% possible_axis,
+         "invalid argument: axis_side should be 'left' or 'right'"),
+    list(is.null(term_selected) | term_selected %in% unique(term),
+         "invalid argument: term_selected should be NULL or from term"),
+    list(is_numeric_vector(rate_range, min_length = 2, max_length = 2),
+         "invalid argument: rate_range should be a numeric vector of length 2"),
+    list(is_numeric_vector(diff_range, min_length = 2, max_length = 2),
+         "invalid argument: diff_range should be a numeric vector of length 2"),
+    list(is_logical_single(reversed),
+         "invalid argument: reversed should be a TRUE or FALSE"),
+    list(is_character_single(ci_method) &
+           ci_method %in% c("wald", "waldcc", "ac",
+                           "scorecc", "score", "mn",
+                           "mee", "blj", "ha"),
+         "invalid argument: ci_method should be a method supported by `DescTools::BinomDiffCI`"),
+    list(is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
+         "invalid argument: conf_level should be a number between 0.5 and 1"),
+    list(is_character_vector(color, min_length = 2, max_length = 2),
+         "invalid argument: check that color is a character vector of length 2"),
+    list(is_numeric_vector(shape, min_length = 2, max_length = 2),
+         "invalid argument: check that shape is a numeric vector of length 2"),
+    list(is_numeric_single(fontsize) & between(fontsize, 0, Inf),
+         "invalid argument: check that fontsize is a number greater than 0"),
+    list(is_character_single(title),
+         "invalid argument: check that title is of type character"),
+    list(is_character_single(foot),
+         "invalid argument: check that foot is of type character")
+  )
 
   arms <- c(trt, ref)
-
   n <- tibble(arm = arm_sl) %>%
     group_by(arm) %>%
     summarise(total = n()) %>%
@@ -119,21 +139,12 @@ g_events_term_id <- function(term,
            label = str_wrap(label, width = 10)) %>%
     filter(arm %in% arms)
 
-  # n_size <- n %>%
-  #   mutate(arm = factor(arm, levels = arms)) %>%
-  #   arrange(arm) %>%
-  #   pull(total)
-
   df <- tibble(id = id, arm = arm, term = term) %>%
     filter(arm %in% arms & term %in% term_selected) %>%
     distinct() %>%
     group_by(arm, term) %>%
     summarise(count = n()) %>%
     ungroup
-
-  # renamed_arm <- tibble(arm = arms) %>%
-  #   left_join(n, by = "arm") %>%
-  #   pull(label)
 
   names(color) <- arms
   names(shape) <- arms
@@ -166,9 +177,9 @@ g_events_term_id <- function(term,
     select(-tmp) %>%
     group_by(term) %>%
     mutate(lower = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
-                               conf_level, method = cimethod)[2],
+                               conf_level, method = ci_method)[2],
            upper = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
-                               conf_level, method = cimethod)[3],
+                               conf_level, method = ci_method)[3],
            !!r1 := !!x1 / !!n1,
            !!r2 := !!x2 / !!n2,
            riskdiff = !!r1 - !!r2,
@@ -237,11 +248,7 @@ g_events_term_id <- function(term,
 
 
   mylegend <- grob_part(grob_part(p1_parts, "guide-box"), "guides")
-  if (axis_side == "right") {
-    axis <- grob_part(p1_parts, "axis-r")
-  } else {
-    axis <- grob_part(p1_parts, "axis-l")
-  }
+  axis <- grob_part(p1_parts, axis_name)
 
   less_risk <- textGrob("Favor\nTreatment",
                         just = "centre",
