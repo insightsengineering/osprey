@@ -40,7 +40,7 @@ reference:
       - stream_filter
       - stream_filter_convwhere
       - stream_filter_index
-  - title: Elementary Tables
+  - title: Elementary Functions
     contents:
       - patient_domain_profile
   - title: Data
