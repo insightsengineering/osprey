@@ -24,10 +24,6 @@
 #' Default set to c("red", "blue")
 #' @param shape Shape for the plot. Vector of length 2. Shape for arms seperately.
 #' Default set to c(16, 17).
-#' @param title the title for the plot. Set to NULL to remove the title. Default set to
-#' "Most Frequent On-Therapy Adverse Events Sorted by $\{sort_by\}".
-#' The "$\{sort_by\}" is used to show the sort_by variable in the title.
-#' @param foot the footnote of the figure.
 #' @param fontsize font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
 #' want "points" you will need to devide the point number by "ggplot2:::.pt"
 #'
@@ -79,10 +75,7 @@ g_events_term_id <- function(term,
                              axis_side = "left",
                              color = c("red", "blue"),
                              shape = c(16, 17),
-                             fontsize = 4,
-                             title = "Most Frequent On-Therapy Adverse Events",
-                             foot = "Note: CI is calculated with Wald by default") {
-
+                             fontsize = 4) {
   # argument validation
   possible_sort <- c("term", "riskdiff", "meanrisk")
   possible_axis <- c("left", "right")
@@ -94,44 +87,81 @@ g_events_term_id <- function(term,
     list(!is_empty(term), "missing argument: term must be specified"),
     list(!is_empty(id), "missing argument: id must be specified"),
     list(!is_empty(arm), "missing argument: arm must be specified"),
-    list(!is_empty(arm_sl), "missing argument: arm_sl must be specified"),
+    list(
+      !is_empty(arm_sl),
+      "missing argument: arm_sl must be specified"
+    ),
 
-    list(length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1,
-         "invalid arguments: check that the length of id, term and arm are identical"),
+    list(
+      length(unique(vapply(
+        list(id, term, arm), length, integer(1)
+      ))) == 1,
+      "invalid arguments: check that the length of id, term and arm are identical"
+    ),
 
-    list(is_character_vector(arm_sl, min_length = 2),
-         "invalid argument: check that arm_sl is a character vector with length >= 2"),
-    list(all(c(trt, ref) %in% unique(arm)),
-         "invalid arguments: trt and ref need to be from arm"),
-    list(sort_by %in% possible_sort,
-         "invalid argument: sort_by should be 'term', 'riskdiff' or 'meanrisk'"),
-    list(axis_side %in% possible_axis,
-         "invalid argument: axis_side should be 'left' or 'right'"),
-    list(is.null(term_selected) | term_selected %in% unique(term),
-         "invalid argument: term_selected should be NULL or from term"),
-    list(is_numeric_vector(rate_range, min_length = 2, max_length = 2),
-         "invalid argument: rate_range should be a numeric vector of length 2"),
-    list(is_numeric_vector(diff_range, min_length = 2, max_length = 2),
-         "invalid argument: diff_range should be a numeric vector of length 2"),
-    list(is_logical_single(reversed),
-         "invalid argument: reversed should be a TRUE or FALSE"),
-    list(is_character_single(ci_method) &
-           ci_method %in% c("wald", "waldcc", "ac",
-                           "scorecc", "score", "mn",
-                           "mee", "blj", "ha"),
-         "invalid argument: ci_method should be a method supported by `DescTools::BinomDiffCI`"),
-    list(is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
-         "invalid argument: conf_level should be a number between 0.5 and 1"),
-    list(is_character_vector(color, min_length = 2, max_length = 2),
-         "invalid argument: check that color is a character vector of length 2"),
-    list(is_numeric_vector(shape, min_length = 2, max_length = 2),
-         "invalid argument: check that shape is a numeric vector of length 2"),
-    list(is_numeric_single(fontsize) & between(fontsize, 0, Inf),
-         "invalid argument: check that fontsize is a number greater than 0"),
-    list(is_character_single(title),
-         "invalid argument: check that title is of type character"),
-    list(is_character_single(foot),
-         "invalid argument: check that foot is of type character")
+    list(
+      is_character_vector(arm_sl, min_length = 2),
+      "invalid argument: check that arm_sl is a character vector with length >= 2"
+    ),
+    list(
+      all(c(trt, ref) %in% unique(arm)),
+      "invalid arguments: trt and ref need to be from arm"
+    ),
+    list(
+      sort_by %in% possible_sort,
+      "invalid argument: sort_by should be 'term', 'riskdiff' or 'meanrisk'"
+    ),
+    list(
+      axis_side %in% possible_axis,
+      "invalid argument: axis_side should be 'left' or 'right'"
+    ),
+    list(
+      is.null(term_selected) | term_selected %in% unique(term),
+      "invalid argument: term_selected should be NULL or from term"
+    ),
+    list(
+      is_numeric_vector(rate_range, min_length = 2, max_length = 2),
+      "invalid argument: rate_range should be a numeric vector of length 2"
+    ),
+    list(
+      is_numeric_vector(diff_range, min_length = 2, max_length = 2),
+      "invalid argument: diff_range should be a numeric vector of length 2"
+    ),
+    list(
+      is_logical_single(reversed),
+      "invalid argument: reversed should be a TRUE or FALSE"
+    ),
+    list(
+      is_character_single(ci_method) &
+        ci_method %in% c(
+          "wald",
+          "waldcc",
+          "ac",
+          "scorecc",
+          "score",
+          "mn",
+          "mee",
+          "blj",
+          "ha"
+        ),
+      "invalid argument: ci_method should be a method supported by `DescTools::BinomDiffCI`"
+    ),
+    list(
+      is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
+      "invalid argument: conf_level should be a number between 0.5 and 1"
+    ),
+    list(
+      is_character_vector(color, min_length = 2, max_length = 2),
+      "invalid argument: check that color is a character vector of length 2"
+    ),
+    list(
+      is_numeric_vector(shape, min_length = 2, max_length = 2),
+      "invalid argument: check that shape is a numeric vector of length 2"
+    ),
+    list(
+      is_numeric_single(fontsize) & between(fontsize, 0, Inf),
+      "invalid argument: check that fontsize is a number greater than 0"
+    )
   )
 
   arms <- c(trt, ref)
@@ -170,23 +200,33 @@ g_events_term_id <- function(term,
     full_join(df_ref, by = c("term", "arm")) %>%
     tidyr::replace_na(list(count = 0)) %>%
     mutate(tmp = 1) %>%
-    pivot_wider(values_from = "count", names_from = "arm",
-                values_fill = list("count" = 0), names_prefix = "count__") %>%
-    left_join(n %>%
-                select(arm, total) %>%
-                pivot_wider(names_from = "arm", values_from = "total",
-                            names_prefix = "total__") %>%
-                mutate(tmp = 1), by = "tmp") %>%
+    pivot_wider(
+      values_from = "count",
+      names_from = "arm",
+      values_fill = list("count" = 0),
+      names_prefix = "count__"
+    ) %>%
+    left_join(
+      n %>%
+        select(arm, total) %>%
+        pivot_wider(
+          names_from = "arm",
+          values_from = "total",
+          names_prefix = "total__"
+        ) %>%
+        mutate(tmp = 1),
+      by = "tmp"
+    ) %>%
     select(-tmp) %>%
     group_by(term) %>%
-    mutate(lower = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
-                               conf_level, method = ci_method)[2],
-           upper = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
-                               conf_level, method = ci_method)[3],
-           !!r1 := !!x1 / !!n1,
-           !!r2 := !!x2 / !!n2,
-           riskdiff = !!r1 - !!r2,
-           meanrisk = (!!x1 + !!x2) / (!!n1 + !!n2)) %>%
+    mutate(
+      lower = BinomDiffCI(!!x1,!!n1,!!x2,!!n2,
+                          conf_level, method = ci_method)[2],
+      upper = BinomDiffCI(!!x1,!!n1,!!x2,!!n2,
+                          conf_level, method = ci_method)[3],!!r1 := !!x1 / !!n1,!!r2 := !!x2 / !!n2,
+      riskdiff = !!r1-!!r2,
+      meanrisk = (!!x1+!!x2) / (!!n1+!!n2)
+    ) %>%
     ungroup %>%
     filter(meanrisk > rate_range[1] & meanrisk < rate_range[2]) %>%
     filter(riskdiff > diff_range[1] & riskdiff < diff_range[2])
@@ -216,19 +256,33 @@ g_events_term_id <- function(term,
                         paste, collapse = "\n")
 
   df_risk <- df_risk %>%
-    pivot_longer(matches("__"), names_to = c(".value", "arm"), names_sep = "__")
+    pivot_longer(matches("__"),
+                 names_to = c(".value", "arm"),
+                 names_sep = "__")
 
-  mytheme <- theme_osprey(axis_side = axis_side, fontsize = fontsize)
+  mytheme <-
+    theme_osprey(axis_side = axis_side, fontsize = fontsize)
 
   labels <- n$label
   names(labels) <- n$arm
 
-  y_axis <- scale_y_discrete(limits = terms_needed, breaks = terms_needed,
-                             labels = terms_label, position = axis_side)
+  y_axis <-
+    scale_y_discrete(
+      limits = terms_needed,
+      breaks = terms_needed,
+      labels = terms_label,
+      position = axis_side
+    )
 
   p1 <- ggplot(df_risk) +
-    geom_point(aes(y = term, x = risk, group = arm,
-                   color = arm, shape = arm), size = fontsize * 0.7) +
+    geom_point(aes(
+      y = term,
+      x = risk,
+      group = arm,
+      color = arm,
+      shape = arm
+    ),
+    size = fontsize * 0.7) +
     mytheme +
     ggtitle("Proportion") +
     scale_color_manual(values = color, labels = labels) +
@@ -236,8 +290,11 @@ g_events_term_id <- function(term,
     y_axis
 
   p2 <- ggplot(df_risk) +
-    geom_point(mapping = aes(y = term, x = riskdiff), size = fontsize * 0.7) +
-    geom_vline(data = NULL, xintercept = 0, linetype = 2) +
+    geom_point(mapping = aes(y = term, x = riskdiff),
+               size = fontsize * 0.7) +
+    geom_vline(data = NULL,
+               xintercept = 0,
+               linetype = 2) +
     mytheme +
     geom_errorbarh(mapping = aes(xmax = upper, xmin = lower, y = term),
                    height = 0.4) +
@@ -253,14 +310,18 @@ g_events_term_id <- function(term,
   mylegend <- grob_part(grob_part(p1_parts, "guide-box"), "guides")
   axis <- grob_part(p1_parts, axis_name)
 
-  less_risk <- textGrob("Favor\nTreatment",
-                        just = "centre",
-                        x = unit(fontsize * .pt, "pt"),
-                        gp = gpar(fontsize = fontsize * .pt, fontface = "bold"))
-  more_risk <- textGrob("Favor\nControl",
-                        just = "centre",
-                        x = unit(1, "npc") - unit(fontsize * .pt, "pt"),
-                        gp = gpar(fontsize = fontsize * .pt, fontface = "bold"))
+  less_risk <- textGrob(
+    "Favor\nTreatment",
+    just = "centre",
+    x = unit(fontsize * .pt, "pt"),
+    gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+  )
+  more_risk <- textGrob(
+    "Favor\nControl",
+    just = "centre",
+    x = unit(1, "npc") - unit(fontsize * .pt, "pt"),
+    gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+  )
 
   risk_label <- arrangeGrob(less_risk, more_risk, nrow = 1)
   title1 <- grob_part(p1_parts, "title")
@@ -270,10 +331,15 @@ g_events_term_id <- function(term,
   axis_b1 <- grob_part(p1_parts, "axis-b")
   axis_b2 <- grob_part(p2_parts, "axis-b")
 
-  grobs <- list(title1, title2,
-                axis, panel1, panel2,
-                axis_b1, axis_b2,
-                mylegend, risk_label)
+  grobs <- list(title1,
+                title2,
+                axis,
+                panel1,
+                panel2,
+                axis_b1,
+                axis_b2,
+                mylegend,
+                risk_label)
 
   if (axis_side == "left") {
     layout_matrix <- rbind(c(NA, 1, NA, 2),
@@ -292,21 +358,22 @@ g_events_term_id <- function(term,
                           c("null", "pt", "null")),
                      grobWidth(axis))
   }
-  heights <- unit.c(grobHeight(title1), unit(1, "null"), grobHeight(axis_b1),
-                    max(grobHeight(mylegend), grobHeight(more_risk)))
+  heights <-
+    unit.c(
+      grobHeight(title1),
+      unit(1, "null"),
+      grobHeight(axis_b1),
+      max(grobHeight(mylegend), grobHeight(more_risk))
+    )
 
-  boldfont <-  gpar(fontsize = fontsize * 4,
-                    fontface = "bold",
-                    lineheight = 1)
-  ret <- arrangeGrob(grobs = grobs,
-                     nrow = 4, ncol = 4,
-                     layout_matrix = layout_matrix,
-                     heights = heights, widths = widths,
-                     top = textGrob(title, gp = boldfont),
-                     bottom = textGrob(foot,
-                                       just = "left",
-                                       x = unit(5.5, "pt"),
-                                       gp = gpar(fontsize = fontsize * .pt)))
+  ret <- arrangeGrob(
+    grobs = grobs,
+    nrow = 4,
+    ncol = 4,
+    layout_matrix = layout_matrix,
+    heights = heights,
+    widths = widths
+  )
 
   ret <- grob_add_padding(ret)
   plot(ret)
