@@ -509,7 +509,8 @@ patient_domain_profile <- function(domain = NULL,
 #' @param xlab string to be shown as x-axis label, default is \code{"Study Days"}
 #' @param title string to be shown as title of the plot, default is \code{"Patient Profile"}
 #'
-#' @author Xuefeng Hou (houx14) \email{houx14@gene.com} Molly He \email{hey59@gene.com}
+#' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
+#' @author Molly He (hey59) \email{hey59@gene.com}
 #' @template author_qit3
 #'
 #' @importFrom cowplot plot_grid
@@ -835,6 +836,6 @@ g_patient_profile <- function(select_ex = TRUE,
     #relative height
     dplyr::mutate(sbplt_ht = unlist(nline_dat) / sum(unlist(nline_dat)))
 
-  cowplot::plot_grid(plotlist = plot_list, nrow = nrow(var_list),
-                     align = "v", axis = "lr", rel_heights = var_list$sbplt_ht)
+  plot_grid(plotlist = plot_list, nrow = nrow(var_list),
+            align = "v", axis = "lr", rel_heights = var_list$sbplt_ht)
 }
