@@ -31,13 +31,12 @@
 #'
 #' @return grob object
 #'
-#' @importFrom dplyr %>% filter mutate tibble distinct group_by summarise ungroup left_join arrange top_n pull
-#' @importFrom rlang !! sym :=
 #' @import ggplot2
 #' @importFrom gridExtra arrangeGrob
-#' @importFrom tidyr spread gather expand_grid replace_na pivot_wider pivot_longer
+#' @import data.table
 #' @importFrom grid textGrob unit unit.c
 #' @importFrom DescTools BinomDiffCI
+#' @importFrom utils.nest stop_if_not
 #' @export
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
@@ -55,10 +54,14 @@
 #' ref <- "ARM B"
 #' g_events_term_id(term, id, arm, arm_sl, sort_by = "riskdiff")
 #' g_events_term_id(term, id, arm, arm_sl, sort_by = "term", reversed = FALSE)
-#' g_events_term_id(term, id, arm, arm_sl, sort_by = "meanrisk",
-#' reversed = FALSE, axis_side = "right")
-#' g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
+#' g_events_term_id(term, id, arm, arm_sl,
+#'   sort_by = "meanrisk",
 
+#'   reversed = FALSE, axis_side = "right"
+#' )
+#' g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
+#' term <- create_flag_vars(cadae)
+#' g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 4)
 g_events_term_id <- function(term,
                              id,
                              arm,
@@ -66,7 +69,6 @@ g_events_term_id <- function(term,
                              trt = unique(arm)[1],
                              ref = unique(arm)[2],
                              sort_by = "term",
-                             term_selected = NULL,
                              rate_range = c(0, 1),
                              diff_range = c(-1, 1),
                              reversed = FALSE,
@@ -75,14 +77,12 @@ g_events_term_id <- function(term,
                              axis_side = "left",
                              color = c("red", "blue"),
                              shape = c(16, 17),
-                             fontsize = 4) {
+                             fontsize = 4,
+                             draw = TRUE) {
   # argument validation
   possible_sort <- c("term", "riskdiff", "meanrisk")
   possible_axis <- c("left", "right")
 
-  if (is.null(term_selected)) {
-    term_selected <- unique(term)
-  }
   stop_if_not(
     list(!is_empty(term), "missing argument: term must be specified"),
     list(!is_empty(id), "missing argument: id must be specified"),
@@ -114,10 +114,6 @@ g_events_term_id <- function(term,
     list(
       axis_side %in% possible_axis,
       "invalid argument: axis_side should be 'left' or 'right'"
-    ),
-    list(
-      is.null(term_selected) | term_selected %in% unique(term),
-      "invalid argument: term_selected should be NULL or from term"
     ),
     list(
       is_numeric_vector(rate_range, min_length = 2, max_length = 2),
@@ -165,106 +161,90 @@ g_events_term_id <- function(term,
   )
 
   arms <- c(trt, ref)
-  n <- tibble(arm = arm_sl) %>%
-    group_by(arm) %>%
-    summarise(total = n()) %>%
-    mutate(label = sprintf("%s (N=%i)", arm, total),
-           label = str_wrap(label, width = 10)) %>%
-    filter(arm %in% arms)
+  df_n <- data.table(arm = arm_sl)[arm %in% arms,
+                                   .(total = .N),
+                                   by = .(arm)]
+  trt_total <- df_n[arm == trt, total]
+  ref_total <- df_n[arm == ref, total]
+  df <-
+    data.table(id = id, arm = arm, term = term)[, list(term = as.character(unlist(term))), by = .(arm, id)]
+  df <- unique(df)[arm %in% arms,
+                   .N,
+                   by = .(arm, term)]
+  df[, arm := ifelse(arm == trt, "trt_count", "ref_count")]
+  df <-
+    dcast(
+      df,
+      term ~ arm,
+      value.var = c("N"),
+      drop = FALSE,
+      fill = 0
+    )
 
-  df <- tibble(id = id, arm = arm, term = term) %>%
-    filter(arm %in% arms & term %in% term_selected) %>%
-    distinct() %>%
-    group_by(arm, term) %>%
-    summarise(count = n()) %>%
-    ungroup
+  df[, `:=`(trt_total = trt_total, ref_total = ref_total)]
 
+  df_ci <- df[, .(
+    value = c(
+      BinomDiffCI(
+        trt_count,
+        trt_total,
+        ref_count,
+        ref_total,
+        conf_level,
+        method = ci_method
+      )[1, ],
+      (trt_count + ref_count) / (trt_total + ref_total)
+    ),
+    param = c("riskdiff", "lower_ci", "upper_ci", "meanrisk")
+  ), by = .(term)]
+  df_ci <- dcast(df_ci, term ~ param, variable.var = "value")
+  df_risk <- df[, .(
+    risk = c(trt_count / trt_total, ref_count / ref_total),
+    arm = c(trt, ref)
+  ), by = .(term)]
   names(color) <- arms
   names(shape) <- arms
 
-  xs <- syms(paste("count", arms, sep = "__"))
-  ns <- syms(paste("total", arms, sep = "__"))
-  rs <- syms(paste("risk", arms, sep = "__"))
+  terms_needed <- unique(df_ci[(riskdiff > diff_range[1] &
+                                  riskdiff < diff_range[2]) &
+                                 (meanrisk > rate_range[1] &
+                                    meanrisk < rate_range[2]) ,
+                               term])
 
-  x1 <- xs[[1]]
-  n1 <- ns[[1]]
-  x2 <- xs[[2]]
-  n2 <- ns[[2]]
-  r1 <- rs[[1]]
-  r2 <- rs[[2]]
-
-  df_ref <- expand_grid(term = term_selected, arm = arms)
-
-  df_risk <- df %>%
-    select(term, count, arm) %>%
-    full_join(df_ref, by = c("term", "arm")) %>%
-    tidyr::replace_na(list(count = 0)) %>%
-    mutate(tmp = 1) %>%
-    pivot_wider(
-      values_from = "count",
-      names_from = "arm",
-      values_fill = list("count" = 0),
-      names_prefix = "count__"
-    ) %>%
-    left_join(
-      n %>%
-        select(arm, total) %>%
-        pivot_wider(
-          names_from = "arm",
-          values_from = "total",
-          names_prefix = "total__"
-        ) %>%
-        mutate(tmp = 1),
-      by = "tmp"
-    ) %>%
-    select(-tmp) %>%
-    group_by(term) %>%
-    mutate(
-      lower = BinomDiffCI(!!x1,!!n1,!!x2,!!n2,
-                          conf_level, method = ci_method)[2],
-      upper = BinomDiffCI(!!x1,!!n1,!!x2,!!n2,
-                          conf_level, method = ci_method)[3],!!r1 := !!x1 / !!n1,!!r2 := !!x2 / !!n2,
-      riskdiff = !!r1-!!r2,
-      meanrisk = (!!x1+!!x2) / (!!n1+!!n2)
-    ) %>%
-    ungroup %>%
-    filter(meanrisk > rate_range[1] & meanrisk < rate_range[2]) %>%
-    filter(riskdiff > diff_range[1] & riskdiff < diff_range[2])
-  if (nrow(df_risk) == 0) {
-    grid.draw(textGrob("All Observations are filtered out"))
-    return(NULL)
+  if (length(terms_needed) == 0) {
+    ret <- textGrob("All Observations are filtered out")
+    if (draw) {
+      grid.draw(ret)
+    }
+    return(invisible(ret))
   }
-  if (sort_by != "term") {
-    sort_var <- sym(sort_by)
-    df_risk <-  df_risk %>%
-      arrange(!!sort_var)
+  if (sort_by == "term") {
+    terms_needed <- sort(terms_needed, decreasing = TRUE)
   } else {
-    df_risk <-  df_risk %>%
-      arrange(desc(term))
+    terms_needed <-
+      df_ci[order(df_ci[[sort_by]], decreasing = FALSE)][term %in% terms_needed, term]
   }
-
-
-  terms_needed <- df_risk$term
 
   if (reversed) {
     terms_needed <- rev(terms_needed)
   }
 
-
-  terms_needed <- terms_needed
-  terms_label <- sapply(lapply(terms_needed, strwrap, width = 30),
-                        paste, collapse = "\n")
-
-  df_risk <- df_risk %>%
-    pivot_longer(matches("__"),
-                 names_to = c(".value", "arm"),
-                 names_sep = "__")
+  df_ci <- df_ci[term %in% terms_needed]
+  df_ci[, term := factor(term, terms_needed)]
+  df_risk <- df_risk[term %in% terms_needed]
+  df_risk[, term := factor(term, terms_needed)]
+  terms_label <- vapply(
+    lapply(terms_needed, strwrap, width = 30),
+    paste,
+    FUN.VALUE = character(1),
+    collapse = "\n"
+  )
 
   mytheme <-
     theme_osprey(axis_side = axis_side, fontsize = fontsize)
 
-  labels <- n$label
-  names(labels) <- n$arm
+  labels <-
+    setNames(df_n[, sprintf("%s\n(N = %i)", arm, total)], df_n$arm)
 
   y_axis <-
     scale_y_discrete(
@@ -289,14 +269,14 @@ g_events_term_id <- function(term,
     scale_shape_manual(values = shape, labels = labels) +
     y_axis
 
-  p2 <- ggplot(df_risk) +
+  p2 <- ggplot(df_ci) +
     geom_point(mapping = aes(y = term, x = riskdiff),
                size = fontsize * 0.7) +
     geom_vline(data = NULL,
                xintercept = 0,
                linetype = 2) +
     mytheme +
-    geom_errorbarh(mapping = aes(xmax = upper, xmin = lower, y = term),
+    geom_errorbarh(mapping = aes(xmax = upper_ci, xmin = lower_ci, y = term),
                    height = 0.4) +
     y_axis +
     ggtitle("Risk Difference")
@@ -348,8 +328,7 @@ g_events_term_id <- function(term,
                            c(8, 8, NA, 9))
     widths <- unit.c(grobWidth(axis), unit(c(1, 2 * fontsize, 1),
                                            c("null", "pt", "null")))
-
-  } else{
+  } else {
     layout_matrix <- rbind(c(1, NA, 2, NA),
                            c(4, NA, 5, 3),
                            c(6, NA, 7, NA),
@@ -376,6 +355,87 @@ g_events_term_id <- function(term,
   )
 
   ret <- grob_add_padding(ret)
-  plot(ret)
+  if (draw) {
+    grid.draw(ret)
+  }
   invisible(ret)
+}
+
+
+#' default ae overview flags
+#' @import data.table
+#' @param df data frame of ae. use default
+#' @param ... named expressions used to generate categories
+#' @details in this function, all flags are expressions calls, for simpler usage.
+#' @export
+#' @examples
+#' library(random.cdisc.data)
+#' create_flag_vars(cadae)
+#' create_flag_vars(cadae, `AENSER` = AESER != "Y") # create other flags
+#' create_flag_vars(cadae, `Serious AE` = NULL) # remove not needed flags
+create_flag_vars <- function(df,
+                             `AE with fatal outcome` = AESDTH == "Y",
+                             `Serious AE` = AESER == "Y",
+                             `Serious AE leading to withdrawal` = AESER == "Y" &
+                               grepl("DRUG WITHDRAWN", AEACN),
+                             `Serious AE leading to dose modification` = AESER == "Y" &
+                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                             `Related Serious AE` = AESER == "Y" &
+                               AEREL == "Y",
+                             `AE leading to withdrawal` = grepl("DRUG WITHDRAWN", AEACN),
+                             `AE leading to dose modification` = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                             `Related AE` = AEREL == "Y",
+                             `Related AE leading to withdrawal` = AEREL == "Y" &
+                               grepl("DRUG WITHDRAWN", AEACN),
+                             `Related AE leading to dose modification` = AEREL == "Y" &
+                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                             `Grade 3-5 AE` = AETOXGR %in% c("3", "4", "5"),
+                             ...) {
+  args <-
+    eval(substitute(
+      alist(
+        "AE with fatal outcome" = `AE with fatal outcome`,
+        "Serious AE" = `Serious AE`,
+        "Serious AE leading to withdrawal" = `Serious AE leading to withdrawal`,
+        "Serious AE leading to dose modification" = `Serious AE leading to dose modification`,
+        "Related Serious AE" = `Related Serious AE`,
+        "AE leading to withdrawal" = `AE leading to withdrawal`,
+        "AE leading to dose modification" = `AE leading to dose modification`,
+        "Related AE" = `Related AE`,
+        "Related AE leading to withdrawal" = `Related AE leading to withdrawal`,
+        "Related AE leading to dose modification" = `Related AE leading to dose modification`,
+        "Grade 3-5 AE" = `Grade 3-5 AE`
+      )
+    ))
+  args <- c(args, eval(substitute(alist(...))))
+  stopifnot(all(names(args) != "")) # all elements in ... should be named
+  argnames <- unique(names(args))
+  df <- as.data.table(df)
+  ret <- lapply(argnames, function(t) {
+    tryCatch({
+      df[, eval(args[[t]])]
+    },
+    error = function(w) {
+      warning(sprintf(
+        "%s with calculation %s not valid",
+        t,
+        as.character(as.expression(args[[t]]))
+      ))
+      NULL
+    },
+    warning = function(w) {
+      warning(sprintf(
+        "%s with calculation %s not valid",
+        t,
+        as.character(as.expression(args[[t]]))
+      ))
+      NULL
+    })
+  })
+  names(ret) <- argnames
+  ret <- Filter(Negate(is.null), ret)
+  retnames <- names(ret)
+  lapply(data.table::transpose(ret), function(x) {
+    retnames[x]
+  })
 }
