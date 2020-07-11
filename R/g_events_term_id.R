@@ -33,7 +33,7 @@
 #'
 #' @import ggplot2
 #' @importFrom gridExtra arrangeGrob
-#' @import data.table
+#' @importFrom data.table data.table dcast
 #' @importFrom grid textGrob unit unit.c
 #' @importFrom DescTools BinomDiffCI
 #' @importFrom utils.nest stop_if_not
@@ -82,7 +82,7 @@ g_events_term_id <- function(term,
   # argument validation
   possible_sort <- c("term", "riskdiff", "meanrisk")
   possible_axis <- c("left", "right")
-
+  term <- force(term)
   stop_if_not(
     list(!is_empty(term), "missing argument: term must be specified"),
     list(!is_empty(id), "missing argument: id must be specified"),
@@ -167,7 +167,7 @@ g_events_term_id <- function(term,
   trt_total <- df_n[arm == trt, total]
   ref_total <- df_n[arm == ref, total]
   df <-
-    data.table(id = id, arm = arm, term = term)[, list(term = as.character(unlist(term))), by = .(arm, id)]
+    data.table(id, arm, term)[, list(term = as.character(unlist(term))), by = .(arm, id)]
   df <- unique(df)[arm %in% arms,
                    .N,
                    by = .(arm, term)]
@@ -363,7 +363,7 @@ g_events_term_id <- function(term,
 
 
 #' default ae overview flags
-#' @import data.table
+#' @importFrom data.table data.table as.data.table transpose
 #' @param df data frame of ae. use default
 #' @param ... named expressions used to generate categories
 #' @details in this function, all flags are expressions calls, for simpler usage.
@@ -439,3 +439,7 @@ create_flag_vars <- function(df,
     retnames[x]
   })
 }
+
+
+#' allow data.table in pacakge
+.datatable.aware = TRUE

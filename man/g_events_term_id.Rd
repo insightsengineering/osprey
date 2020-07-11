@@ -92,7 +92,8 @@ g_events_term_id(term, id, arm, arm_sl,
   reversed = FALSE, axis_side = "right"
 )
 g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
-g_events_term_id(create_flag_vars(cadae), id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
+term <- create_flag_vars(cadae)
+g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 4)
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}
