@@ -374,22 +374,17 @@ g_events_term_id <- function(term,
 #' create_flag_vars(cadae, `AENSER` = AESER != "Y") # create other flags
 #' create_flag_vars(cadae, `Serious AE` = NULL) # remove not needed flags
 create_flag_vars <- function(df,
-                             `AE with fatal outcome` = AESDTH == "Y",
-                             `Serious AE` = AESER == "Y",
-                             `Serious AE leading to withdrawal` = AESER == "Y" &
-                               grepl("DRUG WITHDRAWN", AEACN),
-                             `Serious AE leading to dose modification` = AESER == "Y" &
-                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
-                             `Related Serious AE` = AESER == "Y" &
-                               AEREL == "Y",
-                             `AE leading to withdrawal` = grepl("DRUG WITHDRAWN", AEACN),
-                             `AE leading to dose modification` = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
-                             `Related AE` = AEREL == "Y",
-                             `Related AE leading to withdrawal` = AEREL == "Y" &
-                               grepl("DRUG WITHDRAWN", AEACN),
-                             `Related AE leading to dose modification` = AEREL == "Y" &
-                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
-                             `Grade 3-5 AE` = AETOXGR %in% c("3", "4", "5"),
+                             `AE with fatal outcome` = AESDTH == "Y",#nolint
+                             `Serious AE` = AESER == "Y",#nolint
+                             `Serious AE leading to withdrawal` = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),#nolint
+                             `Serious AE leading to dose modification` = AESER == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
+                             `Related Serious AE` = AESER == "Y" & AEREL == "Y",#nolint
+                             `AE leading to withdrawal` = grepl("DRUG WITHDRAWN", AEACN),#nolint
+                             `AE leading to dose modification` = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
+                             `Related AE` = AEREL == "Y",#nolint
+                             `Related AE leading to withdrawal` = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),#nolint
+                             `Related AE leading to dose modification` = AEREL == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
+                             `Grade 3-5 AE` = AETOXGR %in% c("3", "4", "5"),#nolint
                              ...) {
   args <-
     eval(substitute(
@@ -442,4 +437,4 @@ create_flag_vars <- function(df,
 
 
 #' allow data.table in pacakge
-.datatable.aware = TRUE
+.datatable.aware <- TRUE #nolint
