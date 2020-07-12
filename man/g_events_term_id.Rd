@@ -100,3 +100,8 @@ g_events_term_id(term, id, arm, arm_sl, sort_by = "meanrisk",
 reversed = FALSE, axis_side = "right")
 g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
 }
+\author{
+Liming Li (Lil128) \email{liming.li@roche.com}
+
+Molly He (hey59) \email{hey59@gene.com}
+}
