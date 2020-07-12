@@ -17,7 +17,7 @@ g_events_term_id(
   diff_range = c(-1, 1),
   reversed = FALSE,
   conf_level = 0.95,
-  cimethod = "wald",
+  ci_method = "wald",
   axis_side = "left",
   color = c("red", "blue"),
   shape = c(16, 17),
@@ -27,22 +27,23 @@ g_events_term_id(
 )
 }
 \arguments{
-\item{term}{event term vector.}
+\item{term}{\code{character} or \code{factor} vector represents events information}
 
-\item{id}{id of the event term vector. Ususally it is USUBJID.}
+\item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the same as the length or number of rows of
+\code{terms}. Ususally it is \code{USUBJID}.}
 
-\item{arm}{Arm vector. Usually it is ACTARM.}
+\item{arm}{\code{character} vector contains arm informatiion. For example, \code{ACTARMCD}.}
 
-\item{arm_sl}{Subject level of arm vector. Usually it is adsl$ACTARM.}
+\item{arm_sl}{\code{character} vector contains subject level arm vector. For example, \code{ADSL$ACTARMCD}.}
 
-\item{trt}{treatment arm}
+\item{trt}{\code{character} indicates the name of the treatment arm}
 
-\item{ref}{reference arm}
+\item{ref}{\code{character} indicates the name of the reference arm}
 
-\item{sort_by}{sort_by type variable. Default set to "term", to sort_by by term. You can also use
-"riskdiff", "meanrisk" to sort.}
+\item{sort_by}{\code{character} indicates sort_by type. Choose from "term", "riskdiff" and "meanrisk". Default is "term".}
 
-\item{term_selected}{selected term to draw common ae. filter term with term_selected if it is not NULL.}
+\item{term_selected}{\code{character} single or vector contains selected term to draw common events. Default is \code{NULL}.
+Filter term with term_selected if it is not NULL.}
 
 \item{rate_range}{Range for overall rate}
 
@@ -52,7 +53,7 @@ g_events_term_id(
 
 \item{conf_level}{The confidence interval level, default set to 0.95.}
 
-\item{cimethod}{The method used to calculate confidence interval. Defalt is "wald".
+\item{ci_method}{The method used to calculate confidence interval. Defalt is "wald".
 Possible choices are methods supported in `DescTools::BinomDiffCI`.}
 
 \item{axis_side}{the side of the axis label, "left" or "right". Default set to "left".}

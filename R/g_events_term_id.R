@@ -4,15 +4,16 @@
 #' It creates basic summary of events and compares event occurrences between treatment and reference
 #' arms, and can be used for events data such as Adverse Events.
 #'
-#' @param term event term vector.
-#' @param id id of the event term vector. Ususally it is USUBJID.
-#' @param arm Arm vector. Usually it is ACTARM.
-#' @param arm_sl Subject level of arm vector. Usually it is adsl$ACTARM.
-#' @param trt treatment arm
-#' @param ref reference arm
-#' @param sort_by sort_by type variable. Default set to "term", to sort_by by term. You can also use
-#' "riskdiff", "meanrisk" to sort.
-#' @param term_selected selected term to draw common ae. filter term with term_selected if it is not NULL.
+#' @param term \code{character} or \code{factor} vector represents events information
+#' @param id \code{vector} contains subject identifier. Length of \code{id} must be the same as the length or number of rows of
+#'   \code{terms}. Ususally it is \code{USUBJID}.
+#' @param arm \code{character} vector contains arm informatiion. For example, \code{ACTARMCD}.
+#' @param arm_sl \code{character} vector contains subject level arm vector. For example, \code{ADSL$ACTARMCD}.
+#' @param trt \code{character} indicates the name of the treatment arm
+#' @param ref \code{character} indicates the name of the reference arm
+#' @param sort_by \code{character} indicates sort_by type. Choose from "term", "riskdiff" and "meanrisk". Default is "term".
+#' @param term_selected \code{character} single or vector contains selected term to draw common events. Default is \code{NULL}.
+#' Filter term with term_selected if it is not NULL.
 #' @param rate_range Range for overall rate
 #' @param diff_range Range for rate difference
 #' @param reversed Whether to sort_by on reversed variable. Default set to FALSE.
