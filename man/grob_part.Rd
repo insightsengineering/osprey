@@ -7,9 +7,9 @@
 grob_part(gplot_grob, part)
 }
 \arguments{
-\item{part}{name of the part to be extracted. NA will return zeroGrob()}
+\item{gplot_grob}{ggplot or grob object}
 
-\item{gplot}{ggplot or grob object}
+\item{part}{name of the part to be extracted. NA will return zeroGrob()}
 }
 \description{
 Extract specific part of a ggplot or grob

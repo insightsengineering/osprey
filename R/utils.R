@@ -435,8 +435,9 @@ shift_label_table <- function(tbl, term) {
 
 #' Extract specific part of a ggplot or grob
 #'
-#' @param gplot ggplot or grob object
+#' @param gplot_grob ggplot or grob object
 #' @param part name of the part to be extracted. NA will return zeroGrob()
+#' @importFrom ggplot2 zeroGrob
 #'
 grob_part <- function(gplot_grob, part) {
   if (is.na(part)) {
@@ -457,6 +458,7 @@ grob_part <- function(gplot_grob, part) {
 #' @param pad_v padding to add vertically
 #' @param pad_h padding to add horizontally
 #' @importFrom gtable gtable_add_grob gtable
+#' @importFrom grid rectGrob
 #'
 grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
   ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v),
@@ -468,8 +470,11 @@ grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 
 
 
-# this theme is used across many figures. can be safely removed if update the theme in each function
-theme_osprey <- function(axis_side = "left", fontsize = 4, ygrid = element_line(colour = "grey50", linetype = 2)){
+#' this theme is used across many figures. can be safely removed if update the theme in each function
+#' @importFrom  ggplot2 theme .pt
+#' @param axis_side axis position
+#' @param fontsize font size in 'mm'
+theme_osprey <- function(axis_side = "left", fontsize = 4){
   theme(panel.background = element_rect(fill = "white", colour = "white"),
         panel.grid.major.y = element_line(colour = "grey50", linetype = 2),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),

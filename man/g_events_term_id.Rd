@@ -63,8 +63,6 @@ Default set to c(16, 17).}
 want "points" you will need to devide the point number by "ggplot2:::.pt"}
 
 \item{draw}{whether to draw the Plot.}
-
-\item{term_selected}{selected term to draw common ae. filter term with term_selected if it is not NULL.}
 }
 \value{
 grob object

@@ -6,25 +6,47 @@
 \usage{
 create_flag_vars(
   df,
-  `AE with fatal outcome` = AESDTH == "Y",
-  `Serious AE` = AESER == "Y",
-  `Serious AE leading to withdrawal` = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),
-  `Serious AE leading to dose modification` = AESER == "Y" &
+  AE_with_fatal_outcome = AESDTH == "Y",
+  Serious_AE = AESER == "Y",
+  Serious_AE_leading_to_withdrawal = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),
+  Serious_AE_leading_to_dose_modification = AESER == "Y" &
     grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
-  `Related Serious AE` = AESER == "Y" & AEREL == "Y",
-  `AE leading to withdrawal` = grepl("DRUG WITHDRAWN", AEACN),
-  `AE leading to dose modification` = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
+  Related_Serious_AE = AESER == "Y" & AEREL == "Y",
+  AE_leading_to_withdrawal = grepl("DRUG WITHDRAWN", AEACN),
+  AE_leading_to_dose_modification = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
     AEACN),
-  `Related AE` = AEREL == "Y",
-  `Related AE leading to withdrawal` = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),
-  `Related AE leading to dose modification` = AEREL == "Y" &
+  Related_AE = AEREL == "Y",
+  Related_AE_leading_to_withdrawal = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),
+  Related_AE_leading_to_dose_modification = AEREL == "Y" &
     grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
-  `Grade 3-5 AE` = AETOXGR \%in\% c("3", "4", "5"),
+  `Grade_3-5_AE` = AETOXGR \%in\% c("3", "4", "5"),
   ...
 )
 }
 \arguments{
 \item{df}{data frame of ae. use default}
+
+\item{AE_with_fatal_outcome}{AE with fatal outcome derivation}
+
+\item{Serious_AE}{Serious AE derivation.}
+
+\item{Serious_AE_leading_to_withdrawal}{Serious AE leading to withdrawal derivation}
+
+\item{Serious_AE_leading_to_dose_modification}{Serious AE leading to dose modification derivation}
+
+\item{Related_Serious_AE}{Related Serious AE derivation}
+
+\item{AE_leading_to_withdrawal}{AE leading to withdrawal derivation}
+
+\item{AE_leading_to_dose_modification}{AE leading to dose modification derivation}
+
+\item{Related_AE}{Related AE derivation}
+
+\item{Related_AE_leading_to_withdrawal}{Related AE leading to withdrawal derivation}
+
+\item{Related_AE_leading_to_dose_modification}{Related AE leading to dose modification derivation}
+
+\item{Grade_3-5_AE}{Grade 3-5 AE derivation}
 
 \item{...}{named expressions used to generate categories}
 }

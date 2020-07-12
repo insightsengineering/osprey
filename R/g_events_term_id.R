@@ -12,7 +12,6 @@
 #' @param ref reference arm
 #' @param sort_by sort_by type variable. Default set to "term", to sort_by by term. You can also use
 #' "riskdiff", "meanrisk" to sort.
-#' @param term_selected selected term to draw common ae. filter term with term_selected if it is not NULL.
 #' @param rate_range Range for overall rate
 #' @param diff_range Range for rate difference
 #' @param reversed Whether to sort_by on reversed variable. Default set to FALSE.
@@ -33,10 +32,11 @@
 #'
 #' @import ggplot2
 #' @importFrom gridExtra arrangeGrob
-#' @importFrom data.table data.table dcast
-#' @importFrom grid textGrob unit unit.c
+#' @importFrom data.table data.table dcast ":="
+#' @importFrom grid textGrob unit unit.c grobHeight grobWidth
 #' @importFrom DescTools BinomDiffCI
 #' @importFrom utils.nest stop_if_not
+#' @importFrom stats setNames
 #' @export
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
@@ -79,6 +79,8 @@ g_events_term_id <- function(term,
                              shape = c(16, 17),
                              fontsize = 4,
                              draw = TRUE) {
+  # check issues
+  `.` <- `.N` <- total <- trt_count <- ref_count <- riskdiff <- meanrisk <- risk <- upper_ci <- lower_ci <- NULL #nolint
   # argument validation
   possible_sort <- c("term", "riskdiff", "meanrisk")
   possible_axis <- c("left", "right")
@@ -365,6 +367,17 @@ g_events_term_id <- function(term,
 #' default ae overview flags
 #' @importFrom data.table data.table as.data.table transpose
 #' @param df data frame of ae. use default
+#' @param AE_with_fatal_outcome AE with fatal outcome derivation
+#' @param Serious_AE Serious AE derivation.
+#' @param Serious_AE_leading_to_withdrawal Serious AE leading to withdrawal derivation
+#' @param Serious_AE_leading_to_dose_modification Serious AE leading to dose modification derivation
+#' @param Related_Serious_AE Related Serious AE derivation
+#' @param AE_leading_to_withdrawal AE leading to withdrawal derivation
+#' @param AE_leading_to_dose_modification AE leading to dose modification derivation
+#' @param Related_AE Related AE derivation
+#' @param Related_AE_leading_to_withdrawal Related AE leading to withdrawal derivation
+#' @param Related_AE_leading_to_dose_modification Related AE leading to dose modification derivation
+#' @param Grade_3-5_AE Grade 3-5 AE derivation
 #' @param ... named expressions used to generate categories
 #' @details in this function, all flags are expressions calls, for simpler usage.
 #' @export
@@ -374,32 +387,33 @@ g_events_term_id <- function(term,
 #' create_flag_vars(cadae, `AENSER` = AESER != "Y") # create other flags
 #' create_flag_vars(cadae, `Serious AE` = NULL) # remove not needed flags
 create_flag_vars <- function(df,
-                             `AE with fatal outcome` = AESDTH == "Y",#nolint
-                             `Serious AE` = AESER == "Y",#nolint
-                             `Serious AE leading to withdrawal` = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),#nolint
-                             `Serious AE leading to dose modification` = AESER == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
-                             `Related Serious AE` = AESER == "Y" & AEREL == "Y",#nolint
-                             `AE leading to withdrawal` = grepl("DRUG WITHDRAWN", AEACN),#nolint
-                             `AE leading to dose modification` = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
-                             `Related AE` = AEREL == "Y",#nolint
-                             `Related AE leading to withdrawal` = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),#nolint
-                             `Related AE leading to dose modification` = AEREL == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
-                             `Grade 3-5 AE` = AETOXGR %in% c("3", "4", "5"),#nolint
+                             `AE_with_fatal_outcome` = AESDTH == "Y",#nolint
+                             `Serious_AE` = AESER == "Y",#nolint
+                             `Serious_AE_leading_to_withdrawal` = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),#nolint
+                             `Serious_AE_leading_to_dose_modification` = AESER == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
+                             `Related_Serious_AE` = AESER == "Y" & AEREL == "Y",#nolint
+                             `AE_leading_to_withdrawal` = grepl("DRUG WITHDRAWN", AEACN),#nolint
+                             `AE_leading_to_dose_modification` = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
+                             `Related_AE` = AEREL == "Y",#nolint
+                             `Related_AE_leading_to_withdrawal` = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),#nolint
+                             `Related_AE_leading_to_dose_modification` = AEREL == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
+                             `Grade_3-5_AE` = AETOXGR %in% c("3", "4", "5"),#nolint
                              ...) {
+  AESDTH <- AESER <- AEACN <- AEREL <- AETOXGR <- NULL #nolint
   args <-
     eval(substitute(
       alist(
-        "AE with fatal outcome" = `AE with fatal outcome`,
-        "Serious AE" = `Serious AE`,
-        "Serious AE leading to withdrawal" = `Serious AE leading to withdrawal`,
-        "Serious AE leading to dose modification" = `Serious AE leading to dose modification`,
-        "Related Serious AE" = `Related Serious AE`,
-        "AE leading to withdrawal" = `AE leading to withdrawal`,
-        "AE leading to dose modification" = `AE leading to dose modification`,
-        "Related AE" = `Related AE`,
-        "Related AE leading to withdrawal" = `Related AE leading to withdrawal`,
-        "Related AE leading to dose modification" = `Related AE leading to dose modification`,
-        "Grade 3-5 AE" = `Grade 3-5 AE`
+        "AE with fatal outcome" = `AE_with_fatal_outcome`,
+        "Serious AE" = `Serious_AE`,
+        "Serious AE leading to withdrawal" = `Serious_AE_leading_to_withdrawal`,
+        "Serious AE leading to dose modification" = `Serious_AE_leading_to_dose_modification`,
+        "Related Serious AE" = `Related_Serious_AE`,
+        "AE leading to withdrawal" = `AE_leading_to_withdrawal`,
+        "AE leading to dose modification" = `AE_leading_to_dose_modification`,
+        "Related AE" = `Related_AE`,
+        "Related AE leading to withdrawal" = `Related_AE_leading_to_withdrawal`,
+        "Related AE leading to dose modification" = `Related_AE_leading_to_dose_modification`,
+        "Grade 3-5 AE" = `Grade_3-5_AE`
       )
     ))
   args <- c(args, eval(substitute(alist(...))))
