@@ -26,7 +26,7 @@
 #' Default set to c(16, 17).
 #' @param fontsize font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
 #' want "points" you will need to devide the point number by "ggplot2:::.pt"
-#'
+#' @param draw whether to draw the Plot.
 #' @details there is no equivalent STREAM output
 #'
 #' @return grob object
@@ -164,8 +164,8 @@ g_events_term_id <- function(term,
   df_n <- data.table(arm = arm_sl)[arm %in% arms,
                                    .(total = .N),
                                    by = .(arm)]
-  trt_total <- df_n[arm == trt, total]
-  ref_total <- df_n[arm == ref, total]
+  trt_total <- df_n[arm == trt, total] #nolint
+  ref_total <- df_n[arm == ref, total] #nolint
   df <-
     data.table(id, arm, term)[, list(term = as.character(unlist(term))), by = .(arm, id)]
   df <- unique(df)[arm %in% arms,
@@ -208,7 +208,7 @@ g_events_term_id <- function(term,
   terms_needed <- unique(df_ci[(riskdiff > diff_range[1] &
                                   riskdiff < diff_range[2]) &
                                  (meanrisk > rate_range[1] &
-                                    meanrisk < rate_range[2]) ,
+                                    meanrisk < rate_range[2]),
                                term])
 
   if (length(terms_needed) == 0) {
