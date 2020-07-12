@@ -12,7 +12,6 @@ g_events_term_id(
   trt = unique(arm)[1],
   ref = unique(arm)[2],
   sort_by = "term",
-  term_selected = NULL,
   rate_range = c(0, 1),
   diff_range = c(-1, 1),
   reversed = FALSE,
@@ -22,8 +21,7 @@ g_events_term_id(
   color = c("red", "blue"),
   shape = c(16, 17),
   fontsize = 4,
-  title = "Most Frequent On-Therapy Adverse Events",
-  foot = "Note: CI is calculated with Wald by default"
+  draw = TRUE
 )
 }
 \arguments{
@@ -67,11 +65,7 @@ Default set to c(16, 17).}
 \item{fontsize}{font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
 want "points" you will need to devide the point number by "ggplot2:::.pt"}
 
-\item{title}{the title for the plot. Set to NULL to remove the title. Default set to
-"Most Frequent On-Therapy Adverse Events Sorted by $\{sort_by\}".
-The "$\{sort_by\}" is used to show the sort_by variable in the title.}
-
-\item{foot}{the footnote of the figure.}
+\item{draw}{whether to draw the Plot.}
 }
 \value{
 grob object
@@ -96,9 +90,13 @@ trt <- "ARM A"
 ref <- "ARM B"
 g_events_term_id(term, id, arm, arm_sl, sort_by = "riskdiff")
 g_events_term_id(term, id, arm, arm_sl, sort_by = "term", reversed = FALSE)
-g_events_term_id(term, id, arm, arm_sl, sort_by = "meanrisk",
-reversed = FALSE, axis_side = "right")
+g_events_term_id(term, id, arm, arm_sl,
+  sort_by = "meanrisk",
+  reversed = FALSE, axis_side = "right"
+)
 g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
+term <- create_flag_vars(cadae)
+g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 4)
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}

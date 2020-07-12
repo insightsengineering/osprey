@@ -26,7 +26,9 @@ Imports:
   rlang,
   rtables (>= 0.1.6),
   stringr,
-  utils.nest (>= 0.2.4)
+  utils.nest (>= 0.2.4),
+  DescTools,
+  data.table
 Suggests:
   knitr,
   random.cdisc.data (>= 0.3.4),
