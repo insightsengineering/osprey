@@ -25,7 +25,8 @@ g_events_term_id(
 )
 }
 \arguments{
-\item{term}{\code{character} or \code{factor} vector represents events information}
+\item{term}{\code{character} or \code{factor} vector, or \code{data.frame} \cr
+Represents events information. \code{term} can be a \code{data.frame} produced by \code{create_flag_vars}, with each column being a \code{logical} event indicator}
 
 \item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the same as
 the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.}
@@ -41,29 +42,29 @@ the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.}
 \item{sort_by}{\code{character} indicates sort_by type. Choose from "term", "riskdiff"
 and "meanrisk". Default is "term".}
 
-\item{rate_range}{Range for overall rate}
+\item{rate_range}{Numeric \code{vector} of length 2. Range for overall rate}
 
-\item{diff_range}{Range for rate difference}
+\item{diff_range}{Numeric \code{vector} of length 2. Range for rate difference}
 
-\item{reversed}{Whether to sort_by on reversed variable. Default set to FALSE.}
+\item{reversed}{\code{logical} whether to sort_by on reversed variable. Default is FALSE.}
 
-\item{conf_level}{The confidence interval level, default set to 0.95.}
+\item{conf_level}{\code{numeric} The confidence interval level, default is 0.95.}
 
-\item{ci_method}{The method used to calculate confidence interval. Defalt is "wald".
+\item{ci_method}{\code{character} The method used to calculate confidence interval. Defalt is "wald".
 Possible choices are methods supported in `DescTools::BinomDiffCI`.}
 
-\item{axis_side}{the side of the axis label, "left" or "right". Default set to "left".}
+\item{axis_side}{\code{character} the side of the axis label, "left" or "right". Default is "left".}
 
-\item{color}{Color for the plot. Vector of length 2. Color for arms seperately.
+\item{color}{Color for the plot. \code{vector} of length 2. Color for arms seperately.
 Default set to c("red", "blue")}
 
-\item{shape}{Shape for the plot. Vector of length 2. Shape for arms seperately.
+\item{shape}{Shape for the plot. \code{vector} of length 2. Shape for arms seperately.
 Default set to c(16, 17).}
 
-\item{fontsize}{font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
+\item{fontsize}{\code{numeric} font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
 want "points" you will need to devide the point number by "ggplot2:::.pt"}
 
-\item{draw}{whether to draw the Plot.}
+\item{draw}{\code{logical} whether to draw the Plot.}
 }
 \value{
 grob object
@@ -80,20 +81,52 @@ there is no equivalent STREAM output
 library(osprey)
 library(random.cdisc.data)
 
-term <- as.character(cadae$AEDECOD)
-id <- cadae$USUBJID
-arm <- as.character(cadae$ACTARMCD)
-arm_sl <- as.character(cadsl$ACTARMCD)
+ADSL <- cadsl
+ADAE <- cadae
+
+adae_labels <- var_labels(ADAE)
+adae_labels <- c(adae_labels,
+                "Action Taken with Study Treatment",
+                "Results in Death",
+                "Serious AE related to A: Drug X",
+                "Serious AE related to B: Placebo")
+
+# add AEACN to ADAE
+AEACN <- sample(c("DOSE NOT CHANGED",
+                  "DOSE INTERRUPTED",
+                  "DOSE INCREASED",
+                  "DOSE REDUCED",
+                  "DRUG WITHDRAWN"),
+                nrow(ADAE),
+                replace = TRUE)
+# add AESDTH to ADAE
+AESDTH <- sample(c("Y", "N"),
+                 nrow(ADAE),
+                 replace = TRUE)
+
+ADAE <- ADAE \%>\%
+             mutate(AEACN = AEACN,
+                    AESDTH = AESDTH) \%>\%
+             # additional flag variable
+             mutate(AEREL1 = (AEREL == "Y" &
+                              ADAE$ACTARM == "A: Drug X")) \%>\%
+             mutate(AEREL2 = (AEREL == "Y" &
+                              ADAE$ACTARM == "B: Placebo"))
+var_labels(ADAE) <- adae_labels
+
+term <- as.character(ADAE$AEDECOD)
+id <- ADAE$USUBJID
+arm <- as.character(ADAE$ACTARMCD)
+arm_sl <- as.character(ADSL$ACTARMCD)
 trt <- "ARM A"
 ref <- "ARM B"
 g_events_term_id(term, id, arm, arm_sl, sort_by = "riskdiff")
 g_events_term_id(term, id, arm, arm_sl, sort_by = "term", reversed = FALSE)
-g_events_term_id(term, id, arm, arm_sl,
-  sort_by = "meanrisk",
-  reversed = FALSE, axis_side = "right"
-)
+g_events_term_id(term, id, arm, arm_sl, sort_by = "meanrisk",
+                 reversed = FALSE, axis_side = "right")
 g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
-term <- create_flag_vars(cadae)
+
+term <- create_flag_vars(ADAE)
 g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 4)
 }
 \author{

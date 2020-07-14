@@ -4,7 +4,8 @@
 #' It creates basic summary of events and compares event occurrences between treatment and reference
 #' arms, and can be used for events data such as Adverse Events.
 #'
-#' @param term \code{character} or \code{factor} vector represents events information
+#' @param term \code{character} or \code{factor} vector, or \code{data.frame} \cr
+#' Represents events information. \code{term} can be a \code{data.frame} produced by \code{create_flag_vars}, with each column being a \code{logical} event indicator
 #' @param id \code{vector} contains subject identifier. Length of \code{id} must be the same as
 #'  the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.
 #' @param arm \code{character} vector contains arm informatiion. For example, \code{ACTARMCD}.
@@ -13,20 +14,20 @@
 #' @param ref \code{character} indicates the name of the reference arm
 #' @param sort_by \code{character} indicates sort_by type. Choose from "term", "riskdiff"
 #' and "meanrisk". Default is "term".
-#' @param rate_range Range for overall rate
-#' @param diff_range Range for rate difference
-#' @param reversed Whether to sort_by on reversed variable. Default set to FALSE.
-#' @param conf_level The confidence interval level, default set to 0.95.
-#' @param ci_method The method used to calculate confidence interval. Defalt is "wald".
+#' @param rate_range Numeric \code{vector} of length 2. Range for overall rate
+#' @param diff_range Numeric \code{vector} of length 2. Range for rate difference
+#' @param reversed \code{logical} whether to sort_by on reversed variable. Default is FALSE.
+#' @param conf_level \code{numeric} The confidence interval level, default is 0.95.
+#' @param ci_method \code{character} The method used to calculate confidence interval. Defalt is "wald".
 #' Possible choices are methods supported in `DescTools::BinomDiffCI`.
-#' @param axis_side the side of the axis label, "left" or "right". Default set to "left".
-#' @param color Color for the plot. Vector of length 2. Color for arms seperately.
+#' @param axis_side \code{character} the side of the axis label, "left" or "right". Default is "left".
+#' @param color Color for the plot. \code{vector} of length 2. Color for arms seperately.
 #' Default set to c("red", "blue")
-#' @param shape Shape for the plot. Vector of length 2. Shape for arms seperately.
+#' @param shape Shape for the plot. \code{vector} of length 2. Shape for arms seperately.
 #' Default set to c(16, 17).
-#' @param fontsize font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
+#' @param fontsize \code{numeric} font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
 #' want "points" you will need to devide the point number by "ggplot2:::.pt"
-#' @param draw whether to draw the Plot.
+#' @param draw \code{logical} whether to draw the Plot.
 #' @details there is no equivalent STREAM output
 #'
 #' @return grob object
@@ -47,20 +48,52 @@
 #' library(osprey)
 #' library(random.cdisc.data)
 #'
-#' term <- as.character(cadae$AEDECOD)
-#' id <- cadae$USUBJID
-#' arm <- as.character(cadae$ACTARMCD)
-#' arm_sl <- as.character(cadsl$ACTARMCD)
+#' ADSL <- cadsl
+#' ADAE <- cadae
+#'
+#' adae_labels <- var_labels(ADAE)
+#' adae_labels <- c(adae_labels,
+#'                 "Action Taken with Study Treatment",
+#'                 "Results in Death",
+#'                 "Serious AE related to A: Drug X",
+#'                 "Serious AE related to B: Placebo")
+#'
+#' # add AEACN to ADAE
+#' AEACN <- sample(c("DOSE NOT CHANGED",
+#'                   "DOSE INTERRUPTED",
+#'                   "DOSE INCREASED",
+#'                   "DOSE REDUCED",
+#'                   "DRUG WITHDRAWN"),
+#'                 nrow(ADAE),
+#'                 replace = TRUE)
+#' # add AESDTH to ADAE
+#' AESDTH <- sample(c("Y", "N"),
+#'                  nrow(ADAE),
+#'                  replace = TRUE)
+#'
+#' ADAE <- ADAE %>%
+#'              mutate(AEACN = AEACN,
+#'                     AESDTH = AESDTH) %>%
+#'              # additional flag variable
+#'              mutate(AEREL1 = (AEREL == "Y" &
+#'                               ADAE$ACTARM == "A: Drug X")) %>%
+#'              mutate(AEREL2 = (AEREL == "Y" &
+#'                               ADAE$ACTARM == "B: Placebo"))
+#' var_labels(ADAE) <- adae_labels
+#'
+#' term <- as.character(ADAE$AEDECOD)
+#' id <- ADAE$USUBJID
+#' arm <- as.character(ADAE$ACTARMCD)
+#' arm_sl <- as.character(ADSL$ACTARMCD)
 #' trt <- "ARM A"
 #' ref <- "ARM B"
 #' g_events_term_id(term, id, arm, arm_sl, sort_by = "riskdiff")
 #' g_events_term_id(term, id, arm, arm_sl, sort_by = "term", reversed = FALSE)
-#' g_events_term_id(term, id, arm, arm_sl,
-#'   sort_by = "meanrisk",
-#'   reversed = FALSE, axis_side = "right"
-#' )
+#' g_events_term_id(term, id, arm, arm_sl, sort_by = "meanrisk",
+#'                  reversed = FALSE, axis_side = "right")
 #' g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
-#' term <- create_flag_vars(cadae)
+#'
+#' term <- create_flag_vars(ADAE)
 #' g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 4)
 g_events_term_id <- function(term,
                              id,
@@ -396,9 +429,39 @@ g_events_term_id <- function(term,
 #' @export
 #' @examples
 #' library(random.cdisc.data)
-#' create_flag_vars(cadae)
-#' create_flag_vars(cadae, `AENSER` = AESER != "Y") # create other flags
-#' create_flag_vars(cadae, fatal = NULL) # remove not needed flags
+#' ADAE <- cadae
+#' adae_labels <- var_labels(ADAE)
+#' adae_labels <- c(adae_labels,
+#'                 "Action Taken with Study Treatment",
+#'                 "Results in Death",
+#'                 "Serious AE related to A: Drug X",
+#'                 "Serious AE related to B: Placebo")
+#'
+#' # add AEACN to ADAE
+#' AEACN <- sample(c("DOSE NOT CHANGED",
+#'                   "DOSE INTERRUPTED",
+#'                   "DOSE INCREASED",
+#'                   "DOSE REDUCED",
+#'                   "DRUG WITHDRAWN"),
+#'                 nrow(ADAE),
+#'                 replace = TRUE)
+#' # add AESDTH to ADAE
+#' AESDTH <- sample(c("Y", "N"),
+#'                  nrow(ADAE),
+#'                  replace = TRUE)
+#'
+#' ADAE <- ADAE %>%
+#'              mutate(AEACN = AEACN,
+#'                     AESDTH = AESDTH) %>%
+#'              # additional flag variable
+#'              mutate(AEREL1 = (AEREL == "Y" &
+#'                               ADAE$ACTARM == "A: Drug X")) %>%
+#'              mutate(AEREL2 = (AEREL == "Y" &
+#'                               ADAE$ACTARM == "B: Placebo"))
+#' var_labels(ADAE) <- adae_labels
+#' create_flag_vars(ADAE)
+#' create_flag_vars(ADAE, `AENSER` = AESER != "Y") # create other flags
+#' create_flag_vars(ADAE, fatal = NULL) # remove not needed flags
 create_flag_vars <- function(df,
                              fatal = AESDTH == "Y",
                              #nolint
