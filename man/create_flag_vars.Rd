@@ -6,47 +6,46 @@
 \usage{
 create_flag_vars(
   df,
-  AE_with_fatal_outcome = AESDTH == "Y",
-  Serious_AE = AESER == "Y",
-  Serious_AE_leading_to_withdrawal = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),
-  Serious_AE_leading_to_dose_modification = AESER == "Y" &
-    grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
-  Related_Serious_AE = AESER == "Y" & AEREL == "Y",
-  AE_leading_to_withdrawal = grepl("DRUG WITHDRAWN", AEACN),
-  AE_leading_to_dose_modification = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
+  fatal = AESDTH == "Y",
+  serious = AESER == "Y",
+  serious_withdrawl = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),
+  serious_modified = AESER == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
     AEACN),
-  Related_AE = AEREL == "Y",
-  Related_AE_leading_to_withdrawal = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),
-  Related_AE_leading_to_dose_modification = AEREL == "Y" &
-    grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
-  `Grade_3-5_AE` = AETOXGR \%in\% c("3", "4", "5"),
+  serious_related = AESER == "Y" & AEREL == "Y",
+  withdrawl = grepl("DRUG WITHDRAWN", AEACN),
+  modified = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+  related = AEREL == "Y",
+  related_withdrawl = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),
+  related_modified = AEREL == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
+    AEACN),
+  grade3 = AETOXGR \%in\% c("3", "4", "5"),
   ...
 )
 }
 \arguments{
 \item{df}{data frame of ae. use default}
 
-\item{AE_with_fatal_outcome}{AE with fatal outcome derivation}
+\item{fatal}{AE with fatal outcome derivation}
 
-\item{Serious_AE}{Serious AE derivation.}
+\item{serious}{Serious AE derivation.}
 
-\item{Serious_AE_leading_to_withdrawal}{Serious AE leading to withdrawal derivation}
+\item{serious_withdrawl}{Serious AE leading to withdrawal derivation}
 
-\item{Serious_AE_leading_to_dose_modification}{Serious AE leading to dose modification derivation}
+\item{serious_modified}{Serious AE leading to dose modification derivation}
 
-\item{Related_Serious_AE}{Related Serious AE derivation}
+\item{serious_related}{Related Serious AE derivation}
 
-\item{AE_leading_to_withdrawal}{AE leading to withdrawal derivation}
+\item{withdrawl}{AE leading to withdrawal derivation}
 
-\item{AE_leading_to_dose_modification}{AE leading to dose modification derivation}
+\item{modified}{AE leading to dose modification derivation}
 
-\item{Related_AE}{Related AE derivation}
+\item{related}{Related AE derivation}
 
-\item{Related_AE_leading_to_withdrawal}{Related AE leading to withdrawal derivation}
+\item{related_withdrawl}{Related AE leading to withdrawal derivation}
 
-\item{Related_AE_leading_to_dose_modification}{Related AE leading to dose modification derivation}
+\item{related_modified}{Related AE leading to dose modification derivation}
 
-\item{Grade_3-5_AE}{Grade 3-5 AE derivation}
+\item{grade3}{Grade 3-5 AE derivation}
 
 \item{...}{named expressions used to generate categories}
 }
@@ -60,5 +59,5 @@ in this function, all flags are expressions calls, for simpler usage.
 library(random.cdisc.data)
 create_flag_vars(cadae)
 create_flag_vars(cadae, `AENSER` = AESER != "Y") # create other flags
-create_flag_vars(cadae, `Serious AE` = NULL) # remove not needed flags
+create_flag_vars(cadae, fatal = NULL) # remove not needed flags
 }

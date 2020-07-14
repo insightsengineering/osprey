@@ -27,8 +27,8 @@ g_events_term_id(
 \arguments{
 \item{term}{\code{character} or \code{factor} vector represents events information}
 
-\item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the same as the length or number of rows of
-\code{terms}. Ususally it is \code{USUBJID}.}
+\item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the same as
+the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.}
 
 \item{arm}{\code{character} vector contains arm informatiion. For example, \code{ACTARMCD}.}
 
@@ -38,10 +38,8 @@ g_events_term_id(
 
 \item{ref}{\code{character} indicates the name of the reference arm}
 
-\item{sort_by}{\code{character} indicates sort_by type. Choose from "term", "riskdiff" and "meanrisk". Default is "term".}
-
-\item{term_selected}{\code{character} single or vector contains selected term to draw common events. Default is \code{NULL}.
-Filter term with term_selected if it is not NULL.}
+\item{sort_by}{\code{character} indicates sort_by type. Choose from "term", "riskdiff"
+and "meanrisk". Default is "term".}
 
 \item{rate_range}{Range for overall rate}
 

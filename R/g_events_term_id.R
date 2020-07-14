@@ -5,15 +5,14 @@
 #' arms, and can be used for events data such as Adverse Events.
 #'
 #' @param term \code{character} or \code{factor} vector represents events information
-#' @param id \code{vector} contains subject identifier. Length of \code{id} must be the same as the length or number of rows of
-#'   \code{terms}. Ususally it is \code{USUBJID}.
+#' @param id \code{vector} contains subject identifier. Length of \code{id} must be the same as
+#'  the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.
 #' @param arm \code{character} vector contains arm informatiion. For example, \code{ACTARMCD}.
 #' @param arm_sl \code{character} vector contains subject level arm vector. For example, \code{ADSL$ACTARMCD}.
 #' @param trt \code{character} indicates the name of the treatment arm
 #' @param ref \code{character} indicates the name of the reference arm
-#' @param sort_by \code{character} indicates sort_by type. Choose from "term", "riskdiff" and "meanrisk". Default is "term".
-#' @param term_selected \code{character} single or vector contains selected term to draw common events. Default is \code{NULL}.
-#' Filter term with term_selected if it is not NULL.
+#' @param sort_by \code{character} indicates sort_by type. Choose from "term", "riskdiff"
+#' and "meanrisk". Default is "term".
 #' @param rate_range Range for overall rate
 #' @param diff_range Range for rate difference
 #' @param reversed Whether to sort_by on reversed variable. Default set to FALSE.
@@ -34,7 +33,7 @@
 #'
 #' @import ggplot2
 #' @importFrom gridExtra arrangeGrob
-#' @importFrom data.table data.table dcast ":="
+#' @importFrom data.table data.table dcast ":=" transpose
 #' @importFrom grid textGrob unit unit.c grobHeight grobWidth
 #' @importFrom DescTools BinomDiffCI
 #' @importFrom utils.nest stop_if_not
@@ -58,7 +57,6 @@
 #' g_events_term_id(term, id, arm, arm_sl, sort_by = "term", reversed = FALSE)
 #' g_events_term_id(term, id, arm, arm_sl,
 #'   sort_by = "meanrisk",
-
 #'   reversed = FALSE, axis_side = "right"
 #' )
 #' g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
@@ -82,7 +80,20 @@ g_events_term_id <- function(term,
                              fontsize = 4,
                              draw = TRUE) {
   # check issues
-  `.` <- `.N` <- total <- trt_count <- ref_count <- riskdiff <- meanrisk <- risk <- upper_ci <- lower_ci <- NULL #nolint
+  `.` <-
+    `.N` <- #nolint
+    total <-
+    trt_count <-
+    ref_count <-
+    riskdiff <-
+    meanrisk <- risk <- upper_ci <- lower_ci <- NULL #nolint
+  if (is.data.frame(term)) {
+    term_levels <- factor(colnames(term), levels = rev(colnames(term)))
+    term <- data.table::transpose(term)
+    term <- lapply(term, function(x) {
+      term_levels[x]
+    })
+  }
   # argument validation
   possible_sort <- c("term", "riskdiff", "meanrisk")
   possible_axis <- c("left", "right")
@@ -367,19 +378,19 @@ g_events_term_id <- function(term,
 
 
 #' default ae overview flags
-#' @importFrom data.table data.table as.data.table transpose
+#' @importFrom data.table data.table as.data.table
 #' @param df data frame of ae. use default
-#' @param AE_with_fatal_outcome AE with fatal outcome derivation
-#' @param Serious_AE Serious AE derivation.
-#' @param Serious_AE_leading_to_withdrawal Serious AE leading to withdrawal derivation
-#' @param Serious_AE_leading_to_dose_modification Serious AE leading to dose modification derivation
-#' @param Related_Serious_AE Related Serious AE derivation
-#' @param AE_leading_to_withdrawal AE leading to withdrawal derivation
-#' @param AE_leading_to_dose_modification AE leading to dose modification derivation
-#' @param Related_AE Related AE derivation
-#' @param Related_AE_leading_to_withdrawal Related AE leading to withdrawal derivation
-#' @param Related_AE_leading_to_dose_modification Related AE leading to dose modification derivation
-#' @param Grade_3-5_AE Grade 3-5 AE derivation
+#' @param fatal AE with fatal outcome derivation
+#' @param serious Serious AE derivation.
+#' @param serious_withdrawl Serious AE leading to withdrawal derivation
+#' @param serious_modified Serious AE leading to dose modification derivation
+#' @param serious_related Related Serious AE derivation
+#' @param withdrawl AE leading to withdrawal derivation
+#' @param modified AE leading to dose modification derivation
+#' @param related Related AE derivation
+#' @param related_withdrawl Related AE leading to withdrawal derivation
+#' @param related_modified Related AE leading to dose modification derivation
+#' @param grade3 Grade 3-5 AE derivation
 #' @param ... named expressions used to generate categories
 #' @details in this function, all flags are expressions calls, for simpler usage.
 #' @export
@@ -387,35 +398,51 @@ g_events_term_id <- function(term,
 #' library(random.cdisc.data)
 #' create_flag_vars(cadae)
 #' create_flag_vars(cadae, `AENSER` = AESER != "Y") # create other flags
-#' create_flag_vars(cadae, `Serious AE` = NULL) # remove not needed flags
+#' create_flag_vars(cadae, fatal = NULL) # remove not needed flags
 create_flag_vars <- function(df,
-                             `AE_with_fatal_outcome` = AESDTH == "Y",#nolint
-                             `Serious_AE` = AESER == "Y",#nolint
-                             `Serious_AE_leading_to_withdrawal` = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),#nolint
-                             `Serious_AE_leading_to_dose_modification` = AESER == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
-                             `Related_Serious_AE` = AESER == "Y" & AEREL == "Y",#nolint
-                             `AE_leading_to_withdrawal` = grepl("DRUG WITHDRAWN", AEACN),#nolint
-                             `AE_leading_to_dose_modification` = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
-                             `Related_AE` = AEREL == "Y",#nolint
-                             `Related_AE_leading_to_withdrawal` = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),#nolint
-                             `Related_AE_leading_to_dose_modification` = AEREL == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),#nolint
-                             `Grade_3-5_AE` = AETOXGR %in% c("3", "4", "5"),#nolint
+                             fatal = AESDTH == "Y",
+                             #nolint
+                             serious = AESER == "Y",
+                             #nolint
+                             serious_withdrawl = AESER == "Y" &
+                               grepl("DRUG WITHDRAWN", AEACN),
+                             #nolint
+                             serious_modified = AESER == "Y" &
+                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                             #nolint
+                             serious_related = AESER == "Y" &
+                               AEREL == "Y",
+                             #nolint
+                             withdrawl = grepl("DRUG WITHDRAWN", AEACN),
+                             #nolint
+                             modified = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                             #nolint
+                             related = AEREL == "Y",
+                             #nolint
+                             related_withdrawl = AEREL == "Y" &
+                               grepl("DRUG WITHDRAWN", AEACN),
+                             #nolint
+                             related_modified = AEREL == "Y" &
+                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                             #nolint
+                             grade3 = AETOXGR %in% c("3", "4", "5"),
+                             #nolint
                              ...) {
   AESDTH <- AESER <- AEACN <- AEREL <- AETOXGR <- NULL #nolint
   args <-
     eval(substitute(
       alist(
-        "AE with fatal outcome" = `AE_with_fatal_outcome`,
-        "Serious AE" = `Serious_AE`,
-        "Serious AE leading to withdrawal" = `Serious_AE_leading_to_withdrawal`,
-        "Serious AE leading to dose modification" = `Serious_AE_leading_to_dose_modification`,
-        "Related Serious AE" = `Related_Serious_AE`,
-        "AE leading to withdrawal" = `AE_leading_to_withdrawal`,
-        "AE leading to dose modification" = `AE_leading_to_dose_modification`,
-        "Related AE" = `Related_AE`,
-        "Related AE leading to withdrawal" = `Related_AE_leading_to_withdrawal`,
-        "Related AE leading to dose modification" = `Related_AE_leading_to_dose_modification`,
-        "Grade 3-5 AE" = `Grade_3-5_AE`
+        "AE with fatal outcome" = fatal,
+        "Serious AE" = serious,
+        "Serious AE leading to withdrawal" = serious_withdrawl,
+        "Serious AE leading to dose modification" = serious_modified,
+        "Related Serious AE" = serious_related,
+        "AE leading to withdrawal" = withdrawl,
+        "AE leading to dose modification" = modified,
+        "Related AE" = related,
+        "Related AE leading to withdrawal" = related_withdrawl,
+        "Related AE leading to dose modification" = related_modified,
+        "Grade 3-5 AE" = grade3
       )
     ))
   args <- c(args, eval(substitute(alist(...))))
@@ -427,28 +454,25 @@ create_flag_vars <- function(df,
       df[, eval(args[[t]])]
     },
     error = function(w) {
-      warning(sprintf(
-        "%s with calculation %s not valid",
-        t,
-        as.character(as.expression(args[[t]]))
-      ))
       NULL
     },
     warning = function(w) {
-      warning(sprintf(
-        "%s with calculation %s not valid",
-        t,
-        as.character(as.expression(args[[t]]))
-      ))
       NULL
     })
   })
   names(ret) <- argnames
-  ret <- Filter(Negate(is.null), ret)
-  retnames <- names(ret)
-  lapply(data.table::transpose(ret), function(x) {
-    retnames[x]
-  })
+  valid <- vapply(argnames, function(x) {
+    valid <- length(ret[[x]]) > 0
+    if (!valid) {
+      warning(sprintf(
+        "%s with calculation %s not valid",
+        x,
+        as.character(as.expression(args[[x]]))
+      ))
+    }
+    valid
+  }, FUN.VALUE = TRUE)
+  do.call(data.table, args = ret[valid])
 }
 
 
