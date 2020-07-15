@@ -57,7 +57,37 @@ in this function, all flags are expressions calls, for simpler usage.
 }
 \examples{
 library(random.cdisc.data)
-create_flag_vars(cadae)
-create_flag_vars(cadae, `AENSER` = AESER != "Y") # create other flags
-create_flag_vars(cadae, fatal = NULL) # remove not needed flags
+ADAE <- cadae
+adae_labels <- var_labels(ADAE)
+adae_labels <- c(adae_labels,
+                "Action Taken with Study Treatment",
+                "Results in Death",
+                "Serious AE related to A: Drug X",
+                "Serious AE related to B: Placebo")
+
+# add AEACN to ADAE
+AEACN <- sample(c("DOSE NOT CHANGED",
+                  "DOSE INTERRUPTED",
+                  "DOSE INCREASED",
+                  "DOSE REDUCED",
+                  "DRUG WITHDRAWN"),
+                nrow(ADAE),
+                replace = TRUE)
+# add AESDTH to ADAE
+AESDTH <- sample(c("Y", "N"),
+                 nrow(ADAE),
+                 replace = TRUE)
+
+ADAE <- ADAE \%>\%
+             mutate(AEACN = AEACN,
+                    AESDTH = AESDTH) \%>\%
+             # additional flag variable
+             mutate(AEREL1 = (AEREL == "Y" &
+                              ADAE$ACTARM == "A: Drug X")) \%>\%
+             mutate(AEREL2 = (AEREL == "Y" &
+                              ADAE$ACTARM == "B: Placebo"))
+var_labels(ADAE) <- adae_labels
+create_flag_vars(ADAE)
+create_flag_vars(ADAE, `AENSER` = AESER != "Y") # create other flags
+create_flag_vars(ADAE, fatal = NULL) # remove not needed flags
 }
