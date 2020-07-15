@@ -19,6 +19,8 @@
 #' @param title  The title to be shown in the graph.
 #' @param foot The footnote to be shown in the graph.
 #'
+#' @author Liming Li (Lil128) \email{liming.li@roche.com}
+#'
 #' @details there is no equivalent STREAM output
 #'
 #' @return grob object
