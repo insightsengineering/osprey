@@ -2,22 +2,28 @@
 #'
 #' Draw adverse event category plot.
 #'
-#' @param term event term vector.
-#' @param term_selected The selected term that is passed to analysis. Default set to the first value in term vector.
-#' @param id id of the event term vector. Ususally it is USUBJID.
-#' @param arm Treatment variable. Usually it is ACTARM
-#' @param arm_sl Subject level treatment variable. Usually it is ACTARM
-#' @param col_by_levels Selected levels treatment and baseline respectively.
-#' @param subgroups Variables to conduct analysis.
-#' @param subgroups_sl Subject level variables to conduct analysis.
-#' @param subgroups_levels Named list of variables to conduct analysis.
+#' @param term \code{character} event term vector.
+#' @param term_selected A \code{character} or \code{vector} include selected term(s) that is passed to analysis.
+#'  All terms are included by default.
+#' @param id \code{vector} id of the event term vector.
+#' For example, \code{ADAE$USUBJID}.
+#' @param arm A \code{vector} of the treatment variable.
+#' For example, \code{ADAE$ACTARM}.
+#' @param arm_sl A \code{vector} of the subject level treatment variable.
+#' For example, \code{ADSL$ACTARM}.
+#' @param subgroups \code{data.frame} Variables to conduct analysis.
+#' @param subgroups_sl \code{data.frame} Subject level variables to conduct analysis.
+#' Usually from ADSL.
+#' @param subgroups_levels A nested named \code{list} of variables to conduct analysis.
 #' The names of the nested lists are used to show as the label.
-#' @param conf_level The confidence interval level, default set to 0.95.
-#' @param cimethod The method used to calculate confidence interval. Defalt is "wald".
+#' The children lists should start with "Total" = variable label,
+#' followed by labels for each level of said variable. See example for reference.
+#' @param conf_level \code{numeric} The confidence interval level, default set to 0.95.
+#' @param ci_method \code{character} The method used to calculate confidence interval.
+#' Defalt is "wald".
 #' Possible choices are methods supported in `DescTools::BinomDiffCI`.
-#' @param fontsize The size of the font. It is not the true font size but a multiplier.
-#' @param title  The title to be shown in the graph.
-#' @param foot The footnote to be shown in the graph.
+#' @param fontsize a \code{numeric} value controls the size of the font.
+#' Default is 4.
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
 #'
@@ -27,7 +33,7 @@
 #'
 #' @import dplyr
 #' @import ggplot2
-#' @import checkmate
+#' @import utils.nest
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom grid unit.c unit
 #' @importFrom tidyr pivot_longer pivot_wider replace_na unite separate_rows
@@ -39,17 +45,30 @@
 #' library(osprey)
 #' library(random.cdisc.data)
 #'
-#' term <- as.character(cadae$AEDECOD)
-#' id <- cadae$USUBJID
-#' arm <- as.character(cadae$ACTARMCD)
-#' arm_sl <- as.character(cadsl$ACTARMCD)
-#' subgroups_sl <- cadsl[, c("SEX", "RACE", "STRATA1")]
-#' subgroups <- cadae[, c("SEX", "RACE", "STRATA1")]
+#' ADAE <- cadae
+#' ADSL <- cadsl
+#'
+#' term <- as.character(ADAE$AEDECOD)
+#' id <- ADAE$USUBJID
+#' arm <- as.character(ADAE$ACTARMCD)
+#' arm_sl <- as.character(ADSL$ACTARMCD)
+#' subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
+#' subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
 #' trt <- "ARM A"
 #' ref <- "ARM C"
-#' subgroups_labels <- list(RACE = list("Total" = "Race", "AMERICAN INDIAN OR ALASKA NATIVE" = "American", "WHITE" = "White", "ASIAN" = "Asian",
-#' "African" = "BLACK OR AFRICAN AMERICAN"), STRATA1 = list("Total" = "Strata", "A" = "TypeA", "B" = "TypeB", "C" = "Typec"),
-#' SEX = list("Total" = "Sex", "M" = "Male", "F" = "Female", "U" = "Unknown"))
+#' subgroups_labels <- list(RACE = list("Total" = "Race",
+#'                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
+#'                                      "WHITE" = "White",
+#'                                      "ASIAN" = "Asian",
+#'                                      "African" = "BLACK OR AFRICAN AMERICAN"),
+#'                          STRATA1 = list("Total" = "Strata",
+#'                                         "A" = "TypeA",
+#'                                         "B" = "TypeB",
+#'                                         "C" = "Typec"),
+#'                          SEX = list("Total" = "Sex",
+#'                                     "M" = "Male",
+#'                                     "F" = "Female",
+#'                                     "U" = "Unknown"))
 #' term_selected <- unique(term)[1]
 #' g_ae_sub(term,
 #'          term_selected,
@@ -72,20 +91,18 @@ g_ae_sub <- function(term,
                      indent = 4,
                      subgroups_labels = NULL,
                      xmax = 0,
-                     cimethod = "wald",
+                     ci_method = "wald",
                      conf_level = 0.95,
                      fontsize = 4,
                      draw = TRUE) {
-  if (is.null(subgroups)) {
-    return(textGrob("No Subgroups Selected"))
-  }
-  if (is.null(subgroups_labels)) {
-    subgroups_names <- paste(colnames(subgroups), collapse = ", ")
-  } else {
-    subgroups_names <-
-      paste(sapply(subgroups_labels, function(x)
-        x$Total), collapse = ", ")
-
+  stop_if_not(
+    list(!is_empty(term), "missing argument: term must be specified"),
+    list(!is_empty(id), "missing argument: id must be specified"),
+    list(!is_empty(arm), "missing argument: arm must be specified"),
+    list(!is_empty(arm_sl), "missing argument: arm_sl must be specified"),
+    list(!is_empty(subgroups), "missing argument: subgroups must be specified")
+  )
+  if (!is.null(subgroups_labels)) {
     labels <- unlist(subgroups_labels)
     label_df <-
       tibble(level = str_replace_all(names(labels), "\\.", "__"),
@@ -94,40 +111,54 @@ g_ae_sub <- function(term,
       mutate(indents = str_dup(" ", if_else(
         str_detect(level, "__Total"), 0, indent
       )),
+      #create label with indents if not total
       label = paste0(indents, label))
   }
-
+ # default is all terms, discrepency with description
   if (is.null(term_selected)) {
     term_selected <- unique(term)
   }
+  stop_if_not(
+    list(all(term_selected %in% unique(term)),
+         "invalid argument: term_selected much be from term"),
+    list(length(unique(vapply(list(id, term, arm),
+                              length, integer(1)))) == 1,
+         "invalid arguments: check that the length of id, term and arm are identical"
+    ),
+    list(is_character_vector(arm_sl, min_length = 2),
+         "invalid argument: check that arm_sl is a character vector with length >= 2"
+    ),
+    list(all(c(trt, ref) %in% unique(arm)),
+         "invalid arguments: trt and ref need to be from arm"
+    ),
+    list(is_character_single(ci_method) &
+           ci_method %in% c("wald", "waldcc", "ac",
+                            "scorecc", "score", "mn",
+                            "mee", "blj", "ha"),
+         "invalid argument: ci_method should be a method supported by `DescTools::BinomDiffCI`"
+    ),
+    list(
+      is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
+      "invalid argument: conf_level should be a number between 0.5 and 1"
+    ),
+    list(
+      is_numeric_single(fontsize) & between(fontsize, 0, Inf),
+      "invalid argument: check that fontsize is a number greater than 0"
+    ),
+    list(
+      "data.frame" %in% class(subgroups) & nrow(subgroups) == length(arm),
+      "invalid argument: subgroups needs to be a data.frame with nrow = length(arm)"
+    ),
+    list(
+      "data.frame" %in% class(subgroups_sl) & nrow(subgroups_sl) == length(arm_sl),
+      "invalid argument: subgroups_sl need to be a data.frame with nrow = length(arm_sl)"
+    ),
+    list(is_numeric_single(indent) & between(indent, 0, Inf),
+         "invalid argument: indent must be a number >= 0"),
+    list(is_numeric_single(xmax) & between(xmax, 0, Inf),
+         "invalid argument: xmax must be a number >= 0")
+  )
 
-  l <- length(id)
-  assert_vector(id, min.len = 1)
-  assert_character(term, len = l)
-  assert_character(arm, len = l)
-  assert_vector(arm_sl, min.len = 2)
-  arm_unique <- unique(arm)
-  assert_choice(trt, arm_unique)
-  assert_choice(ref, arm_unique)
-  assert_subset(term_selected, unique(term))
-  assert_choice(cimethod,
-                c(
-                  'wald',
-                  'waldcc',
-                  'ac',
-                  'scorecc',
-                  'score',
-                  'mn',
-                  'mee',
-                  'blj',
-                  'ha'
-                ))
-  assert_data_frame(subgroups, nrows = l)
-  assert_data_frame(subgroups_sl, nrows = length(arm_sl))
-  assert_number(conf_level, lower = 0.5, upper = 1)
-  assert_number(fontsize, lower = 0)
-  assert_number(indent, lower = 0)
-  assert_number(xmax, lower = 0)
 
   subgroups <- subgroups %>%
     mutate_all(as.character) %>%
@@ -197,9 +228,11 @@ g_ae_sub <- function(term,
     mutate(
       !!r1 := !!x1 / !!n1,
       !!r2 := !!x2 / !!n2,
-      lower = BinomDiffCI(!!x1, !!n1, !!x2, !!n2, conf_level, method = cimethod)[2],
-      upper = BinomDiffCI(!!x1, !!n1, !!x2, !!n2, conf_level, method = cimethod)[3],
-      riskdiff = !!r1-!!r2
+      lower = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
+                          conf_level, method = ci_method)[2],
+      upper = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
+                          conf_level, method = ci_method)[3],
+      riskdiff = !!r1 - !!r2
     ) %>%
     pivot_longer(matches("__"),
                  names_to = c(".value", "arm"),
@@ -366,10 +399,10 @@ g_ae_sub <- function(term,
     risk_label
   ))
 
-  widths = unit.c(grobWidth(grobs[[1]]),
+  widths <- unit.c(grobWidth(grobs[[1]]),
                   unit(c(14 * fontsize, 1, 50 * fontsize),
                        c("pt", "null", "pt")))
-  heights = unit.c(
+  heights <- unit.c(
     grobHeight(grobs[[6]]),
     unit(1, "null"),
     grobHeight(grobs[[5]]),

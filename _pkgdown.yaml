@@ -31,7 +31,6 @@ reference:
     desc: some useful functions
     contents:
       - as_pdf
-      - getdata_bce
       - grobs2pdf
   - title: Utility
     contents:

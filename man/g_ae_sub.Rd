@@ -17,42 +17,45 @@ g_ae_sub(
   indent = 4,
   subgroups_labels = NULL,
   xmax = 0,
-  cimethod = "wald",
+  ci_method = "wald",
   conf_level = 0.95,
   fontsize = 4,
   draw = TRUE
 )
 }
 \arguments{
-\item{term}{event term vector.}
+\item{term}{\code{character} event term vector.}
 
-\item{term_selected}{The selected term that is passed to analysis. Default set to the first value in term vector.}
+\item{term_selected}{A \code{character} or \code{vector} include selected term(s) that is passed to analysis.
+All terms are included by default.}
 
-\item{id}{id of the event term vector. Ususally it is USUBJID.}
+\item{id}{\code{vector} id of the event term vector.
+For example, \code{ADAE$USUBJID}.}
 
-\item{arm}{Treatment variable. Usually it is ACTARM}
+\item{arm}{A \code{vector} of the treatment variable.
+For example, \code{ADAE$ACTARM}.}
 
-\item{arm_sl}{Subject level treatment variable. Usually it is ACTARM}
+\item{arm_sl}{A \code{vector} of the subject level treatment variable.
+For example, \code{ADSL$ACTARM}.}
 
-\item{subgroups}{Variables to conduct analysis.}
+\item{subgroups}{\code{data.frame} Variables to conduct analysis.}
 
-\item{subgroups_sl}{Subject level variables to conduct analysis.}
+\item{subgroups_sl}{\code{data.frame} Subject level variables to conduct analysis.
+Usually from ADSL.}
 
-\item{cimethod}{The method used to calculate confidence interval. Defalt is "wald".
+\item{ci_method}{\code{character} The method used to calculate confidence interval.
+Defalt is "wald".
 Possible choices are methods supported in `DescTools::BinomDiffCI`.}
 
-\item{conf_level}{The confidence interval level, default set to 0.95.}
+\item{conf_level}{\code{numeric} The confidence interval level, default set to 0.95.}
 
-\item{fontsize}{The size of the font. It is not the true font size but a multiplier.}
+\item{fontsize}{a \code{numeric} value controls the size of the font.
+Default is 4.}
 
-\item{col_by_levels}{Selected levels treatment and baseline respectively.}
-
-\item{subgroups_levels}{Named list of variables to conduct analysis.
-The names of the nested lists are used to show as the label.}
-
-\item{title}{The title to be shown in the graph.}
-
-\item{foot}{The footnote to be shown in the graph.}
+\item{subgroups_levels}{A nested named \code{list} of variables to conduct analysis.
+The names of the nested lists are used to show as the label.
+The children lists should start with "Total" = variable label,
+followed by labels for each level of said variable. See example for reference.}
 }
 \value{
 grob object
@@ -67,17 +70,30 @@ there is no equivalent STREAM output
 library(osprey)
 library(random.cdisc.data)
 
-term <- as.character(cadae$AEDECOD)
-id <- cadae$USUBJID
-arm <- as.character(cadae$ACTARMCD)
-arm_sl <- as.character(cadsl$ACTARMCD)
-subgroups_sl <- cadsl[, c("SEX", "RACE", "STRATA1")]
-subgroups <- cadae[, c("SEX", "RACE", "STRATA1")]
+ADAE <- cadae
+ADSL <- cadsl
+
+term <- as.character(ADAE$AEDECOD)
+id <- ADAE$USUBJID
+arm <- as.character(ADAE$ACTARMCD)
+arm_sl <- as.character(ADSL$ACTARMCD)
+subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
+subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
 trt <- "ARM A"
 ref <- "ARM C"
-subgroups_labels <- list(RACE = list("Total" = "Race", "AMERICAN INDIAN OR ALASKA NATIVE" = "American", "WHITE" = "White", "ASIAN" = "Asian",
-"African" = "BLACK OR AFRICAN AMERICAN"), STRATA1 = list("Total" = "Strata", "A" = "TypeA", "B" = "TypeB", "C" = "Typec"),
-SEX = list("Total" = "Sex", "M" = "Male", "F" = "Female", "U" = "Unknown"))
+subgroups_labels <- list(RACE = list("Total" = "Race",
+                                     "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
+                                     "WHITE" = "White",
+                                     "ASIAN" = "Asian",
+                                     "African" = "BLACK OR AFRICAN AMERICAN"),
+                         STRATA1 = list("Total" = "Strata",
+                                        "A" = "TypeA",
+                                        "B" = "TypeB",
+                                        "C" = "Typec"),
+                         SEX = list("Total" = "Sex",
+                                    "M" = "Male",
+                                    "F" = "Female",
+                                    "U" = "Unknown"))
 term_selected <- unique(term)[1]
 g_ae_sub(term,
          term_selected,
