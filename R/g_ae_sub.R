@@ -30,7 +30,7 @@
 #' @import checkmate
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom grid unit.c unit
-#' @importFrom tidyr pivot_longer pivot_wider
+#' @importFrom tidyr pivot_longer pivot_wider replace_na unite separate_rows
 #' @importFrom stringr str_dup str_replace_all str_c str_detect
 #' @importFrom DescTools BinomDiffCI
 #' @export
@@ -51,7 +51,14 @@
 #' "African" = "BLACK OR AFRICAN AMERICAN"), STRATA1 = list("Total" = "Strata", "A" = "TypeA", "B" = "TypeB", "C" = "Typec"),
 #' SEX = list("Total" = "Sex", "M" = "Male", "F" = "Female", "U" = "Unknown"))
 #' term_selected <- unique(term)[1]
-#' g_ae_sub(term, term_selected, id, arm, arm_sl, subgroups, subgroups_sl, subgroups_labels = subgroups_labels)
+#' g_ae_sub(term,
+#'          term_selected,
+#'          id,
+#'          arm,
+#'          arm_sl,
+#'          subgroups,
+#'          subgroups_sl,
+#'          subgroups_labels = subgroups_labels)
 
 g_ae_sub <- function(term,
                      term_selected,
@@ -68,7 +75,7 @@ g_ae_sub <- function(term,
                      cimethod = "wald",
                      conf_level = 0.95,
                      fontsize = 4,
-                     draw = FALSE) {
+                     draw = TRUE) {
   if (is.null(subgroups)) {
     return(textGrob("No Subgroups Selected"))
   }
@@ -266,14 +273,20 @@ g_ae_sub <- function(term,
     xmax <- max(abs(df_risk$upper), abs(df_risk$lower), na.rm = T)
   }
   p1 <-
-    ggplot(df_risk) + geom_point(aes(x = riskdiff, y = level), size = fontsize) +
+    ggplot(df_risk) +
+    geom_point(aes(x = riskdiff,
+                   y = level),
+               size = fontsize) +
     geom_vline(
       data = NULL,
       xintercept = 0,
       linetype = 1,
       color = "grey"
     ) +
-    geom_errorbarh(aes(xmin = lower, xmax = upper, y = level), height = 0.3) +
+    geom_errorbarh(aes(xmin = lower,
+                       xmax = upper,
+                       y = level),
+                   height = 0.3) +
     mytheme +
     theme(axis.ticks.x = element_line(),
           axis.line.x = element_line()) +

@@ -20,7 +20,7 @@ g_ae_sub(
   cimethod = "wald",
   conf_level = 0.95,
   fontsize = 4,
-  draw = FALSE
+  draw = TRUE
 )
 }
 \arguments{
@@ -79,7 +79,14 @@ subgroups_labels <- list(RACE = list("Total" = "Race", "AMERICAN INDIAN OR ALASK
 "African" = "BLACK OR AFRICAN AMERICAN"), STRATA1 = list("Total" = "Strata", "A" = "TypeA", "B" = "TypeB", "C" = "Typec"),
 SEX = list("Total" = "Sex", "M" = "Male", "F" = "Female", "U" = "Unknown"))
 term_selected <- unique(term)[1]
-g_ae_sub(term, term_selected, id, arm, arm_sl, subgroups, subgroups_sl, subgroups_labels = subgroups_labels)
+g_ae_sub(term,
+         term_selected,
+         id,
+         arm,
+         arm_sl,
+         subgroups,
+         subgroups_sl,
+         subgroups_labels = subgroups_labels)
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}
