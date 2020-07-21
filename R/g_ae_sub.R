@@ -114,7 +114,6 @@ g_ae_sub <- function(term,
       #create label with indents if not total
       label = paste0(indents, label))
   }
- # default is all terms, discrepency with description
   if (is.null(term_selected)) {
     term_selected <- unique(term)
   }
