@@ -20,6 +20,7 @@ Depends:
   dplyr (>= 0.8.0),
   ggplot2 (>= 2.0.0)
 Imports:
+  cowplot,
   grid,
   gridExtra,
   gtable,
@@ -33,7 +34,7 @@ Suggests:
   test.nest (>= 0.2.3),
   tidyr,
   testthat (>= 2.0)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 URL:
   https://github.roche.com/NEST/osprey/
 BugReports:

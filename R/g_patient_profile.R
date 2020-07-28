@@ -7,22 +7,23 @@
 #'
 #' @param domain string of domain name to be shown as y-axis label, default is \code{NULL}
 #' @param var_names vector to identify each lane
-#' @param marker_pos numeric vector for (\code{ADEX}), (\code{ADLB}) or (\code{ADRS}) domain marker position,
-#' numeric data frame with two columns for (\code{ADAE}) or (\code{ADCM}) domain marker position for start
-#' and end time marker position
+#' @param marker_pos marker position, which needs to be a numeric vector for \code{ADEX}, \code{ADLB}
+#' or \code{ADRS} for duration marker position, or a numeric data frame with two columns for
+#' \code{ADAE} or \code{ADCM} for start and end time marker position
 #' @param arrow_end numeric value indicates the end of arrow when arrows are requested
 #' @param xtick_at optional break interval of bar length axis
 #' @param line_col factor vector to specify color for segments, default is \code{NULL}
 #' @param line_col_legend string to be displayed as line color legend title, default is \code{NULL}
 #' @param line_col_opt aesthetic values to map color values (named vector to map color values to each name).
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
-#'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified
+#'      otherwise color will be assigned by \code{\link{ggplot}} default, please note that \code{NULL}
+#'      needs to be specified
 #' @param line_width numeric value for segment width, default is \code{line_width = 1}
 #' @param arrow_size numeric value for arrow size, default is \code{arrow_size = 0.1}
-#' @param no_enddate_extention numeric value for extending the arrow when end date is missing for AE or CM domain,
-#' default is \code{no_enddate_extention = 0}
+#' @param no_enddate_extention numeric value for extending the arrow when end date is missing for \code{ADAE}
+#' or \code{ADCM} domain. Default is \code{no_enddate_extention = 0}.
 #' @param marker_color factor vector to specify color for markers, default is \code{NULL}
-#' @param marker_color_opt aesthetic values to map color values (named vector to map color values to each name).
+#' @param marker_color_opt aesthetic values to map color values (named vector to map color values to each name)
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_color} values,
 #'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified
 #' @param marker_color_legend string to be displayed as marker color legend title, default is \code{NULL}
@@ -34,7 +35,7 @@
 #' @param show_days_label boolean value for showing y-axis label, default is \code{TRUE}
 #' @param xlim numeric vector for x-axis limit, default is
 #'     \code{xlim = c(-28, max(marker_pos) + 5)}
-#' @param xlab string to be shown as x-axis label, default is \code{"Study Days"}
+#' @param xlab string to be shown as x-axis label, default is \code{"Study Day"}
 #' @param show_title boolean value for showing title of the plot, default is \code{TRUE}
 #' @param title string to be shown as title of the plot, default is \code{NULL}
 #'
@@ -101,7 +102,8 @@
 #' # Laboratory ADLB
 #' rADLB <- radlb(cached = TRUE)
 #' ADLB <- rADLB %>%
-#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN,
+#'                LBTESTCD, ANRIND)
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
@@ -130,7 +132,7 @@
 #'                              marker_shape_legend = "Dose Modification",
 #'                              show_days_label = TRUE,
 #'                              xlim = c(-28, ADSL$max_day),
-#'                              xlab = "Study Days",
+#'                              xlab = "Study Day",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #' p1
 #'
@@ -157,7 +159,7 @@
 #'                              marker_shape_legend = "Grade",
 #'                              show_days_label = TRUE,
 #'                              xlim = c(-28, ADSL$max_day),
-#'                              xlab = "Study Days",
+#'                              xlab = "Study Day",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'
 #' p2
@@ -186,7 +188,7 @@
 #'                             marker_shape_legend = "Response",
 #'                              show_days_label = TRUE,
 #'                              xlim = c(-28, ADSL$max_day),
-#'                              xlab = "Study Days",
+#'                              xlab = "Study Day",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p3
 #'
@@ -210,7 +212,7 @@
 #'                              marker_shape_legend = NULL,
 #'                              show_days_label = TRUE,
 #'                              xlim = c(-28, ADSL$max_day),
-#'                              xlab = "Study Days",
+#'                              xlab = "Study Day",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #' p4
 #'
@@ -236,7 +238,7 @@
 #'                              marker_shape_legend = "Labs Abnormality",
 #'                              show_days_label = TRUE,
 #'                              xlim = c(-30, ADSL$max_day),
-#'                              xlab = "Study Days",
+#'                              xlab = "Study Day",
 #'                              title = paste("Patient Profile: ", ADSL$USUBJID))
 #'p5
 
@@ -285,16 +287,16 @@ patient_domain_profile <- function(domain = NULL,
 
   marker_data <- data.frame(var_names,
                             marker_pos = if (is.null(marker_pos))
-                              tern:::to_n("x", length(var_names)) else marker_pos,
+                              to_n("x", length(var_names)) else marker_pos,
                             marker_shape = if (is.null(marker_shape))
-                              tern:::to_n("x", length(var_names)) else marker_shape,
+                              to_n("x", length(var_names)) else marker_shape,
                             marker_color = if (is.null(marker_color))
-                              tern:::to_n("x", length(var_names)) else marker_color)
+                              to_n("x", length(var_names)) else marker_color)
 
   # plot lines
   if (length(dim(marker_pos)) == 2) {
     line_data <- data.frame(var_names,
-                            line_col = if (is.null(line_col)) tern:::to_n("x", length(var_names)) else line_col,
+                            line_col = if (is.null(line_col)) to_n("x", length(var_names)) else line_col,
                             line_start = marker_pos[, 1],
                             line_end = marker_pos[, 2],
                             line_min = rep(xlim[1], length(var_names)),
@@ -322,7 +324,7 @@ patient_domain_profile <- function(domain = NULL,
       p <- p + scale_color_manual(breaks = line_data$line_col,
                                   values = line_col_opt,
                                   limits = levels(line_data$line_col))
-    } else{
+    } else {
       p <- p + scale_color_manual(breaks = line_data$line_col,
                                   values = c(1:25),
                                   limits = levels(line_data$line_col))
@@ -350,7 +352,7 @@ patient_domain_profile <- function(domain = NULL,
     if (!is.null(marker_color_opt)) {
       p <- p + scale_fill_manual(breaks = marker_data$marker_color,
                                  values = marker_color_opt)
-    } else{
+    } else {
       p <- p + scale_fill_manual(breaks = marker_data$marker_color,
                                  values = c(1:25))
     }
@@ -381,7 +383,7 @@ patient_domain_profile <- function(domain = NULL,
       p <- p + guides(shape = FALSE)
     }
 
-  } else{
+  } else {
     p <- ggplot() +
       geom_point(data = marker_data, aes(x = var_names,
                                          y = marker_pos,
@@ -414,7 +416,7 @@ patient_domain_profile <- function(domain = NULL,
       p <- p + scale_fill_manual(name = marker_color_legend,
                                  breaks = marker_data$marker_color,
                                  values = marker_color_opt)
-    } else{
+    } else {
       p <- p + scale_fill_manual(name = marker_color_legend,
                                  breaks = marker_data$marker_color,
                                  values = c(1:25))
@@ -424,7 +426,7 @@ patient_domain_profile <- function(domain = NULL,
       p <- p + scale_shape_manual(name = marker_shape_legend,
                                   breaks = marker_data$marker_shape,
                                   values = marker_shape_opt)
-    } else{
+    } else {
       p <- p + scale_shape_manual(name = marker_shape_legend,
                                   breaks = marker_data$marker_shape,
                                   values = c(1:25))
@@ -455,7 +457,7 @@ patient_domain_profile <- function(domain = NULL,
         legend.margin = margin(t = 0, b = 0, r = 0.5, l = 0, unit = "cm"),
         plot.margin = margin(t = 0, b = 0, r = 0.5, l = 0.5, unit = "cm")
       )
-  } else{
+  } else {
     p <- p + theme_bw() +
       theme(
         panel.background = element_blank(),
@@ -480,34 +482,36 @@ patient_domain_profile <- function(domain = NULL,
 #' each domain plot generated by function \code{\link{patient_domain_profile}}. This \code{\link{g_patient_profile}}
 #' function assembles all requested domain plots into one patient profile.
 #' \code{ADSL}, \code{ADEX}, \code{ADAE}, \code{ADRS}, \code{ADCM} and \code{ADLB} data must be provided.
-#' If there is a missing dataset, assign a NULL value to it. ie) \code{ADRS <- NULL} prior to running the
+#' If there is a missing dataset, assign a \code{NULL} value to it. ie) \code{ADRS <- NULL} prior to running the
 #' patient profile plot.
 #'
-#' @param select_ex boolean value for showing EX domain plot, default is \code{TRUE}
-#' @param select_ae boolean value for showing AE domain plot, default is \code{TRUE}
-#' @param select_rs boolean value for showing RS domain plot, default is \code{TRUE}
-#' @param select_cm boolean value for showing CM domain plot, default is \code{TRUE}
-#' @param select_lb boolean value for showing LB domain plot, default is \code{TRUE}
-#' @param ex_data dataframe for EX domain dataset
-#' @param ex_var vector to identify each lane of EX domain plot
-#' @param ae_data dataframe for AE domain dataset
-#' @param ae_var vector to identify each lane of AE domain plot
-#' @param ae_line_col factor vector to specify color for segments of AE domain plot
-#' @param ae_line_col_legend string to be displayed as line color legend title of AE domain plot, default is \code{NULL}
-#' @param ae_line_col_opt aesthetic values to map line color values of AE domain plot
+#' @param select_ex boolean value for showing \code{ADEX} domain plot, default is \code{TRUE}
+#' @param select_ae boolean value for showing \code{ADAE} domain plot, default is \code{TRUE}
+#' @param select_rs boolean value for showing \code{ADRS} domain plot, default is \code{TRUE}
+#' @param select_cm boolean value for showing \code{ADCM} domain plot, default is \code{TRUE}
+#' @param select_lb boolean value for showing \code{ADLB} domain plot, default is \code{TRUE}
+#' @param ex_data dataframe for \code{ADEX} domain dataset
+#' @param ex_var vector to identify each lane of \code{ADEX} domain plot
+#' @param ae_data dataframe for \code{ADAE} domain dataset
+#' @param ae_var vector to identify each lane of \code{ADAE} plot
+#' @param ae_line_col factor vector to specify color for segments of \code{ADAE} plot
+#' @param ae_line_col_legend string to be displayed as line color legend title of \code{ADAE} plot,
+#' default is \code{NULL}
+#' @param ae_line_col_opt aesthetic values to map line color values of \code{ADAE} plot
 #'      (named vector to map color values to each name).
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{ae_line_col} values,
-#'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified
-#' @param rs_data dataframe for RS domain dataset
-#' @param rs_var vector to identify each lane of RS domain plot
-#' @param cm_data dataframe for CM domain dataset
-#' @param cm_var vector to identify each lane of CM domain plot
-#' @param lb_data dataframe for LB domain dataset
-#' @param lb_var vector to identify each lane of LB domain plot
+#'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be
+#'      specified
+#' @param rs_data dataframe for \code{ADRS} domain dataset
+#' @param rs_var vector to identify each lane of \code{ADRS} domain plot
+#' @param cm_data dataframe for \code{ADCM} domain dataset
+#' @param cm_var vector to identify each lane of \code{ADCM} domain plot
+#' @param lb_data dataframe for \code{ADLB} domain dataset
+#' @param lb_var vector to identify each lane of \code{ADLB} domain plot
 #' @param arrow_end_day numeric value indicates the end of arrow when arrows are requested
 #' @param xlim numeric vector for x-axis limit that will be shared by all domain plots, default is
 #'      \code{xlim = c(-28, 365)}
-#' @param xlab string to be shown as x-axis label, default is \code{"Study Days"}
+#' @param xlab string to be shown as x-axis label, default is \code{"Study Day"}
 #' @param title string to be shown as title of the plot, default is \code{"Patient Profile"}
 #'
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
@@ -575,7 +579,8 @@ patient_domain_profile <- function(domain = NULL,
 #' # ADLB
 #' rADLB <- radlb(cached = TRUE)
 #' ADLB <- rADLB %>%
-#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN,
+#'                LBTESTCD, ANRIND)
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
@@ -603,10 +608,33 @@ patient_domain_profile <- function(domain = NULL,
 #'                   lb_var = ADLB$LBTESTCD,
 #'                   arrow_end_day = ADSL$max_day,
 #'                   xlim = c(-28, ADSL$max_day),
-#'                   xlab = "Study Days",
+#'                   xlab = "Study Day",
 #'                   title = paste("Patient Profile: ", ADSL$USUBJID))
 #'
-
+#' # Example Patient Profile plot without ADCM and ADLB
+#' g_patient_profile(select_ex = TRUE,
+#'                   select_ae = TRUE,
+#'                   select_rs = TRUE,
+#'                   select_cm = FALSE,
+#'                   select_lb = FALSE,
+#'                   ex_data = ADEX,
+#'                   ex_var = ADEX$PARCAT2,
+#'                   ae_data = ADAE,
+#'                   ae_var = ADAE$AEDECOD,
+#'                   ae_line_col = factor(ADAE$AESER),
+#'                   ae_line_col_legend = "Serious",
+#'                   ae_line_col_opt = c("Y" = "red", "N" = "blue"),
+#'                   rs_data = ADRS,
+#'                   rs_var = ADRS$PARAMCD,
+#'                   cm_data = NULL,
+#'                   cm_var = NULL,
+#'                   lb_data = NULL,
+#'                   lb_var = NULL,
+#'                   arrow_end_day = ADSL$max_day,
+#'                   xlim = c(-28, ADSL$max_day),
+#'                   xlab = "Study Day",
+#'                   title = paste("Patient Profile: ", ADSL$USUBJID))
+#'
 g_patient_profile <- function(select_ex = TRUE,
                               select_ae = TRUE,
                               select_rs = TRUE,
@@ -627,7 +655,7 @@ g_patient_profile <- function(select_ex = TRUE,
                               lb_var,
                               arrow_end_day,
                               xlim = c(-28, 365),
-                              xlab = "Study Days",
+                              xlab = "Study Day",
                               title = "Patient Profile") {
   stop_if_not(
     list(lapply(list(select_ex, select_ae, select_rs, select_cm, select_lb), rlang::is_bool) %>%
@@ -636,7 +664,7 @@ g_patient_profile <- function(select_ex = TRUE,
          "invalid argument: check that the select arguments are boolean")
   )
 
-  #Check if we have data for each of these plots
+  # check if we have data for each of these plots
   if (dim(ex_data)[1] == 0 || is.null(ex_data)) {
     select_ex <- FALSE
     warning("No ADEX data for this subject")
@@ -727,14 +755,14 @@ g_patient_profile <- function(select_ex = TRUE,
                                  xlab = xlab,
                                  show_title = show_title[2],
                                  title = title)
-  } else{
+  } else {
     p2 <- NULL
   }
 
 
   # Domain "ADRS"
   if (select_rs == TRUE) {
-    p3 <- patient_domain_profile(domain = "Tumor Response (ADRS)",
+    p3 <- patient_domain_profile(domain = "Response (ADRS)",
                                  var_names = rs_var,
                                  marker_pos = rs_data$ADY,
                                  arrow_end = arrow_end_day,
@@ -765,7 +793,7 @@ g_patient_profile <- function(select_ex = TRUE,
 
   # Domain "ADCM"
   if (select_cm == TRUE) {
-    p4 <- patient_domain_profile(domain = "Concomitant Med (ADCM)",
+    p4 <- patient_domain_profile(domain = "Conmed (ADCM)",
                                  var_names = cm_var,
                                  marker_pos = cm_data[, c("ASTDY", "AENDY")],
                                  arrow_end = arrow_end_day,
@@ -833,12 +861,17 @@ g_patient_profile <- function(select_ex = TRUE,
     unlist %>%
     cbind(.data, select_list) %>%
     as.data.frame() %>%
-    #keep the selected domains
+    # keep the selected domains
     dplyr::filter(select_list == TRUE) %>%
     dplyr::mutate(nline_dat = ifelse(. <= 10 & . > 0, 10, .)) %>%
-    #relative height
+    # relative height
     dplyr::mutate(sbplt_ht = unlist(nline_dat) / sum(unlist(nline_dat)))
 
-  plot_grid(plotlist = plot_list, nrow = nrow(var_list),
-            align = "v", axis = "lr", rel_heights = var_list$sbplt_ht)
+  cowplot::plot_grid(
+    plotlist = plot_list,
+    nrow = nrow(var_list),
+    align = "v",
+    axis = "lr",
+    rel_heights = var_list$sbplt_ht
+  )
 }
