@@ -9,15 +9,13 @@ create_flag_vars(
   fatal = AESDTH == "Y",
   serious = AESER == "Y",
   serious_withdrawl = AESER == "Y" & grepl("DRUG WITHDRAWN", AEACN),
-  serious_modified = AESER == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
-    AEACN),
+  serious_modified = AESER == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
   serious_related = AESER == "Y" & AEREL == "Y",
   withdrawl = grepl("DRUG WITHDRAWN", AEACN),
   modified = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
   related = AEREL == "Y",
   related_withdrawl = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),
-  related_modified = AEREL == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
-    AEACN),
+  related_modified = AEREL == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
   grade3 = AETOXGR \%in\% c("3", "4", "5"),
   ...
 )
@@ -60,8 +58,6 @@ library(random.cdisc.data)
 ADAE <- cadae
 adae_labels <- var_labels(ADAE)
 adae_labels <- c(adae_labels,
-                "Action Taken with Study Treatment",
-                "Results in Death",
                 "Serious AE related to A: Drug X",
                 "Serious AE related to B: Placebo")
 
@@ -79,8 +75,6 @@ AESDTH <- sample(c("Y", "N"),
                  replace = TRUE)
 
 ADAE <- ADAE \%>\%
-             mutate(AEACN = AEACN,
-                    AESDTH = AESDTH) \%>\%
              # additional flag variable
              mutate(AEREL1 = (AEREL == "Y" &
                               ADAE$ACTARM == "A: Drug X")) \%>\%

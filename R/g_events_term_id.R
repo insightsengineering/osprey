@@ -5,7 +5,8 @@
 #' arms, and can be used for events data such as Adverse Events.
 #'
 #' @param term \code{character} or \code{factor} vector, or \code{data.frame} \cr
-#' Represents events information. \code{term} can be a \code{data.frame} produced by \code{create_flag_vars}, with each column being a \code{logical} event indicator
+#' Represents events information. \code{term} can be a \code{data.frame} produced
+#'  by \code{create_flag_vars}, with each column being a \code{logical} event indicator
 #' @param id \code{vector} contains subject identifier. Length of \code{id} must be the same as
 #'  the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.
 #' @param arm \code{character} vector contains arm informatiion. For example, \code{ACTARMCD}.
@@ -53,8 +54,6 @@
 #'
 #' adae_labels <- var_labels(ADAE)
 #' adae_labels <- c(adae_labels,
-#'                 "Action Taken with Study Treatment",
-#'                 "Results in Death",
 #'                 "Serious AE related to A: Drug X",
 #'                 "Serious AE related to B: Placebo")
 #'
@@ -72,8 +71,6 @@
 #'                  replace = TRUE)
 #'
 #' ADAE <- ADAE %>%
-#'              mutate(AEACN = AEACN,
-#'                     AESDTH = AESDTH) %>%
 #'              # additional flag variable
 #'              mutate(AEREL1 = (AEREL == "Y" &
 #'                               ADAE$ACTARM == "A: Drug X")) %>%
@@ -215,7 +212,8 @@ g_events_term_id <- function(term,
   trt_total <- df_n[arm == trt, total] #nolint
   ref_total <- df_n[arm == ref, total] #nolint
   df <-
-    data.table(id, arm, term)[, list(term = as.character(unlist(term))), by = .(arm, id)]
+    data.table(id, arm, term)[, list(term = as.character(unlist(term))),
+                              by = .(arm, id)]
   df <- unique(df)[arm %in% arms,
                    .N,
                    by = .(arm, term)]
@@ -270,7 +268,9 @@ g_events_term_id <- function(term,
     terms_needed <- sort(terms_needed, decreasing = TRUE)
   } else {
     terms_needed <-
-      df_ci[order(df_ci[[sort_by]], decreasing = FALSE)][term %in% terms_needed, term]
+      df_ci[order(df_ci[[sort_by]],
+                  decreasing = FALSE)][term %in% terms_needed,
+                                       term]
   }
 
   if (reversed) {
@@ -432,8 +432,6 @@ g_events_term_id <- function(term,
 #' ADAE <- cadae
 #' adae_labels <- var_labels(ADAE)
 #' adae_labels <- c(adae_labels,
-#'                 "Action Taken with Study Treatment",
-#'                 "Results in Death",
 #'                 "Serious AE related to A: Drug X",
 #'                 "Serious AE related to B: Placebo")
 #'
@@ -451,8 +449,6 @@ g_events_term_id <- function(term,
 #'                  replace = TRUE)
 #'
 #' ADAE <- ADAE %>%
-#'              mutate(AEACN = AEACN,
-#'                     AESDTH = AESDTH) %>%
 #'              # additional flag variable
 #'              mutate(AEREL1 = (AEREL == "Y" &
 #'                               ADAE$ACTARM == "A: Drug X")) %>%
@@ -471,14 +467,16 @@ create_flag_vars <- function(df,
                                grepl("DRUG WITHDRAWN", AEACN),
                              #nolint
                              serious_modified = AESER == "Y" &
-                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
+                                     AEACN),
                              #nolint
                              serious_related = AESER == "Y" &
                                AEREL == "Y",
                              #nolint
                              withdrawl = grepl("DRUG WITHDRAWN", AEACN),
                              #nolint
-                             modified = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                             modified = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
+                                              AEACN),
                              #nolint
                              related = AEREL == "Y",
                              #nolint
@@ -486,7 +484,8 @@ create_flag_vars <- function(df,
                                grepl("DRUG WITHDRAWN", AEACN),
                              #nolint
                              related_modified = AEREL == "Y" &
-                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
+                                     AEACN),
                              #nolint
                              grade3 = AETOXGR %in% c("3", "4", "5"),
                              #nolint

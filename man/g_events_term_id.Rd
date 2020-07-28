@@ -26,7 +26,8 @@ g_events_term_id(
 }
 \arguments{
 \item{term}{\code{character} or \code{factor} vector, or \code{data.frame} \cr
-Represents events information. \code{term} can be a \code{data.frame} produced by \code{create_flag_vars}, with each column being a \code{logical} event indicator}
+Represents events information. \code{term} can be a \code{data.frame} produced
+ by \code{create_flag_vars}, with each column being a \code{logical} event indicator}
 
 \item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the same as
 the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.}
@@ -86,8 +87,6 @@ ADAE <- cadae
 
 adae_labels <- var_labels(ADAE)
 adae_labels <- c(adae_labels,
-                "Action Taken with Study Treatment",
-                "Results in Death",
                 "Serious AE related to A: Drug X",
                 "Serious AE related to B: Placebo")
 
@@ -105,8 +104,6 @@ AESDTH <- sample(c("Y", "N"),
                  replace = TRUE)
 
 ADAE <- ADAE \%>\%
-             mutate(AEACN = AEACN,
-                    AESDTH = AESDTH) \%>\%
              # additional flag variable
              mutate(AEREL1 = (AEREL == "Y" &
                               ADAE$ACTARM == "A: Drug X")) \%>\%
