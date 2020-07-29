@@ -287,26 +287,21 @@ patient_domain_profile <- function(domain = NULL,
 
   marker_data <- data.frame(
     var_names,
-    marker_pos = if (is.null(marker_pos))
-      to_n("x", length(var_names)) else marker_pos,
-    marker_shape = if (is.null(marker_shape))
-      to_n("x", length(var_names)) else marker_shape,
-    marker_color = if (is.null(marker_color))
-      to_n("x", length(var_names)) else marker_color
+    marker_pos = if (is.null(marker_pos)) to_n("x", length(var_names)) else marker_pos,
+    marker_shape = if (is.null(marker_shape)) to_n("x", length(var_names)) else marker_shape,
+    marker_color = if (is.null(marker_color)) to_n("x", length(var_names)) else marker_color
     )
 
   # plot lines
   if (length(dim(marker_pos)) == 2) {
     line_data <- data.frame(
-      var_names,
+      var_names = var_names,
       line_col = if (is.null(line_col)) to_n("x", length(var_names)) else line_col,
       line_start = marker_pos[, 1],
       line_end = marker_pos[, 2],
       line_min = rep(xlim[1], length(var_names)),
       line_max = rep(arrow_end + no_enddate_extention, length(var_names))
       )
-    names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
-
 
     p <- ggplot() +
       geom_segment(
