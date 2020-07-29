@@ -6,6 +6,7 @@
 #' (\code{ADCM}), exposure (\code{ADEX}), and laboratory (\code{ADLB}).
 #'
 #' @param domain string of domain name to be shown as y-axis label, default is \code{NULL}
+#' (no y-axis label shown)
 #' @param var_names character vector to identify each lane
 #' @param marker_pos marker position, which needs to be a numeric vector for \code{ADEX}, \code{ADLB}
 #' or \code{ADRS} for duration marker position, or a numeric data frame with two columns for
@@ -13,7 +14,9 @@
 #' @param arrow_end numeric value indicates the end of arrow when arrows are requested
 #' @param xtick_at optional break interval of bar length axis
 #' @param line_col factor vector to specify color for segments, default is \code{NULL}
-#' @param line_col_legend string to be displayed as line color legend title, default is \code{NULL}
+#' (no line color is specified)
+#' @param line_col_legend string to be displayed as line color legend title when \code{line_col} is specified,
+#'  default is \code{NULL} (no legend title is displayed)
 #' @param line_col_opt aesthetic values to map color values (named vector to map color values to each name).
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
 #'      otherwise color will be assigned by \code{\link{ggplot}} default, please note that \code{NULL}
@@ -23,6 +26,7 @@
 #' @param no_enddate_extention numeric value for extending the arrow when end date is missing for \code{ADAE}
 #' or \code{ADCM} domain. Default is \code{no_enddate_extention = 0}.
 #' @param marker_color factor vector to specify color for markers, default is \code{NULL}
+#' (no color markers is specified)
 #' @param marker_color_opt aesthetic values to map color values (named vector to map color values to each name)
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_color} values,
 #'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified
@@ -37,7 +41,7 @@
 #'     \code{xlim = c(-28, max(marker_pos) + 5)}
 #' @param xlab string to be shown as x-axis label, default is \code{"Study Day"}
 #' @param show_title boolean value for showing title of the plot, default is \code{TRUE}
-#' @param title string to be shown as title of the plot, default is \code{NULL}
+#' @param title string to be shown as title of the plot, default is \code{NULL} (no plot title is depalyed)
 #'
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
 #' @author Tina Cho (chot) \email{tina.cho@roche.com}
@@ -267,10 +271,6 @@ patient_domain_profile <- function(domain = NULL,
 
   #check user input
   stop_if_not(
-    list(!is_empty(var_names), "missing argument: var_names must be specified"),
-    list(!is_empty(marker_pos), "missing argument: marker_pos must be specified"),
-    list(!is_empty(arrow_end), "missing argument: arrow_end must be specified"),
-
     list(length(unique(nrow(data.frame(var_names)), nrow(data.frame(marker_pos)), nrow(data.frame(arrow_end)))) == 1,
          "invalid arguments: check that the length of input arguments are identical"),
     list(ncol(data.frame(marker_pos)) <= 2,
@@ -285,49 +285,72 @@ patient_domain_profile <- function(domain = NULL,
          "invalid arguments: check that xlim is of type numeric vector")
   )
 
-  marker_data <- data.frame(var_names,
-                            marker_pos = if (is.null(marker_pos))
-                              to_n("x", length(var_names)) else marker_pos,
-                            marker_shape = if (is.null(marker_shape))
-                              to_n("x", length(var_names)) else marker_shape,
-                            marker_color = if (is.null(marker_color))
-                              to_n("x", length(var_names)) else marker_color)
+  marker_data <- data.frame(
+    var_names,
+    marker_pos = if (is.null(marker_pos))
+      to_n("x", length(var_names)) else marker_pos,
+    marker_shape = if (is.null(marker_shape))
+      to_n("x", length(var_names)) else marker_shape,
+    marker_color = if (is.null(marker_color))
+      to_n("x", length(var_names)) else marker_color
+    )
 
   # plot lines
   if (length(dim(marker_pos)) == 2) {
-    line_data <- data.frame(var_names,
-                            line_col = if (is.null(line_col)) to_n("x", length(var_names)) else line_col,
-                            line_start = marker_pos[, 1],
-                            line_end = marker_pos[, 2],
-                            line_min = rep(xlim[1], length(var_names)),
-                            line_max = rep(arrow_end + no_enddate_extention, length(var_names)))
+    line_data <- data.frame(
+      var_names,
+      line_col = if (is.null(line_col)) to_n("x", length(var_names)) else line_col,
+      line_start = marker_pos[, 1],
+      line_end = marker_pos[, 2],
+      line_min = rep(xlim[1], length(var_names)),
+      line_max = rep(arrow_end + no_enddate_extention, length(var_names))
+      )
     names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
 
 
     p <- ggplot() +
-      geom_segment(data = line_data[!is.na(line_data$line_end), ],
-                   aes(x = var_names, y = line_start, xend = var_names, yend = line_end, color = line_col),
-                   lineend = "round", linejoin = "round",
-                   size = line_width, arrow = NULL, show.legend = NA,
-                   na.rm = TRUE) +
+      geom_segment(
+        data = line_data[!is.na(line_data$line_end), ],
+        aes(
+          x = var_names,
+          y = line_start,
+          xend = var_names,
+          yend = line_end,
+          color = line_col),
+        lineend = "round", linejoin = "round",
+        size = line_width, arrow = NULL, show.legend = NA,
+        na.rm = TRUE
+        ) +
       scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
-      geom_segment(data = line_data[is.na(line_data$line_end) == TRUE, ],
-                   aes(x = var_names, y = pmax(line_start, line_min, na.rm = TRUE),
-                       xend = var_names, yend = line_max, color = line_col),
-                   lineend = "round", linejoin = "round",
-                   size = line_width, show.legend = FALSE,
-                   arrow = arrow(length = unit(arrow_size, "inches")),
-                   na.rm = TRUE)
+      geom_segment(
+        data = line_data[is.na(line_data$line_end) == TRUE, ],
+        aes(
+          x = var_names,
+          y = pmax(line_start, line_min, na.rm = TRUE),
+          xend = var_names,
+          yend = line_max,
+          color = line_col
+          ),
+        lineend = "round", linejoin = "round",
+        size = line_width, show.legend = FALSE,
+        arrow = arrow(length = unit(arrow_size, "inches")),
+        na.rm = TRUE
+        )
 
     if (!is.null(line_col_opt)) {
-      p <- p + scale_color_manual(breaks = line_data$line_col,
-                                  values = line_col_opt,
-                                  limits = levels(line_data$line_col))
+      p <- p +
+        scale_color_manual(
+          breaks = line_data$line_col,
+          values = line_col_opt,
+          limits = levels(line_data$line_col)
+          )
     } else {
-      p <- p + scale_color_manual(breaks = line_data$line_col,
-                                  values = c(1:25),
-                                  limits = levels(line_data$line_col))
+      p <- p +
+        scale_color_manual(
+          breaks = line_data$line_col,
+          values = c(1:25),
+          limits = levels(line_data$line_col))
     }
 
     if (!is.null(line_col)) {
@@ -337,24 +360,33 @@ patient_domain_profile <- function(domain = NULL,
     }
 
     # plot markers
-    p <- p + geom_point(data = marker_data, aes(x = var_names,
-                                                y = marker_data[, 2],
-                                                fill = factor(marker_color)),
-                        shape = 21, #-as.hexmode("25BA"),
-                        size = 5,
-                        na.rm = TRUE) +
-      geom_point(data = marker_data, aes(x = var_names,
-                                         y = marker_data[, 3],
-                                         fill = factor(marker_color)),
-                 shape = 22, #-as.hexmode("25C4"),
-                 size = 3, na.rm = TRUE)
+    p <- p +
+      geom_point(
+        data = marker_data,
+        aes(x = var_names, y = marker_data[, 2], fill = factor(marker_color)),
+        shape = 21,
+        size = 5,
+        na.rm = TRUE
+        ) +
+      geom_point(
+        data = marker_data,
+        aes(x = var_names, y = marker_data[, 3], fill = factor(marker_color)),
+        shape = 22,
+        size = 3,
+        na.rm = TRUE
+        )
 
     if (!is.null(marker_color_opt)) {
-      p <- p + scale_fill_manual(breaks = marker_data$marker_color,
-                                 values = marker_color_opt)
+      p <- p +
+        scale_fill_manual(
+          breaks = marker_data$marker_color,
+          values = marker_color_opt
+          )
     } else {
-      p <- p + scale_fill_manual(breaks = marker_data$marker_color,
-                                 values = c(1:25))
+      p <- p +
+        scale_fill_manual(
+          breaks = marker_data$marker_color,
+          values = c(1:25))
     }
 
 
@@ -385,10 +417,14 @@ patient_domain_profile <- function(domain = NULL,
 
   } else {
     p <- ggplot() +
-      geom_point(data = marker_data, aes(x = var_names,
-                                         y = marker_pos,
-                                         shape = marker_shape,
-                                         fill = marker_color),
+      geom_point(
+        data = marker_data,
+        aes(
+          x = var_names,
+          y = marker_pos,
+          shape = marker_shape,
+          fill = marker_color
+          ),
                  size = 3, na.rm = TRUE) +
       scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
@@ -413,23 +449,33 @@ patient_domain_profile <- function(domain = NULL,
     }
 
     if (!is.null(marker_color_opt)) {
-      p <- p + scale_fill_manual(name = marker_color_legend,
-                                 breaks = marker_data$marker_color,
-                                 values = marker_color_opt)
+      p <- p +
+        scale_fill_manual(
+          name = marker_color_legend,
+          breaks = marker_data$marker_color,
+          values = marker_color_opt)
     } else {
-      p <- p + scale_fill_manual(name = marker_color_legend,
-                                 breaks = marker_data$marker_color,
-                                 values = c(1:25))
+      p <- p +
+        scale_fill_manual(
+          name = marker_color_legend,
+          breaks = marker_data$marker_color,
+          values = c(1:25)
+          )
     }
 
     if (!is.null(marker_shape_opt)) {
-      p <- p + scale_shape_manual(name = marker_shape_legend,
-                                  breaks = marker_data$marker_shape,
-                                  values = marker_shape_opt)
+      p <- p + scale_shape_manual(
+        name = marker_shape_legend,
+        breaks = marker_data$marker_shape,
+        values = marker_shape_opt
+        )
     } else {
-      p <- p + scale_shape_manual(name = marker_shape_legend,
-                                  breaks = marker_data$marker_shape,
-                                  values = c(1:25))
+      p <- p +
+        scale_shape_manual(
+          name = marker_shape_legend,
+          breaks = marker_data$marker_shape,
+          values = c(1:25)
+          )
     }
 
   }
@@ -658,10 +704,11 @@ g_patient_profile <- function(select_ex = TRUE,
                               xlab = "Study Day",
                               title = "Patient Profile") {
   stop_if_not(
-    list(lapply(list(select_ex, select_ae, select_rs, select_cm, select_lb), rlang::is_bool) %>%
-           unlist %>%
-           all,
-         "invalid argument: check that the select arguments are boolean")
+    list(
+      lapply(list(select_ex, select_ae, select_rs, select_cm, select_lb), rlang::is_bool) %>%
+        unlist %>%
+        all,
+      "invalid argument: check that the select arguments are boolean")
   )
 
   # check if we have data for each of these plots
@@ -703,58 +750,60 @@ g_patient_profile <- function(select_ex = TRUE,
 
   # Domain "ADEX"
   if (select_ex == TRUE) {
-    p1 <- patient_domain_profile(domain = "Exposure (ADEX)",
-                                 var_names = ex_var,
-                                 marker_pos = ex_data$ASTDT_dur,
-                                 arrow_end = arrow_end_day,
-                                 xtick_at = waiver(),
-                                 line_col = NULL,
-                                 line_col_legend = NULL,
-                                 line_col_opt = NULL,
-                                 line_width = 1,
-                                 arrow_size = 0.1,
-                                 no_enddate_extention = 0,
-                                 marker_color = factor(ex_data$Modification),
-                                 marker_color_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
-                                 marker_color_legend = NULL,
-                                 marker_shape = factor(ex_data$Modification),
-                                 marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
-                                 marker_shape_legend = "Dose Modification",
-                                 show_days_label = show_days_label[1],
-                                 xlim = xlim,
-                                 xlab = xlab,
-                                 show_title = show_title[1],
-                                 title = title)
-
+    p1 <- patient_domain_profile(
+      domain = "Exposure (ADEX)",
+      var_names = ex_var,
+      marker_pos = ex_data$ASTDT_dur,
+      arrow_end = arrow_end_day,
+      xtick_at = waiver(),
+      line_col = NULL,
+      line_col_legend = NULL,
+      line_col_opt = NULL,
+      line_width = 1,
+      arrow_size = 0.1,
+      no_enddate_extention = 0,
+      marker_color = factor(ex_data$Modification),
+      marker_color_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
+      marker_color_legend = NULL,
+      marker_shape = factor(ex_data$Modification),
+      marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
+      marker_shape_legend = "Dose Modification",
+      show_days_label = show_days_label[1],
+      xlim = xlim,
+      xlab = xlab,
+      show_title = show_title[1],
+      title = title
+      )
   } else {
     p1 <- NULL
   }
-
   # Domain "ADAE"
   if (select_ae == TRUE) {
-    p2 <- patient_domain_profile(domain = "Adverse Event (ADAE)",
-                                 var_names = ae_var,
-                                 marker_pos = ae_data[, c("ASTDY", "AENDY")],
-                                 arrow_end = arrow_end_day,
-                                 xtick_at = waiver(),
-                                 line_col = ae_line_col,
-                                 line_col_legend = ae_line_col_legend,
-                                 line_col_opt = ae_line_col_opt,
-                                 line_width = 1,
-                                 arrow_size = 0.1,
-                                 no_enddate_extention = 0.1,
-                                 marker_color = factor(ae_data$AETOXGR),
-                                 marker_color_opt = c("1" = "green", "2" = "blue",
-                                                      "3" = "yellow", "4" = "orange", "5" = "red"),
-                                 marker_color_legend = "Grade",
-                                 marker_shape = NULL,
-                                 marker_shape_opt = NULL,
-                                 marker_shape_legend = NULL,
-                                 show_days_label = show_days_label[2],
-                                 xlim = xlim,
-                                 xlab = xlab,
-                                 show_title = show_title[2],
-                                 title = title)
+    p2 <- patient_domain_profile(
+       domain = "Adverse Event (ADAE)",
+       var_names = ae_var,
+       marker_pos = ae_data[, c("ASTDY", "AENDY")],
+       arrow_end = arrow_end_day,
+       xtick_at = waiver(),
+       line_col = ae_line_col,
+       line_col_legend = ae_line_col_legend,
+       line_col_opt = ae_line_col_opt,
+       line_width = 1,
+       arrow_size = 0.1,
+       no_enddate_extention = 0.1,
+       marker_color = factor(ae_data$AETOXGR),
+       marker_color_opt = c("1" = "green", "2" = "blue",
+                            "3" = "yellow", "4" = "orange", "5" = "red"),
+       marker_color_legend = "Grade",
+       marker_shape = NULL,
+       marker_shape_opt = NULL,
+       marker_shape_legend = NULL,
+       show_days_label = show_days_label[2],
+       xlim = xlim,
+       xlab = xlab,
+       show_title = show_title[2],
+       title = title
+       )
   } else {
     p2 <- NULL
   }
@@ -762,30 +811,32 @@ g_patient_profile <- function(select_ex = TRUE,
 
   # Domain "ADRS"
   if (select_rs == TRUE) {
-    p3 <- patient_domain_profile(domain = "Response (ADRS)",
-                                 var_names = rs_var,
-                                 marker_pos = rs_data$ADY,
-                                 arrow_end = arrow_end_day,
-                                 xtick_at = waiver(),
-                                 line_col = NULL,
-                                 line_col_legend = NULL,
-                                 line_col_opt = NULL,
-                                 line_width = 1,
-                                 arrow_size = 0.1,
-                                 no_enddate_extention = 0,
-                                 marker_color = factor(rs_data$AVALC),
-                                 marker_color_opt =  c("CR" = "green", "PR" = "blue", "SD" = "yellow",
-                                                       "PD" = "red", "NE" = "pink", "Y" = "lightblue", "N" = "darkred"),
-                                 marker_color_legend = NULL,
-                                 marker_shape = factor(rs_data$AVALC),
-                                 marker_shape_opt = c("CR" = 21, "PR" = 24, "SD" = 23, "PD" = 22, "NE" = 14,
-                                                      "Y" = 11, "N" = 8),
-                                 marker_shape_legend = "Response",
-                                 show_days_label = show_days_label[3],
-                                 xlim = xlim,
-                                 xlab = xlab,
-                                 show_title = show_title[3],
-                                 title = title)
+    p3 <- patient_domain_profile(
+       domain = "Response (ADRS)",
+       var_names = rs_var,
+       marker_pos = rs_data$ADY,
+       arrow_end = arrow_end_day,
+       xtick_at = waiver(),
+       line_col = NULL,
+       line_col_legend = NULL,
+       line_col_opt = NULL,
+       line_width = 1,
+       arrow_size = 0.1,
+       no_enddate_extention = 0,
+       marker_color = factor(rs_data$AVALC),
+       marker_color_opt =  c("CR" = "green", "PR" = "blue", "SD" = "yellow",
+                             "PD" = "red", "NE" = "pink", "Y" = "lightblue", "N" = "darkred"),
+       marker_color_legend = NULL,
+       marker_shape = factor(rs_data$AVALC),
+       marker_shape_opt = c("CR" = 21, "PR" = 24, "SD" = 23, "PD" = 22, "NE" = 14,
+                            "Y" = 11, "N" = 8),
+       marker_shape_legend = "Response",
+       show_days_label = show_days_label[3],
+       xlim = xlim,
+       xlab = xlab,
+       show_title = show_title[3],
+       title = title
+       )
   } else {
     p3 <- NULL
   }
@@ -793,57 +844,61 @@ g_patient_profile <- function(select_ex = TRUE,
 
   # Domain "ADCM"
   if (select_cm == TRUE) {
-    p4 <- patient_domain_profile(domain = "Conmed (ADCM)",
-                                 var_names = cm_var,
-                                 marker_pos = cm_data[, c("ASTDY", "AENDY")],
-                                 arrow_end = arrow_end_day,
-                                 xtick_at = waiver(),
-                                 line_col = NULL,
-                                 line_col_legend = NULL,
-                                 line_col_opt = "orange",
-                                 line_width = 1,
-                                 arrow_size = 0.1,
-                                 no_enddate_extention = 0.1,
-                                 marker_color = NULL,
-                                 marker_color_opt = "orange",
-                                 marker_color_legend = NULL,
-                                 marker_shape = NULL,
-                                 marker_shape_opt = NULL,
-                                 marker_shape_legend = NULL,
-                                 show_days_label = show_days_label[4],
-                                 xlim = xlim,
-                                 xlab = xlab,
-                                 show_title = show_title[4],
-                                 title = title)
+    p4 <- patient_domain_profile(
+       domain = "Conmed (ADCM)",
+       var_names = cm_var,
+       marker_pos = cm_data[, c("ASTDY", "AENDY")],
+       arrow_end = arrow_end_day,
+       xtick_at = waiver(),
+       line_col = NULL,
+       line_col_legend = NULL,
+       line_col_opt = "orange",
+       line_width = 1,
+       arrow_size = 0.1,
+       no_enddate_extention = 0.1,
+       marker_color = NULL,
+       marker_color_opt = "orange",
+       marker_color_legend = NULL,
+       marker_shape = NULL,
+       marker_shape_opt = NULL,
+       marker_shape_legend = NULL,
+       show_days_label = show_days_label[4],
+       xlim = xlim,
+       xlab = xlab,
+       show_title = show_title[4],
+       title = title
+       )
   } else {
     p4 <- NULL
   }
 
   # Domain "ADLB"
   if (select_lb == TRUE) {
-    p5 <- patient_domain_profile(domain = "Laboratory (ADLB)",
-                                 var_names = lb_var,
-                                 marker_pos = lb_data$ADY,
-                                 arrow_end = arrow_end_day,
-                                 xtick_at = waiver(),
-                                 line_col = NULL,
-                                 line_col_legend = NULL,
-                                 line_col_opt = NULL,
-                                 line_width = 1,
-                                 arrow_size = 0.1,
-                                 no_enddate_extention = 0,
-                                 marker_color = factor(lb_data$ANRIND),
-                                 marker_color_opt =  c("HIGH" = "red", "LOW" = "blue",
-                                                       "NORMAL" = "green"),
-                                 marker_color_legend = NULL,
-                                 marker_shape = factor(lb_data$ANRIND),
-                                 marker_shape_opt = c("HIGH" = 24, "LOW" = 25, "NORMAL" = 23),
-                                 marker_shape_legend = "Labs Abnormality",
-                                 show_days_label = show_days_label[5],
-                                 xlim = xlim,
-                                 xlab = xlab,
-                                 show_title = show_title[5],
-                                 title = title)
+    p5 <- patient_domain_profile(
+       domain = "Laboratory (ADLB)",
+       var_names = lb_var,
+       marker_pos = lb_data$ADY,
+       arrow_end = arrow_end_day,
+       xtick_at = waiver(),
+       line_col = NULL,
+       line_col_legend = NULL,
+       line_col_opt = NULL,
+       line_width = 1,
+       arrow_size = 0.1,
+       no_enddate_extention = 0,
+       marker_color = factor(lb_data$ANRIND),
+       marker_color_opt =  c("HIGH" = "red", "LOW" = "blue",
+                             "NORMAL" = "green"),
+       marker_color_legend = NULL,
+       marker_shape = factor(lb_data$ANRIND),
+       marker_shape_opt = c("HIGH" = 24, "LOW" = 25, "NORMAL" = 23),
+       marker_shape_legend = "Labs Abnormality",
+       show_days_label = show_days_label[5],
+       xlim = xlim,
+       xlab = xlab,
+       show_title = show_title[5],
+       title = title
+       )
   } else {
     p5 <- NULL
   }
