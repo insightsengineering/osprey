@@ -1,6 +1,6 @@
 #' Patient Domain Profile
 #'
-#' Patient domian profile provides information for a specific subject participated in the study.
+#' Patient domain profile provides information for a specific subject that participated in the study.
 #' The plot includes relevant data for one subject in a user specified domain, including
 #' adverse events (\code{ADAE}), response (\code{ADRS}), concomitant medications
 #' (\code{ADCM}), exposure (\code{ADEX}), and laboratory (\code{ADLB}).
