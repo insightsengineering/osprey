@@ -435,7 +435,7 @@ patient_domain_profile <- function(domain = NULL,
   }
 
   # plot title and labels
-  if (show_title == TRUE) {
+  if (show_title) {
     p <- p +
       labs(title = title) +
       theme(plot.title = element_text(face = "bold"))
