@@ -295,14 +295,14 @@ patient_domain_profile <- function(domain = NULL,
   # plot lines
   if (length(dim(marker_pos)) == 2) {
     line_data <- data.frame(
-      var_names = var_names,
+      var_names,
       line_col = if (is.null(line_col)) to_n("x", length(var_names)) else line_col,
       line_start = marker_pos[, 1],
       line_end = marker_pos[, 2],
       line_min = rep(xlim[1], length(var_names)),
       line_max = rep(arrow_end + no_enddate_extention, length(var_names))
       )
-
+    names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
     p <- ggplot() +
       geom_segment(
         data = line_data[!is.na(line_data$line_end), ],
@@ -333,20 +333,14 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
         )
 
-    if (!is.null(line_col_opt)) {
-      p <- p +
-        scale_color_manual(
-          breaks = line_data$line_col,
-          values = line_col_opt,
-          limits = levels(line_data$line_col)
-          )
-    } else {
-      p <- p +
-        scale_color_manual(
-          breaks = line_data$line_col,
-          values = c(1:25),
-          limits = levels(line_data$line_col))
-    }
+    if (is.null(line_col_opt)) line_col_opt <- c(1:25)
+
+    p <- p +
+      scale_color_manual(
+        breaks = line_data$line_col,
+        values = line_col_opt,
+        limits = levels(line_data$line_col)
+        )
 
     if (!is.null(line_col)) {
       p <- p + guides(color = guide_legend(line_col_legend, order = 1))
@@ -371,18 +365,12 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
         )
 
-    if (!is.null(marker_color_opt)) {
-      p <- p +
-        scale_fill_manual(
-          breaks = marker_data$marker_color,
-          values = marker_color_opt
-          )
-    } else {
-      p <- p +
-        scale_fill_manual(
-          breaks = marker_data$marker_color,
-          values = c(1:25))
-    }
+    if (is.null(marker_color_opt)) marker_color_opt <- c(1:25)
+    p <- p +
+      scale_fill_manual(
+        breaks = marker_data$marker_color,
+        values = marker_color_opt
+        )
 
 
     p <- p + theme_bw() +
