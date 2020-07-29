@@ -305,7 +305,7 @@ patient_domain_profile <- function(domain = NULL,
 
 
     p <- ggplot() +
-      geom_segment(data = line_data[is.na(line_data$line_end) == FALSE, ],
+      geom_segment(data = line_data[!is.na(line_data$line_end), ],
                    aes(x = var_names, y = line_start, xend = var_names, yend = line_end, color = line_col),
                    lineend = "round", linejoin = "round",
                    size = line_width, arrow = NULL, show.legend = NA,
