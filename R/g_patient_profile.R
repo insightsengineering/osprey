@@ -13,29 +13,38 @@
 #' \code{ADAE} or \code{ADCM} for start and end time marker position
 #' @param arrow_end numeric value indicates the end of arrow when arrows are requested
 #' @param xtick_at optional break interval of bar length axis
-#' @param line_col factor vector to specify color for segments, default is \code{NULL}
-#' (no line color is specified)
-#' @param line_col_legend string to be displayed as line color legend title when \code{line_col} is specified,
-#'  default is \code{NULL} (no legend title is displayed)
-#' @param line_col_opt aesthetic values to map color values (named vector to map color values to each name).
+#' @param line_col_list a list may contain \cr
+#' \itemize{
+#' \item \code{line_col}: factor vector to specify color for segments , default is \code{NULL}
+#' (no line color is specified)\cr
+#' \item \code{line_col_opt} aesthetic values to map color values (named vector to map color values to each name).
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
-#'      otherwise color will be assigned by \code{\link{ggplot}} default, please note that \code{NULL}
-#'      needs to be specified
+#'      otherwise color will be assigned by \code{\link{ggplot}} default
+#' \item \code{line_col_legend}: a string to be displayed as line color legend title when \code{line_col} is specified,
+#'  default is \code{NULL} (no legend title is displayed)
+#' }
 #' @param line_width numeric value for segment width, default is \code{line_width = 1}
 #' @param arrow_size numeric value for arrow size, default is \code{arrow_size = 0.1}
 #' @param no_enddate_extention numeric value for extending the arrow when end date is missing for \code{ADAE}
 #' or \code{ADCM} domain. Default is \code{no_enddate_extention = 0}.
-#' @param marker_color factor vector to specify color for markers, default is \code{NULL}
-#' (no color markers is specified)
-#' @param marker_color_opt aesthetic values to map color values (named vector to map color values to each name)
-#'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_color} values,
-#'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified
-#' @param marker_color_legend string to be displayed as marker color legend title, default is \code{NULL}
-#' @param marker_shape factor vector to specify shape for markers, default is \code{NULL}
-#' @param marker_shape_opt aesthetic values to map shape values (named vector to map shape values to each name).
+#' @param marker_col_list a list may contain \cr
+#' \itemize{
+#' \item \code{marker_col} a factor vector to specify color for markers, default is \code{NULL} (no color markers is specified)
+#' \item \code{marker_col_opt} aesthetic values to map color values (named vector to map color values to each name)
+#'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_col} values,
+#'      otherwise color will be assigned by \code{ggplot} default
+#' \item \code{marker_col_legend} a string to be displayed as marker color legend title, default is \code{NULL}
+#' (no legend title is displayed)
+#' }
+#' @param marker_shape_list a list may contain \cr
+#' \itemize{
+#' \item \code{marker_shape} factor vector to specify shape for markers, default is \code{NULL} (no shape marker is specified)
+#' \item  \code{marker_shape_opt} aesthetic values to map shape values (named vector to map shape values to each name).
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_shape} values,
-#'      otherwise shape will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified
-#' @param marker_shape_legend string to be displayed as marker shape legend title, default is \code{NULL}
+#'      otherwise shape will be assigned by \code{ggplot} default
+#' \item \code{marker_shape_legend} string to be displayed as marker shape legend title, default is \code{NULL}
+#' (no legend title is displayed)
+#' }
 #' @param show_days_label boolean value for showing y-axis label, default is \code{TRUE}
 #' @param xlim numeric vector for x-axis limit, default is
 #'     \code{xlim = c(-28, max(marker_pos) + 5)}
@@ -96,19 +105,20 @@
 #'     marker_pos = ADEX$ASTDT_dur,
 #'     arrow_end = ADSL$max_day,
 #'     xtick_at = waiver(),
-#'     line_col = NULL,
-#'     line_col_legend = NULL,
-#'     line_col_opt = NULL,
+#'     line_col_list = NULL,
 #'     line_width = 1,
 #'     arrow_size = 0.1,
 #'     no_enddate_extention = 0,
-#'     marker_color = factor(ADEX$Modification),
-#'     marker_color_opt =  c("Increase" = "red",
-#'                           "Decrease" = "green", "None" = "blue"),
-#'     marker_color_legend = NULL,
-#'     marker_shape = factor(ADEX$Modification),
-#'     marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
-#'     marker_shape_legend = "Dose Modification",
+#'     marker_col_list = list(
+#'       marker_col = factor(ADEX$Modification),
+#'       marker_col_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
+#'       marker_col_legend = NULL
+#'       ),
+#'     marker_shape_list = list(
+#'       marker_shape = factor(ADEX$Modification),
+#'       marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
+#'       marker_shape_legend = "Dose Modification"
+#'       ),
 #'     show_days_label = TRUE,
 #'     xlim = c(-28, ADSL$max_day),
 #'     xlab = "Study Day",
@@ -133,18 +143,24 @@
 #'     marker_pos = ADAE[, c("ASTDY", "AENDY")],
 #'     arrow_end = ADSL$max_day,
 #'     xtick_at = waiver(),
-#'     line_col = ADAE$AESER,
-#'     line_col_legend = "Serious",
-#'     line_col_opt = NULL,
+#'     line_col_list = list(
+#'       line_col = ADAE$AESER,
+#'       line_col_legend = "Serious",
+#'       line_col_opt = c("blue","green")
+#'     ),
 #'     line_width = 1,
 #'     arrow_size = 0.1,
 #'     no_enddate_extention = 0,
-#'     marker_color = factor(ADAE$AETOXGR),
-#'     marker_color_opt =  c("3" = "yellow", "4" = "red"),
-#'     marker_color_legend = NULL,
-#'     marker_shape = NULL,
-#'     marker_shape_opt = NULL,
-#'     marker_shape_legend = "Grade",
+#'     marker_col_list = list(
+#'       marker_col = factor(ADAE$AETOXGR),
+#'       marker_col_opt =  c("3" = "yellow", "4" = "red"),
+#'       marker_col_legend = NULL
+#'     ),
+#'     marker_shape_list = list(
+#'       marker_shape = NULL,
+#'       marker_shape_opt = NULL,
+#'       marker_shape_legend = "Grade"
+#'     ),
 #'     show_days_label = TRUE,
 #'     xlim = c(-28, ADSL$max_day),
 #'     xlab = "Study Day",
@@ -164,22 +180,24 @@
 #'     marker_pos = ADRS$ADY,
 #'     arrow_end = ADSL$max_day,
 #'     xtick_at = waiver(),
-#'     line_col = NULL,
-#'     line_col_legend = NULL,
-#'     line_col_opt = NULL,
+#'     line_col_list = NULL,
 #'     line_width = 1,
 #'     arrow_size = 0.1,
 #'     no_enddate_extention = 0,
-#'     marker_color = factor(ADRS$AVALC),
-#'     marker_color_opt =  c("CR" = "green", "PR" = "blue",
-#'                           "SD" = "yellow", "PD" = "red", "NE" = "pink",
-#'                           "Y" = "lightblue", "N" = "darkred"),
-#'     marker_color_legend = NULL,
-#'     marker_shape = factor(ADRS$AVALC),
-#'     marker_shape_opt = c("CR" = 21, "PR" = 24,
-#'                          "SD" = 23, "PD" = 22, "NE" = 14,
-#'                          "Y" = 11, "N" = 8),
-#'     marker_shape_legend = "Response",
+#'     marker_col_list = list(
+#'       marker_col = factor(ADRS$AVALC),
+#'       marker_col_opt =  c("CR" = "green", "PR" = "blue",
+#'                             "SD" = "yellow", "PD" = "red", "NE" = "pink",
+#'                             "Y" = "lightblue", "N" = "darkred"),
+#'       marker_col_legend = NULL
+#'      ),
+#'      marker_shape_list = list(
+#'        marker_shape = factor(ADRS$AVALC),
+#'        marker_shape_opt = c("CR" = 21, "PR" = 24,
+#'                             "SD" = 23, "PD" = 22, "NE" = 14,
+#'                             "Y" = 11, "N" = 8),
+#'        marker_shape_legend = "Response"
+#'      ),
 #'     show_days_label = TRUE,
 #'     xlim = c(-28, ADSL$max_day),
 #'     xlab = "Study Day",
@@ -199,18 +217,12 @@
 #'     marker_pos = ADCM[, c("ASTDY", "AENDY")],
 #'     arrow_end = ADSL$max_day,
 #'     xtick_at = waiver(),
-#'     line_col = NULL,
-#'     line_col_legend = NULL,
-#'     line_col_opt = "orange",
+#'     line_col_list = list(line_col_opt = "orange"),
 #'     line_width = 1,
 #'     arrow_size = 0.1,
 #'     no_enddate_extention = 50,
-#'     marker_color = NULL,
-#'     marker_color_opt = "orange",
-#'     marker_color_legend = NULL,
-#'     marker_shape = NULL,
-#'     marker_shape_opt = NULL,
-#'     marker_shape_legend = NULL,
+#'     marker_col_list = list(marker_col_opt = "orange"),
+#'     marker_shape_list = NULL,
 #'     show_days_label = TRUE,
 #'     xlim = c(-28, ADSL$max_day),
 #'     xlab = "Study Day",
@@ -237,20 +249,21 @@
 #'     marker_pos = ADLB$ADY,
 #'     arrow_end = ADSL$max_day,
 #'     xtick_at = waiver(),
-#'     line_col = NULL,
-#'     line_col_legend = NULL,
-#'     line_col_opt = NULL,
+#'     line_col_list = NULL,
 #'     line_width = 1,
 #'     arrow_size = 0.1,
 #'     no_enddate_extention = 0,
-#'     marker_color = factor(ADLB$ANRIND),
-#'     marker_color_opt =  c("HIGH" = "red", "LOW" = "blue",
-#'                           "NORMAL" = "green", "NA" = "green"),
-#'     marker_color_legend = NULL,
-#'     marker_shape = factor(ADLB$ANRIND),
-#'     marker_shape_opt = c("HIGH" = 24, "LOW" = 25,
-#'                          "NORMAL" = 23, "NA" = 23),
-#'     marker_shape_legend = "Labs Abnormality",
+#'     marker_col_list = list(
+#'       marker_col = factor(ADLB$ANRIND),
+#'       marker_col_opt =  c("HIGH" = "red", "LOW" = "blue",
+#'                             "NORMAL" = "green", "NA" = "green")
+#'     ),
+#'     marker_shape_list = list(
+#'       marker_shape = factor(ADLB$ANRIND),
+#'       marker_shape_opt = c("HIGH" = 24, "LOW" = 25,
+#'                            "NORMAL" = 23, "NA" = 23),
+#'       marker_shape_legend = "Labs Abnormality"
+#'     ),
 #'     show_days_label = TRUE,
 #'     xlim = c(-30, ADSL$max_day),
 #'     xlab = "Study Day",
@@ -263,23 +276,28 @@ patient_domain_profile <- function(domain = NULL,
                                    marker_pos,
                                    arrow_end,
                                    xtick_at = waiver(),
-                                   line_col = NULL,
-                                   line_col_legend = NULL,
-                                   line_col_opt = NULL,
+                                   line_col_list = NULL,
                                    line_width = 1,
                                    arrow_size = 0.1,
                                    no_enddate_extention = 0,
-                                   marker_color = NULL,
-                                   marker_color_opt = NULL,
-                                   marker_color_legend = NULL,
-                                   marker_shape = NULL,
-                                   marker_shape_opt = NULL,
-                                   marker_shape_legend = NULL,
+                                   marker_col_list = NULL,
+                                   marker_shape_list = NULL,
                                    show_days_label = TRUE,
                                    xlim = c(-28, max(marker_pos) + 5),
                                    xlab = NULL,
                                    show_title = TRUE,
                                    title = NULL) {
+  line_col <- line_col_list[["line_col"]]
+  line_col_opt <- line_col_list[["line_col_opt"]]
+  line_col_legend <- line_col_list[["line_col_legend"]]
+
+  marker_col <- marker_col_list[["marker_col"]]
+  marker_col_opt <- marker_col_list[["marker_col_opt"]]
+  marker_col_legend <- marker_col_list[["marker_col_legend"]]
+
+  marker_shape <- marker_shape_list[["marker_shape"]]
+  marker_shape_opt <- marker_shape_list[["marker_shape_opt"]]
+  marker_shape_legend <- marker_shape_list[["marker_shape_legend"]]
 
   #check user input
   stop_if_not(
@@ -289,8 +307,8 @@ patient_domain_profile <- function(domain = NULL,
          "invalid argument: check that marker_pos is either a vector or a data frame with two columns"),
     list(is.null(line_col) || length(line_col) == length(var_names),
          "invalid arguments: check that the length of line_col is equal as other inputs"),
-    list(is.null(marker_color) || length(marker_color) == length(var_names),
-         "invalid arguments: check that the length of marker_color is equal as other inputs"),
+    list(is.null(marker_col) || length(marker_col) == length(var_names),
+         "invalid arguments: check that the length of marker_col is equal as other inputs"),
     list(is.null(marker_shape) || length(marker_shape) == length(var_names),
          "invalid arguments: check that the length of marker_shape is equal as other inputs"),
     list(is_numeric_vector(xlim, min_length = 2, max_length = 2),
@@ -301,7 +319,7 @@ patient_domain_profile <- function(domain = NULL,
     var_names,
     marker_pos = if (is.null(marker_pos)) to_n("x", length(var_names)) else marker_pos,
     marker_shape = if (is.null(marker_shape)) to_n("x", length(var_names)) else marker_shape,
-    marker_color = if (is.null(marker_color)) to_n("x", length(var_names)) else marker_color
+    marker_col = if (is.null(marker_col)) to_n("x", length(var_names)) else marker_col
     )
 
   # plot lines
@@ -364,24 +382,24 @@ patient_domain_profile <- function(domain = NULL,
     p <- p +
       geom_point(
         data = marker_data,
-        aes(x = var_names, y = marker_data[, 2], fill = factor(marker_color)),
+        aes(x = var_names, y = marker_data[, 2], fill = factor(marker_col)),
         shape = 21,
         size = 5,
         na.rm = TRUE
         ) +
       geom_point(
         data = marker_data,
-        aes(x = var_names, y = marker_data[, 3], fill = factor(marker_color)),
+        aes(x = var_names, y = marker_data[, 3], fill = factor(marker_col)),
         shape = 22,
         size = 3,
         na.rm = TRUE
         )
 
-    if (is.null(marker_color_opt)) marker_color_opt <- c(1:25)
+    if (is.null(marker_col_opt)) marker_col_opt <- c(1:25)
     p <- p +
       scale_fill_manual(
-        breaks = marker_data$marker_color,
-        values = marker_color_opt
+        breaks = marker_data$marker_col,
+        values = marker_col_opt
         )
 
 
@@ -393,8 +411,8 @@ patient_domain_profile <- function(domain = NULL,
       ) +
       ylab(xlab) + xlab(domain)
 
-    if (!is.null(marker_color)) {
-      p <- p + guides(fill = guide_legend(marker_color_legend, order = 2))
+    if (!is.null(marker_col)) {
+      p <- p + guides(fill = guide_legend(marker_col_legend, order = 2))
     } else {
       p <- p + guides(fill = FALSE)
     }
@@ -418,9 +436,9 @@ patient_domain_profile <- function(domain = NULL,
           x = var_names,
           y = marker_pos,
           shape = marker_shape,
-          fill = marker_color
+          fill = marker_col
           ),
-                 size = 3, na.rm = TRUE) +
+        size = 3, na.rm = TRUE) +
       scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       theme_bw() +
@@ -431,24 +449,24 @@ patient_domain_profile <- function(domain = NULL,
       ) +
       ylab(xlab) + xlab(domain)
 
-    if (is.null(marker_color_legend)) {
-      if (length(setdiff(marker_color, marker_shape)) == 0) {
-        marker_color_legend <- marker_shape_legend
+    if (is.null(marker_col_legend)) {
+      if (length(setdiff(marker_col, marker_shape)) == 0) {
+        marker_col_legend <- marker_shape_legend
       }
     }
 
     if (is.null(marker_shape_legend)) {
-      if (length(setdiff(marker_color, marker_shape)) == 0) {
-        marker_shape_legend <- marker_color_legend
+      if (length(setdiff(marker_col, marker_shape)) == 0) {
+        marker_shape_legend <- marker_col_legend
       }
     }
 
-    if (is.null(marker_color_opt)) marker_color_opt <- c(1:25)
+    if (is.null(marker_col_opt)) marker_col_opt <- c(1:25)
     p <- p +
       scale_fill_manual(
-        name = marker_color_legend,
-        breaks = marker_data$marker_color,
-        values = marker_color_opt
+        name = marker_col_legend,
+        breaks = marker_data$marker_col,
+        values = marker_col_opt
         )
 
     if (is.null(marker_shape_opt)) marker_shape_opt <- c(1:25)
@@ -742,9 +760,9 @@ g_patient_profile <- function(select_ex = TRUE,
       line_width = 1,
       arrow_size = 0.1,
       no_enddate_extention = 0,
-      marker_color = factor(ex_data$Modification),
-      marker_color_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
-      marker_color_legend = NULL,
+      marker_col = factor(ex_data$Modification),
+      marker_col_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
+      marker_col_legend = NULL,
       marker_shape = factor(ex_data$Modification),
       marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
       marker_shape_legend = "Dose Modification",
@@ -771,10 +789,10 @@ g_patient_profile <- function(select_ex = TRUE,
        line_width = 1,
        arrow_size = 0.1,
        no_enddate_extention = 0.1,
-       marker_color = factor(ae_data$AETOXGR),
-       marker_color_opt = c("1" = "green", "2" = "blue",
+       marker_col = factor(ae_data$AETOXGR),
+       marker_col_opt = c("1" = "green", "2" = "blue",
                             "3" = "yellow", "4" = "orange", "5" = "red"),
-       marker_color_legend = "Grade",
+       marker_col_legend = "Grade",
        marker_shape = NULL,
        marker_shape_opt = NULL,
        marker_shape_legend = NULL,
@@ -803,10 +821,10 @@ g_patient_profile <- function(select_ex = TRUE,
        line_width = 1,
        arrow_size = 0.1,
        no_enddate_extention = 0,
-       marker_color = factor(rs_data$AVALC),
-       marker_color_opt =  c("CR" = "green", "PR" = "blue", "SD" = "yellow",
+       marker_col = factor(rs_data$AVALC),
+       marker_col_opt =  c("CR" = "green", "PR" = "blue", "SD" = "yellow",
                              "PD" = "red", "NE" = "pink", "Y" = "lightblue", "N" = "darkred"),
-       marker_color_legend = NULL,
+       marker_col_legend = NULL,
        marker_shape = factor(rs_data$AVALC),
        marker_shape_opt = c("CR" = 21, "PR" = 24, "SD" = 23, "PD" = 22, "NE" = 14,
                             "Y" = 11, "N" = 8),
@@ -836,9 +854,9 @@ g_patient_profile <- function(select_ex = TRUE,
        line_width = 1,
        arrow_size = 0.1,
        no_enddate_extention = 0.1,
-       marker_color = NULL,
-       marker_color_opt = "orange",
-       marker_color_legend = NULL,
+       marker_col = NULL,
+       marker_col_opt = "orange",
+       marker_col_legend = NULL,
        marker_shape = NULL,
        marker_shape_opt = NULL,
        marker_shape_legend = NULL,
@@ -866,10 +884,10 @@ g_patient_profile <- function(select_ex = TRUE,
        line_width = 1,
        arrow_size = 0.1,
        no_enddate_extention = 0,
-       marker_color = factor(lb_data$ANRIND),
-       marker_color_opt =  c("HIGH" = "red", "LOW" = "blue",
+       marker_col = factor(lb_data$ANRIND),
+       marker_col_opt =  c("HIGH" = "red", "LOW" = "blue",
                              "NORMAL" = "green"),
-       marker_color_legend = NULL,
+       marker_col_legend = NULL,
        marker_shape = factor(lb_data$ANRIND),
        marker_shape_opt = c("HIGH" = 24, "LOW" = 25, "NORMAL" = 23),
        marker_shape_legend = "Labs Abnormality",
