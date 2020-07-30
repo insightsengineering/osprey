@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_events_term_id.R
 \name{create_flag_vars}
 \alias{create_flag_vars}
-\title{default ae overview flags}
+\title{create AE overview flags}
 \usage{
 create_flag_vars(
   df,
@@ -16,12 +16,12 @@ create_flag_vars(
   related = AEREL == "Y",
   related_withdrawl = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),
   related_modified = AEREL == "Y" & grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
-  grade3 = AETOXGR \%in\% c("3", "4", "5"),
+  ctc35 = AETOXGR \%in\% c("3", "4", "5"),
   ...
 )
 }
 \arguments{
-\item{df}{data frame of ae. use default}
+\item{df}{data frame of AE}
 
 \item{fatal}{AE with fatal outcome derivation}
 
@@ -43,45 +43,33 @@ create_flag_vars(
 
 \item{related_modified}{Related AE leading to dose modification derivation}
 
-\item{grade3}{Grade 3-5 AE derivation}
+\item{ctc35}{Grade 3-5 AE derivation}
 
 \item{...}{named expressions used to generate categories}
 }
 \description{
-default ae overview flags
+create AE overview flags
 }
 \details{
 in this function, all flags are expressions calls, for simpler usage.
 }
 \examples{
 library(random.cdisc.data)
-ADAE <- cadae
-adae_labels <- var_labels(ADAE)
-adae_labels <- c(adae_labels,
-                "Serious AE related to A: Drug X",
-                "Serious AE related to B: Placebo")
+ADAE <- radae(cached = TRUE)
 
-# add AEACN to ADAE
-AEACN <- sample(c("DOSE NOT CHANGED",
-                  "DOSE INTERRUPTED",
-                  "DOSE INCREASED",
-                  "DOSE REDUCED",
-                  "DRUG WITHDRAWN"),
-                nrow(ADAE),
-                replace = TRUE)
-# add AESDTH to ADAE
-AESDTH <- sample(c("Y", "N"),
-                 nrow(ADAE),
-                 replace = TRUE)
-
+# add additional dummy causality flags
 ADAE <- ADAE \%>\%
-             # additional flag variable
-             mutate(AEREL1 = (AEREL == "Y" &
-                              ADAE$ACTARM == "A: Drug X")) \%>\%
-             mutate(AEREL2 = (AEREL == "Y" &
-                              ADAE$ACTARM == "B: Placebo"))
-var_labels(ADAE) <- adae_labels
+  mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) \%>\%
+  mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo")) \%>\%
+  rtables::var_relabel(
+    AEREL1 = "AE related to A: Drug X",
+    AEREL2 = "AE related to B: Placebo"
+  )
+
 create_flag_vars(ADAE)
-create_flag_vars(ADAE, `AENSER` = AESER != "Y") # create other flags
-create_flag_vars(ADAE, fatal = NULL) # remove not needed flags
+# create other flags
+create_flag_vars(ADAE, `AENSER` = AESER != "Y")
+# remove flags that are not needed
+create_flag_vars(ADAE, fatal = NULL)
+
 }

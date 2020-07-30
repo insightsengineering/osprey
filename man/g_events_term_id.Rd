@@ -2,23 +2,23 @@
 % Please edit documentation in R/g_events_term_id.R
 \name{g_events_term_id}
 \alias{g_events_term_id}
-\title{Common Events Plot}
+\title{Events by Term Plot}
 \usage{
 g_events_term_id(
   term,
   id,
   arm,
-  arm_sl,
-  trt = unique(arm)[1],
-  ref = unique(arm)[2],
-  sort_by = "term",
+  arm_N,
+  ref = levels(arm)[1],
+  trt = levels(arm)[2],
+  sort_by = c("term", "riskdiff", "meanrisk"),
   rate_range = c(0, 1),
   diff_range = c(-1, 1),
   reversed = FALSE,
   conf_level = 0.95,
-  ci_method = "wald",
-  axis_side = "left",
-  color = c("red", "blue"),
+  diff_ci_method = "wald",
+  axis_side = c("left", "right"),
+  color = c("blue", "red"),
   shape = c(16, 17),
   fontsize = 4,
   draw = TRUE
@@ -27,43 +27,50 @@ g_events_term_id(
 \arguments{
 \item{term}{\code{character} or \code{factor} vector, or \code{data.frame} \cr
 Represents events information. \code{term} can be a \code{data.frame} produced
- by \code{create_flag_vars}, with each column being a \code{logical} event indicator}
+by \code{create_flag_vars}, with each column being a \code{logical} event indicator}
 
-\item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the same as
-the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.}
+\item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the
+same as the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.}
 
-\item{arm}{\code{character} vector contains arm informatiion. For example, \code{ACTARMCD}.}
+\item{arm}{\code{factor} vector that contains arm informatiion in analysis data.
+For example, \code{ADAE$ACTARMCD}.}
 
-\item{arm_sl}{\code{character} vector contains subject level arm vector. For example, \code{ADSL$ACTARMCD}.}
+\item{arm_N}{(\code{numeric} vector)\cr
+Contains information of the number of patients in the levels of \code{arm}. This is useful
+if there are patients that have no adverse events can be accounted for with this argument.}
 
-\item{trt}{\code{character} indicates the name of the treatment arm}
+\item{ref}{\code{character} indicates the name of the reference arm. Default is the first
+level of \code{arm}.}
 
-\item{ref}{\code{character} indicates the name of the reference arm}
+\item{trt}{\code{character} indicates the name of the treatment arm. Default is the second
+level of \code{arm}.}
 
-\item{sort_by}{\code{character} indicates sort_by type. Choose from "term", "riskdiff"
-and "meanrisk". Default is "term".}
+\item{sort_by}{\code{character} indicates how each \code{term} is sorted in the plot.
+Choose from "term" for alphabetic terms, "riskdiff" for risk difference, and "meanrisk"
+for mean risk. Default is "term".}
 
-\item{rate_range}{Numeric \code{vector} of length 2. Range for overall rate}
+\item{rate_range}{Numeric \code{vector} of length 2. Range for overall rate display}
 
-\item{diff_range}{Numeric \code{vector} of length 2. Range for rate difference}
+\item{diff_range}{Numeric \code{vector} of length 2. Range for rate difference display}
 
-\item{reversed}{\code{logical} whether to sort_by on reversed variable. Default is FALSE.}
+\item{reversed}{\code{logical} whether to reverse the sorting by \code{sort_by}.
+Default is FALSE.}
 
 \item{conf_level}{\code{numeric} The confidence interval level, default is 0.95.}
 
-\item{ci_method}{\code{character} The method used to calculate confidence interval. Defalt is "wald".
-Possible choices are methods supported in `DescTools::BinomDiffCI`.}
+\item{diff_ci_method}{\code{character} The method used to calculate confidence interval.
+Defalt is "wald". Possible choices are methods supported in \code{DescTools::BinomDiffCI}.}
 
 \item{axis_side}{\code{character} the side of the axis label, "left" or "right". Default is "left".}
 
-\item{color}{Color for the plot. \code{vector} of length 2. Color for arms seperately.
-Default set to c("red", "blue")}
+\item{color}{Color for the plot. \code{vector} of length 2. Color for reference and
+treatment arms respectively. Default set to c("blue", "red").}
 
-\item{shape}{Shape for the plot. \code{vector} of length 2. Shape for arms seperately.
-Default set to c(16, 17).}
+\item{shape}{Shape for the plot. \code{vector} of length 2. Shape for reference and
+treatment arms respectively. Default set to c(16, 17).}
 
-\item{fontsize}{\code{numeric} font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
-want "points" you will need to devide the point number by "ggplot2:::.pt"}
+\item{fontsize}{\code{numeric} font size for the plot. It is the size used in ggplot2 with
+default unit "mm", if you want "points" you will need to devide the point number by "ggplot2:::.pt"}
 
 \item{draw}{\code{logical} whether to draw the Plot.}
 }
@@ -72,59 +79,82 @@ grob object
 }
 \description{
 This function plots commonly occurred events by number of unique subjects with events.
-It creates basic summary of events and compares event occurrences between treatment and reference
-arms, and can be used for events data such as Adverse Events.
+It creates basic summary of events and compares event occurrences between comparison
+and reference arms, and can be used for events data such as Adverse Events.
 }
 \details{
 there is no equivalent STREAM output
 }
 \examples{
-library(osprey)
 library(random.cdisc.data)
+library(osprey)
 
-ADSL <- cadsl
-ADAE <- cadae
+ADSL <- radsl(cached = TRUE)
+ADAE <- radae(cached = TRUE)
 
-adae_labels <- var_labels(ADAE)
-adae_labels <- c(adae_labels,
-                "Serious AE related to A: Drug X",
-                "Serious AE related to B: Placebo")
-
-# add AEACN to ADAE
-AEACN <- sample(c("DOSE NOT CHANGED",
-                  "DOSE INTERRUPTED",
-                  "DOSE INCREASED",
-                  "DOSE REDUCED",
-                  "DRUG WITHDRAWN"),
-                nrow(ADAE),
-                replace = TRUE)
-# add AESDTH to ADAE
-AESDTH <- sample(c("Y", "N"),
-                 nrow(ADAE),
-                 replace = TRUE)
-
+# add additional dummy causality flags
 ADAE <- ADAE \%>\%
-             # additional flag variable
-             mutate(AEREL1 = (AEREL == "Y" &
-                              ADAE$ACTARM == "A: Drug X")) \%>\%
-             mutate(AEREL2 = (AEREL == "Y" &
-                              ADAE$ACTARM == "B: Placebo"))
-var_labels(ADAE) <- adae_labels
+  mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) \%>\%
+  mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo")) \%>\%
+  rtables::var_relabel(
+    AEREL1 = "AE related to A: Drug X",
+    AEREL2 = "AE related to B: Placebo"
+  )
 
-term <- as.character(ADAE$AEDECOD)
+term <- ADAE$AEDECOD
 id <- ADAE$USUBJID
-arm <- as.character(ADAE$ACTARMCD)
-arm_sl <- as.character(ADSL$ACTARMCD)
-trt <- "ARM A"
-ref <- "ARM B"
-g_events_term_id(term, id, arm, arm_sl, sort_by = "riskdiff")
-g_events_term_id(term, id, arm, arm_sl, sort_by = "term", reversed = FALSE)
-g_events_term_id(term, id, arm, arm_sl, sort_by = "meanrisk",
-                 reversed = FALSE, axis_side = "right")
-g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
+arm <- ADAE$ACTARMCD
+arm_N <- table(ADSL$ACTARMCD)
+ref <- "ARM A"
+trt <- "ARM C"
+# Example 1
+p1 <- g_events_term_id(
+  term,
+  id,
+  arm,
+  arm_N
+)
+grid.newpage()
+grid.draw(p1)
 
+# Example 2
+p2 <- g_events_term_id(
+  term,
+  id,
+  arm,
+  arm_N,
+  trt = trt,
+  ref = ref,
+  sort_by = "riskdiff",
+  diff_ci_method = "ac",
+  conf_level = 0.9
+)
+grid.newpage()
+grid.draw(p2)
+
+# Example 3
+p3 <- g_events_term_id(
+  term,
+  id,
+  arm,
+  arm_N,
+  sort_by = "meanrisk",
+  axis_side = "right",
+  fontsize = 5
+)
+grid.newpage()
+grid.draw(p3)
+
+# Example 4
 term <- create_flag_vars(ADAE)
-g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 4)
+g_events_term_id(
+  term,
+  id,
+  arm,
+  arm_N,
+  fontsize = 3
+)
+
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}

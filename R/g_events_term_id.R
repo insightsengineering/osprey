@@ -1,33 +1,40 @@
-#' Common Events Plot
+#' Events by Term Plot
 #'
 #' This function plots commonly occurred events by number of unique subjects with events.
-#' It creates basic summary of events and compares event occurrences between treatment and reference
-#' arms, and can be used for events data such as Adverse Events.
+#' It creates basic summary of events and compares event occurrences between comparison
+#' and reference arms, and can be used for events data such as Adverse Events.
 #'
 #' @param term \code{character} or \code{factor} vector, or \code{data.frame} \cr
 #' Represents events information. \code{term} can be a \code{data.frame} produced
-#'  by \code{create_flag_vars}, with each column being a \code{logical} event indicator
-#' @param id \code{vector} contains subject identifier. Length of \code{id} must be the same as
-#'  the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.
-#' @param arm \code{character} vector contains arm informatiion. For example, \code{ACTARMCD}.
-#' @param arm_sl \code{character} vector contains subject level arm vector. For example, \code{ADSL$ACTARMCD}.
-#' @param trt \code{character} indicates the name of the treatment arm
-#' @param ref \code{character} indicates the name of the reference arm
-#' @param sort_by \code{character} indicates sort_by type. Choose from "term", "riskdiff"
-#' and "meanrisk". Default is "term".
-#' @param rate_range Numeric \code{vector} of length 2. Range for overall rate
-#' @param diff_range Numeric \code{vector} of length 2. Range for rate difference
-#' @param reversed \code{logical} whether to sort_by on reversed variable. Default is FALSE.
+#' by \code{create_flag_vars}, with each column being a \code{logical} event indicator
+#' @param id \code{vector} contains subject identifier. Length of \code{id} must be the
+#' same as the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.
+#' @param arm \code{factor} vector that contains arm informatiion in analysis data.
+#' For example, \code{ADAE$ACTARMCD}.
+#' @param arm_N (\code{numeric} vector)\cr
+#' Contains information of the number of patients in the levels of \code{arm}. This is useful
+#' if there are patients that have no adverse events can be accounted for with this argument.
+#' @param ref \code{character} indicates the name of the reference arm. Default is the first
+#' level of \code{arm}.
+#' @param trt \code{character} indicates the name of the treatment arm. Default is the second
+#' level of \code{arm}.
+#' @param sort_by \code{character} indicates how each \code{term} is sorted in the plot.
+#' Choose from "term" for alphabetic terms, "riskdiff" for risk difference, and "meanrisk"
+#' for mean risk. Default is "term".
+#' @param rate_range Numeric \code{vector} of length 2. Range for overall rate display
+#' @param diff_range Numeric \code{vector} of length 2. Range for rate difference display
+#' @param reversed \code{logical} whether to reverse the sorting by \code{sort_by}.
+#' Default is FALSE.
 #' @param conf_level \code{numeric} The confidence interval level, default is 0.95.
-#' @param ci_method \code{character} The method used to calculate confidence interval. Defalt is "wald".
-#' Possible choices are methods supported in `DescTools::BinomDiffCI`.
+#' @param diff_ci_method \code{character} The method used to calculate confidence interval.
+#' Defalt is "wald". Possible choices are methods supported in \code{DescTools::BinomDiffCI}.
 #' @param axis_side \code{character} the side of the axis label, "left" or "right". Default is "left".
-#' @param color Color for the plot. \code{vector} of length 2. Color for arms seperately.
-#' Default set to c("red", "blue")
-#' @param shape Shape for the plot. \code{vector} of length 2. Shape for arms seperately.
-#' Default set to c(16, 17).
-#' @param fontsize \code{numeric} font size for the plot. It is the size used in ggplot2 with default unit "mm", if you
-#' want "points" you will need to devide the point number by "ggplot2:::.pt"
+#' @param color Color for the plot. \code{vector} of length 2. Color for reference and
+#' treatment arms respectively. Default set to c("blue", "red").
+#' @param shape Shape for the plot. \code{vector} of length 2. Shape for reference and
+#' treatment arms respectively. Default set to c(16, 17).
+#' @param fontsize \code{numeric} font size for the plot. It is the size used in ggplot2 with
+#' default unit "mm", if you want "points" you will need to devide the point number by "ggplot2:::.pt"
 #' @param draw \code{logical} whether to draw the Plot.
 #' @details there is no equivalent STREAM output
 #'
@@ -46,77 +53,100 @@
 #' @author Molly He (hey59) \email{hey59@gene.com}
 #'
 #' @examples
-#' library(osprey)
 #' library(random.cdisc.data)
+#' library(osprey)
 #'
-#' ADSL <- cadsl
-#' ADAE <- cadae
+#' ADSL <- radsl(cached = TRUE)
+#' ADAE <- radae(cached = TRUE)
 #'
-#' adae_labels <- var_labels(ADAE)
-#' adae_labels <- c(adae_labels,
-#'                 "Serious AE related to A: Drug X",
-#'                 "Serious AE related to B: Placebo")
-#'
-#' # add AEACN to ADAE
-#' AEACN <- sample(c("DOSE NOT CHANGED",
-#'                   "DOSE INTERRUPTED",
-#'                   "DOSE INCREASED",
-#'                   "DOSE REDUCED",
-#'                   "DRUG WITHDRAWN"),
-#'                 nrow(ADAE),
-#'                 replace = TRUE)
-#' # add AESDTH to ADAE
-#' AESDTH <- sample(c("Y", "N"),
-#'                  nrow(ADAE),
-#'                  replace = TRUE)
-#'
+#' # add additional dummy causality flags
 #' ADAE <- ADAE %>%
-#'              # additional flag variable
-#'              mutate(AEREL1 = (AEREL == "Y" &
-#'                               ADAE$ACTARM == "A: Drug X")) %>%
-#'              mutate(AEREL2 = (AEREL == "Y" &
-#'                               ADAE$ACTARM == "B: Placebo"))
-#' var_labels(ADAE) <- adae_labels
+#'   mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) %>%
+#'   mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo")) %>%
+#'   rtables::var_relabel(
+#'     AEREL1 = "AE related to A: Drug X",
+#'     AEREL2 = "AE related to B: Placebo"
+#'   )
 #'
-#' term <- as.character(ADAE$AEDECOD)
+#' term <- ADAE$AEDECOD
 #' id <- ADAE$USUBJID
-#' arm <- as.character(ADAE$ACTARMCD)
-#' arm_sl <- as.character(ADSL$ACTARMCD)
-#' trt <- "ARM A"
-#' ref <- "ARM B"
-#' g_events_term_id(term, id, arm, arm_sl, sort_by = "riskdiff")
-#' g_events_term_id(term, id, arm, arm_sl, sort_by = "term", reversed = FALSE)
-#' g_events_term_id(term, id, arm, arm_sl, sort_by = "meanrisk",
-#'                  reversed = FALSE, axis_side = "right")
-#' g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 6)
+#' arm <- ADAE$ACTARMCD
+#' arm_N <- table(ADSL$ACTARMCD)
+#' ref <- "ARM A"
+#' trt <- "ARM C"
+#' # Example 1
+#' p1 <- g_events_term_id(
+#'   term,
+#'   id,
+#'   arm,
+#'   arm_N
+#' )
+#' grid.newpage()
+#' grid.draw(p1)
 #'
+#' # Example 2
+#' p2 <- g_events_term_id(
+#'   term,
+#'   id,
+#'   arm,
+#'   arm_N,
+#'   trt = trt,
+#'   ref = ref,
+#'   sort_by = "riskdiff",
+#'   diff_ci_method = "ac",
+#'   conf_level = 0.9
+#' )
+#' grid.newpage()
+#' grid.draw(p2)
+#'
+#' # Example 3
+#' p3 <- g_events_term_id(
+#'   term,
+#'   id,
+#'   arm,
+#'   arm_N,
+#'   sort_by = "meanrisk",
+#'   axis_side = "right",
+#'   fontsize = 5
+#' )
+#' grid.newpage()
+#' grid.draw(p3)
+#'
+#' # Example 4
 #' term <- create_flag_vars(ADAE)
-#' g_events_term_id(term, id, arm, arm_sl, conf_level = 0.9, fontsize = 4)
+#' g_events_term_id(
+#'   term,
+#'   id,
+#'   arm,
+#'   arm_N,
+#'   fontsize = 3
+#' )
+#'
 g_events_term_id <- function(term,
                              id,
                              arm,
-                             arm_sl,
-                             trt = unique(arm)[1],
-                             ref = unique(arm)[2],
-                             sort_by = "term",
+                             arm_N, # nolint
+                             ref = levels(arm)[1],
+                             trt = levels(arm)[2],
+                             sort_by = c("term", "riskdiff", "meanrisk"),
                              rate_range = c(0, 1),
                              diff_range = c(-1, 1),
                              reversed = FALSE,
                              conf_level = 0.95,
-                             ci_method = "wald",
-                             axis_side = "left",
-                             color = c("red", "blue"),
+                             diff_ci_method = "wald",
+                             axis_side = c("left", "right"),
+                             color = c("blue", "red"),
                              shape = c(16, 17),
                              fontsize = 4,
                              draw = TRUE) {
   # check issues
   `.` <-
-    `.N` <- #nolint
+    `.N` <- # nolint
     total <-
     trt_count <-
     ref_count <-
     riskdiff <-
-    meanrisk <- risk <- upper_ci <- lower_ci <- NULL #nolint
+    meanrisk <- risk <- upper_ci <- lower_ci <- NULL # nolint
   if (is.data.frame(term)) {
     term_levels <- factor(colnames(term), levels = rev(colnames(term)))
     term <- data.table::transpose(term)
@@ -125,6 +155,8 @@ g_events_term_id <- function(term,
     })
   }
   # argument validation
+  sort_by <- match.arg(sort_by)
+  axis_side <- match.arg(axis_side)
   possible_sort <- c("term", "riskdiff", "meanrisk")
   possible_axis <- c("left", "right")
   term <- force(term)
@@ -133,20 +165,18 @@ g_events_term_id <- function(term,
     list(!is_empty(id), "missing argument: id must be specified"),
     list(!is_empty(arm), "missing argument: arm must be specified"),
     list(
-      !is_empty(arm_sl),
-      "missing argument: arm_sl must be specified"
+      is.factor(arm) & nlevels(arm) >= 2,
+      "arm needs to be a factor with more than 2 levels"
     ),
-
+    list(
+      !is_empty(arm_N),
+      "missing argument: arm_N must be specified"
+    ),
     list(
       length(unique(vapply(
         list(id, term, arm), length, integer(1)
       ))) == 1,
       "invalid arguments: check that the length of id, term and arm are identical"
-    ),
-
-    list(
-      is_character_vector(arm_sl, min_length = 2),
-      "invalid argument: check that arm_sl is a character vector with length >= 2"
     ),
     list(
       all(c(trt, ref) %in% unique(arm)),
@@ -173,8 +203,8 @@ g_events_term_id <- function(term,
       "invalid argument: reversed should be a TRUE or FALSE"
     ),
     list(
-      is_character_single(ci_method) &
-        ci_method %in% c(
+      is_character_single(diff_ci_method) &
+        diff_ci_method %in% c(
           "wald",
           "waldcc",
           "ac",
@@ -185,7 +215,7 @@ g_events_term_id <- function(term,
           "blj",
           "ha"
         ),
-      "invalid argument: ci_method should be a method supported by `DescTools::BinomDiffCI`"
+      "invalid argument: diff_ci_method should be a method supported by `DescTools::BinomDiffCI`"
     ),
     list(
       is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
@@ -205,27 +235,26 @@ g_events_term_id <- function(term,
     )
   )
 
-  arms <- c(trt, ref)
-  df_n <- data.table(arm = arm_sl)[arm %in% arms,
-                                   .(total = .N),
-                                   by = .(arm)]
-  trt_total <- df_n[arm == trt, total] #nolint
-  ref_total <- df_n[arm == ref, total] #nolint
-  df <-
-    data.table(id, arm, term)[, list(term = as.character(unlist(term))),
-                              by = .(arm, id)]
+  # construct calculations
+  arms <- c(ref, trt)
+  df_n <- data.table(arm_N)
+  names(df_n) <- c("arm", "total")
+  df_n <- df_n[df_n$arm %in% arms, ]
+  ref_total <- df_n[arm == ref, total] # nolint
+  trt_total <- df_n[arm == trt, total] # nolint
+  df <- data.table(id, arm, term)[, list(term = as.character(unlist(term))),
+                                  by = .(arm, id)]
   df <- unique(df)[arm %in% arms,
                    .N,
                    by = .(arm, term)]
   df[, arm := ifelse(arm == trt, "trt_count", "ref_count")]
-  df <-
-    dcast(
-      df,
-      term ~ arm,
-      value.var = c("N"),
-      drop = FALSE,
-      fill = 0
-    )
+  df <- dcast(
+    df,
+    term ~ arm,
+    value.var = c("N"),
+    drop = FALSE,
+    fill = 0
+  )
 
   df[, `:=`(trt_total = trt_total, ref_total = ref_total)]
 
@@ -237,7 +266,7 @@ g_events_term_id <- function(term,
         ref_count,
         ref_total,
         conf_level,
-        method = ci_method
+        method = diff_ci_method
       )[1, ],
       (trt_count + ref_count) / (trt_total + ref_total)
     ),
@@ -251,11 +280,10 @@ g_events_term_id <- function(term,
   names(color) <- arms
   names(shape) <- arms
 
+  # if diff_range specified, limit terms
   terms_needed <- unique(df_ci[(riskdiff > diff_range[1] &
                                   riskdiff < diff_range[2]) &
-                                 (meanrisk > rate_range[1] &
-                                    meanrisk < rate_range[2]),
-                               term])
+                                 (meanrisk > rate_range[1] & meanrisk < rate_range[2]), term])
 
   if (length(terms_needed) == 0) {
     ret <- textGrob("All Observations are filtered out")
@@ -264,13 +292,13 @@ g_events_term_id <- function(term,
     }
     return(invisible(ret))
   }
+
+  # sorting
   if (sort_by == "term") {
     terms_needed <- sort(terms_needed, decreasing = TRUE)
   } else {
     terms_needed <-
-      df_ci[order(df_ci[[sort_by]],
-                  decreasing = FALSE)][term %in% terms_needed,
-                                       term]
+      df_ci[order(df_ci[[sort_by]], decreasing = FALSE)][term %in% terms_needed, term]
   }
 
   if (reversed) {
@@ -288,11 +316,9 @@ g_events_term_id <- function(term,
     collapse = "\n"
   )
 
-  mytheme <-
-    theme_osprey(axis_side = axis_side, fontsize = fontsize)
+  mytheme <- theme_osprey(axis_side = axis_side, fontsize = fontsize)
 
-  labels <-
-    setNames(df_n[, sprintf("%s\n(N = %i)", arm, total)], df_n$arm)
+  labels <- setNames(df_n[, sprintf("%s\n(N = %i)", arm, total)], df_n$arm)
 
   y_axis <-
     scale_y_discrete(
@@ -330,10 +356,9 @@ g_events_term_id <- function(term,
     ggtitle("Risk Difference")
 
   axis_name <- sprintf("axis-%s", substr(axis_side, 1, 1))
+
   p1_parts <- ggplotGrob(p1)
-
   p2_parts <- ggplotGrob(p2)
-
 
   mylegend <- grob_part(grob_part(p1_parts, "guide-box"), "guides")
   axis <- grob_part(p1_parts, axis_name)
@@ -385,13 +410,13 @@ g_events_term_id <- function(term,
                           c("null", "pt", "null")),
                      grobWidth(axis))
   }
-  heights <-
-    unit.c(
-      grobHeight(title1),
-      unit(1, "null"),
-      grobHeight(axis_b1),
-      max(grobHeight(mylegend), grobHeight(more_risk))
-    )
+
+  heights <- unit.c(
+    grobHeight(title1),
+    unit(1, "null"),
+    grobHeight(axis_b1),
+    max(grobHeight(mylegend), grobHeight(more_risk))
+  )
 
   ret <- arrangeGrob(
     grobs = grobs,
@@ -403,6 +428,7 @@ g_events_term_id <- function(term,
   )
 
   ret <- grob_add_padding(ret)
+
   if (draw) {
     grid.draw(ret)
   }
@@ -410,9 +436,8 @@ g_events_term_id <- function(term,
 }
 
 
-#' default ae overview flags
-#' @importFrom data.table data.table as.data.table
-#' @param df data frame of ae. use default
+#' create AE overview flags
+#' @param df data frame of AE
 #' @param fatal AE with fatal outcome derivation
 #' @param serious Serious AE derivation.
 #' @param serious_withdrawl Serious AE leading to withdrawal derivation
@@ -423,74 +448,50 @@ g_events_term_id <- function(term,
 #' @param related Related AE derivation
 #' @param related_withdrawl Related AE leading to withdrawal derivation
 #' @param related_modified Related AE leading to dose modification derivation
-#' @param grade3 Grade 3-5 AE derivation
+#' @param ctc35 Grade 3-5 AE derivation
 #' @param ... named expressions used to generate categories
+#' @importFrom data.table data.table as.data.table
 #' @details in this function, all flags are expressions calls, for simpler usage.
 #' @export
 #' @examples
 #' library(random.cdisc.data)
-#' ADAE <- cadae
-#' adae_labels <- var_labels(ADAE)
-#' adae_labels <- c(adae_labels,
-#'                 "Serious AE related to A: Drug X",
-#'                 "Serious AE related to B: Placebo")
+#' ADAE <- radae(cached = TRUE)
 #'
-#' # add AEACN to ADAE
-#' AEACN <- sample(c("DOSE NOT CHANGED",
-#'                   "DOSE INTERRUPTED",
-#'                   "DOSE INCREASED",
-#'                   "DOSE REDUCED",
-#'                   "DRUG WITHDRAWN"),
-#'                 nrow(ADAE),
-#'                 replace = TRUE)
-#' # add AESDTH to ADAE
-#' AESDTH <- sample(c("Y", "N"),
-#'                  nrow(ADAE),
-#'                  replace = TRUE)
-#'
+#' # add additional dummy causality flags
 #' ADAE <- ADAE %>%
-#'              # additional flag variable
-#'              mutate(AEREL1 = (AEREL == "Y" &
-#'                               ADAE$ACTARM == "A: Drug X")) %>%
-#'              mutate(AEREL2 = (AEREL == "Y" &
-#'                               ADAE$ACTARM == "B: Placebo"))
-#' var_labels(ADAE) <- adae_labels
+#'   mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) %>%
+#'   mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo")) %>%
+#'   rtables::var_relabel(
+#'     AEREL1 = "AE related to A: Drug X",
+#'     AEREL2 = "AE related to B: Placebo"
+#'   )
+#'
 #' create_flag_vars(ADAE)
-#' create_flag_vars(ADAE, `AENSER` = AESER != "Y") # create other flags
-#' create_flag_vars(ADAE, fatal = NULL) # remove not needed flags
+#' # create other flags
+#' create_flag_vars(ADAE, `AENSER` = AESER != "Y")
+#' # remove flags that are not needed
+#' create_flag_vars(ADAE, fatal = NULL)
+#'
 create_flag_vars <- function(df,
+                             # nolint start
                              fatal = AESDTH == "Y",
-                             #nolint
                              serious = AESER == "Y",
-                             #nolint
                              serious_withdrawl = AESER == "Y" &
                                grepl("DRUG WITHDRAWN", AEACN),
-                             #nolint
                              serious_modified = AESER == "Y" &
-                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
-                                     AEACN),
-                             #nolint
-                             serious_related = AESER == "Y" &
-                               AEREL == "Y",
-                             #nolint
+                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
+                             serious_related = AESER == "Y" & AEREL == "Y",
                              withdrawl = grepl("DRUG WITHDRAWN", AEACN),
-                             #nolint
-                             modified = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
-                                              AEACN),
-                             #nolint
+                             modified = grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
                              related = AEREL == "Y",
-                             #nolint
-                             related_withdrawl = AEREL == "Y" &
-                               grepl("DRUG WITHDRAWN", AEACN),
-                             #nolint
+                             related_withdrawl = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),
                              related_modified = AEREL == "Y" &
                                grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
                                      AEACN),
-                             #nolint
-                             grade3 = AETOXGR %in% c("3", "4", "5"),
-                             #nolint
+                             ctc35 = AETOXGR %in% c("3", "4", "5"),
+                             # nolint end
                              ...) {
-  AESDTH <- AESER <- AEACN <- AEREL <- AETOXGR <- NULL #nolint
+  AESDTH <- AESER <- AEACN <- AEREL <- AETOXGR <- NULL # nolint
   args <-
     eval(substitute(
       alist(
@@ -504,7 +505,7 @@ create_flag_vars <- function(df,
         "Related AE" = related,
         "Related AE leading to withdrawal" = related_withdrawl,
         "Related AE leading to dose modification" = related_modified,
-        "Grade 3-5 AE" = grade3
+        "Grade 3-5 AE" = ctc35
       )
     ))
   args <- c(args, eval(substitute(alist(...))))
@@ -537,6 +538,5 @@ create_flag_vars <- function(df,
   do.call(data.table, args = ret[valid])
 }
 
-
 #' allow data.table in pacakge
-.datatable.aware <- TRUE #nolint
+.datatable.aware <- TRUE # nolint
