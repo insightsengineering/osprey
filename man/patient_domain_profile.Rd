@@ -29,9 +29,11 @@ patient_domain_profile(
 
 \item{var_names}{character vector to identify each lane}
 
-\item{marker_pos}{marker position, which needs to be a numeric vector for \code{ADEX}, \code{ADLB}
-or \code{ADRS} for duration marker position, or a numeric data frame with two columns for
-\code{ADAE} or \code{ADCM} for start and end time marker position}
+\item{marker_pos}{\itemize{
+\item marker position numeric vector for domains \code{ADEX}, \code{ADLB}, and \code{ADRS}
+\item numeric data frame with two columns, start and end time marker position,
+for domains \code{ADAE} and \code{ADCM}
+}}
 
 \item{arrow_end}{numeric value indicates the end of arrow when arrows are requested}
 

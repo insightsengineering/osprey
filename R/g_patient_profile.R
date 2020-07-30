@@ -8,9 +8,12 @@
 #' @param domain string of domain name to be shown as y-axis label, default is \code{NULL}
 #' (no y-axis label shown)
 #' @param var_names character vector to identify each lane
-#' @param marker_pos marker position, which needs to be a numeric vector for \code{ADEX}, \code{ADLB}
-#' or \code{ADRS} for duration marker position, or a numeric data frame with two columns for
-#' \code{ADAE} or \code{ADCM} for start and end time marker position
+#' @param marker_pos
+#' \itemize{
+#' \item marker position numeric vector for domains \code{ADEX}, \code{ADLB}, and \code{ADRS}
+#' \item numeric data frame with two columns, start and end time marker position,
+#' for domains \code{ADAE} and \code{ADCM}
+#' }
 #' @param arrow_end numeric value indicates the end of arrow when arrows are requested
 #' @param xtick_at optional break interval of bar length axis
 #' @param line_col_list a list may contain \cr
