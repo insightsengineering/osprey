@@ -10,18 +10,12 @@ patient_domain_profile(
   marker_pos,
   arrow_end,
   xtick_at = waiver(),
-  line_col = NULL,
-  line_col_legend = NULL,
-  line_col_opt = NULL,
+  line_col_list = NULL,
   line_width = 1,
   arrow_size = 0.1,
   no_enddate_extention = 0,
-  marker_color = NULL,
-  marker_color_opt = NULL,
-  marker_color_legend = NULL,
-  marker_shape = NULL,
-  marker_shape_opt = NULL,
-  marker_shape_legend = NULL,
+  marker_col_list = NULL,
+  marker_shape_list = NULL,
   show_days_label = TRUE,
   xlim = c(-28, max(marker_pos) + 5),
   xlab = NULL,
@@ -30,66 +24,78 @@ patient_domain_profile(
 )
 }
 \arguments{
-\item{domain}{string of domain name to be shown as y-axis label, default is \code{NULL}}
+\item{domain}{string of domain name to be shown as y-axis label, default is \code{NULL}
+(no y-axis label shown)}
 
-\item{var_names}{vector to identify each lane}
+\item{var_names}{character vector to identify each lane}
 
-\item{marker_pos}{numeric vector for EX, LB and RS domain, numeric data frame with two columns for AE or CM domain}
+\item{marker_pos}{marker position, which needs to be a numeric vector for \code{ADEX}, \code{ADLB}
+or \code{ADRS} for duration marker position, or a numeric data frame with two columns for
+\code{ADAE} or \code{ADCM} for start and end time marker position}
 
 \item{arrow_end}{numeric value indicates the end of arrow when arrows are requested}
 
 \item{xtick_at}{optional break interval of bar length axis}
 
-\item{line_col}{factor vector to specify color for segments, default is \code{NULL}}
-
-\item{line_col_legend}{string to be displayed as line color legend title, default is \code{NULL}}
-
-\item{line_col_opt}{aesthetic values to map color values (named vector to map color values to each name).
-If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
-otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified}
+\item{line_col_list}{a list may contain \cr
+\itemize{
+\item \code{line_col}: factor vector to specify color for segments , default is \code{NULL}
+(no line color is specified)\cr
+\item \code{line_col_opt} aesthetic values to map color values (named vector to map color values to each name).
+     If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
+     otherwise color will be assigned by \code{\link{ggplot}} default
+\item \code{line_col_legend}: a string to be displayed as line color legend title when \code{line_col} is specified,
+ default is \code{NULL} (no legend title is displayed)
+}}
 
 \item{line_width}{numeric value for segment width, default is \code{line_width = 1}}
 
 \item{arrow_size}{numeric value for arrow size, default is \code{arrow_size = 0.1}}
 
-\item{no_enddate_extention}{numeric value for extending the arrow when end date is missing for AE or CM domain,
-default is \code{no_enddate_extention = 0}}
+\item{no_enddate_extention}{numeric value for extending the arrow when end date is missing for \code{ADAE}
+or \code{ADCM} domain. Default is \code{no_enddate_extention = 0}.}
 
-\item{marker_color}{factor vector to specify color for markers, default is \code{NULL}}
+\item{marker_col_list}{a list may contain \cr
+\itemize{
+\item \code{marker_col} a factor vector to specify color for markers,
+default is \code{NULL} (no color markers is specified)
+\item \code{marker_col_opt} aesthetic values to map color values (named vector to map color values to each name)
+     If not \code{NULL}, please make sure this contains all posible values for \code{marker_col} values,
+     otherwise color will be assigned by \code{ggplot} default
+\item \code{marker_col_legend} a string to be displayed as marker color legend title, default is \code{NULL}
+(no legend title is displayed)
+}}
 
-\item{marker_color_opt}{aesthetic values to map color values (named vector to map color values to each name).
-If not \code{NULL}, please make sure this contains all posible values for \code{marker_color} values,
-otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified}
-
-\item{marker_color_legend}{string to be displayed as marker color legend title, default is \code{NULL}}
-
-\item{marker_shape}{factor vector to specify shape for markers, default is \code{NULL}}
-
-\item{marker_shape_opt}{aesthetic values to map shape values (named vector to map shape values to each name).
-If not \code{NULL}, please make sure this contains all posible values for \code{marker_shape} values,
-otherwise shape will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be specified}
-
-\item{marker_shape_legend}{string to be displayed as marker shape legend title, default is \code{NULL}}
+\item{marker_shape_list}{a list may contain \cr
+\itemize{
+\item \code{marker_shape} factor vector to specify shape for markers,
+default is \code{NULL} (no shape marker is specified)
+\item  \code{marker_shape_opt} aesthetic values to map shape values (named vector to map shape values to each name).
+     If not \code{NULL}, please make sure this contains all posible values for \code{marker_shape} values,
+     otherwise shape will be assigned by \code{ggplot} default
+\item \code{marker_shape_legend} string to be displayed as marker shape legend title, default is \code{NULL}
+(no legend title is displayed)
+}}
 
 \item{show_days_label}{boolean value for showing y-axis label, default is \code{TRUE}}
 
 \item{xlim}{numeric vector for x-axis limit, default is
 \code{xlim = c(-28, max(marker_pos) + 5)}}
 
-\item{xlab}{string to be shown as x-axis label, default is \code{"Study Days"}}
+\item{xlab}{string to be shown as x-axis label, default is \code{"Study Day"}}
 
 \item{show_title}{boolean value for showing title of the plot, default is \code{TRUE}}
 
-\item{title}{string to be shown as title of the plot, default is \code{NULL}}
+\item{title}{string to be shown as title of the plot, default is \code{NULL} (no plot title is depalyed)}
 }
 \value{
 plot object
 }
 \description{
-Patient domian profile provides information for a specific subject participated in the study.
+Patient domain profile provides information for a specific subject that participated in the study.
 The plot includes relevant data for one subject in a user specified domain, including
-adverse events (ADAE), tumor response (ADRS), concomitant medications (ADCM),
-exposures (ADEX), labs (ADLB).
+adverse events (\code{ADAE}), response (\code{ADRS}), concomitant medications
+(\code{ADCM}), exposure (\code{ADEX}), and laboratory (\code{ADLB}).
 }
 \examples{
 library(random.cdisc.data)
@@ -101,27 +107,63 @@ library(dplyr)
 rADSL <- radsl(cached = TRUE)
 ADSL <-  rADSL \%>\%
   group_by(USUBJID) \%>\%
-  mutate(TRTSDT = as.Date(TRTSDTM),
-         max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
-         max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) \%>\%
+  mutate(
+    TRTSDT = as.Date(TRTSDTM),
+    max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
+    max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) \%>\%
   select(USUBJID, STUDYID, TRTSDT , max_day) \%>\%
   filter(USUBJID == rADSL$USUBJID[1])
 
-# Exposure ADEX
+
+# Example 1 Exposure "ADEX"
 rADEX <- radex(cached = TRUE)
 ADEX <- rADEX \%>\%
         select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
-
 ADEX <- ADEX \%>\%
   filter(PARAMCD == "DOSE") \%>\%
   arrange(PARCAT2, PARAMCD) \%>\%
   mutate(diff = c(0, diff(AVAL, lag = 1))) \%>\%
-  mutate(Modification = case_when(diff < 0 ~ "Decrease",
-                                  diff > 0 ~ "Increase",
-                                  diff == 0 ~ "None")) \%>\%
-  mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
-                                as.Date(TRTSDT) + 1))
+  mutate(
+    Modification = case_when(diff < 0 ~ "Decrease",
+    diff > 0 ~ "Increase",
+    diff == 0 ~ "None")) \%>\%
+  mutate(
+    ASTDT_dur = as.numeric(
+      as.Date(
+        substr(as.character(ASTDTM), 1, 10)) - as.Date(TRTSDT) + 1))
+
+p1 <-
+  patient_domain_profile(
+    domain = "Exposure (ADEX)",
+    var_names = ADEX$PARCAT2,
+    marker_pos = ADEX$ASTDT_dur,
+    arrow_end = ADSL$max_day,
+    xtick_at = waiver(),
+    line_col_list = NULL,
+    line_width = 1,
+    arrow_size = 0.1,
+    no_enddate_extention = 0,
+    marker_col_list = list(
+      marker_col = factor(ADEX$Modification),
+      marker_col_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
+      marker_col_legend = NULL
+      ),
+    marker_shape_list = list(
+      marker_shape = factor(ADEX$Modification),
+      marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
+      marker_shape_legend = "Dose Modification"
+      ),
+    show_days_label = TRUE,
+    xlim = c(-28, ADSL$max_day),
+    xlab = "Study Day",
+    title = paste("Patient Profile: ", ADSL$USUBJID)
+    )
+p1
+
+# Example 2 Adverse Event "ADAE"
+# Note that ASTDY is represented by a circle and AENDY is represented by a square.
+# If AENDY and ASTDY occur on the same day only AENDY will be shown.
 
 # Adverse Event ADAE
 rADAE <- radae(cached = TRUE)
@@ -129,158 +171,139 @@ ADAE <- rADAE \%>\%
         select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
-# Tumor Response ADRS
+p2 <-
+  patient_domain_profile(
+    domain = "Adverse Event (ADAE)",
+    var_names = ADAE$AEDECOD,
+    marker_pos = ADAE[, c("ASTDY", "AENDY")],
+    arrow_end = ADSL$max_day,
+    xtick_at = waiver(),
+    line_col_list = list(
+      line_col = ADAE$AESER,
+      line_col_legend = "Serious",
+      line_col_opt = c("blue","green")
+    ),
+    line_width = 1,
+    arrow_size = 0.1,
+    no_enddate_extention = 0,
+    marker_col_list = list(
+      marker_col = factor(ADAE$AETOXGR),
+      marker_col_opt =  c("3" = "yellow", "4" = "red"),
+      marker_col_legend = NULL
+    ),
+    marker_shape_list = list(
+      marker_shape = NULL,
+      marker_shape_opt = NULL,
+      marker_shape_legend = "Grade"
+    ),
+    show_days_label = TRUE,
+    xlim = c(-28, ADSL$max_day),
+    xlab = "Study Day",
+    title = paste("Patient Profile: ", ADSL$USUBJID)
+    )
+p2
+
+# Example 3 Tumor Response "ADRS"
 rADRS <- radrs(cached = TRUE)
 ADRS <- rADRS \%>\%
         select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
+p3 <-
+  patient_domain_profile(
+    domain = "Tumor Response (ADRS)",
+    var_names = ADRS$PARAMCD,
+    marker_pos = ADRS$ADY,
+    arrow_end = ADSL$max_day,
+    xtick_at = waiver(),
+    line_col_list = NULL,
+    line_width = 1,
+    arrow_size = 0.1,
+    no_enddate_extention = 0,
+    marker_col_list = list(
+      marker_col = factor(ADRS$AVALC),
+      marker_col_opt =  c("CR" = "green", "PR" = "blue",
+                            "SD" = "yellow", "PD" = "red", "NE" = "pink",
+                            "Y" = "lightblue", "N" = "darkred"),
+      marker_col_legend = NULL
+     ),
+     marker_shape_list = list(
+       marker_shape = factor(ADRS$AVALC),
+       marker_shape_opt = c("CR" = 21, "PR" = 24,
+                            "SD" = 23, "PD" = 22, "NE" = 14,
+                            "Y" = 11, "N" = 8),
+       marker_shape_legend = "Response"
+     ),
+    show_days_label = TRUE,
+    xlim = c(-28, ADSL$max_day),
+    xlab = "Study Day",
+    title = paste("Patient Profile: ", ADSL$USUBJID)
+    )
+p3
 
-# Concomitant Med ADCM
+# Example 4 Concomitant Med "ADCM"
 rADCM <- radcm(cached = TRUE)
 ADCM <- rADCM \%>\%
         select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
+p4 <-
+  patient_domain_profile(
+    domain = "Concomitant Med (ADCM)",
+    var_names = ADCM$CMDECOD,
+    marker_pos = ADCM[, c("ASTDY", "AENDY")],
+    arrow_end = ADSL$max_day,
+    xtick_at = waiver(),
+    line_col_list = list(line_col_opt = "orange"),
+    line_width = 1,
+    arrow_size = 0.1,
+    no_enddate_extention = 50,
+    marker_col_list = list(marker_col_opt = "orange"),
+    marker_shape_list = NULL,
+    show_days_label = TRUE,
+    xlim = c(-28, ADSL$max_day),
+    xlab = "Study Day",
+    title = paste("Patient Profile: ", ADSL$USUBJID)
+    )
+p4
 
-# Laboratory ADLB
+# Example 5 Laboratory "ADLB"
 rADLB <- radlb(cached = TRUE)
 ADLB <- rADLB \%>\%
-        select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
+        select(
+          USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE,
+          ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
 ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 
 ADLB <- ADLB \%>\%
         group_by(USUBJID) \%>\%
         mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
 
-
-# Example 1 "ADEX"
-p1 <- patient_domain_profile(domain = "Exposure (ADEX)",
-                             var_names = ADEX$PARCAT2,
-                             marker_pos = ADEX$ASTDT_dur,
-                             arrow_end = ADSL$max_day,
-                             xtick_at = waiver(),
-                             line_col = NULL,
-                             line_col_legend = NULL,
-                             line_col_opt = NULL,
-                             line_width = 1,
-                             arrow_size = 0.1,
-                             no_enddate_extention = 0,
-                             marker_color = factor(ADEX$Modification),
-                             marker_color_opt =  c("Increase" = "red",
-                             "Decrease" = "green", "None" = "blue"),
-                             marker_color_legend = NULL,
-                             marker_shape = factor(ADEX$Modification),
-                             marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
-                             marker_shape_legend = "Dose Modification",
-                             show_days_label = TRUE,
-                             xlim = c(-28, ADSL$max_day),
-                             xlab = "Study Days",
-                             title = paste("Patient Profile: ", ADSL$USUBJID))
-p1
-
-# Example 2 "ADAE"
-# Note that ASTDY is represented by a circle and AENDY is represented by a square.
-# If AENDY and ASTDY occur on the same day only AENDY will be shown.
-
-p2 <- patient_domain_profile(domain = "Adverse Event (ADAE)",
-                             var_names = ADAE$AEDECOD,
-                             marker_pos = ADAE[, c("ASTDY", "AENDY")],
-                             arrow_end = ADSL$max_day,
-                             xtick_at = waiver(),
-                             line_col = ADAE$AESER,
-                             line_col_legend = "Serious",
-                             line_col_opt = NULL,
-                             line_width = 1,
-                             arrow_size = 0.1,
-                             no_enddate_extention = 0,
-                             marker_color = factor(ADAE$AETOXGR),
-                             marker_color_opt =  c("3" = "yellow", "4" = "red"),
-                             marker_color_legend = NULL,
-                             marker_shape = NULL,
-                             marker_shape_opt = NULL,
-                             marker_shape_legend = "Grade",
-                             show_days_label = TRUE,
-                             xlim = c(-28, ADSL$max_day),
-                             xlab = "Study Days",
-                             title = paste("Patient Profile: ", ADSL$USUBJID))
-
-p2
-
-# Example 3 "ADRS"
-p3 <- patient_domain_profile(domain = "Tumor Response (ADRS)",
-                             var_names = ADRS$PARAMCD,
-                             marker_pos = ADRS$ADY,
-                             arrow_end = ADSL$max_day,
-                             xtick_at = waiver(),
-                             line_col = NULL,
-                             line_col_legend = NULL,
-                             line_col_opt = NULL,
-                             line_width = 1,
-                             arrow_size = 0.1,
-                             no_enddate_extention = 0,
-                             marker_color = factor(ADRS$AVALC),
-                             marker_color_opt =  c("CR" = "green", "PR" = "blue",
-                             "SD" = "yellow", "PD" = "red", "NE" = "pink",
-                             "Y" = "lightblue", "N" = "darkred"),
-                             marker_color_legend = NULL,
-                             marker_shape = factor(ADRS$AVALC),
-                             marker_shape_opt = c("CR" = 21, "PR" = 24,
-                             "SD" = 23, "PD" = 22, "NE" = 14,
-                             "Y" = 11, "N" = 8),
-                            marker_shape_legend = "Response",
-                             show_days_label = TRUE,
-                             xlim = c(-28, ADSL$max_day),
-                             xlab = "Study Days",
-                             title = paste("Patient Profile: ", ADSL$USUBJID))
-p3
-
-# Example 4 "ADCM"
-p4 <- patient_domain_profile(domain = "Concomitant Med (ADCM)",
-                             var_names = ADCM$CMDECOD,
-                             marker_pos = ADCM[, c("ASTDY", "AENDY")],
-                             arrow_end = ADSL$max_day,
-                             xtick_at = waiver(),
-                             line_col = NULL,
-                             line_col_legend = NULL,
-                             line_col_opt = "orange",
-                             line_width = 1,
-                             arrow_size = 0.1,
-                             no_enddate_extention = 50,
-                             marker_color = NULL,
-                             marker_color_opt = "orange",
-                             marker_color_legend = NULL,
-                             marker_shape = NULL,
-                             marker_shape_opt = NULL,
-                             marker_shape_legend = NULL,
-                             show_days_label = TRUE,
-                             xlim = c(-28, ADSL$max_day),
-                             xlab = "Study Days",
-                             title = paste("Patient Profile: ", ADSL$USUBJID))
-p4
-
-# Example 5 "ADLB"
-p5 <- patient_domain_profile(domain = "Laboratoy (ADLB)",
-                             var_names = ADLB$LBTESTCD,
-                             marker_pos = ADLB$ADY,
-                             arrow_end = ADSL$max_day,
-                             xtick_at = waiver(),
-                             line_col = NULL,
-                             line_col_legend = NULL,
-                             line_col_opt = NULL,
-                             line_width = 1,
-                             arrow_size = 0.1,
-                             no_enddate_extention = 0,
-                             marker_color = factor(ADLB$ANRIND),
-                             marker_color_opt =  c("HIGH" = "red", "LOW" = "blue",
-                                                   "NORMAL" = "green", "NA" = "green"),
-                             marker_color_legend = NULL,
-                             marker_shape = factor(ADLB$ANRIND),
-                             marker_shape_opt = c("HIGH" = 24, "LOW" = 25,
-                                                  "NORMAL" = 23, "NA" = 23),
-                             marker_shape_legend = "Labs Abnormality",
-                             show_days_label = TRUE,
-                             xlim = c(-30, ADSL$max_day),
-                             xlab = "Study Days",
-                             title = paste("Patient Profile: ", ADSL$USUBJID))
+p5 <-
+  patient_domain_profile(
+    domain = "Laboratoy (ADLB)",
+    var_names = ADLB$LBTESTCD,
+    marker_pos = ADLB$ADY,
+    arrow_end = ADSL$max_day,
+    xtick_at = waiver(),
+    line_col_list = NULL,
+    line_width = 1,
+    arrow_size = 0.1,
+    no_enddate_extention = 0,
+    marker_col_list = list(
+      marker_col = factor(ADLB$ANRIND),
+      marker_col_opt =  c("HIGH" = "red", "LOW" = "blue",
+                            "NORMAL" = "green", "NA" = "green")
+    ),
+    marker_shape_list = list(
+      marker_shape = factor(ADLB$ANRIND),
+      marker_shape_opt = c("HIGH" = 24, "LOW" = 25,
+                           "NORMAL" = 23, "NA" = 23),
+      marker_shape_legend = "Labs Abnormality"
+    ),
+    show_days_label = TRUE,
+    xlim = c(-30, ADSL$max_day),
+    xlab = "Study Day",
+    title = paste("Patient Profile: ", ADSL$USUBJID)
+    )
 p5
 }
 \author{

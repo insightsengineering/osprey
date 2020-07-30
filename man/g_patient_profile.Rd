@@ -5,24 +5,12 @@
 \title{Patient Profile Plot}
 \usage{
 g_patient_profile(
-  select_ex = TRUE,
-  select_ae = TRUE,
-  select_rs = TRUE,
-  select_cm = TRUE,
-  select_lb = TRUE,
-  ex_data,
-  ex_var,
-  ae_data,
-  ae_var,
-  ae_line_col,
-  ae_line_col_legend = NULL,
-  ae_line_col_opt = NULL,
-  rs_data,
-  rs_var,
-  cm_data,
-  cm_var,
-  lb_data,
-  lb_var,
+  select = c("ex", "ae", "rs", "cm", "lb"),
+  ex,
+  ae,
+  rs,
+  cm,
+  lb,
   arrow_end_day,
   xlim = c(-28, 365),
   xlab = "Study Day",
@@ -30,46 +18,45 @@ g_patient_profile(
 )
 }
 \arguments{
-\item{select_ex}{boolean value for showing \code{ADEX} domain plot, default is \code{TRUE}}
+\item{select}{vector includes the domains to plot, choose from \code{c("ex", "ae", "rs", "cm", "lb")},
+default is to plot all domains with data available}
 
-\item{select_ae}{boolean value for showing \code{ADAE} domain plot, default is \code{TRUE}}
+\item{ex}{list may contain
+\itemize{
+\item \code{ex_data} dataframe for \code{ADEX} domain dataset
+\item \code{ex_var} vector to identify each lane of \code{ADEX} domain plot
+}}
 
-\item{select_rs}{boolean value for showing \code{ADRS} domain plot, default is \code{TRUE}}
+\item{ae}{list may contain
+\itemize{
+\item \code{ae_data} dataframe for \code{ADAE} domain dataset
+\item \code{ae_var} vector to identify each lane of \code{ADAE} plot
+\item \code{ae_line_col} factor vector to specify color for segments of \code{ADAE} plot
+\item \code{ae_line_col_legend} string to be displayed as line color legend title of \code{ADAE} plot
+\item \code{ae_line_col_opt} aesthetic values to map line color values of \code{ADAE} plot
+     (named vector to map color values to each name).
+     If not \code{NULL}, please make sure this contains all posible values for \code{ae_line_col} values,
+     otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be
+     specified
+}}
 
-\item{select_cm}{boolean value for showing \code{ADCM} domain plot, default is \code{TRUE}}
+\item{rs}{list may contain
+\itemize{
+\item \code{rs_data} dataframe for \code{ADRS} domain dataset
+\item \code{rs_var} vector to identify each lane of \code{ADRS} domain plot
+}}
 
-\item{select_lb}{boolean value for showing \code{ADLB} domain plot, default is \code{TRUE}}
+\item{cm}{list may contain
+\itemize{
+\item \code{cm_data} dataframe for \code{ADCM} domain dataset
+\item \code{cm_var} vector to identify each lane of \code{ADCM} domain plot
+}}
 
-\item{ex_data}{dataframe for \code{ADEX} domain dataset}
-
-\item{ex_var}{vector to identify each lane of \code{ADEX} domain plot}
-
-\item{ae_data}{dataframe for \code{ADAE} domain dataset}
-
-\item{ae_var}{vector to identify each lane of \code{ADAE} plot}
-
-\item{ae_line_col}{factor vector to specify color for segments of \code{ADAE} plot}
-
-\item{ae_line_col_legend}{string to be displayed as line color legend title of \code{ADAE} plot,
-default is \code{NULL}}
-
-\item{ae_line_col_opt}{aesthetic values to map line color values of \code{ADAE} plot
-(named vector to map color values to each name).
-If not \code{NULL}, please make sure this contains all posible values for \code{ae_line_col} values,
-otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be
-specified}
-
-\item{rs_data}{dataframe for \code{ADRS} domain dataset}
-
-\item{rs_var}{vector to identify each lane of \code{ADRS} domain plot}
-
-\item{cm_data}{dataframe for \code{ADCM} domain dataset}
-
-\item{cm_var}{vector to identify each lane of \code{ADCM} domain plot}
-
-\item{lb_data}{dataframe for \code{ADLB} domain dataset}
-
-\item{lb_var}{vector to identify each lane of \code{ADLB} domain plot}
+\item{lb}{list may contain
+\itemize{
+\item \code{lb_data} dataframe for \code{ADLB} domain dataset
+\item \code{lb_var} vector to identify each lane of \code{ADLB} domain plot
+}}
 
 \item{arrow_end_day}{numeric value indicates the end of arrow when arrows are requested}
 
@@ -103,9 +90,10 @@ library(dplyr)
 rADSL <- radsl(cached = TRUE)
 ADSL <-  rADSL \%>\%
   group_by(USUBJID) \%>\%
-  mutate(TRTSDT = as.Date(TRTSDTM),
-         max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
-         max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) \%>\%
+  mutate(
+    TRTSDT = as.Date(TRTSDTM),
+    max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
+    max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) \%>\%
   select(USUBJID, STUDYID, TRTSDT , max_day) \%>\%
   filter(USUBJID == rADSL$USUBJID[1])
 
@@ -119,11 +107,13 @@ ADEX <- ADEX \%>\%
   filter(PARAMCD == "DOSE") \%>\%
   arrange(PARCAT2, PARAMCD) \%>\%
   mutate(diff = c(0, diff(AVAL, lag = 1))) \%>\%
-  mutate(Modification = case_when(diff < 0 ~ "Decrease",
-                                  diff > 0 ~ "Increase",
-                                  diff == 0 ~ "None")) \%>\%
-  mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
-                                as.Date(TRTSDT) + 1))
+  mutate(Modification = case_when(
+    diff < 0 ~ "Decrease",
+    diff > 0 ~ "Increase",
+    diff == 0 ~ "None")) \%>\%
+  mutate(ASTDT_dur = as.numeric(
+    as.Date(substr(as.character(ASTDTM), 1, 10)) -
+      as.Date(TRTSDT) + 1))
 
 # ADAE
 rADAE <- radae(cached = TRUE)
@@ -146,8 +136,9 @@ ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 # ADLB
 rADLB <- radlb(cached = TRUE)
 ADLB <- rADLB \%>\%
-        select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN,
-               LBTESTCD, ANRIND)
+        select(
+          USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
+          ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
 ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 
 ADLB <- ADLB \%>\%
@@ -155,53 +146,68 @@ ADLB <- ADLB \%>\%
         mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
 
 # Example Patient Profile plot 5 domains
-g_patient_profile(select_ex = TRUE,
-                  select_ae = TRUE,
-                  select_rs = TRUE,
-                  select_cm = TRUE,
-                  select_lb = TRUE,
-                  ex_data = ADEX,
-                  ex_var = ADEX$PARCAT2,
-                  ae_data = ADAE,
-                  ae_var = ADAE$AEDECOD,
-                  ae_line_col = factor(ADAE$AESER),
-                  ae_line_col_legend = "Serious",
-                  ae_line_col_opt = c("Y" = "red", "N" = "blue"),
-                  rs_data = ADRS,
-                  rs_var = ADRS$PARAMCD,
-                  cm_data = ADCM,
-                  cm_var = ADCM$CMDECOD,
-                  lb_data = ADLB,
-                  lb_var = ADLB$LBTESTCD,
-                  arrow_end_day = ADSL$max_day,
-                  xlim = c(-28, ADSL$max_day),
-                  xlab = "Study Day",
-                  title = paste("Patient Profile: ", ADSL$USUBJID))
+g_patient_profile(
+  select = c("ex", "ae", "rs", "cm", "lb"),
+  ex = list(
+    ex_data = ADEX,
+    ex_var = ADEX$PARCAT2
+    ),
+  ae = list(
+    ae_data = ADAE,
+    ae_var = ADAE$AEDECOD,
+    ae_line_col = factor(ADAE$AESER),
+    ae_line_col_legend = "Serious",
+    ae_line_col_opt = c("Y" = "red", "N" = "blue")
+    ),
+  rs = list(
+    rs_data = ADRS,
+    rs_var = ADRS$PARAMCD
+    ),
+  cm = list(
+    cm_data = ADCM,
+    cm_var = ADCM$CMDECOD
+    ),
+  lb = list(
+    lb_data = ADLB,
+    lb_var = ADLB$LBTESTCD
+    ),
+  arrow_end_day = ADSL$max_day,
+  xlim = c(-28, ADSL$max_day),
+  xlab = "Study Day",
+  title = paste("Patient Profile: ", ADSL$USUBJID)
+  )
 
 # Example Patient Profile plot without ADCM and ADLB
-g_patient_profile(select_ex = TRUE,
-                  select_ae = TRUE,
-                  select_rs = TRUE,
-                  select_cm = FALSE,
-                  select_lb = FALSE,
-                  ex_data = ADEX,
-                  ex_var = ADEX$PARCAT2,
-                  ae_data = ADAE,
-                  ae_var = ADAE$AEDECOD,
-                  ae_line_col = factor(ADAE$AESER),
-                  ae_line_col_legend = "Serious",
-                  ae_line_col_opt = c("Y" = "red", "N" = "blue"),
-                  rs_data = ADRS,
-                  rs_var = ADRS$PARAMCD,
-                  cm_data = NULL,
-                  cm_var = NULL,
-                  lb_data = NULL,
-                  lb_var = NULL,
-                  arrow_end_day = ADSL$max_day,
-                  xlim = c(-28, ADSL$max_day),
-                  xlab = "Study Day",
-                  title = paste("Patient Profile: ", ADSL$USUBJID))
-
+g_patient_profile(
+  select = c("ex", "ae", "rs"),
+  ex = list(
+    ex_data = ADEX,
+    ex_var = ADEX$PARCAT2
+    ),
+  ae = list(
+    ae_data = ADAE,
+    ae_var = ADAE$AEDECOD,
+    ae_line_col = factor(ADAE$AESER),
+    ae_line_col_legend = "Serious",
+    ae_line_col_opt = c("Y" = "red", "N" = "blue")
+    ),
+  rs = list(
+    rs_data = ADRS,
+    rs_var = ADRS$PARAMCD
+    ),
+  cm = list(
+    cm_data = NULL,
+    cm_var = NULL
+    ),
+  lb = list(
+    lb_data = NULL,
+    lb_var = NULL
+    ),
+  arrow_end_day = ADSL$max_day,
+  xlim = c(-28, ADSL$max_day),
+  xlab = "Study Day",
+  title = paste("Patient Profile: ", ADSL$USUBJID)
+  )
 }
 \seealso{
 \code{\link{patient_domain_profile}}

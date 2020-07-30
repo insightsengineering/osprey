@@ -29,7 +29,8 @@
 #' or \code{ADCM} domain. Default is \code{no_enddate_extention = 0}.
 #' @param marker_col_list a list may contain \cr
 #' \itemize{
-#' \item \code{marker_col} a factor vector to specify color for markers, default is \code{NULL} (no color markers is specified)
+#' \item \code{marker_col} a factor vector to specify color for markers,
+#' default is \code{NULL} (no color markers is specified)
 #' \item \code{marker_col_opt} aesthetic values to map color values (named vector to map color values to each name)
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_col} values,
 #'      otherwise color will be assigned by \code{ggplot} default
@@ -38,7 +39,8 @@
 #' }
 #' @param marker_shape_list a list may contain \cr
 #' \itemize{
-#' \item \code{marker_shape} factor vector to specify shape for markers, default is \code{NULL} (no shape marker is specified)
+#' \item \code{marker_shape} factor vector to specify shape for markers,
+#' default is \code{NULL} (no shape marker is specified)
 #' \item  \code{marker_shape_opt} aesthetic values to map shape values (named vector to map shape values to each name).
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_shape} values,
 #'      otherwise shape will be assigned by \code{ggplot} default
@@ -529,29 +531,40 @@ patient_domain_profile <- function(domain = NULL,
 #' If there is a missing dataset, assign a \code{NULL} value to it. ie) \code{ADRS <- NULL} prior to running the
 #' patient profile plot.
 #'
-#' @param select_ex boolean value for showing \code{ADEX} domain plot, default is \code{TRUE}
-#' @param select_ae boolean value for showing \code{ADAE} domain plot, default is \code{TRUE}
-#' @param select_rs boolean value for showing \code{ADRS} domain plot, default is \code{TRUE}
-#' @param select_cm boolean value for showing \code{ADCM} domain plot, default is \code{TRUE}
-#' @param select_lb boolean value for showing \code{ADLB} domain plot, default is \code{TRUE}
-#' @param ex_data dataframe for \code{ADEX} domain dataset
-#' @param ex_var vector to identify each lane of \code{ADEX} domain plot
-#' @param ae_data dataframe for \code{ADAE} domain dataset
-#' @param ae_var vector to identify each lane of \code{ADAE} plot
-#' @param ae_line_col factor vector to specify color for segments of \code{ADAE} plot
-#' @param ae_line_col_legend string to be displayed as line color legend title of \code{ADAE} plot,
-#' default is \code{NULL}
-#' @param ae_line_col_opt aesthetic values to map line color values of \code{ADAE} plot
+#' @param select vector includes the domains to plot, choose from \code{c("ex", "ae", "rs", "cm", "lb")},
+#' default is to plot all domains with data available
+#' @param ex list may contain
+#' \itemize{
+#' \item \code{ex_data} dataframe for \code{ADEX} domain dataset
+#' \item \code{ex_var} vector to identify each lane of \code{ADEX} domain plot
+#' }
+#' @param ae list may contain
+#' \itemize{
+#' \item \code{ae_data} dataframe for \code{ADAE} domain dataset
+#' \item \code{ae_var} vector to identify each lane of \code{ADAE} plot
+#' \item \code{ae_line_col} factor vector to specify color for segments of \code{ADAE} plot
+#' \item \code{ae_line_col_legend} string to be displayed as line color legend title of \code{ADAE} plot
+#' \item \code{ae_line_col_opt} aesthetic values to map line color values of \code{ADAE} plot
 #'      (named vector to map color values to each name).
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{ae_line_col} values,
 #'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be
 #'      specified
-#' @param rs_data dataframe for \code{ADRS} domain dataset
-#' @param rs_var vector to identify each lane of \code{ADRS} domain plot
-#' @param cm_data dataframe for \code{ADCM} domain dataset
-#' @param cm_var vector to identify each lane of \code{ADCM} domain plot
-#' @param lb_data dataframe for \code{ADLB} domain dataset
-#' @param lb_var vector to identify each lane of \code{ADLB} domain plot
+#' }
+#' @param rs list may contain
+#' \itemize{
+#' \item \code{rs_data} dataframe for \code{ADRS} domain dataset
+#' \item \code{rs_var} vector to identify each lane of \code{ADRS} domain plot
+#' }
+#' @param cm list may contain
+#' \itemize{
+#' \item \code{cm_data} dataframe for \code{ADCM} domain dataset
+#' \item \code{cm_var} vector to identify each lane of \code{ADCM} domain plot
+#' }
+#' @param lb list may contain
+#' \itemize{
+#' \item \code{lb_data} dataframe for \code{ADLB} domain dataset
+#' \item \code{lb_var} vector to identify each lane of \code{ADLB} domain plot
+#' }
 #' @param arrow_end_day numeric value indicates the end of arrow when arrows are requested
 #' @param xlim numeric vector for x-axis limit that will be shared by all domain plots, default is
 #'      \code{xlim = c(-28, 365)}
@@ -580,9 +593,10 @@ patient_domain_profile <- function(domain = NULL,
 #' rADSL <- radsl(cached = TRUE)
 #' ADSL <-  rADSL %>%
 #'   group_by(USUBJID) %>%
-#'   mutate(TRTSDT = as.Date(TRTSDTM),
-#'          max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
-#'          max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) %>%
+#'   mutate(
+#'     TRTSDT = as.Date(TRTSDTM),
+#'     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
+#'     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) %>%
 #'   select(USUBJID, STUDYID, TRTSDT , max_day) %>%
 #'   filter(USUBJID == rADSL$USUBJID[1])
 #'
@@ -596,11 +610,13 @@ patient_domain_profile <- function(domain = NULL,
 #'   filter(PARAMCD == "DOSE") %>%
 #'   arrange(PARCAT2, PARAMCD) %>%
 #'   mutate(diff = c(0, diff(AVAL, lag = 1))) %>%
-#'   mutate(Modification = case_when(diff < 0 ~ "Decrease",
-#'                                   diff > 0 ~ "Increase",
-#'                                   diff == 0 ~ "None")) %>%
-#'   mutate(ASTDT_dur = as.numeric(as.Date(substr(as.character(ASTDTM), 1, 10)) -
-#'                                 as.Date(TRTSDT) + 1))
+#'   mutate(Modification = case_when(
+#'     diff < 0 ~ "Decrease",
+#'     diff > 0 ~ "Increase",
+#'     diff == 0 ~ "None")) %>%
+#'   mutate(ASTDT_dur = as.numeric(
+#'     as.Date(substr(as.character(ASTDTM), 1, 10)) -
+#'       as.Date(TRTSDT) + 1))
 #'
 #' # ADAE
 #' rADAE <- radae(cached = TRUE)
@@ -623,8 +639,9 @@ patient_domain_profile <- function(domain = NULL,
 #' # ADLB
 #' rADLB <- radlb(cached = TRUE)
 #' ADLB <- rADLB %>%
-#'         select(USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM, ADY, ATPTN, AVISITN,
-#'                LBTESTCD, ANRIND)
+#'         select(
+#'           USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
+#'           ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
@@ -632,112 +649,122 @@ patient_domain_profile <- function(domain = NULL,
 #'         mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
 #'
 #' # Example Patient Profile plot 5 domains
-#' g_patient_profile(select_ex = TRUE,
-#'                   select_ae = TRUE,
-#'                   select_rs = TRUE,
-#'                   select_cm = TRUE,
-#'                   select_lb = TRUE,
-#'                   ex_data = ADEX,
-#'                   ex_var = ADEX$PARCAT2,
-#'                   ae_data = ADAE,
-#'                   ae_var = ADAE$AEDECOD,
-#'                   ae_line_col = factor(ADAE$AESER),
-#'                   ae_line_col_legend = "Serious",
-#'                   ae_line_col_opt = c("Y" = "red", "N" = "blue"),
-#'                   rs_data = ADRS,
-#'                   rs_var = ADRS$PARAMCD,
-#'                   cm_data = ADCM,
-#'                   cm_var = ADCM$CMDECOD,
-#'                   lb_data = ADLB,
-#'                   lb_var = ADLB$LBTESTCD,
-#'                   arrow_end_day = ADSL$max_day,
-#'                   xlim = c(-28, ADSL$max_day),
-#'                   xlab = "Study Day",
-#'                   title = paste("Patient Profile: ", ADSL$USUBJID))
+#' g_patient_profile(
+#'   select = c("ex", "ae", "rs", "cm", "lb"),
+#'   ex = list(
+#'     ex_data = ADEX,
+#'     ex_var = ADEX$PARCAT2
+#'     ),
+#'   ae = list(
+#'     ae_data = ADAE,
+#'     ae_var = ADAE$AEDECOD,
+#'     ae_line_col = factor(ADAE$AESER),
+#'     ae_line_col_legend = "Serious",
+#'     ae_line_col_opt = c("Y" = "red", "N" = "blue")
+#'     ),
+#'   rs = list(
+#'     rs_data = ADRS,
+#'     rs_var = ADRS$PARAMCD
+#'     ),
+#'   cm = list(
+#'     cm_data = ADCM,
+#'     cm_var = ADCM$CMDECOD
+#'     ),
+#'   lb = list(
+#'     lb_data = ADLB,
+#'     lb_var = ADLB$LBTESTCD
+#'     ),
+#'   arrow_end_day = ADSL$max_day,
+#'   xlim = c(-28, ADSL$max_day),
+#'   xlab = "Study Day",
+#'   title = paste("Patient Profile: ", ADSL$USUBJID)
+#'   )
 #'
 #' # Example Patient Profile plot without ADCM and ADLB
-#' g_patient_profile(select_ex = TRUE,
-#'                   select_ae = TRUE,
-#'                   select_rs = TRUE,
-#'                   select_cm = FALSE,
-#'                   select_lb = FALSE,
-#'                   ex_data = ADEX,
-#'                   ex_var = ADEX$PARCAT2,
-#'                   ae_data = ADAE,
-#'                   ae_var = ADAE$AEDECOD,
-#'                   ae_line_col = factor(ADAE$AESER),
-#'                   ae_line_col_legend = "Serious",
-#'                   ae_line_col_opt = c("Y" = "red", "N" = "blue"),
-#'                   rs_data = ADRS,
-#'                   rs_var = ADRS$PARAMCD,
-#'                   cm_data = NULL,
-#'                   cm_var = NULL,
-#'                   lb_data = NULL,
-#'                   lb_var = NULL,
-#'                   arrow_end_day = ADSL$max_day,
-#'                   xlim = c(-28, ADSL$max_day),
-#'                   xlab = "Study Day",
-#'                   title = paste("Patient Profile: ", ADSL$USUBJID))
-#'
-g_patient_profile <- function(select_ex = TRUE,
-                              select_ae = TRUE,
-                              select_rs = TRUE,
-                              select_cm = TRUE,
-                              select_lb = TRUE,
-                              ex_data,
-                              ex_var,
-                              ae_data,
-                              ae_var,
-                              ae_line_col,
-                              ae_line_col_legend = NULL,
-                              ae_line_col_opt = NULL,
-                              rs_data,
-                              rs_var,
-                              cm_data,
-                              cm_var,
-                              lb_data,
-                              lb_var,
+#' g_patient_profile(
+#'   select = c("ex", "ae", "rs"),
+#'   ex = list(
+#'     ex_data = ADEX,
+#'     ex_var = ADEX$PARCAT2
+#'     ),
+#'   ae = list(
+#'     ae_data = ADAE,
+#'     ae_var = ADAE$AEDECOD,
+#'     ae_line_col = factor(ADAE$AESER),
+#'     ae_line_col_legend = "Serious",
+#'     ae_line_col_opt = c("Y" = "red", "N" = "blue")
+#'     ),
+#'   rs = list(
+#'     rs_data = ADRS,
+#'     rs_var = ADRS$PARAMCD
+#'     ),
+#'   cm = list(
+#'     cm_data = NULL,
+#'     cm_var = NULL
+#'     ),
+#'   lb = list(
+#'     lb_data = NULL,
+#'     lb_var = NULL
+#'     ),
+#'   arrow_end_day = ADSL$max_day,
+#'   xlim = c(-28, ADSL$max_day),
+#'   xlab = "Study Day",
+#'   title = paste("Patient Profile: ", ADSL$USUBJID)
+#'   )
+
+g_patient_profile <- function(select = c("ex", "ae", "rs", "cm", "lb"),
+                              ex,
+                              ae,
+                              rs,
+                              cm,
+                              lb,
                               arrow_end_day,
                               xlim = c(-28, 365),
                               xlab = "Study Day",
                               title = "Patient Profile") {
-  stop_if_not(
-    list(
-      lapply(list(select_ex, select_ae, select_rs, select_cm, select_lb), rlang::is_bool) %>%
-        unlist %>%
-        all,
-      "invalid argument: check that the select arguments are boolean")
-  )
+  ex_data <- ex[["ex_data"]]
+  ex_var <- ex[["ex_var"]]
+  ae_data <- ae[["ae_data"]]
+  ae_var <- ae[["ae_var"]]
+  ae_line_col <- ae[["ae_line_col"]]
+  ae_line_col_legend <- ae[["ae_line_col_legend"]]
+  ae_line_col_opt <- ae[["ae_line_col_opt"]]
+  rs_data <- rs[["rs_data"]]
+  rs_var <- rs[["rs_var"]]
+  cm_data <- cm[["cm_data"]]
+  cm_var <- cm[["cm_var"]]
+  lb_data <- lb[["lb_data"]]
+  lb_var <- lb[["lb_var"]]
+
+  select <- match.arg(select, several.ok = TRUE)
 
   # check if we have data for each of these plots
-  if (dim(ex_data)[1] == 0 || is.null(ex_data)) {
-    select_ex <- FALSE
+  if ("ex" %in% select && dim(ex_data)[1] == 0 || is.null(ex_data)) {
+    select <- select[- (select == "ex")]
     warning("No ADEX data for this subject")
-
   }
 
-  if (dim(ae_data)[1] == 0 || is.null(ae_data)) {
-    select_ae <- FALSE
+  if ("ae" %in% select && (dim(ae_data)[1] == 0 || is.null(ae_data))) {
+    select <- select[- (select == "ae")]
     warning("No ADAE data for this subject")
-
   }
 
-  if (dim(rs_data)[1] == 0 || is.null(rs_data)) {
-    select_rs <- FALSE
+  if ("rs" %in% select && (dim(rs_data)[1] == 0 || is.null(rs_data))) {
+    select <- select[- (select == "rs")]
     warning("No ADRS data for this subject")
-
   }
 
-  if (dim(cm_data)[1] == 0 || is.null(cm_data)) {
-    select_cm <- FALSE
+  if ("cm" %in% select && (dim(cm_data)[1] == 0 || is.null(cm_data))) {
+    select <- select[- (select == "cm")]
     warning("No ADCM data for this subject")
   }
-  if (dim(lb_data)[1] == 0 || is.null(lb_data)) {
-    select_lb <- FALSE
+
+  if ("lb" %in% select && (dim(lb_data)[1] == 0 || is.null(lb_data))) {
+    select <- select[- (select == "lb")]
     warning("No ADLB data for this subject")
   }
-
-  select_list <- c(select_ex, select_ae, select_rs, select_cm, select_lb)
+  possible_select <- c("ex", "ae", "rs", "cm", "lb")
+  select_list <- possible_select %in% select
 
 
   show_days_label <- c(FALSE, FALSE, FALSE, FALSE, FALSE)
@@ -747,25 +774,26 @@ g_patient_profile <- function(select_ex = TRUE,
   show_title[min(which(select_list == TRUE))] <- TRUE
 
   # Domain "ADEX"
-  if (select_ex == TRUE) {
+  if ("ex" %in% select) {
     p1 <- patient_domain_profile(
       domain = "Exposure (ADEX)",
       var_names = ex_var,
       marker_pos = ex_data$ASTDT_dur,
       arrow_end = arrow_end_day,
       xtick_at = waiver(),
-      line_col = NULL,
-      line_col_legend = NULL,
-      line_col_opt = NULL,
+      line_col_list = NULL,
       line_width = 1,
       arrow_size = 0.1,
       no_enddate_extention = 0,
-      marker_col = factor(ex_data$Modification),
-      marker_col_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
-      marker_col_legend = NULL,
-      marker_shape = factor(ex_data$Modification),
-      marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
-      marker_shape_legend = "Dose Modification",
+      marker_col_list = list(
+        marker_col = factor(ex_data$Modification),
+        marker_col_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue")
+      ),
+      marker_shape_list = list(
+        marker_shape = factor(ex_data$Modification),
+        marker_shape_opt = c("Increase" = 24, "Decrease" = 25, "None" = 23),
+        marker_shape_legend = "Dose Modification"
+      ),
       show_days_label = show_days_label[1],
       xlim = xlim,
       xlab = xlab,
@@ -776,26 +804,28 @@ g_patient_profile <- function(select_ex = TRUE,
     p1 <- NULL
   }
   # Domain "ADAE"
-  if (select_ae == TRUE) {
+  if ("ae" %in% select) {
     p2 <- patient_domain_profile(
        domain = "Adverse Event (ADAE)",
        var_names = ae_var,
        marker_pos = ae_data[, c("ASTDY", "AENDY")],
        arrow_end = arrow_end_day,
        xtick_at = waiver(),
-       line_col = ae_line_col,
-       line_col_legend = ae_line_col_legend,
-       line_col_opt = ae_line_col_opt,
+       line_col_list = list(
+         line_col = ae_line_col,
+         line_col_legend = ae_line_col_legend,
+         line_col_opt = ae_line_col_opt
+       ),
        line_width = 1,
        arrow_size = 0.1,
        no_enddate_extention = 0.1,
-       marker_col = factor(ae_data$AETOXGR),
-       marker_col_opt = c("1" = "green", "2" = "blue",
+       marker_col_list = list(
+         marker_col = factor(ae_data$AETOXGR),
+         marker_col_opt = c("1" = "green", "2" = "blue",
                             "3" = "yellow", "4" = "orange", "5" = "red"),
-       marker_col_legend = "Grade",
-       marker_shape = NULL,
-       marker_shape_opt = NULL,
-       marker_shape_legend = NULL,
+         marker_col_legend = "Grade"
+       ),
+       marker_shape_list = NULL,
        show_days_label = show_days_label[2],
        xlim = xlim,
        xlab = xlab,
@@ -808,27 +838,28 @@ g_patient_profile <- function(select_ex = TRUE,
 
 
   # Domain "ADRS"
-  if (select_rs == TRUE) {
+  if ("rs" %in% select) {
     p3 <- patient_domain_profile(
        domain = "Response (ADRS)",
        var_names = rs_var,
        marker_pos = rs_data$ADY,
        arrow_end = arrow_end_day,
        xtick_at = waiver(),
-       line_col = NULL,
-       line_col_legend = NULL,
-       line_col_opt = NULL,
+       line_col_list = NULL,
        line_width = 1,
        arrow_size = 0.1,
        no_enddate_extention = 0,
-       marker_col = factor(rs_data$AVALC),
-       marker_col_opt =  c("CR" = "green", "PR" = "blue", "SD" = "yellow",
-                             "PD" = "red", "NE" = "pink", "Y" = "lightblue", "N" = "darkred"),
-       marker_col_legend = NULL,
-       marker_shape = factor(rs_data$AVALC),
-       marker_shape_opt = c("CR" = 21, "PR" = 24, "SD" = 23, "PD" = 22, "NE" = 14,
-                            "Y" = 11, "N" = 8),
-       marker_shape_legend = "Response",
+       marker_col_list = list(
+         marker_col = factor(rs_data$AVALC),
+         marker_col_opt =  c("CR" = "green", "PR" = "blue", "SD" = "yellow",
+                             "PD" = "red", "NE" = "pink", "Y" = "lightblue", "N" = "darkred")
+       ),
+       marker_shape_list = list(
+         marker_shape = factor(rs_data$AVALC),
+         marker_shape_opt = c("CR" = 21, "PR" = 24, "SD" = 23, "PD" = 22, "NE" = 14,
+                              "Y" = 11, "N" = 8),
+         marker_shape_legend = "Response"
+       ),
        show_days_label = show_days_label[3],
        xlim = xlim,
        xlab = xlab,
@@ -841,25 +872,19 @@ g_patient_profile <- function(select_ex = TRUE,
 
 
   # Domain "ADCM"
-  if (select_cm == TRUE) {
+  if ("cm" %in% select) {
     p4 <- patient_domain_profile(
        domain = "Conmed (ADCM)",
        var_names = cm_var,
        marker_pos = cm_data[, c("ASTDY", "AENDY")],
        arrow_end = arrow_end_day,
        xtick_at = waiver(),
-       line_col = NULL,
-       line_col_legend = NULL,
-       line_col_opt = "orange",
+       line_col_list = list(line_col_opt = "orange"),
        line_width = 1,
        arrow_size = 0.1,
        no_enddate_extention = 0.1,
-       marker_col = NULL,
-       marker_col_opt = "orange",
-       marker_col_legend = NULL,
-       marker_shape = NULL,
-       marker_shape_opt = NULL,
-       marker_shape_legend = NULL,
+       marker_col_list = list(marker_col_opt = "orange"),
+       marker_shape_list = NULL,
        show_days_label = show_days_label[4],
        xlim = xlim,
        xlab = xlab,
@@ -871,26 +896,27 @@ g_patient_profile <- function(select_ex = TRUE,
   }
 
   # Domain "ADLB"
-  if (select_lb == TRUE) {
+  if ("lb" %in% select) {
     p5 <- patient_domain_profile(
        domain = "Laboratory (ADLB)",
        var_names = lb_var,
        marker_pos = lb_data$ADY,
        arrow_end = arrow_end_day,
        xtick_at = waiver(),
-       line_col = NULL,
-       line_col_legend = NULL,
-       line_col_opt = NULL,
+       line_col_list = NULL,
        line_width = 1,
        arrow_size = 0.1,
        no_enddate_extention = 0,
-       marker_col = factor(lb_data$ANRIND),
-       marker_col_opt =  c("HIGH" = "red", "LOW" = "blue",
-                             "NORMAL" = "green"),
-       marker_col_legend = NULL,
-       marker_shape = factor(lb_data$ANRIND),
-       marker_shape_opt = c("HIGH" = 24, "LOW" = 25, "NORMAL" = 23),
-       marker_shape_legend = "Labs Abnormality",
+       marker_col_list = list(
+         marker_col = factor(lb_data$ANRIND),
+         marker_col_opt =  c("HIGH" = "red", "LOW" = "blue",
+                             "NORMAL" = "green")
+       ),
+       marker_shape_list = list(
+         marker_shape = factor(lb_data$ANRIND),
+         marker_shape_opt = c("HIGH" = 24, "LOW" = 25, "NORMAL" = 23),
+         marker_shape_legend = "Labs Abnormality"
+       ),
        show_days_label = show_days_label[5],
        xlim = xlim,
        xlab = xlab,
