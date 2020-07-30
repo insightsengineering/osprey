@@ -3,7 +3,6 @@
 #' Draw adverse event category plot.
 #'
 #' @param term \code{character} event term vector.
-#' @param term_selected A \code{character} or \code{vector} include selected term(s) that is passed to analysis.
 #'  All terms are included by default.
 #' @param id \code{vector} id of the event term vector.
 #' For example, \code{ADAE$USUBJID}.
@@ -69,9 +68,7 @@
 #'                                     "M" = "Male",
 #'                                     "F" = "Female",
 #'                                     "U" = "Unknown"))
-#' term_selected <- unique(term)[1]
 #' g_ae_sub(term,
-#'          term_selected,
 #'          id,
 #'          arm,
 #'          arm_sl,
@@ -80,7 +77,6 @@
 #'          subgroups_labels = subgroups_labels)
 
 g_ae_sub <- function(term,
-                     term_selected,
                      id,
                      arm,
                      arm_sl,
@@ -114,12 +110,7 @@ g_ae_sub <- function(term,
       #create label with indents if not total
       label = paste0(indents, label))
   }
-  if (is.null(term_selected)) {
-    term_selected <- unique(term)
-  }
   stop_if_not(
-    list(all(term_selected %in% unique(term)),
-         "invalid argument: term_selected much be from term"),
     list(length(unique(vapply(list(id, term, arm),
                               length, integer(1)))) == 1,
          "invalid arguments: check that the length of id, term and arm are identical"
@@ -181,7 +172,7 @@ g_ae_sub <- function(term,
               term = term,
               arm = arm,
               subgroups) %>%
-    filter(term %in% term_selected & arm %in% c(ref, trt)) %>%
+    filter(arm %in% c(ref, trt)) %>%
     select(-term) %>%
     unique %>%
     pivot_longer(
