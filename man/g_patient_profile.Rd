@@ -23,39 +23,39 @@ default is to plot all domains with data available}
 
 \item{ex}{list may contain
 \itemize{
-\item \code{ex_data} dataframe for \code{ADEX} domain dataset
-\item \code{ex_var} vector to identify each lane of \code{ADEX} domain plot
+\item \code{data} dataframe for \code{ADEX} domain dataset
+\item \code{var} vector to identify each lane of \code{ADEX} domain plot
 }}
 
 \item{ae}{list may contain
 \itemize{
-\item \code{ae_data} dataframe for \code{ADAE} domain dataset
-\item \code{ae_var} vector to identify each lane of \code{ADAE} plot
-\item \code{ae_line_col} factor vector to specify color for segments of \code{ADAE} plot
-\item \code{ae_line_col_legend} string to be displayed as line color legend title of \code{ADAE} plot
-\item \code{ae_line_col_opt} aesthetic values to map line color values of \code{ADAE} plot
+\item \code{data} dataframe for \code{ADAE} domain dataset
+\item \code{var} vector to identify each lane of \code{ADAE} plot
+\item \code{line_col} factor vector to specify color for segments of \code{ADAE} plot
+\item \code{line_col_legend} string to be displayed as line color legend title of \code{ADAE} plot
+\item \code{line_col_opt} aesthetic values to map line color values of \code{ADAE} plot
      (named vector to map color values to each name).
-     If not \code{NULL}, please make sure this contains all posible values for \code{ae_line_col} values,
+     If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be
      specified
 }}
 
 \item{rs}{list may contain
 \itemize{
-\item \code{rs_data} dataframe for \code{ADRS} domain dataset
-\item \code{rs_var} vector to identify each lane of \code{ADRS} domain plot
+\item \code{data} dataframe for \code{ADRS} domain dataset
+\item \code{var} vector to identify each lane of \code{ADRS} domain plot
 }}
 
 \item{cm}{list may contain
 \itemize{
-\item \code{cm_data} dataframe for \code{ADCM} domain dataset
-\item \code{cm_var} vector to identify each lane of \code{ADCM} domain plot
+\item \code{data} dataframe for \code{ADCM} domain dataset
+\item \code{var} vector to identify each lane of \code{ADCM} domain plot
 }}
 
 \item{lb}{list may contain
 \itemize{
-\item \code{lb_data} dataframe for \code{ADLB} domain dataset
-\item \code{lb_var} vector to identify each lane of \code{ADLB} domain plot
+\item \code{data} dataframe for \code{ADLB} domain dataset
+\item \code{var} vector to identify each lane of \code{ADLB} domain plot
 }}
 
 \item{arrow_end_day}{numeric value indicates the end of arrow when arrows are requested}
@@ -149,27 +149,27 @@ ADLB <- ADLB \%>\%
 g_patient_profile(
   select = c("ex", "ae", "rs", "cm", "lb"),
   ex = list(
-    ex_data = ADEX,
-    ex_var = ADEX$PARCAT2
+    data = ADEX,
+    var = ADEX$PARCAT2
     ),
   ae = list(
-    ae_data = ADAE,
-    ae_var = ADAE$AEDECOD,
-    ae_line_col = factor(ADAE$AESER),
-    ae_line_col_legend = "Serious",
-    ae_line_col_opt = c("Y" = "red", "N" = "blue")
+    data = ADAE,
+    var = ADAE$AEDECOD,
+    line_col = factor(ADAE$AESER),
+    line_col_legend = "Serious",
+    line_col_opt = c("Y" = "red", "N" = "blue")
     ),
   rs = list(
-    rs_data = ADRS,
-    rs_var = ADRS$PARAMCD
+    data = ADRS,
+    var = ADRS$PARAMCD
     ),
   cm = list(
-    cm_data = ADCM,
-    cm_var = ADCM$CMDECOD
+    data = ADCM,
+    var = ADCM$CMDECOD
     ),
   lb = list(
-    lb_data = ADLB,
-    lb_var = ADLB$LBTESTCD
+    data = ADLB,
+    var = ADLB$LBTESTCD
     ),
   arrow_end_day = ADSL$max_day,
   xlim = c(-28, ADSL$max_day),
@@ -181,27 +181,27 @@ g_patient_profile(
 g_patient_profile(
   select = c("ex", "ae", "rs"),
   ex = list(
-    ex_data = ADEX,
-    ex_var = ADEX$PARCAT2
+    data = ADEX,
+    var = ADEX$PARCAT2
     ),
   ae = list(
-    ae_data = ADAE,
-    ae_var = ADAE$AEDECOD,
-    ae_line_col = factor(ADAE$AESER),
-    ae_line_col_legend = "Serious",
-    ae_line_col_opt = c("Y" = "red", "N" = "blue")
+    data = ADAE,
+    var = ADAE$AEDECOD,
+    line_col = factor(ADAE$AESER),
+    line_col_legend = "Serious",
+    line_col_opt = c("Y" = "red", "N" = "blue")
     ),
   rs = list(
-    rs_data = ADRS,
-    rs_var = ADRS$PARAMCD
+    data = ADRS,
+    var = ADRS$PARAMCD
     ),
   cm = list(
-    cm_data = NULL,
-    cm_var = NULL
+    data = NULL,
+    var = NULL
     ),
   lb = list(
-    lb_data = NULL,
-    lb_var = NULL
+    data = NULL,
+    var = NULL
     ),
   arrow_end_day = ADSL$max_day,
   xlim = c(-28, ADSL$max_day),

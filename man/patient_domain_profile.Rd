@@ -29,7 +29,8 @@ patient_domain_profile(
 
 \item{var_names}{character vector to identify each lane}
 
-\item{marker_pos}{\itemize{
+\item{marker_pos}{Depending on the domain, this can be
+\itemize{
 \item marker position numeric vector for domains \code{ADEX}, \code{ADLB}, and \code{ADRS}
 \item numeric data frame with two columns, start and end time marker position,
 for domains \code{ADAE} and \code{ADCM}
@@ -37,7 +38,7 @@ for domains \code{ADAE} and \code{ADCM}
 
 \item{arrow_end}{numeric value indicates the end of arrow when arrows are requested}
 
-\item{xtick_at}{optional break interval of bar length axis}
+\item{xtick_at}{numeric vector with the locations of the x-axis tick marks}
 
 \item{line_col_list}{a list may contain \cr
 \itemize{
