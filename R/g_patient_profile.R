@@ -330,13 +330,14 @@ patient_domain_profile <- function(domain = NULL,
   # plot lines
   if (length(dim(marker_pos)) == 2) {
     line_data <- data.frame(
-      var_names = var_names,
+      var_names,
       line_col = if (is.null(line_col)) to_n("x", length(var_names)) else line_col,
       line_start = unname(marker_pos[, 1]),
       line_end = unname(marker_pos[, 2]),
       line_min = rep(xlim[1], length(var_names)),
       line_max = rep(arrow_end + no_enddate_extention, length(var_names))
       )
+    names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
 
 
     p <- ggplot() +
