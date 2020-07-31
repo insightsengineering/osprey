@@ -330,7 +330,7 @@ patient_domain_profile <- function(domain = NULL,
   # plot lines
   if (length(dim(marker_pos)) == 2) {
     line_data <- data.frame(
-      var_names,
+      var_names = var_names,
       line_col = if (is.null(line_col)) to_n("x", length(var_names)) else line_col,
       line_start = unname(marker_pos[, 1]),
       line_end = unname(marker_pos[, 2]),
@@ -338,12 +338,13 @@ patient_domain_profile <- function(domain = NULL,
       line_max = rep(arrow_end + no_enddate_extention, length(var_names))
       )
 
+
     p <- ggplot() +
       geom_segment(
         data = line_data[!is.na(line_data$line_end), ],
         aes(
           x = var_names,
-          y = .data$line_start,
+          y = line_start,
           xend = var_names,
           yend = line_end,
           color = line_col),
@@ -357,7 +358,7 @@ patient_domain_profile <- function(domain = NULL,
         data = line_data[is.na(line_data$line_end) == TRUE, ],
         aes(
           x = var_names,
-          y = pmax(.data$line_start, line_min, na.rm = TRUE),
+          y = pmax(line_start, line_min, na.rm = TRUE),
           xend = var_names,
           yend = line_max,
           color = line_col
