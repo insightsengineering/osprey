@@ -31,10 +31,10 @@ reference:
     desc: some useful functions
     contents:
       - as_pdf
-      - getdata_bce
       - grobs2pdf
   - title: Utility
     contents:
+      - create_flag_vars
       - add_ae_class
       - meddra
       - stream_filter
