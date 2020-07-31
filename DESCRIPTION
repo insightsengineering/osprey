@@ -28,14 +28,16 @@ Imports:
   rlang,
   rtables (>= 0.1.6),
   stringr,
-  utils.nest (>= 0.2.4)
+  utils.nest (>= 0.2.4),
+  DescTools,
+  data.table
 Suggests:
   knitr,
   random.cdisc.data (>= 0.3.4),
   test.nest (>= 0.2.3),
   tidyr,
   testthat (>= 2.0)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.0
 URL:
   https://github.roche.com/NEST/osprey/
 BugReports:
