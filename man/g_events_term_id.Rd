@@ -16,7 +16,8 @@ g_events_term_id(
   diff_range = c(-1, 1),
   reversed = FALSE,
   conf_level = 0.95,
-  diff_ci_method = "wald",
+  diff_ci_method = c("wald", "waldcc", "ac", "score", "scorecc", "mn", "mee", "blj",
+    "ha", "beal"),
   axis_side = c("left", "right"),
   color = c("blue", "red"),
   shape = c(16, 17),
@@ -30,7 +31,7 @@ Represents events information. \code{term} can be a \code{data.frame} produced
 by \code{create_flag_vars}, with each column being a \code{logical} event indicator}
 
 \item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the
-same as the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.}
+same as the length or number of rows of \code{terms}. Ususally it is \code{ADAE$USUBJID}.}
 
 \item{arm}{\code{factor} vector that contains arm informatiion in analysis data.
 For example, \code{ADAE$ACTARMCD}.}
@@ -59,20 +60,22 @@ Default is FALSE.}
 \item{conf_level}{\code{numeric} The confidence interval level, default is 0.95.}
 
 \item{diff_ci_method}{\code{character} The method used to calculate confidence interval.
-Defalt is "wald". Possible choices are methods supported in \code{DescTools::BinomDiffCI}.}
+Defalt is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
 \item{axis_side}{\code{character} the side of the axis label, "left" or "right". Default is "left".}
 
 \item{color}{Color for the plot. \code{vector} of length 2. Color for reference and
-treatment arms respectively. Default set to c("blue", "red").}
+treatment arms respectively. Default set to \code{c("blue", "red")}.}
 
 \item{shape}{Shape for the plot. \code{vector} of length 2. Shape for reference and
-treatment arms respectively. Default set to c(16, 17).}
+treatment arms respectively. Default set to \code{c(16, 17)} per
+\code{\link[ggplot2]{scale_shape}}.}
 
 \item{fontsize}{\code{numeric} font size for the plot. It is the size used in ggplot2 with
-default unit "mm", if you want "points" you will need to devide the point number by "ggplot2:::.pt"}
+default unit "mm", if you want "points" you will need to devide the point number by
+\code{ggplot2:::.pt}.}
 
-\item{draw}{\code{logical} whether to draw the Plot.}
+\item{draw}{\code{logical} whether to draw the plot.}
 }
 \value{
 grob object

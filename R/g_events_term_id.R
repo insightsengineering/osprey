@@ -8,7 +8,7 @@
 #' Represents events information. \code{term} can be a \code{data.frame} produced
 #' by \code{create_flag_vars}, with each column being a \code{logical} event indicator
 #' @param id \code{vector} contains subject identifier. Length of \code{id} must be the
-#' same as the length or number of rows of \code{terms}. Ususally it is \code{USUBJID}.
+#' same as the length or number of rows of \code{terms}. Ususally it is \code{ADAE$USUBJID}.
 #' @param arm \code{factor} vector that contains arm informatiion in analysis data.
 #' For example, \code{ADAE$ACTARMCD}.
 #' @param arm_N (\code{numeric} vector)\cr
@@ -27,15 +27,17 @@
 #' Default is FALSE.
 #' @param conf_level \code{numeric} The confidence interval level, default is 0.95.
 #' @param diff_ci_method \code{character} The method used to calculate confidence interval.
-#' Defalt is "wald". Possible choices are methods supported in \code{DescTools::BinomDiffCI}.
+#' Defalt is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.
 #' @param axis_side \code{character} the side of the axis label, "left" or "right". Default is "left".
 #' @param color Color for the plot. \code{vector} of length 2. Color for reference and
-#' treatment arms respectively. Default set to c("blue", "red").
+#' treatment arms respectively. Default set to \code{c("blue", "red")}.
 #' @param shape Shape for the plot. \code{vector} of length 2. Shape for reference and
-#' treatment arms respectively. Default set to c(16, 17).
+#' treatment arms respectively. Default set to \code{c(16, 17)} per
+#' \code{\link[ggplot2]{scale_shape}}.
 #' @param fontsize \code{numeric} font size for the plot. It is the size used in ggplot2 with
-#' default unit "mm", if you want "points" you will need to devide the point number by "ggplot2:::.pt"
-#' @param draw \code{logical} whether to draw the Plot.
+#' default unit "mm", if you want "points" you will need to devide the point number by
+#' \code{ggplot2:::.pt}.
+#' @param draw \code{logical} whether to draw the plot.
 #' @details there is no equivalent STREAM output
 #'
 #' @return grob object
@@ -133,7 +135,8 @@ g_events_term_id <- function(term,
                              diff_range = c(-1, 1),
                              reversed = FALSE,
                              conf_level = 0.95,
-                             diff_ci_method = "wald",
+                             diff_ci_method = c("wald", "waldcc", "ac", "score", "scorecc",
+                                                "mn", "mee", "blj", "ha", "beal"),
                              axis_side = c("left", "right"),
                              color = c("blue", "red"),
                              shape = c(16, 17),
@@ -156,9 +159,8 @@ g_events_term_id <- function(term,
   }
   # argument validation
   sort_by <- match.arg(sort_by)
+  diff_ci_method <- match.arg(diff_ci_method)
   axis_side <- match.arg(axis_side)
-  possible_sort <- c("term", "riskdiff", "meanrisk")
-  possible_axis <- c("left", "right")
   term <- force(term)
   stop_if_not(
     list(!is_empty(term), "missing argument: term must be specified"),
@@ -182,15 +184,7 @@ g_events_term_id <- function(term,
       all(c(trt, ref) %in% unique(arm)),
       "invalid arguments: trt and ref need to be from arm"
     ),
-    list(
-      sort_by %in% possible_sort,
-      "invalid argument: sort_by should be 'term', 'riskdiff' or 'meanrisk'"
-    ),
-    list(
-      axis_side %in% possible_axis,
-      "invalid argument: axis_side should be 'left' or 'right'"
-    ),
-    list(
+   list(
       is_numeric_vector(rate_range, min_length = 2, max_length = 2),
       "invalid argument: rate_range should be a numeric vector of length 2"
     ),
@@ -201,21 +195,6 @@ g_events_term_id <- function(term,
     list(
       is_logical_single(reversed),
       "invalid argument: reversed should be a TRUE or FALSE"
-    ),
-    list(
-      is_character_single(diff_ci_method) &
-        diff_ci_method %in% c(
-          "wald",
-          "waldcc",
-          "ac",
-          "scorecc",
-          "score",
-          "mn",
-          "mee",
-          "blj",
-          "ha"
-        ),
-      "invalid argument: diff_ci_method should be a method supported by `DescTools::BinomDiffCI`"
     ),
     list(
       is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
@@ -365,13 +344,13 @@ g_events_term_id <- function(term,
 
   less_risk <- textGrob(
     "Favor\nTreatment",
-    just = "centre",
+    just = "left",
     x = unit(fontsize * .pt, "pt"),
     gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
   )
   more_risk <- textGrob(
     "Favor\nControl",
-    just = "centre",
+    just = "right",
     x = unit(1, "npc") - unit(fontsize * .pt, "pt"),
     gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
   )
@@ -537,6 +516,3 @@ create_flag_vars <- function(df,
   }, FUN.VALUE = TRUE)
   do.call(data.table, args = ret[valid])
 }
-
-#' allow data.table in pacakge
-.datatable.aware <- TRUE # nolint
