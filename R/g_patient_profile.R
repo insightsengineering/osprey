@@ -343,7 +343,7 @@ patient_domain_profile <- function(domain = NULL,
         data = line_data[!is.na(line_data$line_end), ],
         aes(
           x = var_names,
-          y = line_start,
+          y = .data$line_start,
           xend = var_names,
           yend = line_end,
           color = line_col),
@@ -357,7 +357,7 @@ patient_domain_profile <- function(domain = NULL,
         data = line_data[is.na(line_data$line_end) == TRUE, ],
         aes(
           x = var_names,
-          y = pmax(line_start, line_min, na.rm = TRUE),
+          y = pmax(.data$line_start, line_min, na.rm = TRUE),
           xend = var_names,
           yend = line_max,
           color = line_col
