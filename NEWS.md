@@ -1,6 +1,6 @@
-# osprey 0.1.4.9000
+# osprey 0.1.5
 
-* issues with no comments:
+* TBD
 
 # osprey 0.1.4
 
