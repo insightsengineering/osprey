@@ -9,7 +9,7 @@ grob_parts(gplot, parts)
 \arguments{
 \item{gplot}{ggplot or grob object}
 
-\item{part}{names vector of the parts to be extracted.}
+\item{parts}{names vector of the parts to be extracted.}
 }
 \description{
 Extract specific parts of a ggplot or grob

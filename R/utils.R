@@ -456,7 +456,7 @@ grob_part <- function(gplot_grob, part) {
 #' Extract specific parts of a ggplot or grob
 #'
 #' @param gplot ggplot or grob object
-#' @param part names vector of the parts to be extracted.
+#' @param parts names vector of the parts to be extracted.
 #' @importFrom checkmate assert check_class
 #'
 grob_parts <- function(gplot, parts) {

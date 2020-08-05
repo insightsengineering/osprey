@@ -20,6 +20,9 @@ Depends:
   dplyr (>= 0.8.0),
   ggplot2 (>= 2.0.0)
 Imports:
+  DescTools,
+  checkmate,
+  tidyr,
   grid,
   gridExtra,
   gtable,
@@ -31,7 +34,6 @@ Suggests:
   knitr,
   random.cdisc.data (>= 0.3.4),
   test.nest (>= 0.2.3),
-  tidyr,
   testthat (>= 2.0)
 RoxygenNote: 7.0.2
 URL:

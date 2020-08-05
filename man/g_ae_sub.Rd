@@ -6,27 +6,25 @@
 \usage{
 g_ae_sub(
   term,
-  term_selected,
   id,
   arm,
   arm_sl,
   subgroups,
   subgroups_sl,
-  trt = unique(arm)[1],
-  ref = unique(arm)[2],
+  trt = levels(arm)[1],
+  ref = levels(arm)[2],
   indent = 4,
-  subgroups_labels = NULL,
+  subgroups_levels = NULL,
   xmax = 0,
-  ci_method = "wald",
   conf_level = 0.95,
+  diff_ci_method = c("wald", "waldcc", "ac", "score", "scorecc", "mn", "mee", "blj",
+    "ha", "beal"),
   fontsize = 4,
   draw = TRUE
 )
 }
 \arguments{
-\item{term}{\code{character} event term vector.}
-
-\item{term_selected}{A \code{character} or \code{vector} include selected term(s) that is passed to analysis.
+\item{term}{\code{character} event term vector.
 All terms are included by default.}
 
 \item{id}{\code{vector} id of the event term vector.
@@ -43,19 +41,33 @@ For example, \code{ADSL$ACTARM}.}
 \item{subgroups_sl}{\code{data.frame} Subject level variables to conduct analysis.
 Usually from ADSL.}
 
-\item{ci_method}{\code{character} The method used to calculate confidence interval.
-Defalt is "wald".
-Possible choices are methods supported in `DescTools::BinomDiffCI`.}
+\item{trt}{\code{character} indicates the name of the treatment arm. Default is the second
+level of \code{arm}.}
 
-\item{conf_level}{\code{numeric} The confidence interval level, default set to 0.95.}
+\item{ref}{\code{character} indicates the name of the reference arm. Default is the first
+level of \code{arm}.}
 
-\item{fontsize}{a \code{numeric} value controls the size of the font.
-Default is 4.}
+\item{indent}{\code{numeric} non-negative integer where 0 means that the subgroup levels should not be indented}
 
 \item{subgroups_levels}{A nested named \code{list} of variables to conduct analysis.
 The names of the nested lists are used to show as the label.
 The children lists should start with "Total" = variable label,
 followed by labels for each level of said variable. See example for reference.}
+
+\item{xmax}{\code{numeric} maximum range for the x-axis.
+x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
+xmax is 0 by default}
+
+\item{conf_level}{\code{numeric} The confidence interval level, default set to 0.95.}
+
+\item{diff_ci_method}{\code{character} The method used to calculate confidence interval.
+Defalt is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
+
+\item{fontsize}{\code{numeric} font size for the plot. It is the size used in ggplot2 with
+default unit "mm", if you want "points" you will need to devide the point number by
+\code{ggplot2:::.pt}.}
+
+\item{draw}{\code{logical} whether to draw the plot.}
 }
 \value{
 grob object
@@ -70,18 +82,18 @@ there is no equivalent STREAM output
 library(osprey)
 library(random.cdisc.data)
 
-ADAE <- cadae
-ADSL <- cadsl
+ADAE <- radae(cached = TRUE)
+ADSL <- radsl(cached = TRUE)
 
 term <- as.character(ADAE$AEDECOD)
 id <- ADAE$USUBJID
-arm <- as.character(ADAE$ACTARMCD)
+arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)
 subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
 subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
 trt <- "ARM A"
 ref <- "ARM C"
-subgroups_labels <- list(RACE = list("Total" = "Race",
+subgroups_levels <- list(RACE = list("Total" = "Race",
                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
                                      "WHITE" = "White",
                                      "ASIAN" = "Asian",
@@ -94,15 +106,13 @@ subgroups_labels <- list(RACE = list("Total" = "Race",
                                     "M" = "Male",
                                     "F" = "Female",
                                     "U" = "Unknown"))
-term_selected <- unique(term)[1]
 g_ae_sub(term,
-         term_selected,
          id,
          arm,
          arm_sl,
          subgroups,
          subgroups_sl,
-         subgroups_labels = subgroups_labels)
+         subgroups_levels = subgroups_levels)
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}

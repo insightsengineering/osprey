@@ -13,16 +13,25 @@
 #' @param subgroups \code{data.frame} Variables to conduct analysis.
 #' @param subgroups_sl \code{data.frame} Subject level variables to conduct analysis.
 #' Usually from ADSL.
+#' @param ref \code{character} indicates the name of the reference arm. Default is the first
+#' level of \code{arm}.
+#' @param trt \code{character} indicates the name of the treatment arm. Default is the second
+#' level of \code{arm}.
+#' @param indent \code{numeric} non-negative integer where 0 means that the subgroup levels should not be indented
 #' @param subgroups_levels A nested named \code{list} of variables to conduct analysis.
 #' The names of the nested lists are used to show as the label.
 #' The children lists should start with "Total" = variable label,
 #' followed by labels for each level of said variable. See example for reference.
+#' @param xmax \code{numeric} maximum range for the x-axis.
+#' x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
+#' xmax is 0 by default
 #' @param conf_level \code{numeric} The confidence interval level, default set to 0.95.
-#' @param ci_method \code{character} The method used to calculate confidence interval.
-#' Defalt is "wald".
-#' Possible choices are methods supported in `DescTools::BinomDiffCI`.
-#' @param fontsize a \code{numeric} value controls the size of the font.
-#' Default is 4.
+#' @param diff_ci_method \code{character} The method used to calculate confidence interval.
+#' Defalt is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.
+#' @param fontsize \code{numeric} font size for the plot. It is the size used in ggplot2 with
+#' default unit "mm", if you want "points" you will need to devide the point number by
+#' \code{ggplot2:::.pt}.
+#' @param draw \code{logical} whether to draw the plot.
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
 #'
@@ -44,18 +53,18 @@
 #' library(osprey)
 #' library(random.cdisc.data)
 #'
-#' ADAE <- cadae
-#' ADSL <- cadsl
+#' ADAE <- radae(cached = TRUE)
+#' ADSL <- radsl(cached = TRUE)
 #'
 #' term <- as.character(ADAE$AEDECOD)
 #' id <- ADAE$USUBJID
-#' arm <- as.character(ADAE$ACTARMCD)
+#' arm <- ADAE$ACTARMCD
 #' arm_sl <- as.character(ADSL$ACTARMCD)
 #' subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
 #' subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
 #' trt <- "ARM A"
 #' ref <- "ARM C"
-#' subgroups_labels <- list(RACE = list("Total" = "Race",
+#' subgroups_levels <- list(RACE = list("Total" = "Race",
 #'                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
 #'                                      "WHITE" = "White",
 #'                                      "ASIAN" = "Asian",
@@ -74,7 +83,7 @@
 #'          arm_sl,
 #'          subgroups,
 #'          subgroups_sl,
-#'          subgroups_labels = subgroups_labels)
+#'          subgroups_levels = subgroups_levels)
 
 g_ae_sub <- function(term,
                      id,
@@ -82,15 +91,19 @@ g_ae_sub <- function(term,
                      arm_sl,
                      subgroups,
                      subgroups_sl,
-                     trt = unique(arm)[1],
-                     ref = unique(arm)[2],
+                     trt = levels(arm)[1],
+                     ref = levels(arm)[2],
                      indent = 4,
-                     subgroups_labels = NULL,
+                     subgroups_levels = NULL,
                      xmax = 0,
-                     ci_method = "wald",
                      conf_level = 0.95,
+                     diff_ci_method = c(
+                       "wald", "waldcc", "ac", "score", "scorecc",
+                       "mn", "mee", "blj", "ha", "beal"),
                      fontsize = 4,
                      draw = TRUE) {
+
+  diff_ci_method <- match.arg(diff_ci_method)
   stop_if_not(
     list(!is_empty(term), "missing argument: term must be specified"),
     list(!is_empty(id), "missing argument: id must be specified"),
@@ -98,8 +111,8 @@ g_ae_sub <- function(term,
     list(!is_empty(arm_sl), "missing argument: arm_sl must be specified"),
     list(!is_empty(subgroups), "missing argument: subgroups must be specified")
   )
-  if (!is.null(subgroups_labels)) {
-    labels <- unlist(subgroups_labels)
+  if (!is.null(subgroups_levels)) {
+    labels <- unlist(subgroups_levels)
     label_df <-
       tibble(level = str_replace_all(names(labels), "\\.", "__"),
              label = labels) %>%
@@ -121,12 +134,6 @@ g_ae_sub <- function(term,
     list(all(c(trt, ref) %in% unique(arm)),
          "invalid arguments: trt and ref need to be from arm"
     ),
-    list(is_character_single(ci_method) &
-           ci_method %in% c("wald", "waldcc", "ac",
-                            "scorecc", "score", "mn",
-                            "mee", "blj", "ha"),
-         "invalid argument: ci_method should be a method supported by `DescTools::BinomDiffCI`"
-    ),
     list(
       is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
       "invalid argument: conf_level should be a number between 0.5 and 1"
@@ -145,8 +152,8 @@ g_ae_sub <- function(term,
     ),
     list(is_numeric_single(indent) & between(indent, 0, Inf),
          "invalid argument: indent must be a number >= 0"),
-    list(is_numeric_single(xmax) & between(xmax, 0, Inf),
-         "invalid argument: xmax must be a number >= 0")
+    list(is_numeric_single(xmax),
+         "invalid argument: xmax must be a number")
   )
 
 
@@ -168,10 +175,7 @@ g_ae_sub <- function(term,
 
   df_ref <- tibble(arm = c(ref, trt))
 
-  df <- cbind(id = id,
-              term = term,
-              arm = arm,
-              subgroups) %>%
+  df <- cbind(id = id, term = term, arm = arm, subgroups) %>%
     filter(arm %in% c(ref, trt)) %>%
     select(-term) %>%
     unique %>%
@@ -219,14 +223,15 @@ g_ae_sub <- function(term,
       !!r1 := !!x1 / !!n1,
       !!r2 := !!x2 / !!n2,
       lower = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
-                          conf_level, method = ci_method)[2],
+                          conf_level, method = diff_ci_method)[2],
       upper = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
-                          conf_level, method = ci_method)[3],
+                          conf_level, method = diff_ci_method)[3],
       riskdiff = !!r1 - !!r2
     ) %>%
-    pivot_longer(matches("__"),
-                 names_to = c(".value", "arm"),
-                 names_sep = "__") %>%
+    pivot_longer(
+      matches("__"),
+      names_to = c(".value", "arm"),
+      names_sep = "__") %>%
     ungroup %>%
     unite("level", strata, value, remove = FALSE, sep = "__")
 
@@ -241,7 +246,7 @@ g_ae_sub <- function(term,
     mutate(order = if_else(strata == "TOTAL", integer(1), -row_number())) %>%
     arrange(order)
 
-  if (is.null(subgroups_labels)) {
+  if (is.null(subgroups_levels)) {
     level_format_df <- level_format_df %>%
       mutate(label = if_else(
         strata == "TOTAL",
@@ -306,10 +311,9 @@ g_ae_sub <- function(term,
       linetype = 1,
       color = "grey"
     ) +
-    geom_errorbarh(aes(xmin = lower,
-                       xmax = upper,
-                       y = level),
-                   height = 0.3) +
+    geom_errorbarh(
+      aes(xmin = lower, xmax = upper, y = level),
+      height = 0.3) +
     mytheme +
     theme(axis.ticks.x = element_line(),
           axis.line.x = element_line()) +
