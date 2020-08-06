@@ -46,7 +46,7 @@ for domains \code{ADAE} and \code{ADCM}
 (no line color is specified)\cr
 \item \code{line_col_opt} aesthetic values to map color values (named vector to map color values to each name).
      If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
-     otherwise color will be assigned by \code{\link{ggplot}} default
+     otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 \item \code{line_col_legend}: a string to be displayed as line color legend title when \code{line_col} is specified,
  default is \code{NULL} (no legend title is displayed)
 }}
@@ -64,7 +64,7 @@ or \code{ADCM} domain. Default is \code{no_enddate_extention = 0}.}
 default is \code{NULL} (no color markers is specified)
 \item \code{marker_col_opt} aesthetic values to map color values (named vector to map color values to each name)
      If not \code{NULL}, please make sure this contains all posible values for \code{marker_col} values,
-     otherwise color will be assigned by \code{ggplot} default
+     otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 \item \code{marker_col_legend} a string to be displayed as marker color legend title, default is \code{NULL}
 (no legend title is displayed)
 }}
