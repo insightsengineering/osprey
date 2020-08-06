@@ -578,7 +578,7 @@ patient_domain_profile <- function(domain = NULL,
 #' @template author_qit3
 #'
 #' @importFrom cowplot plot_grid
-#' @importFrom purrr map_lgl
+#' @importFrom purrr map2_lgl
 #'
 #' @return plot object
 #'
@@ -715,7 +715,7 @@ g_patient_profile <- function(ex = NULL,
                               xlab = "Study Day",
                               title = "Patient Profile") {
   domains <- list(ex = ex, ae = ae, rs = rs, cm = cm, lb = lb)
-  select <- map_lgl(domains, domain_check)
+  select <- map2_lgl(domains, names(domains), domain_check)
   names(select) <- names(domains)
 
   show_days_label <- c(FALSE, FALSE, FALSE, FALSE, FALSE)
@@ -908,13 +908,14 @@ g_patient_profile <- function(ex = NULL,
 
 #' a helper function for g_patient_profile to check whether the domain has data available
 #' @param domain domain input from g_patient_profile
-domain_check <- function(domain){
+#' @param name domain names
+domain_check <- function(domain, name){
   if (is.null(domain)){
     select <- FALSE
   } else {
     select <- TRUE
     if (dim(domain$data)[1] == 0 || is.null(domain$data)){
-      warning("No ADEX data for this subject")
+      warning(paste("No", name, "data for this subject"))
       select <- FALSE
     }
   }

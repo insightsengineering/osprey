@@ -1,6 +1,8 @@
 # osprey 0.1.5
 
-* TBD
+* Added new plot functions:
+  - Events by term plot `g_events_term_id`, which can be used to plot events (AE) by terms or AE overview.
+  - Patient profile plot `g_patient_profile`.
 
 # osprey 0.1.4
 
