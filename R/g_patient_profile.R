@@ -22,7 +22,7 @@
 #' (no line color is specified)\cr
 #' \item \code{line_col_opt} aesthetic values to map color values (named vector to map color values to each name).
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
-#'      otherwise color will be assigned by \code{\link{ggplot}} default
+#'      otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 #' \item \code{line_col_legend}: a string to be displayed as line color legend title when \code{line_col} is specified,
 #'  default is \code{NULL} (no legend title is displayed)
 #' }
@@ -36,7 +36,7 @@
 #' default is \code{NULL} (no color markers is specified)
 #' \item \code{marker_col_opt} aesthetic values to map color values (named vector to map color values to each name)
 #'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_col} values,
-#'      otherwise color will be assigned by \code{ggplot} default
+#'      otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 #' \item \code{marker_col_legend} a string to be displayed as marker color legend title, default is \code{NULL}
 #' (no legend title is displayed)
 #' }
@@ -339,7 +339,6 @@ patient_domain_profile <- function(domain = NULL,
       )
     names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
 
-
     p <- ggplot() +
       geom_segment(
         data = line_data[!is.na(line_data$line_end), ],
@@ -370,7 +369,7 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
         )
 
-    if (is.null(line_col_opt)) line_col_opt <- c(1:25)
+    if (is.null(line_col_opt)) line_col_opt <- hcl.colors(length(levels(line_data$line_col)))
 
     p <- p +
       scale_color_manual(
@@ -402,7 +401,7 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
         )
 
-    if (is.null(marker_col_opt)) marker_col_opt <- c(1:25)
+    if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(levels(marker_data$marker_col)))
     p <- p +
       scale_fill_manual(
         breaks = marker_data$marker_col,
@@ -468,7 +467,7 @@ patient_domain_profile <- function(domain = NULL,
       }
     }
 
-    if (is.null(marker_col_opt)) marker_col_opt <- c(1:25)
+    if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(levels(marker_data$marker_col)))
     p <- p +
       scale_fill_manual(
         name = marker_col_legend,
@@ -476,7 +475,7 @@ patient_domain_profile <- function(domain = NULL,
         values = marker_col_opt
         )
 
-    if (is.null(marker_shape_opt)) marker_shape_opt <- c(1:25)
+    if (is.null(marker_shape_opt)) marker_shape_opt <- 1:25
       p <- p + scale_shape_manual(
         name = marker_shape_legend,
         breaks = marker_data$marker_shape,
