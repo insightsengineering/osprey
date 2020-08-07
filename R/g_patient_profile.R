@@ -339,7 +339,6 @@ patient_domain_profile <- function(domain = NULL,
       )
     names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
 
-
     p <- ggplot() +
       geom_segment(
         data = line_data[!is.na(line_data$line_end), ],
@@ -370,7 +369,7 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
         )
 
-    if (is.null(line_col_opt)) line_col_opt <- hcl.colors(length(unique(line_data$line_col)))
+    if (is.null(line_col_opt)) line_col_opt <- hcl.colors(length(levels(line_data$line_col)))
 
     p <- p +
       scale_color_manual(
@@ -402,7 +401,7 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
         )
 
-    if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(unique(marker_data$marker_col)))
+    if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(levels(marker_data$marker_col)))
     p <- p +
       scale_fill_manual(
         breaks = marker_data$marker_col,
@@ -468,7 +467,7 @@ patient_domain_profile <- function(domain = NULL,
       }
     }
 
-    if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(unique(marker_data$marker_col)))
+    if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(levels(marker_data$marker_col)))
     p <- p +
       scale_fill_manual(
         name = marker_col_legend,
