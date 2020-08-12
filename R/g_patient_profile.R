@@ -249,7 +249,7 @@
 #'
 #' p5 <-
 #'   patient_domain_profile(
-#'     domain = "Laboratoy (ADLB)",
+#'     domain = "Laboratory (ADLB)",
 #'     var_names = ADLB$LBTESTCD,
 #'     marker_pos = ADLB$ADY,
 #'     arrow_end = ADSL$max_day,
