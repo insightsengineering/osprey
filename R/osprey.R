@@ -1,5 +1,8 @@
 #' osprey: Additional general TLGs to tern
 #'
+#' @description osprey: Additional general TLGs to tern
+#'
+#'
 #' @importFrom grDevices colors dev.off pdf
 #' @importFrom stats na.omit
 #' @importFrom tern t_max_grade_per_id
