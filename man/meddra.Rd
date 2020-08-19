@@ -4,7 +4,9 @@
 \name{meddra}
 \alias{meddra}
 \title{Meddra data}
-\format{An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 35333 rows and 8 columns.}
+\format{
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 35333 rows and 8 columns.
+}
 \source{
 internal
 }

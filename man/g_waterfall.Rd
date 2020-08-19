@@ -78,7 +78,7 @@ g_waterfall(
 ADSL <- rADSL[1:15,]
 ADRS <- rADRS \%>\%
   filter(USUBJID \%in\% ADSL$USUBJID)
-ADTR <- rADTR\%>\%
+ADTR <- rADTR \%>\%
   filter(USUBJID \%in\% ADSL$USUBJID) \%>\%
   select(USUBJID, PCHG) \%>\%
   group_by(USUBJID) \%>\%
@@ -110,7 +110,7 @@ g_waterfall(
   ytick_at = 20,
   gap_point = NULL,
   show_datavalue = TRUE,
-  y_label = "Best \% Change frome Baseline",
+  y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
 
@@ -129,7 +129,7 @@ g_waterfall(
   add_label = ANL$BESRSPI,
   ytick_at = 20,
   gap_point = 260,
-  y_label = "Best \% Change frome Baseline",
+  y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
 
@@ -153,7 +153,7 @@ g_waterfall(
   add_label = ANL$BESRSPI,
   ytick_at = 20,
   gap_point = 260,
-  y_label = "Best \% Change frome Baseline",
+  y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
 
