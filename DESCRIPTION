@@ -37,7 +37,7 @@ Suggests:
   test.nest (>= 0.2.4),
   tidyr,
   testthat (>= 2.0)
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 URL:
   https://github.roche.com/NEST/osprey/
 BugReports:
