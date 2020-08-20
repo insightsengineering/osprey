@@ -1,3 +1,7 @@
+# osprey 0.1.5.9000
+
+* issues with no news: 
+
 # osprey 0.1.5
 
 * Added new plot functions:
