@@ -43,8 +43,8 @@
 #' @return grob object
 #'
 #' @import ggplot2
+#' @importFrom tidyr pivot_wider unnest
 #' @importFrom gridExtra arrangeGrob
-#' @importFrom data.table data.table dcast ":=" transpose
 #' @importFrom grid textGrob unit unit.c grobHeight grobWidth
 #' @importFrom DescTools BinomDiffCI
 #' @importFrom utils.nest stop_if_not
@@ -150,18 +150,24 @@ g_events_term_id <- function(term,
     ref_count <-
     riskdiff <-
     meanrisk <- risk <- upper_ci <- lower_ci <- NULL # nolint
+
   if (is.data.frame(term)) {
     term_levels <- factor(colnames(term), levels = rev(colnames(term)))
-    term <- data.table::transpose(term)
+    term <- data.frame(t(term))
     term <- lapply(term, function(x) {
       term_levels[x]
-    })
+      })
+    df <- data.frame(id, arm, I(term)) %>%
+      tidyr::unnest(term)
+  } else {
+    df <- data.frame(id, arm, term)
   }
+
   # argument validation
   sort_by <- match.arg(sort_by)
   diff_ci_method <- match.arg(diff_ci_method)
   axis_side <- match.arg(axis_side)
-  term <- force(term)
+
   stop_if_not(
     list(!is_empty(term), "missing argument: term must be specified"),
     list(!is_empty(id), "missing argument: id must be specified"),
@@ -216,53 +222,73 @@ g_events_term_id <- function(term,
 
   # construct calculations
   arms <- c(ref, trt)
-  df_n <- data.table(arm_N)
+  df_n <- data.frame(arm_N)
   names(df_n) <- c("arm", "total")
   df_n <- df_n[df_n$arm %in% arms, ]
-  ref_total <- df_n[arm == ref, total] # nolint
-  trt_total <- df_n[arm == trt, total] # nolint
-  df <- data.table(id, arm, term)[, list(term = as.character(unlist(term))),
-                                  by = .(arm, id)]
-  df <- unique(df)[arm %in% arms,
-                   .N,
-                   by = .(arm, term)]
-  df[, arm := ifelse(arm == trt, "trt_count", "ref_count")]
-  df <- dcast(
-    df,
-    term ~ arm,
-    value.var = c("N"),
-    drop = FALSE,
-    fill = 0
-  )
+  ref_total <- df_n %>%
+    filter(arm == ref) %>%
+    select(total) %>%
+    as.numeric()
+  trt_total <- df_n %>%
+    filter(arm == trt) %>%
+    select(total) %>%
+    as.numeric()
 
-  df[, `:=`(trt_total = trt_total, ref_total = ref_total)]
+  df <- df %>%
+    distinct() %>%
+    filter(arm %in% arms) %>%
+    group_by(arm, term) %>%
+    summarise(N = n()) %>%
+    ungroup() %>%
+    mutate(arm = ifelse(arm == trt, "trt_count", "ref_count")) %>%
+    tidyr::pivot_wider(names_from = arm,
+                       values_from = N,
+                       values_fill = list(N = 0))
 
-  df_ci <- df[, .(
-    value = c(
-      BinomDiffCI(
-        trt_count,
-        trt_total,
-        ref_count,
-        ref_total,
-        conf_level,
-        method = diff_ci_method
-      )[1, ],
-      (trt_count + ref_count) / (trt_total + ref_total)
-    ),
-    param = c("riskdiff", "lower_ci", "upper_ci", "meanrisk")
-  ), by = .(term)]
-  df_ci <- dcast(df_ci, term ~ param, variable.var = "value")
-  df_risk <- df[, .(
-    risk = c(trt_count / trt_total, ref_count / ref_total),
-    arm = c(trt, ref)
-  ), by = .(term)]
+  df_ci <- df %>%
+    group_by(term) %>%
+    do(
+      data.frame(
+        t(c(
+          BinomDiffCI(
+            .$trt_count,
+            trt_total,
+            .$ref_count,
+            ref_total,
+            conf_level,
+            method = diff_ci_method
+            )[1, ], # wald
+          meanrisk = (.$trt_count + .$ref_count) / (trt_total + ref_total)))
+        )
+      ) %>%
+    ungroup() %>%
+    rename(riskdiff = est,
+           lower_ci = lwr.ci,
+           upper_ci = upr.ci)
+
+  df_risk <- df %>%
+    group_by(term) %>%
+    do(
+      data.frame(
+        risk = c(.$trt_count / trt_total, .$ref_count / ref_total),
+        arm = c(trt, ref)
+        )
+      ) %>%
+    ungroup()
+
   names(color) <- arms
   names(shape) <- arms
 
   # if diff_range specified, limit terms
-  terms_needed <- unique(df_ci[(riskdiff > diff_range[1] &
-                                  riskdiff < diff_range[2]) &
-                                 (meanrisk > rate_range[1] & meanrisk < rate_range[2]), term])
+  terms_needed <- df_ci %>%
+    filter(
+      (riskdiff > diff_range[1] & riskdiff < diff_range[2]) &
+             (meanrisk > rate_range[1] & meanrisk < rate_range[2])
+      ) %>%
+    select(term) %>%
+    distinct() %>%
+    pull() %>%
+    as.character()
 
   if (length(terms_needed) == 0) {
     ret <- textGrob("All Observations are filtered out")
@@ -276,18 +302,23 @@ g_events_term_id <- function(term,
   if (sort_by == "term") {
     terms_needed <- sort(terms_needed, decreasing = TRUE)
   } else {
-    terms_needed <-
-      df_ci[order(df_ci[[sort_by]], decreasing = FALSE)][term %in% terms_needed, term]
+    terms_needed <- df_ci %>%
+      arrange(.data[[sort_by]]) %>%
+      filter(term %in% terms_needed) %>%
+      select(term) %>%
+      pull()
   }
 
   if (reversed) {
     terms_needed <- rev(terms_needed)
   }
 
-  df_ci <- df_ci[term %in% terms_needed]
-  df_ci[, term := factor(term, terms_needed)]
-  df_risk <- df_risk[term %in% terms_needed]
-  df_risk[, term := factor(term, terms_needed)]
+  df_ci <- df_ci %>%
+    filter(term %in% terms_needed) %>%
+    mutate(term = factor(term, terms_needed))
+  df_risk <- df_risk %>%
+    filter(term %in% terms_needed) %>%
+    mutate(term = factor(term, terms_needed))
   terms_label <- vapply(
     lapply(terms_needed, strwrap, width = 30),
     paste,
@@ -297,7 +328,7 @@ g_events_term_id <- function(term,
 
   mytheme <- theme_osprey(axis_side = axis_side, fontsize = fontsize)
 
-  labels <- setNames(df_n[, sprintf("%s\n(N = %i)", arm, total)], df_n$arm)
+  labels <- setNames(sprintf("%s\n(N = %i)", df_n$arm, df_n$total), df_n$arm)
 
   y_axis <-
     scale_y_discrete(
@@ -429,7 +460,6 @@ g_events_term_id <- function(term,
 #' @param related_modified Related AE leading to dose modification derivation
 #' @param ctc35 Grade 3-5 AE derivation
 #' @param ... named expressions used to generate categories
-#' @importFrom data.table data.table as.data.table
 #' @details in this function, all flags are expressions calls, for simpler usage.
 #' @export
 #' @examples
@@ -490,10 +520,10 @@ create_flag_vars <- function(df,
   args <- c(args, eval(substitute(alist(...))))
   stopifnot(all(names(args) != "")) # all elements in ... should be named
   argnames <- unique(names(args))
-  df <- as.data.table(df)
+  df <- as.data.frame(df)
   ret <- lapply(argnames, function(t) {
     tryCatch({
-      df[, eval(args[[t]])]
+      with(df, eval(args[[t]]))
     },
     error = function(w) {
       NULL
@@ -514,5 +544,5 @@ create_flag_vars <- function(df,
     }
     valid
   }, FUN.VALUE = TRUE)
-  do.call(data.table, args = ret[valid])
+  do.call(data.frame, args = ret[valid])
 }

@@ -90,7 +90,7 @@ there is no equivalent STREAM output
 }
 \examples{
 library(random.cdisc.data)
-library(osprey)
+library(grid)
 
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
