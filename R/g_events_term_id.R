@@ -56,7 +56,8 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' library(osprey)
+#' library(grid)
+#' library(rtables)
 #'
 #' ADSL <- radsl(cached = TRUE)
 #' ADAE <- radae(cached = TRUE)

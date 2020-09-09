@@ -37,6 +37,7 @@ this is an equivalent of the STREAM output \code{\%stream_t_summary(templates = 
 \examples{
 # Simple example
 library(dplyr)
+library(rtables)
 
 ASL <- tibble(
   USUBJID = paste0("id-", 1:10),

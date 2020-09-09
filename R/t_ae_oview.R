@@ -48,6 +48,7 @@
 #'
 #' @examples
 #' library(dplyr)
+#' library(rtables)
 #'
 #' ANL <- rADAE
 #' flag <- data.frame(
