@@ -143,21 +143,13 @@ g_events_term_id <- function(term,
                              shape = c(16, 17),
                              fontsize = 4,
                              draw = TRUE) {
-  # check issues
-  `.` <-
-    `.N` <- # nolint
-    total <-
-    trt_count <-
-    ref_count <-
-    riskdiff <-
-    meanrisk <- risk <- upper_ci <- lower_ci <- NULL # nolint
 
   if (is.data.frame(term)) {
     term_levels <- factor(colnames(term), levels = rev(colnames(term)))
     term <- data.frame(t(term))
     term <- lapply(term, function(x) {
       term_levels[x]
-      })
+    })
     df <- data.frame(id, arm, I(term)) %>%
       tidyr::unnest(term)
   } else {
@@ -228,12 +220,12 @@ g_events_term_id <- function(term,
   df_n <- df_n[df_n$arm %in% arms, ]
   ref_total <- df_n %>%
     filter(arm == ref) %>%
-    select(total) %>%
-    as.numeric()
+    select(.data$total) %>%
+    pull()
   trt_total <- df_n %>%
     filter(arm == trt) %>%
-    select(total) %>%
-    as.numeric()
+    select(.data$total) %>%
+    pull()
 
   df <- df %>%
     distinct() %>%
@@ -243,7 +235,7 @@ g_events_term_id <- function(term,
     ungroup() %>%
     mutate(arm = ifelse(arm == trt, "trt_count", "ref_count")) %>%
     tidyr::pivot_wider(names_from = arm,
-                       values_from = N,
+                       values_from = .data$N,
                        values_fill = list(N = 0))
 
   df_ci <- df %>%
@@ -252,26 +244,26 @@ g_events_term_id <- function(term,
       data.frame(
         t(c(
           BinomDiffCI(
-            .$trt_count,
+            .data$trt_count,
             trt_total,
-            .$ref_count,
+            .data$ref_count,
             ref_total,
             conf_level,
             method = diff_ci_method
             )[1, ], # wald
-          meanrisk = (.$trt_count + .$ref_count) / (trt_total + ref_total)))
+          meanrisk = (.data$trt_count + .data$ref_count) / (trt_total + ref_total)))
         )
       ) %>%
     ungroup() %>%
-    rename(riskdiff = est,
-           lower_ci = lwr.ci,
-           upper_ci = upr.ci)
+    rename(riskdiff = .data$est,
+           lower_ci = .data$lwr.ci,
+           upper_ci = .data$upr.ci)
 
   df_risk <- df %>%
     group_by(term) %>%
     do(
       data.frame(
-        risk = c(.$trt_count / trt_total, .$ref_count / ref_total),
+        risk = c(.data$trt_count / trt_total, .data$ref_count / ref_total),
         arm = c(trt, ref)
         )
       ) %>%
@@ -283,9 +275,9 @@ g_events_term_id <- function(term,
   # if diff_range specified, limit terms
   terms_needed <- df_ci %>%
     filter(
-      (riskdiff > diff_range[1] & riskdiff < diff_range[2]) &
-             (meanrisk > rate_range[1] & meanrisk < rate_range[2])
-      ) %>%
+      .data$riskdiff > diff_range[1] & .data$riskdiff < diff_range[2] &
+             .data$meanrisk > rate_range[1] & .data$meanrisk < rate_range[2]
+    ) %>%
     select(term) %>%
     distinct() %>%
     pull() %>%
@@ -342,7 +334,7 @@ g_events_term_id <- function(term,
   p1 <- ggplot(df_risk) +
     geom_point(aes(
       y = term,
-      x = risk,
+      x = .data$risk,
       group = arm,
       color = arm,
       shape = arm
@@ -355,13 +347,13 @@ g_events_term_id <- function(term,
     y_axis
 
   p2 <- ggplot(df_ci) +
-    geom_point(mapping = aes(y = term, x = riskdiff),
+    geom_point(mapping = aes(y = term, x = .data$riskdiff),
                size = fontsize * 0.7) +
     geom_vline(data = NULL,
                xintercept = 0,
                linetype = 2) +
     mytheme +
-    geom_errorbarh(mapping = aes(xmax = upper_ci, xmin = lower_ci, y = term),
+    geom_errorbarh(mapping = aes(xmax = .data$upper_ci, xmin = .data$lower_ci, y = term),
                    height = 0.4) +
     y_axis +
     ggtitle("Risk Difference")
