@@ -68,6 +68,7 @@ this is an equivalent of the STREAM output
 }
 \examples{
 library(dplyr)
+library(rtables)
 
 ANL <- rADAE
 flag <- data.frame(
