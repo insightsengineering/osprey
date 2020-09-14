@@ -27,6 +27,7 @@
 #' @importFrom rtables rrow col_by_to_matrix
 #' @examples
 #' # Simple example
+#' library(rtables)
 #' library(dplyr)
 #'
 #' ASL <- tibble(
