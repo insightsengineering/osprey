@@ -343,12 +343,12 @@ patient_domain_profile <- function(domain = NULL,
     p <- ggplot() +
       geom_segment(
         data = line_data[!is.na(line_data$line_end), ],
-        aes_string(
-          x = "var_names",
-          y = "line_start",
-          xend = "var_names",
-          yend = "line_end",
-          color = "line_col"),
+        aes(
+          x = var_names,
+          y = line_start,
+          xend = var_names,
+          yend = line_end,
+          color = line_col),
         lineend = "round", linejoin = "round",
         size = line_width, arrow = NULL, show.legend = NA,
         na.rm = TRUE
@@ -357,12 +357,12 @@ patient_domain_profile <- function(domain = NULL,
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       geom_segment(
         data = line_data[is.na(line_data$line_end) == TRUE, ],
-        aes_string(
-          x = "var_names",
-          y = pmax("line_start", "line_min", na.rm = TRUE),
-          xend = "var_names",
-          yend = "line_max",
-          color = "line_col"
+        aes(
+          x = var_names,
+          y = pmax(line_start, line_min, na.rm = TRUE),
+          xend = var_names,
+          yend = line_max,
+          color = line_col
           ),
         lineend = "round", linejoin = "round",
         size = line_width, show.legend = FALSE,
@@ -893,9 +893,9 @@ g_patient_profile <- function(ex = NULL,
     as.data.frame() %>%
     # keep the selected domains
     dplyr::filter(select == TRUE) %>%
-    dplyr::mutate(nline_dat = ifelse(.data$. <= 10 & .data$. > 0, 10, .data$.)) %>%
+    dplyr::mutate(nline_dat = ifelse(. <= 10 & . > 0, 10, .)) %>%
     # relative height
-    dplyr::mutate(sbplt_ht = unlist(.data$nline_dat) / sum(unlist(.data$nline_dat)))
+    dplyr::mutate(sbplt_ht = unlist(nline_dat) / sum(unlist(nline_dat)))
 
   cowplot::plot_grid(
     plotlist = plot_list,
