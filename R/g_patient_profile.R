@@ -343,12 +343,12 @@ patient_domain_profile <- function(domain = NULL,
     p <- ggplot() +
       geom_segment(
         data = line_data[!is.na(line_data$line_end), ],
-        aes(
-          x = .data$var_names,
-          y = .data$line_start,
-          xend = .data$var_names,
-          yend = .data$line_end,
-          color = .data$line_col),
+        aes_string(
+          x = "var_names",
+          y = "line_start",
+          xend = "var_names",
+          yend = "line_end",
+          color = "line_col"),
         lineend = "round", linejoin = "round",
         size = line_width, arrow = NULL, show.legend = NA,
         na.rm = TRUE
@@ -357,12 +357,12 @@ patient_domain_profile <- function(domain = NULL,
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       geom_segment(
         data = line_data[is.na(line_data$line_end) == TRUE, ],
-        aes(
-          x = .data$var_names,
-          y = pmax(.data$line_start, .data$line_min, na.rm = TRUE),
-          xend = .data$var_names,
-          yend = .data$line_max,
-          color = .data$line_col
+        aes_string(
+          x = "var_names",
+          y = pmax("line_start", "line_min", na.rm = TRUE),
+          xend = "var_names",
+          yend = "line_max",
+          color = "line_col"
           ),
         lineend = "round", linejoin = "round",
         size = line_width, show.legend = FALSE,
