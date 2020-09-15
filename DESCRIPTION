@@ -16,6 +16,8 @@ Encoding: UTF-8
 LazyData: true
 Depends:
   R (>= 3.3),
+  rtables,
+  tern,
   dplyr (>= 0.8.0),
   ggplot2 (>= 2.0.0)
 Imports:
@@ -25,9 +27,7 @@ Imports:
   gridExtra,
   gtable,
   rlang,
-  rtables (>= 0.1.7),
   stringr,
-  tern (>= 0.6.8),
   tidyr (>= 1.0.0),
   utils.nest (>= 0.2.5),
   DescTools
