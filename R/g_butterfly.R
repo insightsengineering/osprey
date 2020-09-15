@@ -253,25 +253,25 @@ g_butterfly <- function(category,
 
   # plot butterfly plot --------------------
   if (!is.null(block_color)) {
-    pl <- ggplot(NULL, aes_string(x = "y")) +
-      geom_bar(data = counts_r, aes_string(y = "n_i", fill = "bar_color"), stat = "identity") +
-      geom_bar(data = counts_l, aes_string(y = "-n_i", fill = "bar_color"), stat = "identity") +
-      geom_text(data = counts_r, aes_string(y = "label_ypos", label = "n_i"), hjust = 0.9) +
-      geom_text(data = counts_l, aes_string(y = "-label_ypos", label = "n_i"), hjust = -0.9) +
-      geom_text(data = total_text_ann_r, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
-      geom_text(data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"),
+    pl <- ggplot(NULL, aes(x = .data$y)) +
+      geom_bar(data = counts_r, aes(y = .data$n_i, fill = .data$bar_color), stat = "identity") +
+      geom_bar(data = counts_l, aes(y = -.data$n_i, fill = .data$bar_color), stat = "identity") +
+      geom_text(data = counts_r, aes(y = .data$label_ypos, label = .data$n_i), hjust = 0.9) +
+      geom_text(data = counts_l, aes(y = -.data$label_ypos, label = .data$n_i), hjust = -0.9) +
+      geom_text(data = total_text_ann_r, aes(y = .data$label_ypos, label = .data$n), fontface = "bold", hjust = -1) +
+      geom_text(data = total_text_ann_l, aes(y = -.data$label_ypos - 0.4, label = .data$n),
                 fontface = "bold", hjust = 0.9) +
       geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
       labs(x = y_label, y = block_count, fill = legend_label)
   } else {
-    pl <- ggplot(NULL, aes_string(x = "y")) +
-      geom_bar(data = counts_r, aes_string(y = "n_i"), stat = "identity") +
-      geom_bar(data = counts_l, aes_string(y = "-n_i"), stat = "identity") +
+    pl <- ggplot(NULL, aes(x = .data$y)) +
+      geom_bar(data = counts_r, aes(y = .data$n_i), stat = "identity") +
+      geom_bar(data = counts_l, aes(y = -.data$n_i), stat = "identity") +
       geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
-      geom_text(data = total_text_ann_r, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
-      geom_text(data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"),
+      geom_text(data = total_text_ann_r, aes(y = .data$label_ypos, label = .data$n), fontface = "bold", hjust = -1) +
+      geom_text(data = total_text_ann_l, aes(y = -.data$label_ypos - 0.4, label = .data$n),
                 fontface = "bold", hjust = 0.9) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
