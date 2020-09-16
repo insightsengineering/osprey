@@ -24,9 +24,9 @@
 #'
 #' @template author_zhanc107
 #'
-#' @importFrom rtables rrow col_by_to_matrix
 #' @examples
 #' # Simple example
+#' library(rtables)
 #' library(dplyr)
 #'
 #' ASL <- tibble(
@@ -82,240 +82,249 @@
 #' tbl2
 #'
 t_ae <- function(class, term, id, col_by, total = "All Patients") {
-
-  # check input arguments ---------------------------
-  col_n <- tapply(id, col_by, function(x) sum(!duplicated(x)))
-  check_col_by(class, col_by_to_matrix(col_by), col_n, min_num_levels = 1)
-
-  if (any("- Overall -" %in% term)) {
-    stop("'- Overall -' is not a valid term, t_ae reserves it for derivation")
-  }
-  if (any("All Patients" %in% col_by)) {
-    stop("'All Patients' is not a valid col_by, t_ae derives All Patients column")
-  }
-
-  check_input_length <- c(nrow(data.frame(class)),
-                          nrow(data.frame(term)),
-                          nrow(data.frame(id)),
-                          nrow(data.frame(col_by)))
-  check_input_col <- c(ncol(data.frame(class)),
-                       ncol(data.frame(term)),
-                       ncol(data.frame(id)),
-                       ncol(data.frame(col_by)))
-
-  if (length(unique(check_input_length)) > 1) {
-    stop("invalid arguments: check that the length of input arguments are identical")
-  }
-  if (length(unique(check_input_col)) > 1 || unique(check_input_col) != 1) {
-    stop("invalid arguments: check that the inputs have a single column")
-  }
-  if (any(check_input_length == 0) || any(check_input_col == 0)) {
-    stop("invalid arguments: check that inputs are not null")
-  }
-
-  # prepare data ------------------------------------
-  df <- data.frame(
-    class = class,
-    term = term,
-    subjid = id,
-    col_by = col_by,
-    stringsAsFactors = FALSE
-  )
-
-  df <- df %>% dplyr::arrange(class, term)
-
-  df <- df %>% dplyr::mutate(
-    class = ifelse(class == "", "No Coding Available", class),
-    term = ifelse(term == "", "No Coding Available", term)
-  )
-
-  class_label <- attr(class, "label")
-  term_label <- attr(term, "label")
-
-  if (is.null(class_label))
-    class_label <- deparse(substitute(class))
-  if (is.null(term_label))
-    term_label <- deparse(substitute(term))
-
-  # adding All Patients
-  if (!is.null(total)) {
-    total <- tot_column(total)
-    if (total %in% levels(col_by)) {
-      stop(paste("col_by can not have", total, "group."))
-    }
-
-    df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
-  }
-
-  # total N for column header (with All Patients)
-  n_total <- tapply(df$subjid, df$col_by, function(x) sum(!duplicated(x)))
-
-  # need to remove extra records that came from subject level data
-  # when left join was done. also any record that is missing class or term
-  df <- na.omit(df)
-
-  # start tabulating --------------------------------------------------------
-  n_cols <- nlevels(col_by)
-
-  # class and term chunks
-  l_t_class_terms <- lapply(split(df, df$class), function(df_s_cl) {
-    df_s_cl_term <- c(
-      list("Total number of patients with at least one adverse event" = df_s_cl),
-      split(df_s_cl, df_s_cl$term)
-    )
-
-    df_s_cl_num_ae <- list("Total number of events" = df_s_cl)
-
-    # count number of AE - includes duplicates per patient
-    l_t_num_ae <- lapply(df_s_cl_num_ae, function(df_i) {
-      df_id <- na.omit(data.frame(df_i$subjid, df_i$col_by))
-      colnames(df_id) <- c("id", "col_by")
-
-      tbl <- rtabulate(
-        df_id,
-        row_by = by_all(""),
-        col_by = df_id$col_by,
-        FUN = count_col_N,
-        col_wise_args = list(n_i = n_total),
-        format = "xx"
-      )
-
-      header(tbl) <- rheader(
-        rrowl("", levels(df_id$col_by)),
-        rrowl("", unname(n_total), format = "(N=xx)")
-      )
-      tbl
-    })
-
-    l_t_terms <- lapply(df_s_cl_term, function(df_i) {
-      df_id <- data.frame(df_i$subjid, df_i$col_by)
-      colnames(df_id) <- c("id", "col_by")
-      df_id <- df_id[!duplicated(df_id$id), ]
-
-
-      tbl <- rtabulate(
-        na.omit(df_id),
-        row_by = by_all(""),
-        col_by = df_id$col_by,
-        FUN = count_perc_col_N,
-        col_wise_args = list(n_i = n_total),
-        format = "xx (xx.x%)"
-      )
-
-      header(tbl) <- rheader(
-        rrowl("", levels(df_id$col_by)),
-        rrowl("", unname(n_total), format = "(N=xx)")
-      )
-      tbl
-    })
-
-    l_t_summary <- c(l_t_terms[1], l_t_num_ae)
-    l_t_terms <- c(l_t_terms[2:length(l_t_terms)])
-
-    # sort terms by total
-    n_total_any <- vapply(l_t_terms, function(tbl) {
-      a <- 0
-      for (i in c(1:n_cols)) {
-        a <- a + tbl[1, i][1]
-      }
-      a
-    }, numeric(1))
-
-    l_t_terms <- l_t_terms[order(-n_total_any, names(l_t_terms), decreasing = FALSE)]
-
-
-    l_t_terms <- c(l_t_summary, l_t_terms)
-  })
-
-  # now sort tables
-  n_total_overall <- vapply(l_t_class_terms, function(tbl) {
-    a <- 0
-    for (i in c(1:n_cols)) {
-      a <- a + tbl[[1]][1, i][1]
-    }
-    a
-  }, numeric(1))
-
-  l_t_class_terms <- l_t_class_terms[order(-n_total_overall, names(l_t_class_terms), decreasing = FALSE)]
-
-  # Overall: total num patients
-  df_patients <- list("Total number of patients with at least one adverse event" = df)
-  tbl_overall_patients <- lapply(df_patients, function(df_i) {
-    df_id <- data.frame(df_i$subjid, df_i$col_by)
-    colnames(df_id) <- c("id", "col_by")
-    df_id <- df_id[!duplicated(df_id$id), ]
-
-    tbl <- rtabulate(
-      na.omit(df_id),
-      row_by = by_all(""),
-      col_by = df_id$col_by,
-      FUN = count_perc_col_N,
-      col_wise_args = list(n_i = n_total),
-      format = "xx (xx.x%)"
-    )
-
-    header(tbl) <- rheader(
-      rrowl("", levels(df_id$col_by)),
-      rrowl("", unname(n_total), format = "(N=xx)")
-    )
-    tbl
-  })
-
-  # Overall: total num of events
-  df_ae <- list("Overall total number of events" = df)
-
-  # count number of AE - includes duplicates per patient
-  tbl_overall_ae <- lapply(df_ae, function(df_i) {
-    df_id <- data.frame(df_i$subjid, df_i$col_by)
-    colnames(df_id) <- c("id", "col_by")
-
-    tbl <- rtabulate(
-      na.omit(df_id),
-      row_by = by_all(""),
-      col_by = df_id$col_by,
-      FUN = count_col_N,
-      col_wise_args = list(n_i = n_total),
-      format = "xx"
-    )
-
-    header(tbl) <- rheader(
-      rrowl("", levels(df_id$col_by)),
-      rrowl("", unname(n_total), format = "(N=xx)")
-    )
-    tbl
-  })
-
-  tbls_all <- l_t_class_terms
-
-  tbls_overview <- c(
-    list("Total number of patients with at least one adverse event" = tbl_overall_patients),
-    list("Overall total number of events" = tbl_overall_ae)
-  )
-
-  tbls_class <- Map(function(tbls_i, class_i) {
-    lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    t2 <- do.call(stack_rtables_condense, lt1)
-    add_ae_class(indent(t2, 1), class_i)
-  }, tbls_all, names(tbls_all))
-
-  tbls_ov <- Map(function(tbls_i) {
-    lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
-    do.call(stack_rtables_condense, lt1) # nolint
-  }, tbls_overview)
-
-
-  tbl_cl <- do.call(stack_rtables, tbls_class)
-  tbl_total <- do.call(stack_rtables, tbls_ov)
-
-
-  header <- attr(tbl_cl, "header")
-  tbl_with_empty_rows <- rtablel(header = header, replicate(1, rrow()))
-
-  tbl <- rbind(tbl_total, tbl_with_empty_rows, tbl_cl)
-
-  attr(attr(tbl, "header")[[1]], "row.name") <- class_label
-  attr(attr(tbl, "header")[[2]], "row.name") <- term_label
-  attr(attr(tbl, "header")[[2]], "indent") <- 1
-
-  return(tbl)
+  tbl <- basic_table() %>%
+    analyze("x", function(x) "To be completed") %>%
+    build_table(data.frame(x = 1))
 }
+
+
+# REFACTOR
+# nolint start
+# t_ae <- function(class, term, id, col_by, total = "All Patients") {
+#   # check input arguments ---------------------------
+#   col_n <- tapply(id, col_by, function(x) sum(!duplicated(x)))
+#   check_col_by(class, col_by_to_matrix(col_by), col_n, min_num_levels = 1)
+#
+#   if (any("- Overall -" %in% term)) {
+#     stop("'- Overall -' is not a valid term, t_ae reserves it for derivation")
+#   }
+#   if (any("All Patients" %in% col_by)) {
+#     stop("'All Patients' is not a valid col_by, t_ae derives All Patients column")
+#   }
+#
+#   check_input_length <- c(nrow(data.frame(class)),
+#                           nrow(data.frame(term)),
+#                           nrow(data.frame(id)),
+#                           nrow(data.frame(col_by)))
+#   check_input_col <- c(ncol(data.frame(class)),
+#                        ncol(data.frame(term)),
+#                        ncol(data.frame(id)),
+#                        ncol(data.frame(col_by)))
+#
+#   if (length(unique(check_input_length)) > 1) {
+#     stop("invalid arguments: check that the length of input arguments are identical")
+#   }
+#   if (length(unique(check_input_col)) > 1 || unique(check_input_col) != 1) {
+#     stop("invalid arguments: check that the inputs have a single column")
+#   }
+#   if (any(check_input_length == 0) || any(check_input_col == 0)) {
+#     stop("invalid arguments: check that inputs are not null")
+#   }
+#
+#   # prepare data ------------------------------------
+#   df <- data.frame(
+#     class = class,
+#     term = term,
+#     subjid = id,
+#     col_by = col_by,
+#     stringsAsFactors = FALSE
+#   )
+#
+#   df <- df %>% dplyr::arrange(class, term)
+#
+#   df <- df %>% dplyr::mutate(
+#     class = ifelse(class == "", "No Coding Available", class),
+#     term = ifelse(term == "", "No Coding Available", term)
+#   )
+#
+#   class_label <- attr(class, "label")
+#   term_label <- attr(term, "label")
+#
+#   if (is.null(class_label))
+#     class_label <- deparse(substitute(class))
+#   if (is.null(term_label))
+#     term_label <- deparse(substitute(term))
+#
+#   # adding All Patients
+#   if (!is.null(total)) {
+#     total <- tot_column(total)
+#     if (total %in% levels(col_by)) {
+#       stop(paste("col_by can not have", total, "group."))
+#     }
+#
+#     df <- duplicate_with_var(df, subjid = paste(df$subjid, "-", total), col_by = total)
+#   }
+#
+#   # total N for column header (with All Patients)
+#   n_total <- tapply(df$subjid, df$col_by, function(x) sum(!duplicated(x)))
+#
+#   # need to remove extra records that came from subject level data
+#   # when left join was done. also any record that is missing class or term
+#   df <- na.omit(df)
+#
+#   # start tabulating --------------------------------------------------------
+#   n_cols <- nlevels(col_by)
+#
+#   # class and term chunks
+#   l_t_class_terms <- lapply(split(df, df$class), function(df_s_cl) {
+#     df_s_cl_term <- c(
+#       list("Total number of patients with at least one adverse event" = df_s_cl),
+#       split(df_s_cl, df_s_cl$term)
+#     )
+#
+#     df_s_cl_num_ae <- list("Total number of events" = df_s_cl)
+#
+#     # count number of AE - includes duplicates per patient
+#     l_t_num_ae <- lapply(df_s_cl_num_ae, function(df_i) {
+#       df_id <- na.omit(data.frame(df_i$subjid, df_i$col_by))
+#       colnames(df_id) <- c("id", "col_by")
+#
+#       tbl <- rtabulate(
+#         df_id,
+#         row_by = by_all(""),
+#         col_by = df_id$col_by,
+#         FUN = count_col_N,
+#         col_wise_args = list(n_i = n_total),
+#         format = "xx"
+#       )
+#
+#       header(tbl) <- rheader(
+#         rrowl("", levels(df_id$col_by)),
+#         rrowl("", unname(n_total), format = "(N=xx)")
+#       )
+#       tbl
+#     })
+#
+#     l_t_terms <- lapply(df_s_cl_term, function(df_i) {
+#       df_id <- data.frame(df_i$subjid, df_i$col_by)
+#       colnames(df_id) <- c("id", "col_by")
+#       df_id <- df_id[!duplicated(df_id$id), ]
+#
+#
+#       tbl <- rtabulate(
+#         na.omit(df_id),
+#         row_by = by_all(""),
+#         col_by = df_id$col_by,
+#         FUN = count_perc_col_N,
+#         col_wise_args = list(n_i = n_total),
+#         format = "xx (xx.x%)"
+#       )
+#
+#       header(tbl) <- rheader(
+#         rrowl("", levels(df_id$col_by)),
+#         rrowl("", unname(n_total), format = "(N=xx)")
+#       )
+#       tbl
+#     })
+#
+#     l_t_summary <- c(l_t_terms[1], l_t_num_ae)
+#     l_t_terms <- c(l_t_terms[2:length(l_t_terms)])
+#
+#     # sort terms by total
+#     n_total_any <- vapply(l_t_terms, function(tbl) {
+#       a <- 0
+#       for (i in c(1:n_cols)) {
+#         a <- a + tbl[1, i][1]
+#       }
+#       a
+#     }, numeric(1))
+#
+#     l_t_terms <- l_t_terms[order(-n_total_any, names(l_t_terms), decreasing = FALSE)]
+#
+#
+#     l_t_terms <- c(l_t_summary, l_t_terms)
+#   })
+#
+#   # now sort tables
+#   n_total_overall <- vapply(l_t_class_terms, function(tbl) {
+#     a <- 0
+#     for (i in c(1:n_cols)) {
+#       a <- a + tbl[[1]][1, i][1]
+#     }
+#     a
+#   }, numeric(1))
+#
+#   l_t_class_terms <- l_t_class_terms[order(-n_total_overall, names(l_t_class_terms), decreasing = FALSE)]
+#
+#   # Overall: total num patients
+#   df_patients <- list("Total number of patients with at least one adverse event" = df)
+#   tbl_overall_patients <- lapply(df_patients, function(df_i) {
+#     df_id <- data.frame(df_i$subjid, df_i$col_by)
+#     colnames(df_id) <- c("id", "col_by")
+#     df_id <- df_id[!duplicated(df_id$id), ]
+#
+#     tbl <- rtabulate(
+#       na.omit(df_id),
+#       row_by = by_all(""),
+#       col_by = df_id$col_by,
+#       FUN = count_perc_col_N,
+#       col_wise_args = list(n_i = n_total),
+#       format = "xx (xx.x%)"
+#     )
+#
+#     header(tbl) <- rheader(
+#       rrowl("", levels(df_id$col_by)),
+#       rrowl("", unname(n_total), format = "(N=xx)")
+#     )
+#     tbl
+#   })
+#
+#   # Overall: total num of events
+#   df_ae <- list("Overall total number of events" = df)
+#
+#   # count number of AE - includes duplicates per patient
+#   tbl_overall_ae <- lapply(df_ae, function(df_i) {
+#     df_id <- data.frame(df_i$subjid, df_i$col_by)
+#     colnames(df_id) <- c("id", "col_by")
+#
+#     tbl <- rtabulate(
+#       na.omit(df_id),
+#       row_by = by_all(""),
+#       col_by = df_id$col_by,
+#       FUN = count_col_N,
+#       col_wise_args = list(n_i = n_total),
+#       format = "xx"
+#     )
+#
+#     header(tbl) <- rheader(
+#       rrowl("", levels(df_id$col_by)),
+#       rrowl("", unname(n_total), format = "(N=xx)")
+#     )
+#     tbl
+#   })
+#
+#   tbls_all <- l_t_class_terms
+#
+#   tbls_overview <- c(
+#     list("Total number of patients with at least one adverse event" = tbl_overall_patients),
+#     list("Overall total number of events" = tbl_overall_ae)
+#   )
+#
+#   tbls_class <- Map(function(tbls_i, class_i) {
+#     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
+#     t2 <- do.call(stack_rtables_condense, lt1)
+#     add_ae_class(indent(t2, 1), class_i)
+#   }, tbls_all, names(tbls_all))
+#
+#   tbls_ov <- Map(function(tbls_i) {
+#     lt1 <- Map(shift_label_table_no_grade, tbls_i, names(tbls_i))
+#     do.call(stack_rtables_condense, lt1) # nolint
+#   }, tbls_overview)
+#
+#
+#   tbl_cl <- do.call(stack_rtables, tbls_class)
+#   tbl_total <- do.call(stack_rtables, tbls_ov)
+#
+#
+#   header <- attr(tbl_cl, "header")
+#   tbl_with_empty_rows <- rtablel(header = header, replicate(1, rrow()))
+#
+#   tbl <- rbind(tbl_total, tbl_with_empty_rows, tbl_cl)
+#
+#   attr(attr(tbl, "header")[[1]], "row.name") <- class_label
+#   attr(attr(tbl, "header")[[2]], "row.name") <- term_label
+#   attr(attr(tbl, "header")[[2]], "indent") <- 1
+#
+#   return(tbl)
+# }
+# nolint end

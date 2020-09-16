@@ -5,9 +5,8 @@
 #'
 #' @importFrom grDevices colors dev.off pdf
 #' @importFrom stats na.omit
-#' @importFrom tern t_max_grade_per_id
-#' @importFrom rtables indent
 #' @import dplyr ggplot2 utils.nest
+#' @import rtables
 #' @rawNamespace import(gridExtra, except = combine)
 #' @docType package
 #' @name osprey
