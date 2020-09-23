@@ -21,7 +21,7 @@
 #' \item \code{line_col}: factor vector to specify color for segments , default is \code{NULL}
 #' (no line color is specified)\cr
 #' \item \code{line_col_opt} aesthetic values to map color values (named vector to map color values to each name).
-#'      If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
+#'      If not \code{NULL}, please make sure this contains all possible values for \code{line_col} values,
 #'      otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 #' \item \code{line_col_legend}: a string to be displayed as line color legend title when \code{line_col} is specified,
 #'  default is \code{NULL} (no legend title is displayed)
@@ -35,7 +35,7 @@
 #' \item \code{marker_col} a factor vector to specify color for markers,
 #' default is \code{NULL} (no color markers is specified)
 #' \item \code{marker_col_opt} aesthetic values to map color values (named vector to map color values to each name)
-#'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_col} values,
+#'      If not \code{NULL}, please make sure this contains all possible values for \code{marker_col} values,
 #'      otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 #' \item \code{marker_col_legend} a string to be displayed as marker color legend title, default is \code{NULL}
 #' (no legend title is displayed)
@@ -45,7 +45,7 @@
 #' \item \code{marker_shape} factor vector to specify shape for markers,
 #' default is \code{NULL} (no shape marker is specified)
 #' \item  \code{marker_shape_opt} aesthetic values to map shape values (named vector to map shape values to each name).
-#'      If not \code{NULL}, please make sure this contains all posible values for \code{marker_shape} values,
+#'      If not \code{NULL}, please make sure this contains all possible values for \code{marker_shape} values,
 #'      otherwise shape will be assigned by \code{ggplot} default
 #' \item \code{marker_shape_legend} string to be displayed as marker shape legend title, default is \code{NULL}
 #' (no legend title is displayed)
@@ -55,7 +55,7 @@
 #'     \code{xlim = c(-28, max(marker_pos) + 5)}
 #' @param xlab string to be shown as x-axis label, default is \code{"Study Day"}
 #' @param show_title boolean value for showing title of the plot, default is \code{TRUE}
-#' @param title string to be shown as title of the plot, default is \code{NULL} (no plot title is depalyed)
+#' @param title string to be shown as title of the plot, default is \code{NULL} (no plot title is displayed)
 #'
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
 #' @author Tina Cho (chot) \email{tina.cho@roche.com}
@@ -307,18 +307,24 @@ patient_domain_profile <- function(domain = NULL,
 
   #check user input
   stop_if_not(
-    list(length(unique(nrow(data.frame(var_names)), nrow(data.frame(marker_pos)), nrow(data.frame(arrow_end)))) == 1,
-         "invalid arguments: check that the length of input arguments are identical"),
-    list(ncol(data.frame(marker_pos)) <= 2,
-         "invalid argument: check that marker_pos is either a vector or a data frame with two columns"),
-    list(is.null(line_col) || length(line_col) == length(var_names),
-         "invalid arguments: check that the length of line_col is equal as other inputs"),
-    list(is.null(marker_col) || length(marker_col) == length(var_names),
-         "invalid arguments: check that the length of marker_col is equal as other inputs"),
-    list(is.null(marker_shape) || length(marker_shape) == length(var_names),
-         "invalid arguments: check that the length of marker_shape is equal as other inputs"),
-    list(is_numeric_vector(xlim, min_length = 2, max_length = 2),
-         "invalid arguments: check that xlim is of type numeric vector")
+    list(
+      length(unique(nrow(data.frame(var_names)), nrow(data.frame(marker_pos)), nrow(data.frame(arrow_end)))) == 1,
+      "invalid arguments: check that the length of input arguments are identical"),
+    list(
+      ncol(data.frame(marker_pos)) <= 2,
+      "invalid argument: check that marker_pos is either a vector or a data frame with two columns"),
+    list(
+      is.null(line_col) || length(line_col) == length(var_names),
+      "invalid arguments: check that the length of line_col is equal as other inputs"),
+    list(
+      is.null(marker_col) || length(marker_col) == length(var_names),
+      "invalid arguments: check that the length of marker_col is equal as other inputs"),
+    list(
+      is.null(marker_shape) || length(marker_shape) == length(var_names),
+      "invalid arguments: check that the length of marker_shape is equal as other inputs"),
+    list(
+      is_numeric_vector(xlim, min_length = 2, max_length = 2),
+      "invalid arguments: check that xlim is of type numeric vector")
   )
 
   marker_data <- data.frame(
@@ -368,7 +374,7 @@ patient_domain_profile <- function(domain = NULL,
         size = line_width, show.legend = FALSE,
         arrow = arrow(length = unit(arrow_size, "inches")),
         na.rm = TRUE
-        )
+      )
 
     if (is.null(line_col_opt)) line_col_opt <- hcl.colors(length(levels(line_data$line_col)))
 
@@ -377,7 +383,7 @@ patient_domain_profile <- function(domain = NULL,
         breaks = line_data$line_col,
         values = line_col_opt,
         limits = levels(line_data$line_col)
-        )
+      )
 
     if (!is.null(line_col)) {
       p <- p + guides(color = guide_legend(line_col_legend, order = 1))
@@ -400,14 +406,14 @@ patient_domain_profile <- function(domain = NULL,
         shape = 22,
         size = 3,
         na.rm = TRUE
-        )
+      )
 
     if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(levels(marker_data$marker_col)))
     p <- p +
       scale_fill_manual(
         breaks = marker_data$marker_col,
         values = marker_col_opt
-        )
+      )
 
 
     p <- p + theme_bw() +
@@ -474,7 +480,7 @@ patient_domain_profile <- function(domain = NULL,
         name = marker_col_legend,
         breaks = marker_data$marker_col,
         values = marker_col_opt
-        )
+      )
 
     if (is.null(marker_shape_opt)) marker_shape_opt <- 1:25
       p <- p + scale_shape_manual(
@@ -548,7 +554,7 @@ patient_domain_profile <- function(domain = NULL,
 #' \item \code{line_col_legend} string to be displayed as line color legend title of \code{ADAE} plot
 #' \item \code{line_col_opt} aesthetic values to map line color values of \code{ADAE} plot
 #'      (named vector to map color values to each name).
-#'      If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
+#'      If not \code{NULL}, please make sure this contains all possible values for \code{line_col} values,
 #'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be
 #'      specified
 #' }
@@ -757,32 +763,31 @@ g_patient_profile <- function(ex = NULL,
   # Domain "ADAE"
   if (select["ae"]) {
     p2 <- patient_domain_profile(
-       domain = "Adverse Event (ADAE)",
-       var_names = ae$var,
-       marker_pos = ae$data[, c("ASTDY", "AENDY")],
-       arrow_end = arrow_end_day,
-       xtick_at = waiver(),
-       line_col_list = list(
-         line_col = ae$line_col,
-         line_col_legend = ae$line_col_legend,
-         line_col_opt = ae$line_col_opt
-       ),
-       line_width = 1,
-       arrow_size = 0.1,
-       no_enddate_extention = 0.1,
-       marker_col_list = list(
-         marker_col = factor(ae$data$AETOXGR),
-         marker_col_opt = c("1" = "green", "2" = "blue",
-                            "3" = "yellow", "4" = "orange", "5" = "red"),
-         marker_col_legend = "Grade"
-       ),
-       marker_shape_list = NULL,
-       show_days_label = show_days_label[2],
-       xlim = xlim,
-       xlab = xlab,
-       show_title = show_title[2],
-       title = title
-       )
+      domain = "Adverse Event (ADAE)",
+      var_names = ae$var,
+      marker_pos = ae$data[, c("ASTDY", "AENDY")],
+      arrow_end = arrow_end_day,
+      xtick_at = waiver(),
+      line_col_list = list(
+        line_col = ae$line_col,
+        line_col_legend = ae$line_col_legend,
+        line_col_opt = ae$line_col_opt
+      ),
+      line_width = 1,
+      arrow_size = 0.1,
+      no_enddate_extention = 0.1,
+      marker_col_list = list(
+        marker_col = factor(ae$data$AETOXGR),
+        marker_col_opt = c("1" = "green", "2" = "blue", "3" = "yellow", "4" = "orange", "5" = "red"),
+        marker_col_legend = "Grade"
+      ),
+      marker_shape_list = NULL,
+      show_days_label = show_days_label[2],
+      xlim = xlim,
+      xlab = xlab,
+      show_title = show_title[2],
+      title = title
+      )
   } else {
     p2 <- NULL
   }
@@ -791,32 +796,32 @@ g_patient_profile <- function(ex = NULL,
   # Domain "ADRS"
   if (select["rs"]) {
     p3 <- patient_domain_profile(
-       domain = "Response (ADRS)",
-       var_names = rs$var,
-       marker_pos = rs$data$ADY,
-       arrow_end = arrow_end_day,
-       xtick_at = waiver(),
-       line_col_list = NULL,
-       line_width = 1,
-       arrow_size = 0.1,
-       no_enddate_extention = 0,
-       marker_col_list = list(
-         marker_col = factor(rs$data$AVALC),
-         marker_col_opt =  c("CR" = "green", "PR" = "blue", "SD" = "yellow",
-                             "PD" = "red", "NE" = "pink", "Y" = "lightblue", "N" = "darkred")
-       ),
-       marker_shape_list = list(
-         marker_shape = factor(rs$data$AVALC),
-         marker_shape_opt = c("CR" = 21, "PR" = 24, "SD" = 23, "PD" = 22, "NE" = 14,
-                              "Y" = 11, "N" = 8),
-         marker_shape_legend = "Response"
-       ),
-       show_days_label = show_days_label[3],
-       xlim = xlim,
-       xlab = xlab,
-       show_title = show_title[3],
-       title = title
-       )
+      domain = "Response (ADRS)",
+      var_names = rs$var,
+      marker_pos = rs$data$ADY,
+      arrow_end = arrow_end_day,
+      xtick_at = waiver(),
+      line_col_list = NULL,
+      line_width = 1,
+      arrow_size = 0.1,
+      no_enddate_extention = 0,
+      marker_col_list = list(
+        marker_col = factor(rs$data$AVALC),
+        marker_col_opt =
+          c("CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
+            "NE" = "pink", "Y" = "lightblue", "N" = "darkred")
+      ),
+      marker_shape_list = list(
+        marker_shape = factor(rs$data$AVALC),
+        marker_shape_opt = c("CR" = 21, "PR" = 24, "SD" = 23, "PD" = 22, "NE" = 14, "Y" = 11, "N" = 8),
+        marker_shape_legend = "Response"
+      ),
+      show_days_label = show_days_label[3],
+      xlim = xlim,
+      xlab = xlab,
+      show_title = show_title[3],
+      title = title
+      )
   } else {
     p3 <- NULL
   }
@@ -825,23 +830,23 @@ g_patient_profile <- function(ex = NULL,
   # Domain "ADCM"
   if (select["cm"]) {
     p4 <- patient_domain_profile(
-       domain = "Conmed (ADCM)",
-       var_names = cm$var,
-       marker_pos = cm$data[, c("ASTDY", "AENDY")],
-       arrow_end = arrow_end_day,
-       xtick_at = waiver(),
-       line_col_list = list(line_col_opt = "orange"),
-       line_width = 1,
-       arrow_size = 0.1,
-       no_enddate_extention = 0.1,
-       marker_col_list = list(marker_col_opt = "orange"),
-       marker_shape_list = NULL,
-       show_days_label = show_days_label[4],
-       xlim = xlim,
-       xlab = xlab,
-       show_title = show_title[4],
-       title = title
-       )
+      domain = "Conmed (ADCM)",
+      var_names = cm$var,
+      marker_pos = cm$data[, c("ASTDY", "AENDY")],
+      arrow_end = arrow_end_day,
+      xtick_at = waiver(),
+      line_col_list = list(line_col_opt = "orange"),
+      line_width = 1,
+      arrow_size = 0.1,
+      no_enddate_extention = 0.1,
+      marker_col_list = list(marker_col_opt = "orange"),
+      marker_shape_list = NULL,
+      show_days_label = show_days_label[4],
+      xlim = xlim,
+      xlab = xlab,
+      show_title = show_title[4],
+      title = title
+      )
   } else {
     p4 <- NULL
   }
@@ -849,31 +854,30 @@ g_patient_profile <- function(ex = NULL,
   # Domain "ADLB"
   if (select["lb"]) {
     p5 <- patient_domain_profile(
-       domain = "Laboratory (ADLB)",
-       var_names = lb$var,
-       marker_pos = lb$data$ADY,
-       arrow_end = arrow_end_day,
-       xtick_at = waiver(),
-       line_col_list = NULL,
-       line_width = 1,
-       arrow_size = 0.1,
-       no_enddate_extention = 0,
-       marker_col_list = list(
-         marker_col = factor(lb$data$ANRIND),
-         marker_col_opt =  c("HIGH" = "red", "LOW" = "blue",
-                             "NORMAL" = "green")
-       ),
-       marker_shape_list = list(
-         marker_shape = factor(lb$data$ANRIND),
-         marker_shape_opt = c("HIGH" = 24, "LOW" = 25, "NORMAL" = 23),
-         marker_shape_legend = "Labs Abnormality"
-       ),
-       show_days_label = show_days_label[5],
-       xlim = xlim,
-       xlab = xlab,
-       show_title = show_title[5],
-       title = title
-       )
+      domain = "Laboratory (ADLB)",
+      var_names = lb$var,
+      marker_pos = lb$data$ADY,
+      arrow_end = arrow_end_day,
+      xtick_at = waiver(),
+      line_col_list = NULL,
+      line_width = 1,
+      arrow_size = 0.1,
+      no_enddate_extention = 0,
+      marker_col_list = list(
+        marker_col = factor(lb$data$ANRIND),
+        marker_col_opt =  c("HIGH" = "red", "LOW" = "blue", "NORMAL" = "green")
+      ),
+      marker_shape_list = list(
+        marker_shape = factor(lb$data$ANRIND),
+        marker_shape_opt = c("HIGH" = 24, "LOW" = 25, "NORMAL" = 23),
+        marker_shape_legend = "Labs Abnormality"
+      ),
+      show_days_label = show_days_label[5],
+      xlim = xlim,
+      xlab = xlab,
+      show_title = show_title[5],
+      title = title
+      )
   } else {
     p5 <- NULL
   }
@@ -883,8 +887,7 @@ g_patient_profile <- function(ex = NULL,
 
   plot_list <- plot_list[select]
   # distribute space by number of levels in each domain
-  var_list <- list(ex$var, ae$var, rs$var,
-                   cm$var, lb$var)
+  var_list <- list(ex$var, ae$var, rs$var, cm$var, lb$var)
   var_list <- var_list %>%
     lapply(unique) %>%
     lapply(length) %>%

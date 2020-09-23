@@ -31,9 +31,9 @@ Represents events information. \code{term} can be a \code{data.frame} produced
 by \code{create_flag_vars}, with each column being a \code{logical} event indicator}
 
 \item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the
-same as the length or number of rows of \code{terms}. Ususally it is \code{ADAE$USUBJID}.}
+same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.}
 
-\item{arm}{\code{factor} vector that contains arm informatiion in analysis data.
+\item{arm}{\code{factor} vector that contains arm information in analysis data.
 For example, \code{ADAE$ACTARMCD}.}
 
 \item{arm_N}{(\code{numeric} vector)\cr
@@ -60,7 +60,7 @@ Default is FALSE.}
 \item{conf_level}{\code{numeric} The confidence interval level, default is 0.95.}
 
 \item{diff_ci_method}{\code{character} The method used to calculate confidence interval.
-Defalt is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
+Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
 \item{axis_side}{\code{character} the side of the axis label, "left" or "right". Default is "left".}
 
@@ -72,7 +72,7 @@ treatment arms respectively. Default set to \code{c(16, 17)} per
 \code{\link[ggplot2]{scale_shape}}.}
 
 \item{fontsize}{\code{numeric} font size for the plot. It is the size used in ggplot2 with
-default unit "mm", if you want "points" you will need to devide the point number by
+default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 
 \item{draw}{\code{logical} whether to draw the plot.}

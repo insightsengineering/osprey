@@ -198,40 +198,40 @@
 # }
 #
 #
+# #' stack a modified version of a data frame
+# #'
+# #' essenially rbind(X,modified(X)). this is useful for example when a total
+# #' column is needed.
+# #'
+# #' @param X a data.frame
+# #' @param ... key=value pairs, where the key refers to a variable in X and value
+# #'   is the valueof the variable in modified(X)
+# #'
+# #' @noRd
+# #'
+# #' @importFrom rtables var_labels var_labels<-
+# #'
+# #' @examples
+# #'
+# #' duplicate_with_var(iris, Species = "Total")
+# duplicate_with_var <- function(x, ...) { # nolint
+#   dots <- list(...)
+#   nms <- names(dots)
+#   if (length(nms) > 1 && (is.null(nms) || !all(nms %in% names(x)))) {
+#     stop("not all names in ... are existent or in X")
+#   }
+#   x_copy <- x
+#   vl <- var_labels(x)
+#   for (var in nms) {
+#     x_copy[[var]] <- dots[[var]]
+#   }
+#   y <- rbind(x, x_copy)
+#   var_labels(y) <- vl
+#   y
+# }
+#
+#
 # nolint end
-
-#' stack a modified version of a data frame
-#'
-#' essenially rbind(X,modified(X)). this is useful for example when a total
-#' column is needed.
-#'
-#' @param X a data.frame
-#' @param ... key=value pairs, where the key refers to a variable in X and value
-#'   is the valueof the variable in modified(X)
-#'
-#' @noRd
-#'
-#' @importFrom rtables var_labels var_labels<-
-#'
-#' @examples
-#'
-#' duplicate_with_var(iris, Species = "Total")
-duplicate_with_var <- function(x, ...) { # nolint
-  dots <- list(...)
-  nms <- names(dots)
-  if (length(nms) > 1 && (is.null(nms) || !all(nms %in% names(x)))) {
-    stop("not all names in ... are existent or in X")
-  }
-  x_copy <- x
-  vl <- var_labels(x)
-  for (var in nms) {
-    x_copy[[var]] <- dots[[var]]
-  }
-  y <- rbind(x, x_copy)
-  var_labels(y) <- vl
-  y
-}
-
 
 
 #' Output decorated grob (gTree) objects as PDF
@@ -472,8 +472,7 @@ grob_part <- function(gplot_grob, part) {
 #' @importFrom grid rectGrob
 #'
 grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
-  ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v),
-                widths = unit.c(pad_h, unit(1, "null"), pad_h))
+  ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v), widths = unit.c(pad_h, unit(1, "null"), pad_h))
   ret <- gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
   ret <- gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
   return(ret)

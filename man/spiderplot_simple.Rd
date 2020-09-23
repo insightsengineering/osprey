@@ -30,7 +30,7 @@ spiderplot_simple(
 ggplot object
 }
 \description{
-Descr of this plot
+Description of this plot
 }
 \examples{
 library(dplyr)

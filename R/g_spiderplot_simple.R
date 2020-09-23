@@ -1,6 +1,6 @@
 #' Simple spider plot
 #'
-#' Descr of this plot
+#' Description of this plot
 #'
 #' @param anl The analysis data frame (e.g. ATE.sas7bdat on BCE)
 #' @param byvar Analysis dataset
@@ -28,8 +28,12 @@
 #'   dplyr::filter(PARAMCD == "OVRINV") %>%
 #'   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 #'
-spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
-    mes_value = "PARAM", group_col = "USUBJID", baseday = 0) {
+spiderplot_simple <- function(anl,
+                              byvar = "USUBJID",
+                              days = "TRTDURD",
+                              mes_value = "PARAM",
+                              group_col = "USUBJID",
+                              baseday = 0) {
   ### remove patients without post baseline measurement
   anl <- anl %>%
     group_by(!!byvar) %>%
@@ -42,8 +46,11 @@ spiderplot_simple <- function(anl, byvar = "USUBJID", days = "TRTDURD",
     slice(which.max(!!as.symbol(days)))
 
   # plotr
-  ggplot(data = anl, mapping = aes_string(x = days, y = mes_value, group = byvar, colour = group_col),
-          size = 2, alpha = 1) +
+  ggplot(
+    data = anl,
+    mapping = aes_string(x = days, y = mes_value, group = byvar, colour = group_col),
+    size = 2,
+    alpha = 1) +
     geom_point(size = 3) + geom_line(size = 2, alpha = 0.7) +
     geom_text(aes_string(x = days, y = mes_value, label = byvar), data = last_obs, hjust = 0) +
     geom_hline(aes(yintercept = 0), linetype = "dotted", color = "black") +
