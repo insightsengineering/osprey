@@ -33,7 +33,7 @@ by decreasing height}
 the argument \code{bar_color_opt} is provided}
 
 \item{bar_color_opt}{aesthetic values to map color values (named vector to map color values to each name).
-If not \code{NULL}, please make sure this contains all posible values for \code{col_by} values,
+If not \code{NULL}, please make sure this contains all possible values for \code{col_by} values,
 otherwise default ggplot color will be assigned, please note that \code{NULL} needs to be specified
 in this case}
 

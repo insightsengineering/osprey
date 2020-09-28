@@ -2,7 +2,7 @@
 ##
 ## First Draft: Federico Mattiello & Adrian Waddell
 ##
-## Modified by Chendi Liao (liaoc10) for Osprey ED teal module development
+## Modified by Chendi Liao (liaoc10) for osprey ED teal module development
 ## - Random VAD data generation ED study VADS
 
 library(dplyr)

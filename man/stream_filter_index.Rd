@@ -16,7 +16,7 @@ stream_filter_index(string1, string2)
 }
 \description{
 Assumption is that use in filters is to only resolve true vs false
-Primarily for use with stream_filter and releated stream_filter_convwhere functions
+Primarily for use with stream_filter and related stream_filter_convwhere functions
 }
 \examples{
 AEACN <- c("DRUG MODIFIED", "DRUG STOPPED", "DOSE/DRUG MODIFIED")

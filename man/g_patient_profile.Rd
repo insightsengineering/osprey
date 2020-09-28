@@ -31,7 +31,7 @@ g_patient_profile(
 \item \code{line_col_legend} string to be displayed as line color legend title of \code{ADAE} plot
 \item \code{line_col_opt} aesthetic values to map line color values of \code{ADAE} plot
      (named vector to map color values to each name).
-     If not \code{NULL}, please make sure this contains all posible values for \code{line_col} values,
+     If not \code{NULL}, please make sure this contains all possible values for \code{line_col} values,
      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be
      specified
 }}
