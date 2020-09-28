@@ -1,6 +1,6 @@
 
 
-## Osprey
+## osprey
 
 `osprey` is a R package for crowd sourcing development of analysis functions to
 create TLGs. We also provide [teal](https://github.roche.com/Rpackages/teal)
@@ -83,7 +83,7 @@ devtools::install_github(
 
 ## Development
 
-Everyone is welcome to share their R functions in `opsrey`.
+Everyone is welcome to share their R functions in `osprey`.
 
 ### Requirements
 
@@ -100,12 +100,12 @@ To qualify to `osprey` package, TLG code has to:
 For this to work you need to have access to libraries `pkgdown` and
 `random.cdisc.data`. Please start by watching the following video:
 
-* [Add a TLG function to the Osrpey R
+* [Add a TLG function to the osprey R
 package](https://streamingmedia.roche.com/media/Adding+TLG+functions+to+the+Osprey+R+package/1_4newkk7i)
 
 That is, follow the following steps:
 
-1. Clone the opsrey repository
+1. Clone the osprey repository
 2. Create branch
 3. Develop a function
 4. Create roxygen comments (ctrl+shift+alt+R or copy from earlier)
@@ -115,7 +115,7 @@ That is, follow the following steps:
 8. Create webpage (in console: `pkgdown::build_site()`)
 9. When everything works, make pull request.
 
-# Contributers:
+# Contributors:
 
 - **Nina Qi (qit3@gene.com)**
 - Chendi Liao (chendi.liao@roche.com)

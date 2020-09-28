@@ -8,8 +8,8 @@
 #' Represents events information. \code{term} can be a \code{data.frame} produced
 #' by \code{create_flag_vars}, with each column being a \code{logical} event indicator
 #' @param id \code{vector} contains subject identifier. Length of \code{id} must be the
-#' same as the length or number of rows of \code{terms}. Ususally it is \code{ADAE$USUBJID}.
-#' @param arm \code{factor} vector that contains arm informatiion in analysis data.
+#' same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.
+#' @param arm \code{factor} vector that contains arm information in analysis data.
 #' For example, \code{ADAE$ACTARMCD}.
 #' @param arm_N (\code{numeric} vector)\cr
 #' Contains information of the number of patients in the levels of \code{arm}. This is useful
@@ -27,7 +27,7 @@
 #' Default is FALSE.
 #' @param conf_level \code{numeric} The confidence interval level, default is 0.95.
 #' @param diff_ci_method \code{character} The method used to calculate confidence interval.
-#' Defalt is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.
+#' Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.
 #' @param axis_side \code{character} the side of the axis label, "left" or "right". Default is "left".
 #' @param color Color for the plot. \code{vector} of length 2. Color for reference and
 #' treatment arms respectively. Default set to \code{c("blue", "red")}.
@@ -35,7 +35,7 @@
 #' treatment arms respectively. Default set to \code{c(16, 17)} per
 #' \code{\link[ggplot2]{scale_shape}}.
 #' @param fontsize \code{numeric} font size for the plot. It is the size used in ggplot2 with
-#' default unit "mm", if you want "points" you will need to devide the point number by
+#' default unit "mm", if you want "points" you will need to divide the point number by
 #' \code{ggplot2:::.pt}.
 #' @param draw \code{logical} whether to draw the plot.
 #' @details there is no equivalent STREAM output
@@ -136,8 +136,8 @@ g_events_term_id <- function(term,
                              diff_range = c(-1, 1),
                              reversed = FALSE,
                              conf_level = 0.95,
-                             diff_ci_method = c("wald", "waldcc", "ac", "score", "scorecc",
-                                                "mn", "mee", "blj", "ha", "beal"),
+                             diff_ci_method =
+                               c("wald", "waldcc", "ac", "score", "scorecc", "mn", "mee", "blj", "ha", "beal"),
                              axis_side = c("left", "right"),
                              color = c("blue", "red"),
                              shape = c(16, 17),
@@ -183,7 +183,7 @@ g_events_term_id <- function(term,
       all(c(trt, ref) %in% unique(arm)),
       "invalid arguments: trt and ref need to be from arm"
     ),
-   list(
+    list(
       is_numeric_vector(rate_range, min_length = 2, max_length = 2),
       "invalid argument: rate_range should be a numeric vector of length 2"
     ),
@@ -234,9 +234,7 @@ g_events_term_id <- function(term,
     summarise(N = n()) %>%
     ungroup() %>%
     mutate(arm = ifelse(arm == trt, "trt_count", "ref_count")) %>%
-    tidyr::pivot_wider(names_from = arm,
-                       values_from = .data$N,
-                       values_fill = list(N = 0))
+    tidyr::pivot_wider(names_from = arm, values_from = .data$N, values_fill = list(N = 0))
 
   df_ci <- df %>%
     group_by(term) %>%
@@ -255,9 +253,7 @@ g_events_term_id <- function(term,
         )
       ) %>%
     ungroup() %>%
-    rename(riskdiff = .data$est,
-           lower_ci = .data$lwr.ci,
-           upper_ci = .data$upr.ci)
+    rename(riskdiff = .data$est, lower_ci = .data$lwr.ci, upper_ci = .data$upr.ci)
 
   df_risk <- df %>%
     group_by(term) %>%
@@ -276,7 +272,7 @@ g_events_term_id <- function(term,
   terms_needed <- df_ci %>%
     filter(
       .data$riskdiff > diff_range[1] & .data$riskdiff < diff_range[2] &
-             .data$meanrisk > rate_range[1] & .data$meanrisk < rate_range[2]
+        .data$meanrisk > rate_range[1] & .data$meanrisk < rate_range[2]
     ) %>%
     select(term) %>%
     distinct() %>%
@@ -347,14 +343,10 @@ g_events_term_id <- function(term,
     y_axis
 
   p2 <- ggplot(df_ci) +
-    geom_point(mapping = aes(y = term, x = .data$riskdiff),
-               size = fontsize * 0.7) +
-    geom_vline(data = NULL,
-               xintercept = 0,
-               linetype = 2) +
+    geom_point(mapping = aes(y = term, x = .data$riskdiff), size = fontsize * 0.7) +
+    geom_vline(data = NULL, xintercept = 0, linetype = 2) +
     mytheme +
-    geom_errorbarh(mapping = aes(xmax = .data$upper_ci, xmin = .data$lower_ci, y = term),
-                   height = 0.4) +
+    geom_errorbarh(mapping = aes(xmax = .data$upper_ci, xmin = .data$lower_ci, y = term), height = 0.4) +
     y_axis +
     ggtitle("Risk Difference")
 
@@ -387,31 +379,34 @@ g_events_term_id <- function(term,
   axis_b1 <- grob_part(p1_parts, "axis-b")
   axis_b2 <- grob_part(p2_parts, "axis-b")
 
-  grobs <- list(title1,
-                title2,
-                axis,
-                panel1,
-                panel2,
-                axis_b1,
-                axis_b2,
-                mylegend,
-                risk_label)
+  grobs <- list(
+    title1,
+    title2,
+    axis,
+    panel1,
+    panel2,
+    axis_b1,
+    axis_b2,
+    mylegend,
+    risk_label
+  )
 
   if (axis_side == "left") {
-    layout_matrix <- rbind(c(NA, 1, NA, 2),
-                           c(3, 4, NA, 5),
-                           c(NA, 6, NA, 7),
-                           c(8, 8, NA, 9))
-    widths <- unit.c(grobWidth(axis), unit(c(1, 2 * fontsize, 1),
-                                           c("null", "pt", "null")))
+    layout_matrix <- rbind(
+      c(NA, 1, NA, 2),
+      c(3, 4, NA, 5),
+      c(NA, 6, NA, 7),
+      c(8, 8, NA, 9)
+    )
+    widths <- unit.c(grobWidth(axis), unit(c(1, 2 * fontsize, 1), c("null", "pt", "null")))
   } else {
-    layout_matrix <- rbind(c(1, NA, 2, NA),
-                           c(4, NA, 5, 3),
-                           c(6, NA, 7, NA),
-                           c(8, NA, 9, NA))
-    widths <- unit.c(unit(c(1, 10, 1),
-                          c("null", "pt", "null")),
-                     grobWidth(axis))
+    layout_matrix <- rbind(
+      c(1, NA, 2, NA),
+      c(4, NA, 5, 3),
+      c(6, NA, 7, NA),
+      c(8, NA, 9, NA)
+    )
+    widths <- unit.c(unit(c(1, 10, 1), c("null", "pt", "null")), grobWidth(axis))
   }
 
   heights <- unit.c(
@@ -488,8 +483,7 @@ create_flag_vars <- function(df,
                              related = AEREL == "Y",
                              related_withdrawl = AEREL == "Y" & grepl("DRUG WITHDRAWN", AEACN),
                              related_modified = AEREL == "Y" &
-                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)",
-                                     AEACN),
+                               grepl("DRUG (INTERRUPTED|INCREASED|REDUCED)", AEACN),
                              ctc35 = AETOXGR %in% c("3", "4", "5"),
                              # nolint end
                              ...) {

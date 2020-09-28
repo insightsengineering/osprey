@@ -26,7 +26,7 @@
   - Cleaning dependencies.
   - Fix tm_g_butterfly faceting error.
   - Add sorting by right or left wing.
-  - Adding g_watterfall.
+  - Adding g_waterfall.
 
 # osprey 0.1.0
 
