@@ -9,8 +9,7 @@ add_ae_class(tbl, class)
 \arguments{
 \item{tbl}{(\code{tibble}) Containing the data}
 
-\item{class}{(\code{character}) Class of adverse events to be added as
-an rtable row}
+\item{class}{(\code{character}) Class of adverse events to be added as an \code{rtable} row}
 }
 \description{
 Add Adverse Events class

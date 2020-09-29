@@ -142,17 +142,21 @@ t_ae_oview <- function(id,
 
   if (!is.null(extra_flag)) {
     extra_flag <- as.data.frame(vapply(extra_flag, toupper, rep(character(1), nrow(extra_flag))))
-    check_input_length <- c(nrow(data.frame(class)),
-                            nrow(data.frame(term)),
-                            nrow(data.frame(id)),
-                            nrow(data.frame(flags)),
-                            nrow(extra_flag))
+    check_input_length <- c(
+      nrow(data.frame(class)),
+      nrow(data.frame(term)),
+      nrow(data.frame(id)),
+      nrow(data.frame(flags)),
+      nrow(extra_flag)
+    )
     check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)))
   } else {
-    check_input_length <- c(nrow(data.frame(class)),
-                            nrow(data.frame(term)),
-                            nrow(data.frame(id)),
-                            nrow(data.frame(flags)))
+    check_input_length <- c(
+      nrow(data.frame(class)),
+      nrow(data.frame(term)),
+      nrow(data.frame(id)),
+      nrow(data.frame(flags))
+    )
     check_input_col <- c(ncol(data.frame(class)), ncol(data.frame(term)), ncol(data.frame(id)))
   }
 

@@ -101,24 +101,32 @@ t_ds <- function(class, term, sub = NULL, id, col_by, total = "All Patients") {
   }
 
   if (!is.null(sub)) {
-    check_input_length <- c(nrow(data.frame(class)),
-                            nrow(data.frame(term)),
-                            nrow(data.frame(id)),
-                            nrow(data.frame(col_by)),
-                            nrow(sub))
-    check_input_col <- c(ncol(data.frame(class)),
-                         ncol(data.frame(term)),
-                         ncol(data.frame(id)),
-                         ncol(data.frame(col_by)))
+    check_input_length <- c(
+      nrow(data.frame(class)),
+      nrow(data.frame(term)),
+      nrow(data.frame(id)),
+      nrow(data.frame(col_by)),
+      nrow(sub)
+    )
+    check_input_col <- c(
+      ncol(data.frame(class)),
+      ncol(data.frame(term)),
+      ncol(data.frame(id)),
+      ncol(data.frame(col_by))
+    )
   } else {
-    check_input_length <- c(nrow(data.frame(class)),
-                            nrow(data.frame(term)),
-                            nrow(data.frame(id)),
-                            nrow(data.frame(col_by)))
-    check_input_col <- c(ncol(data.frame(class)),
-                         ncol(data.frame(term)),
-                         ncol(data.frame(id)),
-                         ncol(data.frame(col_by)))
+    check_input_length <- c(
+      nrow(data.frame(class)),
+      nrow(data.frame(term)),
+      nrow(data.frame(id)),
+      nrow(data.frame(col_by))
+    )
+    check_input_col <- c(
+      ncol(data.frame(class)),
+      ncol(data.frame(term)),
+      ncol(data.frame(id)),
+      ncol(data.frame(col_by))
+    )
   }
 
   if (length(unique(check_input_length)) > 1) {

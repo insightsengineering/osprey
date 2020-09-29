@@ -84,13 +84,6 @@ shift_label_table_no_grade <- function(tbl, term) {
   tbl
 }
 
-# adds row name to rtable
-shift_label_table_mod <- function(tbl, term, ind_tbl) {
-  attr(tbl[[1]], "row.name") <- term
-  indent(tbl, ind_tbl)
-  tbl
-}
-
 # shifts labels - used only in t_ae_ctc_v2
 shift_label_table_t_ae_ctc_v2 <- function(tbl, term) {
   attr(tbl[[1]], "row.name") <- term
@@ -174,8 +167,7 @@ stack_rtables_condense <- function(..., nrow_pad = 1) {
 #' Add Adverse Events class
 #'
 #' @param tbl (\code{tibble}) Containing the data
-#' @param class (\code{character}) Class of adverse events to be added as
-#'   an rtable row
+#' @param class (\code{character}) Class of adverse events to be added as an \code{rtable} row
 #'
 #' @importFrom rtables rtable
 #' @export
@@ -424,13 +416,6 @@ grobs2pdf <- function(grobs,
     outpath = outpath,
     pagesize = pagesize
   )
-}
-
-#' @importFrom rtables cbind_rtables rrow rtablel
-shift_label_table <- function(tbl, term) {
-  t_grade <- rtablel(rheader(rrow("", "."), rrow("", "Grade")), c(lapply(row.names(tbl), function(xi) rrow("", xi))))
-  attr(t_grade[[1]], "row.name") <- term
-  cbind_rtables(t_grade, tbl)
 }
 
 #' Extract specific part of a ggplot or grob

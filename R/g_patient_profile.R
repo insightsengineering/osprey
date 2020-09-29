@@ -64,6 +64,7 @@
 #'
 #' @return plot object
 #' @importFrom rlang .data
+#' @importFrom grDevices hcl.colors
 #'
 #' @export
 #'
