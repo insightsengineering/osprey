@@ -150,7 +150,7 @@ stack_rtables_condense <- function(..., nrow_pad = 1) {
 
   if (length(tbls) > 0) {
 
-    if (!all(vapply(tbls, is, logical(1),"rtable"))) {
+    if (!all(vapply(tbls, is, logical(1), "rtable"))) {
       stop("not all objects are of type rtable")
     }
 
