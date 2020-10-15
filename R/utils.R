@@ -142,7 +142,6 @@ stack_rtables <- function(...) {
 #'
 #' @param ... rtable objects
 #' @param nrow_pad number of empty rows between tables in \code{...}
-#' @importFrom methods is
 #' @noRd
 #'
 stack_rtables_condense <- function(..., nrow_pad = 1) {
