@@ -140,9 +140,8 @@ stack_rtables <- function(...) {
 
 #' Stack rtables with rbind
 #'
-#' @param ... rtbale objects
+#' @param ... rtable objects
 #' @param nrow_pad number of empty rows between tables in \code{...}
-#'
 #' @noRd
 #'
 stack_rtables_condense <- function(..., nrow_pad = 1) {
@@ -150,8 +149,7 @@ stack_rtables_condense <- function(..., nrow_pad = 1) {
 
   if (length(tbls) > 0) {
 
-    are <- getFromNamespace("are", pos = "package:rtables")
-    if (!are(tbls, "rtable")) {
+    if (!all(vapply(tbls, is, logical(1), "rtable"))) {
       stop("not all objects are of type rtable")
     }
 
