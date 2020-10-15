@@ -531,5 +531,5 @@ create_flag_vars <- function(df,
     }
     valid
   }, FUN.VALUE = TRUE)
-  do.call(data.frame, args = ret[valid])
+  do.call(data.frame, args = list(ret[valid], check.names = FALSE))
 }
