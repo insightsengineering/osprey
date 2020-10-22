@@ -121,6 +121,10 @@ g_butterfly <- function(category,
       "invalid arguments: right_flag or left_flag contains values other than 1/TRUE or 0/FALSE"),
 
     list(
+      any(union(right_flag, left_flag) == 1),
+      "invalid arguments: right_flag or left_flag contains only 0/FALSE values"),
+
+    list(
       is.null(block_color) || length(block_color) == length(category),
       "invalid arguments: check that the length of block_color is equal as other inputs"),
 
