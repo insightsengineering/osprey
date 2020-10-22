@@ -257,8 +257,8 @@ g_butterfly <- function(category,
   max_c <- max(c(total_text_ann_r$label_ypos, total_text_ann_l$label_ypos))
 
   if (is.null(group_names)) {
-    g_r <- "Right Flag"
-    g_l <- "Left Flag"
+    g_r <- ""
+    g_l <- ""
   } else {
     g_r <- group_names[1]
     g_l <- group_names[2]
