@@ -9,8 +9,10 @@
 #'
 #'
 #' @param category vector of y values
-#' @param right_flag vector of 1/0 represents right side of barplot
-#' @param left_flag vector of 1/0 represents left side of barplot
+#' @param right_flag vector of \code{logical} of the same length as \code{category}.
+#'   used to filter \code{category} for the right side of the barplot
+#' @param left_flag vector of \code{logical} of the same length as \code{category}.
+#'   used to filter \code{category} for the left side of the barplot
 #' @param group_names string vector of length 2 with desired names of dichotomization variables
 #' required format : first name corresponds to the name of the right side
 #'                   second name corresponds to name of the left side
@@ -115,8 +117,8 @@ g_butterfly <- function(category,
       "invalid arguments: check that the length of input arguments are identical"),
 
     list(
-      length(unique(right_flag)) == 2 && length(unique(left_flag)) == 2,
-      "invalid arguments: groups can only have 2 unique values"),
+      all(union(right_flag, left_flag) %in% c(1, 0)),
+      "invalid arguments: right_flag or left_flag contains values other than 1/TRUE or 0/FALSE"),
 
     list(
       is.null(block_color) || length(block_color) == length(category),
@@ -251,8 +253,8 @@ g_butterfly <- function(category,
   max_c <- max(c(total_text_ann_r$label_ypos, total_text_ann_l$label_ypos))
 
   if (is.null(group_names)) {
-    g_r <- names(right_flag)[1]
-    g_l <- names(left_flag)[2]
+    g_r <- "Right Flag"
+    g_l <- "Left Flag"
   } else {
     g_r <- group_names[1]
     g_l <- group_names[2]

@@ -23,9 +23,11 @@ g_butterfly(
 \arguments{
 \item{category}{vector of y values}
 
-\item{right_flag}{vector of 1/0 represents right side of barplot}
+\item{right_flag}{vector of \code{logical} of the same length as \code{category}.
+used to filter \code{category} for the right side of the barplot}
 
-\item{left_flag}{vector of 1/0 represents left side of barplot}
+\item{left_flag}{vector of \code{logical} of the same length as \code{category}.
+used to filter \code{category} for the left side of the barplot}
 
 \item{id}{unique subject identifier variable.}
 
