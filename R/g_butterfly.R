@@ -122,7 +122,7 @@ g_butterfly <- function(category,
 
     list(
       any(union(right_flag, left_flag) == 1),
-      "invalid arguments: right_flag or left_flag contains only 0/FALSE values"),
+      "invalid arguments: right_flag and left_flag contain only 0/FALSE values"),
 
     list(
       is.null(block_color) || length(block_color) == length(category),
