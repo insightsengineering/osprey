@@ -10,9 +10,11 @@
 #'
 #' @param category vector of y values
 #' @param right_flag vector of \code{logical} of the same length as \code{category}.
-#'   used to filter \code{category} for the right side of the barplot
+#'   used to filter \code{category} for the right side of the barplot.
+#'   to maintain backward compatibility, a vector of 1s and 0s would also work.
 #' @param left_flag vector of \code{logical} of the same length as \code{category}.
-#'   used to filter \code{category} for the left side of the barplot
+#'   used to filter \code{category} for the left side of the barplot.
+#'   to maintain backward compatibility, a vector of 1s and 0s would also work.
 #' @param group_names string vector of length 2 with desired names of dichotomization variables
 #' required format : first name corresponds to the name of the right side
 #'                   second name corresponds to name of the left side

@@ -24,10 +24,12 @@ g_butterfly(
 \item{category}{vector of y values}
 
 \item{right_flag}{vector of \code{logical} of the same length as \code{category}.
-used to filter \code{category} for the right side of the barplot}
+used to filter \code{category} for the right side of the barplot.
+to maintain backward compatibility, a vector of 1s and 0s would also work.}
 
 \item{left_flag}{vector of \code{logical} of the same length as \code{category}.
-used to filter \code{category} for the left side of the barplot}
+used to filter \code{category} for the left side of the barplot.
+to maintain backward compatibility, a vector of 1s and 0s would also work.}
 
 \item{id}{unique subject identifier variable.}
 
