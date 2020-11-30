@@ -1,6 +1,6 @@
-# osprey 0.1.6.9000
+# osprey 0.1.7
 
-* issues with no news:
+* TODO
 
 # osprey 0.1.6
 
