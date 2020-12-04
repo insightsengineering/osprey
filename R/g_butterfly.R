@@ -1,12 +1,10 @@
 #' Butterfly Plot
 #'
-#'
 #' The butterfly plot is often used in Early Development (ED) and is an opposed
 #' barplot that shows instances of AEs or # of patients by category separated by
 #' a dichotomization variable. Each bar can be color coded according
 #' to a variable of choice and sorted according to either alphabetical order or the
 #' maximum count.
-#'
 #'
 #' @param category vector of y values
 #' @param right_flag vector of \code{logical} of the same length as \code{category}.

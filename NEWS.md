@@ -1,6 +1,11 @@
 # osprey 0.1.7
 
-* TODO
+* Retire four table functions due to duplicated functionalities in `tern`:
+
+  - AE overview summary table.
+  - AE summary table by preferred terms.
+  - AE summary table by highest NCI-CTCAE grade.
+  - Disposition table.
 
 # osprey 0.1.6
 

@@ -39,6 +39,7 @@ g \%>\% as_pdf("~/example_aspdf1.pdf")
 decorate_grob_set(grobs = g, titles = "Hello\nOne\ntwo", footnotes = "This is a footnote") \%>\%
   as_pdf("~/example_aspdf2.pdf")
 }
+
 }
 \author{
 Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
