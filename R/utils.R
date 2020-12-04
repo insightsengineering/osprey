@@ -1,205 +1,4 @@
 
-# REFACTOR
-# nolint start
-# # tabulation function for condition checks
-# #' @importFrom utils getFromNamespace
-# #' @importFrom rtables rrowl rheader header<- header rcell by_all rtabulate
-# t_helper_tabulate <- function(df_id, n, checkcol, term, remove_dupl, with_percent) { # nolint
-#   if (checkcol == "rowcount") {
-#     tbl <- rtabulate(
-#       na.omit(df_id),
-#       row_by = by_all(""),
-#       col_by = df_id$col_by,
-#       FUN = nrow,
-#       format = "xx"
-#     )
-#   } else if (checkcol == "uniqueid") {
-#     if (remove_dupl) {
-#       df_id <- df_id[!duplicated(df_id$id), ]
-#     }
-#
-#     if (with_percent) {
-#       tbl <- rtabulate(
-#         na.omit(df_id),
-#         row_by = by_all(""),
-#         col_by = df_id$col_by,
-#         FUN = count_perc_col_N,
-#         col_wise_args = list(n_i = n),
-#         format = "xx (xx.xx%)"
-#       )
-#     } else {
-#       tbl <- rtabulate(
-#         na.omit(df_id),
-#         row_by = by_all(""),
-#         col_by = df_id$col_by,
-#         FUN = count_col_N,
-#         col_wise_args = list(n_i = n),
-#         format = "xx"
-#       )
-#     }
-#   } else {
-#     if (remove_dupl) {
-#       # sort by checkcol in descending order first
-#       df_id <- df_id[order(df_id[checkcol], decreasing = TRUE), ]
-#       df_id <- df_id[!duplicated(df_id$id), ]
-#     }
-#
-#     tbl <- rtabulate(
-#       na.omit(df_id),
-#       row_by = as.factor(df_id[[checkcol]]),
-#       col_by = df_id$col_by,
-#       FUN = count_perc_col_N,
-#       col_wise_args = list(n_i = n),
-#       format = "xx (xx.xx%)"
-#     )
-#
-#     if (dim(tbl)[1] > 1 | (dim(tbl)[1] == 1 & attributes(tbl[1])$names == "1")) {
-#       tbl <- tbl[dim(tbl)[1]]
-#     } else {
-#       for (i in 1:dim(tbl)[2]) {
-#         tbl[[1]][[i]] <- rcell(0)
-#       }
-#     }
-#   }
-#
-#   attr(tbl[[1]], "row.name") <- term
-#
-#   header(tbl) <- rheader(
-#     rrowl("", levels(df_id$col_by)),
-#     rrowl("", unname(n), format = "(N=xx)")
-#   )
-#   tbl
-# }
-#
-# # checks if there is any case and derives counts, otherwise 0
-# count_col_N <- function(x_cell, n_i) { # nolint
-#   if (n_i > 0) {
-#     length(x_cell$id) # obtaining the total
-#   } else {
-#     rcell(0, format = "xx")
-#   }
-# }
-#
-#
-# # adds row name to rtable
-# shift_label_table_no_grade <- function(tbl, term) {
-#   attr(tbl[[1]], "row.name") <- term
-#   tbl
-# }
-#
-# # adds row name to rtable
-# shift_label_table_mod <- function(tbl, term, ind_tbl) {
-#   attr(tbl[[1]], "row.name") <- term
-#   indent(tbl, ind_tbl)
-#   tbl
-# }
-#
-# # shifts labels - used only in t_ae_ctc_v2
-# shift_label_table_t_ae_ctc_v2 <- function(tbl, term) {
-#   attr(tbl[[1]], "row.name") <- term
-#   tbl
-# }
-#
-# # remove null elements from list
-# remove_null <- function(x) {
-#   x <- Filter(Negate(is.null), x)
-#   lapply(x, function(x) {
-#     if (is.list(x) && class(x) != "rtable") remove_null(x) else x
-#   })
-# }
-#
-# # recursive indent function
-# recursive_indent <- function(tbl_l, ind_count) {
-#   if (class(tbl_l) == "rtable") {
-#     in_t <- list(" " = tbl_l)
-#     t <- do.call(stack_rtables_condense, in_t)
-#     for (i in 1:nrow(t)) {
-#       attr(t[[i]], "indent") <- attr(t[[i]], "indent") + ind_count
-#     }
-#     t
-#   } else if (is.list(tbl_l) && class(tbl_l) != "rtable") {
-#     count <- lapply(tbl_l, function(x) {
-#       if (class(x) == "rtable") {
-#         ind_count
-#       } else {
-#         ind_count + 1
-#       }
-#     })
-#     count <- unlist(count)
-#     t0 <- Map(recursive_indent, tbl_l, count)
-#     tbl <- do.call(stack_rtables_condense, t0) # nolint
-#   }
-# }
-#
-# # arguments for total in tables (AET01, AET02, DST01)
-# tot_column <- function(choice = c("All Patients")) {
-#   choice <- match.arg(choice)
-#   return(choice)
-# }
-#
-# #' Stack rtables
-# #'
-# #' @param ... rtable objects
-# #'
-# #' @return rtable object
-# #' @noRd
-# #'
-# stack_rtables <- function(...) {
-#   rbind(..., gap = 1)
-# }
-#
-# #' Stack rtables with rbind
-# #'
-# #' @param ... rtbale objects
-# #' @param nrow_pad number of empty rows between tables in \code{...}
-# #'
-# #' @noRd
-# #'
-# stack_rtables_condense <- function(..., nrow_pad = 1) {
-#   tbls <- Filter(Negate(is.null), list(...))
-#
-#   if (length(tbls) > 0) {
-#
-#     are <- getFromNamespace("are", pos = "package:rtables")
-#     if (!are(tbls, "rtable")) {
-#       stop("not all objects are of type rtable")
-#     }
-#
-#     Reduce(
-#       function(x, y) rbind(x, y),
-#       tbls
-#     )
-#   } else {
-#     list()
-#   }
-# }
-#
-# #' Add Adverse Events class
-# #'
-# #' @param tbl (\code{tibble}) Containing the data
-# #' @param class (\code{character}) Class of adverse events to be added as
-# #'   an rtable row
-# #'
-# #' @importFrom rtables rtable
-# #' @export
-# add_ae_class <- function(tbl, class) {
-#   rbind(
-#     rtable(header(tbl), rrow(class)),
-#     tbl
-#   )
-# }
-#
-#
-# #' @importFrom rtables cbind_rtables rrow rtablel
-# shift_label_table <- function(tbl, term) {
-#   t_grade <- rtablel(rheader(rrow("", "."), rrow("", "Grade")), c(lapply(row.names(tbl), function(xi) rrow("", xi))))
-#   attr(t_grade[[1]], "row.name") <- term
-#   cbind_rtables(t_grade, tbl)
-# }
-#
-#
-# nolint end
-
 #' stack a modified version of a data frame
 #'
 #' essenially rbind(X,modified(X)). this is useful for example when a total
@@ -216,6 +15,7 @@
 #' @examples
 #'
 #' duplicate_with_var(iris, Species = "Total")
+#'
 duplicate_with_var <- function(x, ...) { # nolint # nousage
   dots <- list(...)
   nms <- names(dots)
@@ -231,8 +31,6 @@ duplicate_with_var <- function(x, ...) { # nolint # nousage
   var_labels(y) <- vl
   y
 }
-
-
 
 #' Output decorated grob (gTree) objects as PDF
 #'
@@ -270,6 +68,7 @@ duplicate_with_var <- function(x, ...) { # nolint # nousage
 #' decorate_grob_set(grobs = g, titles = "Hello\nOne\ntwo", footnotes = "This is a footnote") %>%
 #'   as_pdf("~/example_aspdf2.pdf")
 #' }
+#'
 as_pdf <- function(grobs,
                    outpath,
                    pagesize = "letter.landscape") {
@@ -308,7 +107,6 @@ paper_size <- function(pagesize) {
   }
   return(c(paper_width, paper_height))
 }
-
 
 #' Decorate grob (gTree) objects then outputs as IDM compatible PDF
 #'
@@ -361,6 +159,7 @@ paper_size <- function(pagesize) {
 #'   outpath = "~/example_grobs2pdf.pdf"
 #' )
 #' }
+#'
 grobs2pdf <- function(grobs,
                       titles,
                       footnotes,
@@ -442,8 +241,6 @@ grobs2pdf <- function(grobs,
   )
 }
 
-
-
 #' Extract specific part of a ggplot or grob
 #'
 #' @param gplot_grob ggplot or grob object
@@ -482,6 +279,7 @@ grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 #' @importFrom  ggplot2 theme .pt
 #' @param axis_side axis position
 #' @param fontsize font size in 'mm'
+#'
 theme_osprey <- function(axis_side = "left", fontsize = 4) {
   theme(panel.background = element_rect(fill = "white", colour = "white"),
         panel.grid.major.y = element_line(colour = "grey50", linetype = 2),
@@ -496,7 +294,6 @@ theme_osprey <- function(axis_side = "left", fontsize = 4) {
         legend.text = element_text(size = fontsize * .pt),
         plot.title = element_text(hjust = 0.5))
 }
-
 
 check_same_N <- function(..., omit_null = TRUE) { # nolint
   dots <- list(...)

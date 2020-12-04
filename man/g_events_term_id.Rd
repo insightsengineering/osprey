@@ -30,11 +30,11 @@ g_events_term_id(
 Represents events information. \code{term} can be a \code{data.frame} produced
 by \code{create_flag_vars}, with each column being a \code{logical} event indicator}
 
-\item{id}{\code{vector} contains subject identifier. Length of \code{id} must be the
+\item{id}{(`vector`)\cr contains subject identifier. Length of \code{id} must be the
 same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.}
 
-\item{arm}{\code{factor} vector that contains arm information in analysis data.
-For example, \code{ADAE$ACTARMCD}.}
+\item{arm}{(`factor`)\cr vector that contains arm information in analysis data.
+For example, `ADAE$ACTARMCD`.}
 
 \item{arm_N}{(\code{numeric} vector)\cr
 Contains information of the number of patients in the levels of \code{arm}. This is useful
@@ -57,9 +57,9 @@ for mean risk. Default is "term".}
 \item{reversed}{\code{logical} whether to reverse the sorting by \code{sort_by}.
 Default is FALSE.}
 
-\item{conf_level}{\code{numeric} The confidence interval level, default is 0.95.}
+\item{conf_level}{(`numeric`)\cr the confidence interval level, default is 0.95.}
 
-\item{diff_ci_method}{\code{character} The method used to calculate confidence interval.
+\item{diff_ci_method}{(`character`)\cr the method used to calculate confidence interval.
 Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
 \item{axis_side}{\code{character} the side of the axis label, "left" or "right". Default is "left".}
@@ -71,11 +71,11 @@ treatment arms respectively. Default set to \code{c("blue", "red")}.}
 treatment arms respectively. Default set to \code{c(16, 17)} per
 \code{\link[ggplot2]{scale_shape}}.}
 
-\item{fontsize}{\code{numeric} font size for the plot. It is the size used in ggplot2 with
+\item{fontsize}{(`numeric`)\cr font size for the plot. It is the size used in ggplot2 with
 default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 
-\item{draw}{\code{logical} whether to draw the plot.}
+\item{draw}{(`logical`)\cr whether to draw the plot.}
 }
 \value{
 grob object

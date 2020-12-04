@@ -4,13 +4,12 @@
 #' It creates basic summary of events and compares event occurrences between comparison
 #' and reference arms, and can be used for events data such as Adverse Events.
 #'
+#' @inheritParams argument_convention
+#' @param id (`vector`)\cr contains subject identifier. Length of \code{id} must be the
+#' same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.
 #' @param term \code{character} or \code{factor} vector, or \code{data.frame} \cr
 #' Represents events information. \code{term} can be a \code{data.frame} produced
 #' by \code{create_flag_vars}, with each column being a \code{logical} event indicator
-#' @param id \code{vector} contains subject identifier. Length of \code{id} must be the
-#' same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.
-#' @param arm \code{factor} vector that contains arm information in analysis data.
-#' For example, \code{ADAE$ACTARMCD}.
 #' @param arm_N (\code{numeric} vector)\cr
 #' Contains information of the number of patients in the levels of \code{arm}. This is useful
 #' if there are patients that have no adverse events can be accounted for with this argument.
@@ -25,19 +24,12 @@
 #' @param diff_range Numeric \code{vector} of length 2. Range for rate difference display
 #' @param reversed \code{logical} whether to reverse the sorting by \code{sort_by}.
 #' Default is FALSE.
-#' @param conf_level \code{numeric} The confidence interval level, default is 0.95.
-#' @param diff_ci_method \code{character} The method used to calculate confidence interval.
-#' Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.
 #' @param axis_side \code{character} the side of the axis label, "left" or "right". Default is "left".
 #' @param color Color for the plot. \code{vector} of length 2. Color for reference and
 #' treatment arms respectively. Default set to \code{c("blue", "red")}.
 #' @param shape Shape for the plot. \code{vector} of length 2. Shape for reference and
 #' treatment arms respectively. Default set to \code{c(16, 17)} per
 #' \code{\link[ggplot2]{scale_shape}}.
-#' @param fontsize \code{numeric} font size for the plot. It is the size used in ggplot2 with
-#' default unit "mm", if you want "points" you will need to divide the point number by
-#' \code{ggplot2:::.pt}.
-#' @param draw \code{logical} whether to draw the plot.
 #' @details there is no equivalent STREAM output
 #'
 #' @return grob object
