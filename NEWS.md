@@ -1,6 +1,6 @@
 # osprey 0.1.7
 
-* The `right_flag` and `left_flag` arguments of `g_butterfly` should now be `logical` vectors instead of dev1s and 0s.
+* The `right_flag` and `left_flag` arguments of `g_butterfly` should now be `logical` vectors instead of integers (1/0).
 * Retire four table functions due to duplicated functionalities in `tern`:
   - `t_ae_oview`: AE overview summary table.
   - `t_ae`: AE summary table by preferred terms.
