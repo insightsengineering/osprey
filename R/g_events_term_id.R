@@ -218,7 +218,6 @@ g_events_term_id <- function(term,
     select(.data$total) %>%
     pull()
 
-
   # create full cartesian of (arms) X (term levels) with 0 count to have full list of all possible combination
   # this is done in order to secure further calls
   df_full <- cbind(expand.grid(arm = arms, term = levels(term[[1]])), N = 0)
