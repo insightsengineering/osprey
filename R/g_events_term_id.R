@@ -48,8 +48,9 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' library(grid)
 #' library(rtables)
+#' library(dplyr)
+#' library(grid)
 #'
 #' ADSL <- radsl(cached = TRUE)
 #' ADAE <- radae(cached = TRUE)
@@ -116,7 +117,6 @@
 #'   arm_N,
 #'   fontsize = 3
 #' )
-#'
 g_events_term_id <- function(term,
                              id,
                              arm,
@@ -135,7 +135,6 @@ g_events_term_id <- function(term,
                              shape = c(16, 17),
                              fontsize = 4,
                              draw = TRUE) {
-
   if (is.data.frame(term)) {
     term_levels <- factor(colnames(term), levels = rev(colnames(term)))
     term <- data.frame(t(term))
@@ -219,16 +218,24 @@ g_events_term_id <- function(term,
     select(.data$total) %>%
     pull()
 
-  df <- df %>%
+
+  # create full cartesian of (arms) X (term levels) with 0 count to have full list of all possible combination
+  # this is done in order to secure further calls
+  df_full <- cbind(expand.grid(arm = arms, term = levels(term[[1]])), N = 0)
+
+  df_reshaped <- df %>%
     distinct() %>%
     filter(arm %in% arms) %>%
     group_by(arm, term) %>%
     summarise(N = n()) %>%
     ungroup() %>%
+    rbind(df_full) %>%
+    group_by(arm, term) %>%
+    summarise(N = sum(.data$N)) %>%
     mutate(arm = ifelse(arm == trt, "trt_count", "ref_count")) %>%
     tidyr::pivot_wider(names_from = arm, values_from = .data$N, values_fill = list(N = 0))
 
-  df_ci <- df %>%
+  df_ci <- df_reshaped %>%
     group_by(term) %>%
     do(
       data.frame(
@@ -247,7 +254,7 @@ g_events_term_id <- function(term,
     ungroup() %>%
     rename(riskdiff = .data$est, lower_ci = .data$lwr.ci, upper_ci = .data$upr.ci)
 
-  df_risk <- df %>%
+  df_risk <- df_reshaped %>%
     group_by(term) %>%
     do(
       data.frame(
@@ -263,8 +270,10 @@ g_events_term_id <- function(term,
   # if diff_range specified, limit terms
   terms_needed <- df_ci %>%
     filter(
-      .data$riskdiff > diff_range[1] & .data$riskdiff < diff_range[2] &
-        .data$meanrisk > rate_range[1] & .data$meanrisk < rate_range[2]
+      .data$riskdiff > diff_range[1] &
+        .data$riskdiff < diff_range[2] &
+        .data$meanrisk > rate_range[1] &
+        .data$meanrisk < rate_range[2]
     ) %>%
     select(term) %>%
     distinct() %>%
@@ -311,13 +320,12 @@ g_events_term_id <- function(term,
 
   labels <- setNames(sprintf("%s\n(N = %i)", df_n$arm, df_n$total), df_n$arm)
 
-  y_axis <-
-    scale_y_discrete(
-      limits = terms_needed,
-      breaks = terms_needed,
-      labels = terms_label,
-      position = axis_side
-    )
+  y_axis <- scale_y_discrete(
+    limits = terms_needed,
+    breaks = terms_needed,
+    labels = terms_label,
+    position = axis_side
+  )
 
   p1 <- ggplot(df_risk) +
     geom_point(aes(
@@ -444,6 +452,9 @@ g_events_term_id <- function(term,
 #' @export
 #' @examples
 #' library(random.cdisc.data)
+#' library(rtables)
+#' library(dplyr)
+#'
 #' ADAE <- radae(cached = TRUE)
 #'
 #' # add additional dummy causality flags
@@ -460,7 +471,6 @@ g_events_term_id <- function(term,
 #' create_flag_vars(ADAE, `AENSER` = AESER != "Y")
 #' # remove flags that are not needed
 #' create_flag_vars(ADAE, fatal = NULL)
-#'
 create_flag_vars <- function(df,
                              # nolint start
                              fatal = AESDTH == "Y",
