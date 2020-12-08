@@ -27,7 +27,7 @@ Imports:
   rlang,
   rtables,
   stringr,
-  tern (>= 0.6.10),
+  tern (>= 0.7.0),
   tidyr (>= 1.0.0),
   utils.nest (>= 0.2.7),
   DescTools
