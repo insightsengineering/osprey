@@ -6,6 +6,7 @@
   - `t_ae`: AE summary table by preferred terms.
   - `t_ae_ctc`: AE summary table by highest NCI-CTCAE grade.
   - `t_ds`: Disposition table.
+* Fix the issue in `g_waterfall` with simultaneous plot facet and annotation labels.
 * Fix in `g_events_term_id` when no data for treatment arm and a given term.
 
 # osprey 0.1.6
