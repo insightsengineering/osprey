@@ -90,8 +90,9 @@ there is no equivalent STREAM output
 }
 \examples{
 library(random.cdisc.data)
-library(grid)
 library(rtables)
+library(dplyr)
+library(grid)
 
 ADSL <- radsl(cached = TRUE)
 ADAE <- radae(cached = TRUE)
@@ -158,7 +159,6 @@ g_events_term_id(
   arm_N,
   fontsize = 3
 )
-
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}
