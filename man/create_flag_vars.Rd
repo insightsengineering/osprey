@@ -57,6 +57,9 @@ in this function, all flags are expressions calls, for simpler usage.
 }
 \examples{
 library(random.cdisc.data)
+library(rtables)
+library(dplyr)
+
 ADAE <- radae(cached = TRUE)
 
 # add additional dummy causality flags
@@ -73,5 +76,4 @@ create_flag_vars(ADAE)
 create_flag_vars(ADAE, `AENSER` = AESER != "Y")
 # remove flags that are not needed
 create_flag_vars(ADAE, fatal = NULL)
-
 }
