@@ -144,6 +144,7 @@ g_events_term_id <- function(term,
     df <- data.frame(id, arm, I(term)) %>%
       tidyr::unnest(term)
   } else {
+    term_levels <- `if`(is.factor(term), levels(term), unique(term))
     df <- data.frame(id, arm, term)
   }
 
@@ -220,7 +221,7 @@ g_events_term_id <- function(term,
 
   # create full cartesian of (arms) X (term levels) with 0 count to have full list of all possible combination
   # this is done in order to secure further calls
-  df_full <- cbind(expand.grid(arm = arms, term = levels(term[[1]])), N = 0)
+  df_full <- cbind(expand.grid(arm = arms, term = term_levels), N = 0)
 
   df_reshaped <- df %>%
     distinct() %>%
