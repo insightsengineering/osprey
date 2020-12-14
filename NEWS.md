@@ -1,14 +1,16 @@
 # osprey 0.1.7
+### Enhancements
+* Fixed the issue in `g_waterfall` with simultaneous plot facet and annotation labels.
+* Fixed `g_events_term_id` for the case when no data exists fora given treatment arm and a given term are given.
 
+### Miscellaneous
 * The `right_flag` and `left_flag` arguments of `g_butterfly` should now be `logical` vectors instead of integers (1/0).
 * Retired four table functions due to duplicated functionalities in `tern`:
   - `t_ae_oview`: AE overview summary table.
   - `t_ae`: AE summary table by preferred terms.
   - `t_ae_ctc`: AE summary table by highest NCI-CTCAE grade.
   - `t_ds`: Disposition table.
-* Fixed the issue in `g_waterfall` with simultaneous plot facet and annotation labels.
-* Fixed `g_events_term_id` for case when no data for treatment arm and a given term are given.
-
+  
 # osprey 0.1.6
 
 * Refactored `g_events_term_id` to use `dplyr` and `tidyr` functions over `data.table`.
