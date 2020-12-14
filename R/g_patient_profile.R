@@ -912,12 +912,12 @@ g_patient_profile <- function(ex = NULL,
 #' a helper function for g_patient_profile to check whether the domain has data available
 #' @param domain domain input from g_patient_profile
 #' @param name domain names
-domain_check <- function(domain, name){
-  if (is.null(domain)){
+domain_check <- function(domain, name) {
+  if (is.null(domain)) {
     select <- FALSE
   } else {
     select <- TRUE
-    if (dim(domain$data)[1] == 0 || is.null(domain$data)){
+    if (dim(domain$data)[1] == 0 || is.null(domain$data)) {
       warning(paste("No", name, "data for this subject"))
       select <- FALSE
     }
