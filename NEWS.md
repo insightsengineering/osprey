@@ -54,4 +54,3 @@
   - Function to quickly load snapshot data from BCE.
   - Function to output graphic objects in PDF.
   - Formatting graphic objects and outputting PDF that is IDM-compatible.
-
