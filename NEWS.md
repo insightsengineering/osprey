@@ -7,7 +7,7 @@
   - `t_ae_ctc`: AE summary table by highest NCI-CTCAE grade.
   - `t_ds`: Disposition table.
 * Fixed the issue in `g_waterfall` with simultaneous plot facet and annotation labels.
-* Fixed `g_events_term_id` for case when no data for treatment arm and a given term are given.
+* Fixed `g_events_term_id` for the case when no data exists for a given treatment arm and term.
 
 # osprey 0.1.6
 
@@ -52,4 +52,3 @@
   - Function to quickly load snapshot data from BCE.
   - Function to output graphic objects in PDF.
   - Formatting graphic objects and outputting PDF that is IDM-compatible.
-
