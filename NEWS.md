@@ -1,5 +1,5 @@
 # osprey 0.1.7
-### Enhancements
+### Bug fixes
 * Fixed the issue in `g_waterfall` with simultaneous plot facet and annotation labels.
 * Fixed `g_events_term_id` for the case when no data exists fora given treatment arm and a given term are given.
 
