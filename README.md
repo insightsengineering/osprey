@@ -9,9 +9,9 @@ modules for outputs in `osprey` in the
 
 There are two versions of webpage manual for this package
 
-* development version: https://pages.github.roche.com/Rpackages/osprey/dev/
+* development version: https://nest-docs.kubemea.science.roche.com/releases/devel/api-reference/osprey/
 
-* stable release version: https://pages.github.roche.com/Rpackages/osprey/
+* stable release version: https://go.roche.com/nest-docs/releases/latest/api-reference/osprey
 
 
 ## Installation
@@ -20,7 +20,7 @@ Please install package dependencies as follows:
 
 ### Stable Version
 
-[Web Manual](https://pages.github.roche.com/Rpackages/osprey/)
+[Web Manual](https://go.roche.com/nest-docs/releases/latest/api-reference/osprey)
 
 ```r
 devtools::install_github(
@@ -49,7 +49,7 @@ devtools::install_github(
 
 ### Development Version
 
-[Web Manual](https://pages.github.roche.com/Rpackages/osprey/dev/)
+[Web Manual](https://nest-docs.kubemea.science.roche.com/releases/devel/api-reference/osprey/)
 
 ```r
 devtools::install_github(
