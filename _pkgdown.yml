@@ -22,23 +22,15 @@ reference:
     desc: some useful tables
     contents:
       - starts_with("t_")
-  - title: Remaining
-    desc: some useful functions
-    contents:
-      - as_pdf
-      - grobs2pdf
   - title: Utility
     contents:
+      - argument_convention
+      - as_pdf
       - create_flag_vars
-      - meddra
+      - grobs2pdf
       - stream_filter
       - stream_filter_convwhere
       - stream_filter_index
-      - argument_convention
-      - domain_check
-      - grob_add_padding
-      - grob_part
-      - theme_osprey
   - title: Elementary Functions
     contents:
       - patient_domain_profile
@@ -49,3 +41,10 @@ reference:
       - rADSL
       - rADTR
       - rADTTE
+  - title: Unexported functions
+    contents:
+      - domain_check
+      - grob_add_padding
+      - grob_part
+      - meddra
+      - theme_osprey
