@@ -24,7 +24,6 @@ reference:
       - starts_with("t_")
   - title: Utility
     contents:
-      - argument_convention
       - as_pdf
       - create_flag_vars
       - grobs2pdf
@@ -43,6 +42,7 @@ reference:
       - rADTTE
   - title: Unexported functions
     contents:
+      - argument_convention
       - domain_check
       - grob_add_padding
       - grob_part
