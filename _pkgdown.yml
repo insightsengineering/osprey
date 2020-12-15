@@ -30,11 +30,15 @@ reference:
   - title: Utility
     contents:
       - create_flag_vars
-      - add_ae_class
       - meddra
       - stream_filter
       - stream_filter_convwhere
       - stream_filter_index
+      - argument_convention
+      - domain_check
+      - grob_add_padding
+      - grob_part
+      - theme_osprey
   - title: Elementary Functions
     contents:
       - patient_domain_profile
