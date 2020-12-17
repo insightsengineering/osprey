@@ -1,3 +1,8 @@
+# osprey 0.1.7.9000
+
+* Issues with no news:
+
+
 # osprey 0.1.7
 ### Bug fixes
 * Fixed the issue in `g_waterfall` with simultaneous plot facet and annotation labels.
