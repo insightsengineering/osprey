@@ -15,4 +15,4 @@ logs/*
 ^Jenkinsfile$
 ^doc$
 ^Meta$
-.lintr
+^.lintr$
