@@ -19,14 +19,11 @@ Depends:
   dplyr (>= 0.8.0),
   ggplot2 (>= 2.0.0)
 Imports:
-<<<<<<< HEAD
   DescTools,
   checkmate,
   tidyr,
-=======
   purrr,
   cowplot,
->>>>>>> devel
   grid,
   gridExtra,
   gtable,
@@ -39,13 +36,10 @@ Imports:
   DescTools
 Suggests:
   knitr,
-<<<<<<< HEAD
   random.cdisc.data (>= 0.3.4),
   test.nest (>= 0.2.3),
-=======
   random.cdisc.data (>= 0.3.7),
   test.nest (>= 0.2.6),
->>>>>>> devel
   testthat (>= 2.0)
 RoxygenNote: 7.1.1
 URL:
