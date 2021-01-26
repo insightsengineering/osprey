@@ -38,10 +38,7 @@ importFrom(grid,grid.text)
 importFrom(grid,grobHeight)
 importFrom(grid,grobWidth)
 importFrom(grid,rectGrob)
-<<<<<<< HEAD
-=======
 importFrom(grid,textGrob)
->>>>>>> devel
 importFrom(grid,unit)
 importFrom(grid,unit.c)
 importFrom(grid,viewport)
