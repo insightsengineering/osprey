@@ -25,10 +25,7 @@ reference:
   - title: Utility
     contents:
       - as_pdf
-<<<<<<< HEAD:_pkgdown.yaml
-=======
       - create_flag_vars
->>>>>>> devel:_pkgdown.yml
       - grobs2pdf
       - stream_filter
       - stream_filter_convwhere
