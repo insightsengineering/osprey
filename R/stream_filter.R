@@ -104,8 +104,12 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
       new_df <- this_df
     } else {
       # success
-      msg2 <- paste0("\n", nrow(new_df), " of ", nrow(this_df),
-                     " observations selected from ", this_filter_df$FLTTARGET)
+      msg2 <- paste0(
+        "\n",
+        nrow(new_df),
+        " of ",
+        nrow(this_df),
+        " observations selected from ", this_filter_df$FLTTARGET)
       cat(paste("\nFilter", this_filter, "applied", msg1, msg2, "\n"))
       actual_suffix <- if (is.null(actual_suffix)) {
          this_filter
@@ -153,7 +157,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
 #' Replicates the use of index function in sas for logic options
 #'
 #' Assumption is that use in filters is to only resolve true vs false
-#' Primarily for use with stream_filter and releated stream_filter_convwhere functions
+#' Primarily for use with stream_filter and related stream_filter_convwhere functions
 #' @param string1 The string to search within - can be a vector
 #' @param string2 The string to search for - must have length 1
 #'

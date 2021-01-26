@@ -1,18 +1,13 @@
-url: https://pages.github.roche.com/Rpackages/osprey/dev/
+url: https://go.roche.com/nest-docs/releases/latest/api-reference/osprey
 
 template:
   params:
     bootswatch: cerulean
 
-development:
-  mode: devel
-
-
 navbar:
   right:
     - icon: fa-github
-      href: https://github.roche.com/Rpackages/osprey
-
+      href: https://github.roche.com/NEST/osprey
 
 reference:
   - title: Package
@@ -27,18 +22,20 @@ reference:
     desc: some useful tables
     contents:
       - starts_with("t_")
-  - title: Remaining
-    desc: some useful functions
-    contents:
-      - as_pdf
-      - grobs2pdf
   - title: Utility
     contents:
-      - add_ae_class
-      - meddra
+      - as_pdf
+<<<<<<< HEAD:_pkgdown.yaml
+=======
+      - create_flag_vars
+>>>>>>> devel:_pkgdown.yml
+      - grobs2pdf
       - stream_filter
       - stream_filter_convwhere
       - stream_filter_index
+  - title: Elementary Functions
+    contents:
+      - patient_domain_profile
   - title: Data
     contents:
       - rADAE
@@ -46,3 +43,11 @@ reference:
       - rADSL
       - rADTR
       - rADTTE
+  - title: Unexported functions
+    contents:
+      - argument_convention
+      - domain_check
+      - grob_add_padding
+      - grob_part
+      - meddra
+      - theme_osprey

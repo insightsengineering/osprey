@@ -10,7 +10,7 @@
 #' @param col_by vector to color bars, default is \code{NULL} in which case bar_id is taken if
 #'   the argument \code{bar_color_opt} is provided
 #' @param bar_color_opt aesthetic values to map color values (named vector to map color values to each name).
-#'   If not \code{NULL}, please make sure this contains all posible values for \code{col_by} values,
+#'   If not \code{NULL}, please make sure this contains all possible values for \code{col_by} values,
 #'   otherwise default ggplot color will be assigned, please note that \code{NULL} needs to be specified
 #'   in this case
 #' @param anno_txt dataframe of subject-level variables to be displayed as annotation below the waterfall plot,
@@ -49,7 +49,7 @@
 #' ADSL <- rADSL[1:15,]
 #' ADRS <- rADRS %>%
 #'   filter(USUBJID %in% ADSL$USUBJID)
-#' ADTR <- rADTR%>%
+#' ADTR <- rADTR %>%
 #'   filter(USUBJID %in% ADSL$USUBJID) %>%
 #'   select(USUBJID, PCHG) %>%
 #'   group_by(USUBJID) %>%
@@ -81,7 +81,7 @@
 #'   ytick_at = 20,
 #'   gap_point = NULL,
 #'   show_datavalue = TRUE,
-#'   y_label = "Best % Change frome Baseline",
+#'   y_label = "Best % Change from Baseline",
 #'   title = "Waterfall Plot"
 #' )
 #'
@@ -100,7 +100,7 @@
 #'   add_label = ANL$BESRSPI,
 #'   ytick_at = 20,
 #'   gap_point = 260,
-#'   y_label = "Best % Change frome Baseline",
+#'   y_label = "Best % Change from Baseline",
 #'   title = "Waterfall Plot"
 #' )
 #'
@@ -124,7 +124,7 @@
 #'   add_label = ANL$BESRSPI,
 #'   ytick_at = 20,
 #'   gap_point = 260,
-#'   y_label = "Best % Change frome Baseline",
+#'   y_label = "Best % Change from Baseline",
 #'   title = "Waterfall Plot"
 #' )
 #'
@@ -141,8 +141,7 @@ g_waterfall <- function(bar_id,
                         gap_point = NULL,
                         ytick_at = 20,
                         y_label = "Best % Change from Baseline",
-                        title = "Waterfall Plot"){
-
+                        title = "Waterfall Plot") {
   # check data
   check_input_length <- c(nrow(data.frame(bar_id)), nrow(data.frame(bar_height)))
 
@@ -158,9 +157,9 @@ g_waterfall <- function(bar_id,
     } else {
       ls1 <- levels(factor(col_by))
       ls2 <- names(bar_color_opt)
-      if (length(intersect(ls1, ls2)) == 0){
+      if (length(intersect(ls1, ls2)) == 0) {
         stop("invalid argument: check that the col_by and bar_color_opt have overlapping categories")
-      } else if (length(ls2) < length(ls1)){
+      } else if (length(ls2) < length(ls1)) {
         stop("invalid argument: More categories in col_by than the ones listed in bar_color_opt")
       }
     }
@@ -182,7 +181,7 @@ g_waterfall <- function(bar_id,
                          gap_point = gap_point,
                          ytick_at = ytick_at,
                          y_label = y_label,
-                         title = title){
+                         title = title) {
     # Data for plot
     bar_data <- data.frame(
       bar_id,
@@ -198,7 +197,7 @@ g_waterfall <- function(bar_id,
         bar_data$bar_id,
         levels = unique(bar_data$bar_id[order(bar_data$sort_by, bar_data$bar_height, decreasing = TRUE)])
       )
-    } else{
+    } else {
       bar_data$bar_id <- factor(
         bar_data$bar_id,
         levels = unique(bar_data$bar_id[order(bar_data$bar_height, decreasing = TRUE)])
@@ -210,10 +209,11 @@ g_waterfall <- function(bar_id,
     bar_data <- bar_data %>% distinct(bar_id, .keep_all = TRUE)
 
     # plot bar plot
-    if (is.null(gap_point)){
-      ybreaks <- seq(ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-                     ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-                     by = ytick_at)
+    if (is.null(gap_point)) {
+      ybreaks <- seq(
+        ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
+        ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
+        by = ytick_at)
 
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
@@ -229,10 +229,8 @@ g_waterfall <- function(bar_id,
           axis.title.x = element_blank()
         ) +
         ylab(y_label)
-    } else if (all(is.na(bar_height))){
-      ybreaks <- seq(ytick_at * -2,
-                     ytick_at * 2,
-                     by = ytick_at)
+    } else if (all(is.na(bar_height))) {
+      ybreaks <- seq(ytick_at * -2, ytick_at * 2, by = ytick_at)
 
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
@@ -248,10 +246,11 @@ g_waterfall <- function(bar_id,
           axis.title.x = element_blank()
         ) +
         ylab(y_label)
-    } else if (max(bar_height, na.rm = TRUE) <= gap_point)  {
-      ybreaks <- seq(ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-                     ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-                     by = ytick_at)
+    } else if (max(bar_height, na.rm = TRUE) <= gap_point) {
+      ybreaks <- seq(
+        ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
+        ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
+        by = ytick_at)
 
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
@@ -268,37 +267,38 @@ g_waterfall <- function(bar_id,
         ) +
         ylab(y_label)
     } else {
-      length_cut <- ytick_at * floor(0.8 * (min(bar_data$bar_height[bar_data$bar_height > gap_point], na.rm = TRUE)
-                                            - gap_point) / ytick_at)
+      length_cut <- ytick_at *
+        floor(0.8 * (min(bar_data$bar_height[bar_data$bar_height > gap_point], na.rm = TRUE) - gap_point) / ytick_at)
 
-      cut_fun <- function(x){
-        if (is.na(x)){
+      cut_fun <- function(x) {
+        if (is.na(x)) {
           x <- x
-        }
-        else if (x > gap_point){
+        } else if (x > gap_point) {
           x <- x - length_cut
-        }
-        else{
+        } else {
           x <- x
         }
       }
 
       bar_data$new_bar_height <- sapply(bar_data$bar_height, cut_fun)
 
-      ylabel1 <- seq(ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-                     ytick_at * floor(gap_point / ytick_at),
-                     by = ytick_at)
-      ylabel2 <- seq(ytick_at * floor((gap_point + length_cut) / ytick_at),
-                     ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-                     by = ytick_at)
+      ylabel1 <- seq(
+        ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
+        ytick_at * floor(gap_point / ytick_at),
+        by = ytick_at)
+      ylabel2 <- seq(
+        ytick_at * floor((gap_point + length_cut) / ytick_at),
+        ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
+        by = ytick_at)
 
-      ybreaks <- seq(ytick_at * floor(min(bar_data$new_bar_height, na.rm = TRUE) / ytick_at),
-                     ytick_at * ceiling(max(bar_data$new_bar_height, na.rm = TRUE) / ytick_at),
-                     by = ytick_at)
+      ybreaks <- seq(
+        ytick_at * floor(min(bar_data$new_bar_height, na.rm = TRUE) / ytick_at),
+        ytick_at * ceiling(max(bar_data$new_bar_height, na.rm = TRUE) / ytick_at),
+        by = ytick_at)
 
-      if (length(ylabel1) + length(ylabel2) == length(ybreaks)){
+      if (length(ylabel1) + length(ylabel2) == length(ybreaks)) {
         ylabels <- c(ylabel1, ylabel2)
-      } else{
+      } else {
         dif <- length(ylabel1) + length(ylabel2) - length(ybreaks)
         ylabel2 <- ylabel2[- (1:dif)]
         ylabels <- c(ylabel1, ylabel2)
@@ -321,16 +321,18 @@ g_waterfall <- function(bar_id,
         ylab(y_label)
     }
 
-    if (show_datavalue == TRUE){
-      p <- p + geom_text(label = format(bar_data$bar_height, digits = 1),
-                         size = 2.5,
-                         vjust = ifelse(bar_data$bar_height >= 0, -0.5, 1.5))
+    if (show_datavalue == TRUE) {
+      p <- p + geom_text(
+        label = format(bar_data$bar_height, digits = 1),
+        size = 2.5,
+        vjust = ifelse(bar_data$bar_height >= 0, -0.5, 1.5))
     }
 
-    if (!is.null(add_label)){
-      p <- p + geom_text(aes(x = bar_id, y = 0, label = bar_data$add_label),
-                         size = 3,
-                         vjust = ifelse(bar_data$bar_height >= 0, 1.5, -0.5))
+    if (!is.null(add_label)) {
+      p <- p + geom_text(
+        aes(x = bar_id, y = 0, label = bar_data$add_label),
+        size = 3,
+        vjust = ifelse(bar_data$bar_height >= 0, 1.5, -0.5))
     }
 
     if (is.null(col_by)) {
@@ -340,8 +342,9 @@ g_waterfall <- function(bar_id,
         theme(
           legend.title = element_text(size = 9),
           legend.text = element_text(size = 9),
-          legend.key = element_rect(fill = NA))
-      if (!is.null(bar_color_opt)){
+          legend.key = element_rect(fill = NA)
+        )
+      if (!is.null(bar_color_opt)) {
         p <- p + scale_fill_manual(values = bar_color_opt)
       }
     }
@@ -356,13 +359,13 @@ g_waterfall <- function(bar_id,
       p <- p +
         labs(title = title) +
         theme(plot.title = element_text(face = "bold"))
-    }else{
+    } else {
       p <- p +
         labs(title = paste(title, "-", as.character(unique(facet_by)))) +
         theme(plot.title = element_text(face = "bold"))
     }
 
-    if (!is.null(anno_txt)){
+    if (!is.null(anno_txt)) {
       t_anno <- data.frame(
         bar_id,
         bar_height,
@@ -376,7 +379,7 @@ g_waterfall <- function(bar_id,
           t_anno$bar_id,
           levels = unique(t_anno$bar_id[order(t_anno$sort_by, t_anno$bar_height, decreasing = TRUE)])
         )
-      } else{
+      } else {
         t_anno$bar_id <- factor(
           t_anno$bar_id,
           levels = unique(t_anno$bar_id[order(t_anno$bar_height, decreasing = TRUE)])
@@ -392,38 +395,41 @@ g_waterfall <- function(bar_id,
       t_anno <- t(t_anno)
 
       my_theme <- ttheme_default(
-        core = list(bg_params = list(fill = NA, col = NA),
-                    fg_params = list(cex = 0.8)),
-        rowhead = list(bg_params = list(fill = NA, col = NA),
-                       fg_params = list(cex = 0.8)),
+        core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
+        rowhead = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
         padding = unit(c(0, 4), "mm"))
 
-      tb <- tableGrob(t_anno,
-                      rows = NULL, #row.names(t_anno),
-                      cols = NULL,
-                      theme = my_theme)
+      tb <- tableGrob(
+        t_anno,
+        rows = NULL,
+        cols = NULL,
+        theme = my_theme)
 
       tb$widths <- unit(rep(1 / (ncol(tb)), ncol(tb)), "null")
-      tb <- gtable_add_grob(tb,
-                            grobs = rectGrob(gp = gpar(fill = NA, lwd = 2)),
-                            t = 1, b = nrow(tb), l = 1, r = ncol(tb))
+      tb <- gtable_add_grob(
+        tb,
+        grobs = rectGrob(gp = gpar(fill = NA, lwd = 2)),
+        t = 1, b = nrow(tb), l = 1, r = ncol(tb))
 
       t_anno_name <- names(anno_txt)
-      tb_rowname <- tableGrob(t_anno_name,
-                              rows = NULL,
-                              cols = NULL,
-                              theme = ttheme_minimal(core = list(bg_params = list(fill = NA, col = NA),
-                                                                 fg_params = list(cex = 0.8))))
+      tb_rowname <- tableGrob(
+        t_anno_name,
+        rows = NULL,
+        cols = NULL,
+        theme = ttheme_minimal(core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8))))
 
       # grab plot and table as one plot
       g0 <- ggplotGrob(p)
       g1 <- gtable_add_rows(g0, sum(tb$heights), pos = -1)
-      g2 <- gtable_add_grob(g1, tb, t = -1,
-                            l = g1$layout[g1$layout$name == "panel", 2],
-                            r = g1$layout[g1$layout$name == "panel", 4])
+      g2 <- gtable_add_grob(
+        g1,
+        tb,
+        t = -1,
+        l = g1$layout[g1$layout$name == "panel", 2],
+        r = g1$layout[g1$layout$name == "panel", 4])
       g3 <- gtable_add_cols(g2, tb_rowname$widths, pos = 0)
       g <- gtable_add_grob(g3, tb_rowname, t = -1, l = 2)
-    }else{
+    } else {
       p <- p +
         theme(axis.title.x = element_text()) +
         labs(x = "Unique Subject ID")
@@ -432,7 +438,7 @@ g_waterfall <- function(bar_id,
     g
   }
 
-  if (is.null(facet_by)){
+  if (is.null(facet_by)) {
     gt <- facet_plot(
       bar_id = bar_id,
       bar_height = bar_height,
@@ -450,21 +456,22 @@ g_waterfall <- function(bar_id,
       title = title
     )
 
-  }else{
+  } else {
     facet_by <- factor(facet_by)
     g_list <- rep(list(NA), length(levels(facet_by)))
-    for (i in 1:length(levels(facet_by))){
+    for (i in seq_along(levels(facet_by))) {
+      facet_level <- levels(facet_by)[i]
       g_list[[i]] <- facet_plot(
-        bar_id = bar_id[facet_by == levels(facet_by)[i]],
-        bar_height = bar_height[facet_by == levels(facet_by)[i]],
-        sort_by = sort_by[facet_by == levels(facet_by)[i]],
-        col_by = col_by[facet_by == levels(facet_by)[i]],
+        bar_id = bar_id[facet_by == facet_level],
+        bar_height = bar_height[facet_by == facet_level],
+        sort_by = sort_by[facet_by == facet_level],
+        col_by = col_by[facet_by == facet_level],
         bar_color_opt = bar_color_opt,
-        anno_txt = anno_txt[facet_by == levels(facet_by)[i], ],
+        anno_txt = anno_txt[facet_by == facet_level, , drop = FALSE],
         href_line = href_line,
-        facet_by = facet_by[facet_by == levels(facet_by)[i]],
+        facet_by = facet_by[facet_by == facet_level],
         show_datavalue = show_datavalue,
-        add_label = add_label[facet_by == levels(facet_by)[i]],
+        add_label = add_label[facet_by == facet_level],
         gap_point = gap_point,
         ytick_at = ytick_at,
         y_label = y_label,

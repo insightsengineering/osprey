@@ -1,8 +1,8 @@
 Package: osprey
 Type: Package
 Title: R package to create TLGs
-Version: 0.1.4.9000
-Date: 2020-06-04
+Version: 0.1.7.9000
+Date: 2020-12-15
 Authors@R: c(
   person("Nina", "Qi", email = "qit3@gene.com", role = c("aut", "cre")),
   person("Chendi", "Liao", email = "chendi.liao@roche.com", role = c("aut")),
@@ -16,26 +16,38 @@ Encoding: UTF-8
 LazyData: true
 Depends:
   R (>= 3.3),
-  tern (>= 0.6.7),
   dplyr (>= 0.8.0),
   ggplot2 (>= 2.0.0)
 Imports:
+<<<<<<< HEAD
   DescTools,
   checkmate,
   tidyr,
+=======
+  purrr,
+  cowplot,
+>>>>>>> devel
   grid,
   gridExtra,
   gtable,
   rlang,
-  rtables (>= 0.1.6),
+  rtables,
   stringr,
-  utils.nest (>= 0.2.4)
+  tern (>= 0.7.0),
+  tidyr (>= 1.0.0),
+  utils.nest (>= 0.2.7),
+  DescTools
 Suggests:
   knitr,
+<<<<<<< HEAD
   random.cdisc.data (>= 0.3.4),
   test.nest (>= 0.2.3),
+=======
+  random.cdisc.data (>= 0.3.7),
+  test.nest (>= 0.2.6),
+>>>>>>> devel
   testthat (>= 2.0)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1
 URL:
   https://github.roche.com/NEST/osprey/
 BugReports:

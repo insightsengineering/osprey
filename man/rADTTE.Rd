@@ -4,7 +4,9 @@
 \name{rADTTE}
 \alias{rADTTE}
 \title{Random Time to Event Analysis Dataset}
-\format{An object of class \code{data.frame} with 150 rows and 33 columns.}
+\format{
+An object of class \code{data.frame} with 150 rows and 33 columns.
+}
 \source{
 internal
 }

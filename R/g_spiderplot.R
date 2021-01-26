@@ -179,16 +179,17 @@ g_spiderplot <- function(marker_x,
       },
       size = 1,
       alpha = 0.5,
-      show.legend = show_legend)
+      show.legend = show_legend
+    )
 
   # marker shape------------ this section can be condensed later
   if (!is.null(marker_shape)) {
-      pl <- pl +
-        geom_point(mapping = if (!is.null(line_colby)) {
-            aes_string(shape = "sh", color = "l_col")
-          } else {
-            aes_string(shape = "sh")
-          }, size = marker_size, show.legend = show_legend)
+    pl <- pl +
+      geom_point(mapping = if (!is.null(line_colby)) {
+          aes_string(shape = "sh", color = "l_col")
+        } else {
+          aes_string(shape = "sh")
+        }, size = marker_size, show.legend = show_legend)
 
   } else if (is.null(marker_shape)) {
       pl <- pl +
@@ -225,11 +226,13 @@ g_spiderplot <- function(marker_x,
                !is.null(datalabel_txt$mrkr_all) &&
                !is.null(datalabel_txt$mrkr_ann)) {
       pl <- pl +
-        geom_text(data = dat,
-                  aes_string(x = "x", y = "y", label = "lab"),
-                  hjust = -0.45,
-                  size = 4,
-                  show.legend = FALSE)
+        geom_text(
+          data = dat,
+          aes_string(x = "x", y = "y", label = "lab"),
+          hjust = -0.45,
+          size = 4,
+          show.legend = FALSE
+        )
 
       dat_arrow <- dat %>%
         dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%

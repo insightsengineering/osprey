@@ -33,7 +33,7 @@ by decreasing height}
 the argument \code{bar_color_opt} is provided}
 
 \item{bar_color_opt}{aesthetic values to map color values (named vector to map color values to each name).
-If not \code{NULL}, please make sure this contains all posible values for \code{col_by} values,
+If not \code{NULL}, please make sure this contains all possible values for \code{col_by} values,
 otherwise default ggplot color will be assigned, please note that \code{NULL} needs to be specified
 in this case}
 
@@ -78,7 +78,7 @@ g_waterfall(
 ADSL <- rADSL[1:15,]
 ADRS <- rADRS \%>\%
   filter(USUBJID \%in\% ADSL$USUBJID)
-ADTR <- rADTR\%>\%
+ADTR <- rADTR \%>\%
   filter(USUBJID \%in\% ADSL$USUBJID) \%>\%
   select(USUBJID, PCHG) \%>\%
   group_by(USUBJID) \%>\%
@@ -110,7 +110,7 @@ g_waterfall(
   ytick_at = 20,
   gap_point = NULL,
   show_datavalue = TRUE,
-  y_label = "Best \% Change frome Baseline",
+  y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
 
@@ -129,7 +129,7 @@ g_waterfall(
   add_label = ANL$BESRSPI,
   ytick_at = 20,
   gap_point = 260,
-  y_label = "Best \% Change frome Baseline",
+  y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
 
@@ -153,7 +153,7 @@ g_waterfall(
   add_label = ANL$BESRSPI,
   ytick_at = 20,
   gap_point = 260,
-  y_label = "Best \% Change frome Baseline",
+  y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
 
