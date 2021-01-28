@@ -3,9 +3,8 @@
 #' Draw adverse event category plot.
 #'
 #' @param term \code{character} event term vector.
-#'  All terms are included by default.
-#' @param id \code{vector} id of the event term vector.
-#' For example, \code{ADAE$USUBJID}.
+#' @param id (`vector`)\cr contains subject identifier. Length of \code{id} must be the
+#' same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.
 #' @param arm A \code{vector} of the treatment variable.
 #' For example, \code{ADAE$ACTARM}.
 #' @param arm_sl A \code{vector} of the subject level treatment variable.
