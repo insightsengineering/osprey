@@ -384,8 +384,10 @@ grob_parts <- function(gplot, parts) {
 #' @importFrom grid rectGrob
 #'
 grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
-  ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v),
-                widths = unit.c(pad_h, unit(1, "null"), pad_h))
+  ret <- gtable(
+    heights = unit.c(pad_v, unit(1, "null"), pad_v),
+    widths = unit.c(pad_h, unit(1, "null"), pad_h)
+    )
   ret <- gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
   ret <- gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
   return(ret)
