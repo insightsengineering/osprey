@@ -2,24 +2,24 @@
 #'
 #' Draw adverse event category plot.
 #' @inheritParams argument_convention
-#' @param term \code{character} event term vector.
+#' @param term (`character`)\cr event term vector.
 #' @param id (`vector`)\cr contains subject identifier. Length of \code{id} must be the
 #' same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.
-#' @param arm_sl A \code{vector} of the subject level treatment variable.
+#' @param arm_sl (`vector`)\cr contains the subject level treatment variable.
 #' For example, \code{ADSL$ACTARM}.
-#' @param subgroups \code{data.frame} Variables to conduct analysis.
-#' @param subgroups_sl \code{data.frame} Subject level variables to conduct analysis.
+#' @param subgroups (`data.frame`)\cr Variables to conduct analysis.
+#' @param subgroups_sl (`data.frame`)\cr Subject level variables to conduct analysis.
 #' Usually from ADSL.
-#' @param ref \code{character} indicates the name of the reference arm. Default is the first
+#' @param ref (`character`)\cr indicates the name of the reference arm. Default is the first
 #' level of \code{arm}.
-#' @param trt \code{character} indicates the name of the treatment arm. Default is the second
+#' @param trt (`character`)\cr indicates the name of the treatment arm. Default is the second
 #' level of \code{arm}.
-#' @param indent \code{numeric} non-negative integer where 0 means that the subgroup levels should not be indented
-#' @param subgroups_levels A nested named \code{list} of variables to conduct analysis.
+#' @param indent (`numeric`)\cr non-negative integer where 0 means that the subgroup levels should not be indented
+#' @param subgroups_levels (`list`)\cr A nested named list of variables to conduct analysis.
 #' The names of the nested lists are used to show as the label.
 #' The children lists should start with "Total" = variable label,
 #' followed by labels for each level of said variable. See example for reference.
-#' @param xmax \code{numeric} maximum range for the x-axis.
+#' @param xmax (`numeric`)\cr maximum range for the x-axis.
 #' x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
 #' xmax is 0 by default
 #'
@@ -104,25 +104,30 @@ g_ae_sub <- function(term,
   if (!is.null(subgroups_levels)) {
     labels <- unlist(subgroups_levels)
     label_df <-
-      tibble(level = str_replace_all(names(labels), "\\.", "__"),
-             label = labels) %>%
+      tibble(
+        level = str_replace_all(names(labels), "\\.", "__"),
+        label = labels
+        ) %>%
       bind_rows(c(level = "TOTAL__Total", label = "Overall")) %>%
-      mutate(indents = str_dup(" ", if_else(
+      mutate(
+        indents = str_dup(" ", if_else(
         str_detect(level, "__Total"), 0, indent
       )),
       #create label with indents if not total
       label = paste0(indents, label))
   }
   stop_if_not(
-    list(length(unique(vapply(list(id, term, arm),
-                              length, integer(1)))) == 1,
-         "invalid arguments: check that the length of id, term and arm are identical"
+    list(
+      length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1,
+      "invalid arguments: check that the length of id, term and arm are identical"
     ),
-    list(is_character_vector(arm_sl, min_length = 2),
-         "invalid argument: check that arm_sl is a character vector with length >= 2"
+    list(
+      is_character_vector(arm_sl, min_length = 2),
+      "invalid argument: check that arm_sl is a character vector with length >= 2"
     ),
-    list(all(c(trt, ref) %in% unique(arm)),
-         "invalid arguments: trt and ref need to be from arm"
+    list(
+      all(c(trt, ref) %in% unique(arm)),
+      "invalid arguments: trt and ref need to be from arm"
     ),
     list(
       is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
@@ -140,10 +145,13 @@ g_ae_sub <- function(term,
       "data.frame" %in% class(subgroups_sl) & nrow(subgroups_sl) == length(arm_sl),
       "invalid argument: subgroups_sl need to be a data.frame with nrow = length(arm_sl)"
     ),
-    list(is_numeric_single(indent) & between(indent, 0, Inf),
-         "invalid argument: indent must be a number >= 0"),
-    list(is_numeric_single(xmax),
-         "invalid argument: xmax must be a number")
+    list(
+      is_numeric_single(indent) & between(indent, 0, Inf),
+      "invalid argument: indent must be a number >= 0"
+      ),
+    list(
+      is_numeric_single(xmax),
+      "invalid argument: xmax must be a number")
   )
 
 
@@ -212,10 +220,14 @@ g_ae_sub <- function(term,
     mutate(
       !!r1 := !!x1 / !!n1,
       !!r2 := !!x2 / !!n2,
-      lower = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
-                          conf_level, method = diff_ci_method)[2],
-      upper = BinomDiffCI(!!x1, !!n1, !!x2, !!n2,
-                          conf_level, method = diff_ci_method)[3],
+      lower = BinomDiffCI(
+        !!x1, !!n1, !!x2, !!n2,
+        conf_level, method = diff_ci_method
+        )[2],
+      upper = BinomDiffCI(
+        !!x1, !!n1, !!x2, !!n2,
+        conf_level, method = diff_ci_method
+        )[3],
       riskdiff = !!r1 - !!r2
     ) %>%
     pivot_longer(
@@ -292,9 +304,10 @@ g_ae_sub <- function(term,
   }
   p1 <-
     ggplot(df_risk) +
-    geom_point(aes(x = riskdiff,
-                   y = level),
-               size = fontsize) +
+    geom_point(
+      aes(x = riskdiff, y = level),
+      size = fontsize
+      ) +
     geom_vline(
       data = NULL,
       xintercept = 0,
@@ -305,8 +318,10 @@ g_ae_sub <- function(term,
       aes(xmin = lower, xmax = upper, y = level),
       height = 0.3) +
     mytheme +
-    theme(axis.ticks.x = element_line(),
-          axis.line.x = element_line()) +
+    theme(
+      axis.ticks.x = element_line(),
+      axis.line.x = element_line()
+      ) +
     y_axis +
     coord_cartesian(xlim = c(-xmax, xmax))
   p1_grob <- ggplotGrob(p1)
@@ -383,9 +398,13 @@ g_ae_sub <- function(term,
     risk_label
   ))
 
-  widths <- unit.c(grobWidth(grobs[[1]]),
-                  unit(c(14 * fontsize, 1, 50 * fontsize),
-                       c("pt", "null", "pt")))
+  widths <- unit.c(
+    grobWidth(grobs[[1]]),
+    unit(
+      c(14 * fontsize, 1, 50 * fontsize),
+      c("pt", "null", "pt")
+    )
+  )
   heights <- unit.c(
     grobHeight(grobs[[6]]),
     unit(1, "null"),
@@ -394,13 +413,17 @@ g_ae_sub <- function(term,
   )
 
 
-  boldfont <- gpar(fontsize = fontsize * 4,
-                   fontface = "bold",
-                   lineheight = 1)
-  layout_matrix <- rbind(c(NA, 2, 8, 6),
-                         c(1, 3, 4, 7),
-                         c(NA, NA, 5, NA),
-                         c(NA, NA, 9, NA))
+  boldfont <- gpar(
+    fontsize = fontsize * 4,
+    fontface = "bold",
+    lineheight = 1
+  )
+  layout_matrix <- rbind(
+    c(NA, 2, 8, 6),
+    c(1, 3, 4, 7),
+    c(NA, NA, 5, NA),
+    c(NA, NA, 9, NA)
+  )
   ret <- arrangeGrob(
     grobs = grobs,
     layout_matrix = layout_matrix,

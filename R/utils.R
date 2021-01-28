@@ -397,7 +397,7 @@ grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 #' @importFrom  ggplot2 theme .pt
 #' @param axis_side axis position
 #' @param fontsize font size in 'mm'
-theme_osprey <- function(axis_side = "left", fontsize = 4){
+theme_osprey <- function(axis_side = "left", fontsize = 4) {
   theme(panel.background = element_rect(fill = "white", colour = "white"),
         panel.grid.major.y = element_line(colour = "grey50", linetype = 2),
         panel.border = element_rect(colour = "black", fill = NA, size = 1),

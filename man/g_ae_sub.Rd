@@ -24,7 +24,7 @@ g_ae_sub(
 )
 }
 \arguments{
-\item{term}{\code{character} event term vector.}
+\item{term}{(`character`)\cr event term vector.}
 
 \item{id}{(`vector`)\cr contains subject identifier. Length of \code{id} must be the
 same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.}
@@ -32,28 +32,28 @@ same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$U
 \item{arm}{(`factor`)\cr vector that contains arm information in analysis data.
 For example, `ADAE$ACTARMCD`.}
 
-\item{arm_sl}{A \code{vector} of the subject level treatment variable.
+\item{arm_sl}{(`vector`)\cr contains the subject level treatment variable.
 For example, \code{ADSL$ACTARM}.}
 
-\item{subgroups}{\code{data.frame} Variables to conduct analysis.}
+\item{subgroups}{(`data.frame`)\cr Variables to conduct analysis.}
 
-\item{subgroups_sl}{\code{data.frame} Subject level variables to conduct analysis.
+\item{subgroups_sl}{(`data.frame`)\cr Subject level variables to conduct analysis.
 Usually from ADSL.}
 
-\item{trt}{\code{character} indicates the name of the treatment arm. Default is the second
+\item{trt}{(`character`)\cr indicates the name of the treatment arm. Default is the second
 level of \code{arm}.}
 
-\item{ref}{\code{character} indicates the name of the reference arm. Default is the first
+\item{ref}{(`character`)\cr indicates the name of the reference arm. Default is the first
 level of \code{arm}.}
 
-\item{indent}{\code{numeric} non-negative integer where 0 means that the subgroup levels should not be indented}
+\item{indent}{(`numeric`)\cr non-negative integer where 0 means that the subgroup levels should not be indented}
 
-\item{subgroups_levels}{A nested named \code{list} of variables to conduct analysis.
+\item{subgroups_levels}{(`list`)\cr A nested named list of variables to conduct analysis.
 The names of the nested lists are used to show as the label.
 The children lists should start with "Total" = variable label,
 followed by labels for each level of said variable. See example for reference.}
 
-\item{xmax}{\code{numeric} maximum range for the x-axis.
+\item{xmax}{(`numeric`)\cr maximum range for the x-axis.
 x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
 xmax is 0 by default}
 
