@@ -29,8 +29,8 @@ g_ae_sub(
 \item{id}{(`vector`)\cr contains subject identifier. Length of \code{id} must be the
 same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.}
 
-\item{arm}{A \code{vector} of the treatment variable.
-For example, \code{ADAE$ACTARM}.}
+\item{arm}{(`factor`)\cr vector that contains arm information in analysis data.
+For example, `ADAE$ACTARMCD`.}
 
 \item{arm_sl}{A \code{vector} of the subject level treatment variable.
 For example, \code{ADSL$ACTARM}.}
@@ -57,16 +57,16 @@ followed by labels for each level of said variable. See example for reference.}
 x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
 xmax is 0 by default}
 
-\item{conf_level}{\code{numeric} The confidence interval level, default set to 0.95.}
+\item{conf_level}{(`numeric`)\cr the confidence interval level, default is 0.95.}
 
-\item{diff_ci_method}{\code{character} The method used to calculate confidence interval.
-Defalt is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
+\item{diff_ci_method}{(`character`)\cr the method used to calculate confidence interval.
+Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
-\item{fontsize}{\code{numeric} font size for the plot. It is the size used in ggplot2 with
-default unit "mm", if you want "points" you will need to devide the point number by
+\item{fontsize}{(`numeric`)\cr font size for the plot. It is the size used in ggplot2 with
+default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 
-\item{draw}{\code{logical} whether to draw the plot.}
+\item{draw}{(`logical`)\cr whether to draw the plot.}
 }
 \value{
 grob object

@@ -1,12 +1,10 @@
 #' Adverse Event Category Plot
 #'
 #' Draw adverse event category plot.
-#'
+#' @inheritParams argument_convention
 #' @param term \code{character} event term vector.
 #' @param id (`vector`)\cr contains subject identifier. Length of \code{id} must be the
 #' same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.
-#' @param arm A \code{vector} of the treatment variable.
-#' For example, \code{ADAE$ACTARM}.
 #' @param arm_sl A \code{vector} of the subject level treatment variable.
 #' For example, \code{ADSL$ACTARM}.
 #' @param subgroups \code{data.frame} Variables to conduct analysis.
@@ -24,13 +22,6 @@
 #' @param xmax \code{numeric} maximum range for the x-axis.
 #' x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
 #' xmax is 0 by default
-#' @param conf_level \code{numeric} The confidence interval level, default set to 0.95.
-#' @param diff_ci_method \code{character} The method used to calculate confidence interval.
-#' Defalt is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.
-#' @param fontsize \code{numeric} font size for the plot. It is the size used in ggplot2 with
-#' default unit "mm", if you want "points" you will need to devide the point number by
-#' \code{ggplot2:::.pt}.
-#' @param draw \code{logical} whether to draw the plot.
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
 #'
