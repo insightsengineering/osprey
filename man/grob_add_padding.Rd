@@ -5,6 +5,8 @@
 \title{Add padding to grob}
 \usage{
 grob_add_padding(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
+
+grob_add_padding(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 }
 \arguments{
 \item{grob}{grob object}
@@ -14,5 +16,7 @@ grob_add_padding(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 \item{pad_h}{padding to add horizontally}
 }
 \description{
+Add padding to grob
+
 Add padding to grob
 }

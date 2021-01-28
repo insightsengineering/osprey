@@ -5,6 +5,8 @@
 \title{this theme is used across many figures. can be safely removed if update the theme in each function}
 \usage{
 theme_osprey(axis_side = "left", fontsize = 4)
+
+theme_osprey(axis_side = "left", fontsize = 4)
 }
 \arguments{
 \item{axis_side}{axis position}
@@ -12,5 +14,7 @@ theme_osprey(axis_side = "left", fontsize = 4)
 \item{fontsize}{font size in 'mm'}
 }
 \description{
+this theme is used across many figures. can be safely removed if update the theme in each function
+
 this theme is used across many figures. can be safely removed if update the theme in each function
 }
