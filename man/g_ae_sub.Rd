@@ -24,11 +24,10 @@ g_ae_sub(
 )
 }
 \arguments{
-\item{term}{\code{character} event term vector.
-All terms are included by default.}
+\item{term}{\code{character} event term vector.}
 
-\item{id}{\code{vector} id of the event term vector.
-For example, \code{ADAE$USUBJID}.}
+\item{id}{(`vector`)\cr contains subject identifier. Length of \code{id} must be the
+same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.}
 
 \item{arm}{A \code{vector} of the treatment variable.
 For example, \code{ADAE$ACTARM}.}
