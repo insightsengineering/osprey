@@ -22,41 +22,41 @@ g_waterfall(
 )
 }
 \arguments{
-\item{bar_id}{vector of IDs to identify each bar}
+\item{bar_id}{(`vector`)\cr contains IDs to identify each bar}
 
 \item{bar_height}{numeric vector to be plotted as height of each bar}
 
-\item{sort_by}{vector to sort bars, default is \code{NULL} in which case bars are ordered
+\item{sort_by}{(`vector`)\cr used to sort bars, default is \code{NULL} in which case bars are ordered
 by decreasing height}
 
-\item{col_by}{vector to color bars, default is \code{NULL} in which case bar_id is taken if
+\item{col_by}{(`vector`)\cr used to color bars, default is \code{NULL} in which case bar_id is taken if
 the argument \code{bar_color_opt} is provided}
 
-\item{bar_color_opt}{aesthetic values to map color values (named vector to map color values to each name).
+\item{bar_color_opt}{(`vector`)\cr aesthetic values to map color values (named vector to map color values to each name).
 If not \code{NULL}, please make sure this contains all possible values for \code{col_by} values,
 otherwise default ggplot color will be assigned, please note that \code{NULL} needs to be specified
 in this case}
 
-\item{anno_txt}{dataframe of subject-level variables to be displayed as annotation below the waterfall plot,
+\item{anno_txt}{(`dataframe`)\cr contains subject-level variables to be displayed as annotation below the waterfall plot,
 default is \code{NULL}}
 
-\item{href_line}{numeric vector to plot horizontal reference lines, default is \code{NULL}}
+\item{href_line}{(`numeric vector`)\cr to plot horizontal reference lines, default is \code{NULL}}
 
-\item{facet_by}{a vector to facet plot and annotation table, default is \code{NULL}}
+\item{facet_by}{(`vector`)\cr to facet plot and annotation table, default is \code{NULL}}
 
-\item{show_datavalue}{boolean of whether value of bar height is shown, default is \code{TRUE}}
+\item{show_datavalue}{(`boolean`)\cr controls whether value of bar height is shown, default is \code{TRUE}}
 
-\item{add_label}{vector of one subject-level variable to be added to each bar except for bar_height,
+\item{add_label}{(`vector`)\cr of one subject-level variable to be added to each bar except for bar_height,
 default is \code{NULL}}
 
-\item{gap_point}{singular numeric value for adding bar break when some bars are significantly higher than
+\item{gap_point}{(`numeric`)\cr value for adding bar break when some bars are significantly higher than
 others, default is \code{NULL}}
 
-\item{ytick_at}{optional bar height axis interval, default is 20}
+\item{ytick_at}{(`numeric`)\cr optional bar height axis interval, default is 20}
 
-\item{y_label}{label for bar height axis, default is "Best \% Change from Baseline"}
+\item{y_label}{(`string`)\cr label for bar height axis, default is "Best \% Change from Baseline"}
 
-\item{title}{string to be displayed as plot title, default is "Waterfall Plot"}
+\item{title}{(`string`)\cr displayed as plot title, default is "Waterfall Plot"}
 }
 \value{
 plot object
