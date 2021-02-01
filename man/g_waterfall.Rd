@@ -32,12 +32,14 @@ by decreasing height}
 \item{col_by}{(`vector`)\cr used to color bars, default is \code{NULL} in which case bar_id is taken if
 the argument \code{bar_color_opt} is provided}
 
-\item{bar_color_opt}{(`vector`)\cr aesthetic values to map color values (named vector to map color values to each name).
+\item{bar_color_opt}{(`vector`)\cr
+aesthetic values to map color values (named vector to map color values to each name).
 If not \code{NULL}, please make sure this contains all possible values for \code{col_by} values,
 otherwise default ggplot color will be assigned, please note that \code{NULL} needs to be specified
 in this case}
 
-\item{anno_txt}{(`dataframe`)\cr contains subject-level variables to be displayed as annotation below the waterfall plot,
+\item{anno_txt}{(`dataframe`)\cr
+contains subject-level variables to be displayed as annotation below the waterfall plot,
 default is \code{NULL}}
 
 \item{href_line}{(`numeric vector`)\cr to plot horizontal reference lines, default is \code{NULL}}
