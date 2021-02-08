@@ -1,23 +1,45 @@
-heat_color <- ADAE$AETOXGR
-heat_id <- ADAE$USUBJID
-heat_visit <- ADAE$AVISIT
-
-exp_data <- ADEX %>% filter(PARCAT1 == "INDIVIDUAL")
-anno_data <- ADSL
-anno_var <- c("SEX","RACE","COUNTRY")
-heat_data <- ADAE
-heat_color_var <- "AETOXGR"
-heat_color_name <- "Highest grade of\nindividual events"
-heat_color_opt <- c("0" = "aliceblue","1" = "lightsteelblue1", "2" = "steelblue1", "3" = "steelblue4",
-                    "4" = "maroon", "5" = "black")
-g_ce_heat_bygrade <- function(exp_data,
-                              anno_data,
-                              heat_data,
-                              heat_color_var,
-                              heat_color_opt,
-                              heat_visit,
-                              xlab = "Visit",
-                              ylab = "Patient"){
+#' Heatmap by Grade
+#'
+#' This function plots heatmap
+#'
+#' @param heat_id (`vector`)\cr contains subject identifier. Usually it is \code{ADSL$USUBJID}.
+#' @param heat_color (`vector`)\cr to specify color for the heatmap plot.
+#' For example \code{ADAE$AETOXGR} or \code{ADCE$CETOXGR}.
+#' @param text_data (`dataframe`)\cr contains the information needed for the text over heatmap
+#' Usually is \code{ADCM}.
+#' @import ggplot2
+#' @importFrom gridExtra ttheme_default
+#' @export
+#'
+#' @author Nina Qi (qit3) \email{qit3@gene.com}
+#' @author Molly He (hey59) \email{hey59@gene.com}
+#'
+#' @examples
+#' library(random.cdisc.data)
+#'
+#' ADSL <- radsl(cached = TRUE)
+#' ADEX <- radex(cached = TRUE)
+#' ADAE <- radae(cached = TRUE)
+#' ADCM <- radcm(cached = TRUE)
+#' #add AVISIT in ADAE
+#' ADAE$AVISIT <- sample(unique(ADEX$AVISIT[!is.na(ADEX$AVISIT)]), nrow(ADAE), TRUE)
+#' exp_data <- ADEX %>% filter(PARCAT1 == "INDIVIDUAL")
+#' anno_data <- ADSL
+#' anno_var <- c("SEX","RACE","COUNTRY")
+#' heat_data <- ADAE
+#' heat_color_var <- "AETOXGR"
+#' heat_color_name <- "Highest grade of\nindividual events"
+#' heat_color_opt <- c("0" = "aliceblue","1" = "lightsteelblue1", "2" = "steelblue1", "3" = "steelblue4",
+#'                     "4" = "maroon", "5" = "black")
+#'
+#' g_heat_bygrade(exp_data, anno_data, heat_data, heat_color_var,heat_color_opt,)
+g_heat_bygrade <- function(exp_data,
+                           anno_data,
+                           heat_data,
+                           heat_color_var,
+                           heat_color_opt,
+                           xlab = "Visit",
+                           ylab = "Patient"){
   # check if all PARCAT1 in exp_data is "individual"
   stop_if_not(
     list(!is.na(exp_data$AVISIT), "Please only include 'INDIVIDUAL' record in exp_data")
@@ -77,6 +99,26 @@ g_ce_heat_bygrade <- function(exp_data,
       y = ylab
      )
   #plot left legend
-  t <- anl_data
+  t <- as.data.frame(anl_data[,c(anno_var, "SUBJ")])
+  my_theme <- ttheme_default(
+    core = list(
+      bg_params = list(fill = NA, col = NA),
+      fg_params = list(cex = 0.8)
+    ),
+    colhead = list(
+      bg_params = list(fill = NA, col = NA),
+      fg_params = list(cex = 0.8)
+    )
+  )
+  tb <- tableGrob(t, rows = NULL, theme = my_theme)
+  tb$heights <- unit(rep(1 / nrow(tb), nrow(tb)), "null")
 
+  # grab plot and table as one plot
+  g0 <- ggplotGrob(p)
+  g1 <- gtable_add_cols(g0, sum(tb$widths), 0)
+  g <- gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
+
+  grid.newpage()
+  grid.draw(g)
+  invisible(g)
 }
