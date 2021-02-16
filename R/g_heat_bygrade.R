@@ -70,11 +70,11 @@ g_heat_bygrade <- function(exp_data,
     select(USUBJID, AVISIT) %>%
     left_join(heat_data, by = c("USUBJID", "AVISIT")) %>%
     distinct() %>%
-    mutate(heat_color_num = tidyr::replace_na(as.numeric(.data[[heat_color_var]]),0)) %>%
+    mutate(heat_color_num = tidyr::replace_na(as.numeric(.data[[heat_color_var]]), 0)) %>%
     group_by(USUBJID, AVISIT) %>%
     arrange(AVISIT) %>%
-    mutate(heat_color_max = factor(max(heat_color_num), c("0",levels(.data[[heat_color_var]])))) %>%
-    select(-(!!heat_color_var), -heat_color_num) %>%
+    mutate(heat_color_max = factor(max(heat_color_num), c("0", levels(.data[[heat_color_var]])))) %>%
+    select(- (!!heat_color_var), -heat_color_num) %>%
     distinct() %>%
     left_join(anno_data, by = "USUBJID")
 
@@ -107,7 +107,7 @@ g_heat_bygrade <- function(exp_data,
   subj_levels <- unique(anl_data$SUBJ)
   visit_levels <- unique(anl_data$AVISIT)
   p <- ggplot(data = anl_data, aes(x = AVISIT,
-                                   y = factor(SUBJ, levels = c(subj_levels,"")))) +
+                                   y = factor(SUBJ, levels = c(subj_levels, "")))) +
     geom_tile(aes(fill = heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(name = heat_color_name,
@@ -155,7 +155,7 @@ g_heat_bygrade <- function(exp_data,
   }
 
   #plot left legend
-  t <- as.data.frame(anl_data[,c(anno_var, "SUBJ")]) %>% distinct()
+  t <- as.data.frame(anl_data[, c(anno_var, "SUBJ")]) %>% distinct()
   my_theme <- ttheme_default(
     core = list(
       bg_params = list(fill = NA, col = NA),
