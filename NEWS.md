@@ -1,7 +1,6 @@
 # osprey 0.1.7.9000
-
-* Issues with no news:
-
+### Miscellaneous
+* Set up a `.lintr` configuration file.
 
 # osprey 0.1.7
 ### Bug fixes
