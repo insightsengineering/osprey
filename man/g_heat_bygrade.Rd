@@ -29,6 +29,10 @@ Usually is \code{ADCM}.}
 \item{heat_color_var}{(`character`)\cr}
 
 \item{heat_color_opt}{(`vector`)\cr}
+
+\item{xlab}{(`character`)\cr}
+
+\item{title}{(`character`)\cr}
 }
 \description{
 This function plots heatmap
