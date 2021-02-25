@@ -42,6 +42,7 @@
 #' @examples
 #' library(osprey)
 #' library(random.cdisc.data)
+#' library(grid)
 #'
 #' ADAE <- radae(cached = TRUE)
 #' ADSL <- radsl(cached = TRUE)
@@ -67,13 +68,15 @@
 #'                                     "M" = "Male",
 #'                                     "F" = "Female",
 #'                                     "U" = "Unknown"))
-#' g_ae_sub(term,
-#'          id,
-#'          arm,
-#'          arm_sl,
-#'          subgroups,
-#'          subgroups_sl,
-#'          subgroups_levels = subgroups_levels)
+#' p <- g_ae_sub(term,
+#'               id,
+#'               arm,
+#'               arm_sl,
+#'               subgroups,
+#'               subgroups_sl,
+#'               subgroups_levels = subgroups_levels)
+#' grid.newpage()
+#' grid.draw(p)
 
 g_ae_sub <- function(term,
                      id,
@@ -409,7 +412,7 @@ g_ae_sub <- function(term,
     grobHeight(grobs[[6]]),
     unit(1, "null"),
     grobHeight(grobs[[5]]),
-    unit(fontsize * .pt * 2, "pt")
+    unit(fontsize * .pt * 3, "pt")
   )
 
 

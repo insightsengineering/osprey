@@ -80,6 +80,7 @@ there is no equivalent STREAM output
 \examples{
 library(osprey)
 library(random.cdisc.data)
+library(grid)
 
 ADAE <- radae(cached = TRUE)
 ADSL <- radsl(cached = TRUE)
@@ -105,13 +106,15 @@ subgroups_levels <- list(RACE = list("Total" = "Race",
                                     "M" = "Male",
                                     "F" = "Female",
                                     "U" = "Unknown"))
-g_ae_sub(term,
-         id,
-         arm,
-         arm_sl,
-         subgroups,
-         subgroups_sl,
-         subgroups_levels = subgroups_levels)
+p <- g_ae_sub(term,
+              id,
+              arm,
+              arm_sl,
+              subgroups,
+              subgroups_sl,
+              subgroups_levels = subgroups_levels)
+grid.newpage()
+grid.draw(p)
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}
