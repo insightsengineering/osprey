@@ -435,7 +435,7 @@ g_ae_sub <- function(term,
     clip = "on"
   )
   if (draw) {
-    plot(ret)
+    grid.draw(ret)
   }
   invisible(ret)
 }
