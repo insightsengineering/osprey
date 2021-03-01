@@ -599,7 +599,7 @@ patient_domain_profile <- function(domain = NULL,
 #'   group_by(USUBJID) %>%
 #'   mutate(
 #'     TRTSDT = as.Date(TRTSDTM),
-#'     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT)),
+#'     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
 #'     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) %>%
 #'   select(USUBJID, STUDYID, TRTSDT , max_day) %>%
 #'   filter(USUBJID == rADSL$USUBJID[1])
