@@ -330,7 +330,7 @@ g_waterfall <- function(bar_id,
 
     if (!is.null(add_label)) {
       p <- p + geom_text(
-        aes(x = bar_id, y = 0, label = bar_data$add_label),
+        aes(x = bar_id, y = 0, label = add_label),
         size = 3,
         vjust = ifelse(bar_data$bar_height >= 0, 1.5, -0.5))
     }
