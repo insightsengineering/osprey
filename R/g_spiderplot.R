@@ -291,8 +291,6 @@ g_spiderplot <- function(marker_x,
 
   # remove marker from color legend
   if (!is.null(line_colby)) {
-    # pl <- pl + guides(color = guide_legend(override.aes = list(shape = rep(NA, length(unique(dat$l_col))))))
-
     if (!is.null(line_color_opt)) {
       pl <- pl + scale_color_manual(
         name = "Color",
