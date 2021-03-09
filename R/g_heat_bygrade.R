@@ -33,17 +33,18 @@
 #' # add AVISIT in ADAE
 #' ADAE$AVISIT <- sample(unique(ADEX$AVISIT[!is.na(ADEX$AVISIT)]), nrow(ADAE), TRUE)
 #' # include three conmed levels
+#' ADCM_labs <- rtables::var_labels(ADCM)
 #' ADCM <- ADCM %>%
 #'   filter(
 #'     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
 #'     ) %>%
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
+#' rtables::var_labels(ADCM) <- ADCM_labs
 #' exp_data <- ADEX %>% filter(PARCAT1 == "INDIVIDUAL")
 #' anno_data <- ADSL
 #' anno_var <- c("SEX","COUNTRY")
 #' heat_data <- ADAE
 #' heat_color_var <- "AETOXGR"
-#' heat_color_name <- "Highest grade of\nindividual events"
 #' heat_color_opt <- c("0" = "gray90","1" = "lightsteelblue1", "2" = "steelblue1", "3" = "steelblue4",
 #'                     "4" = "maroon", "5" = "brown4")
 #' conmed_data <- ADCM
@@ -133,17 +134,22 @@ g_heat_bygrade <- function(exp_data,
     slice_tail() %>%
     select(USUBJID, SUBJ, AVISIT)
 
+  visit_levels <- unique(anl_data$AVISIT)
+
   conmed_data <- conmed_data %>%
     left_join(anl_data, by = "USUBJID") %>%
-    mutate(conmed_n = as.numeric(CMDECOD)) %>%
-    mutate(distance = (conmed_n - median(unique(conmed_n), na.rm = TRUE))/5) %>%
-    mutate(conmed_x = as.numeric(factor(AVISIT, levels = visit_levels)) + distance) %>%
     group_by(USUBJID) %>%
-    mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1)) %>%
+    mutate(
+      conmed_num = as.numeric(CMDECOD),
+      conmed_num_m = median(unique(conmed_num), na.rm = TRUE),
+      distance = (ifelse(conmed_num <= conmed_num_m, conmed_num - 1, conmed_num + 1) - conmed_num_m) / 5,
+      conmed_x = as.numeric(factor(AVISIT, levels = visit_levels)) + distance,
+      SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1)
+      ) %>%
     select(USUBJID, SUBJ, conmed_x, !!conmed_var)
 
+
   subj_levels <- unique(anl_data$SUBJ)
-  visit_levels <- unique(anl_data$AVISIT)
   p <- ggplot(
     data = anl_data,
     aes(x = AVISIT, y = factor(SUBJ, levels = c(subj_levels, "")))
@@ -151,7 +157,7 @@ g_heat_bygrade <- function(exp_data,
     geom_tile(aes(fill = heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
-      name = heat_color_name,
+      name = "Highest grade of\nindividual events",
       values = heat_color_opt
       ) +
     # plot dose reduction
@@ -170,11 +176,12 @@ g_heat_bygrade <- function(exp_data,
     # plot ongoing
     geom_segment(
       data = exp_lst,
-      aes(x = as.numeric(factor(AVISIT, levels = visit_levels)) + 0.5,
-          xend = as.numeric(factor(AVISIT, levels = visit_levels)) + 0.65,
-          y = as.numeric(factor(SUBJ, levels = rev(subj_levels))),
-          yend = as.numeric(factor(SUBJ, levels = rev(subj_levels)))
-          ),
+      aes(
+        x = as.numeric(factor(AVISIT, levels = visit_levels)) + 0.5,
+        xend = as.numeric(factor(AVISIT, levels = visit_levels)) + 0.65,
+        y = as.numeric(factor(SUBJ, levels = rev(subj_levels))),
+        yend = as.numeric(factor(SUBJ, levels = rev(subj_levels)))
+        ),
       arrow = arrow(length = unit(0.1, "cm")),
       size = .5,
       color = "black"
@@ -186,8 +193,10 @@ g_heat_bygrade <- function(exp_data,
         x = conmed_x,
         y = as.numeric(factor(SUBJ, levels = rev(subj_levels))),
         shape = conmed_data[[conmed_var]]
-        )
+        ),
+      size = 3
       ) +
+    scale_shape(name = rtables::var_labels(conmed_data)[conmed_var]) +
     theme_bw() +
     theme(
       panel.background = element_blank(),

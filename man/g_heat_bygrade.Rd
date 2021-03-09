@@ -11,6 +11,8 @@ g_heat_bygrade(
   heat_data,
   heat_color_var,
   heat_color_opt,
+  conmed_data,
+  conmed_var,
   xlab = "Visit",
   title = "Heatmap by Grade"
 )
@@ -30,6 +32,10 @@ Usually is \code{ADCM}.}
 
 \item{heat_color_opt}{(`vector`)\cr}
 
+\item{conmed_data}{(`dataframe`)\cr}
+
+\item{conmed_var}{(`character`)\cr}
+
 \item{xlab}{(`character`)\cr}
 
 \item{title}{(`character`)\cr}
@@ -44,16 +50,26 @@ ADSL <- radsl(N = 30)
 ADEX <- radex(ADSL)
 ADAE <- radae(ADSL)
 ADCM <- radcm(ADSL)
-#add AVISIT in ADAE
+# add AVISIT in ADAE
 ADAE$AVISIT <- sample(unique(ADEX$AVISIT[!is.na(ADEX$AVISIT)]), nrow(ADAE), TRUE)
+# include three conmed levels
+ADCM_labs <- rtables::var_labels(ADCM)
+ADCM <- ADCM \%>\%
+  filter(
+    CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
+    ) \%>\%
+  mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
+rtables::var_labels(ADCM) <- ADCM_labs
 exp_data <- ADEX \%>\% filter(PARCAT1 == "INDIVIDUAL")
 anno_data <- ADSL
 anno_var <- c("SEX","COUNTRY")
 heat_data <- ADAE
 heat_color_var <- "AETOXGR"
-heat_color_name <- "Highest grade of\nindividual events"
 heat_color_opt <- c("0" = "gray90","1" = "lightsteelblue1", "2" = "steelblue1", "3" = "steelblue4",
                     "4" = "maroon", "5" = "brown4")
+conmed_data <- ADCM
+conmed_var <- "CMDECOD"
+
 xlab = "Visit"; title = "Heatmap by Grade"
 g_heat_bygrade(
   exp_data,
@@ -61,7 +77,9 @@ g_heat_bygrade(
   anno_var,
   heat_data,
   heat_color_var,
-  heat_color_opt
+  heat_color_opt,
+  conmed_data,
+  conmed_var
   )
 }
 \author{
