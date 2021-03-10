@@ -1,8 +1,8 @@
 Package: osprey
 Type: Package
 Title: R package to create TLGs
-Version: 0.1.7.9000
-Date: 2020-12-15
+Version: 0.1.8
+Date: 2021-03-17
 Authors@R: c(
   person("Nina", "Qi", email = "qit3@gene.com", role = c("aut", "cre")),
   person("Chendi", "Liao", email = "chendi.liao@roche.com", role = c("aut")),
@@ -27,14 +27,14 @@ Imports:
   rlang,
   rtables,
   stringr,
-  tern (>= 0.7.0),
+  tern (>= 0.7.1),
   tidyr (>= 1.0.0),
-  utils.nest (>= 0.2.7),
+  utils.nest (>= 0.2.8),
   DescTools
 Suggests:
   knitr,
-  random.cdisc.data (>= 0.3.7),
-  test.nest (>= 0.2.6),
+  random.cdisc.data (>= 0.3.8),
+  test.nest (>= 0.2.7),
   testthat (>= 2.0)
 RoxygenNote: 7.1.1
 URL:

@@ -43,6 +43,7 @@
 #' @export
 #'
 #' @importFrom rlang .data
+#' @importFrom grid grid.draw
 #'
 #' @template author_zhanc107
 #'
@@ -290,8 +291,6 @@ g_spiderplot <- function(marker_x,
 
   # remove marker from color legend
   if (!is.null(line_colby)) {
-    pl <- pl + guides(color = guide_legend(override.aes = list(shape = rep(NA, length(unique(dat$l_col))))))
-
     if (!is.null(line_color_opt)) {
       pl <- pl + scale_color_manual(
         name = "Color",
@@ -307,10 +306,7 @@ g_spiderplot <- function(marker_x,
     symbol_val <- rep(symbol_val, ceiling(len / 26))
 
     pl <- pl + scale_shape_manual(
-      name = "Shape",
-      breaks = sort(dat$sh),
-      values = symbol_val[1:len],
-      guide = guide_legend(override.aes = list(linetype = rep("blank", len)))
+      values = symbol_val[1:len]
     )
   }
 
