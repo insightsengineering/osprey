@@ -191,36 +191,36 @@ g_butterfly <- function(category,
   counts_r <- dat %>%
     dplyr::filter(.data$r_flag == 1) %>%
     highest_grade(block_count) %>%
-    dplyr::group_by_(.dots = groups) %>%
+    dplyr::group_by_at(groups) %>%
     dplyr::summarize(n_i = get_counts(.data, block_count)) %>%
-    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::group_by_at(setdiff(groups, "bar_color")) %>%
     dplyr::mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   counts_l <- dat %>%
     filter(.data$l_flag == 1) %>%
     highest_grade(block_count) %>%
-    dplyr::group_by_(.dots = groups) %>%
+    dplyr::group_by_at(groups) %>%
     dplyr::summarize(n_i = get_counts(.data, block_count)) %>%
-    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::group_by_at(setdiff(groups, "bar_color")) %>%
     dplyr::mutate(label_ypos = rev(cumsum(rev(.data$n_i))))
 
   total_label_pos_r <- counts_r %>%
-    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::group_by_at(setdiff(groups, "bar_color")) %>%
     dplyr::summarize(label_ypos = max(.data$label_ypos))
 
   total_label_pos_l <- counts_l %>%
-    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::group_by_at(setdiff(groups, "bar_color")) %>%
     dplyr::summarize(label_ypos = max(.data$label_ypos))
 
   total_text_ann_r <- dat %>%
     dplyr::filter(.data$r_flag == 1) %>%
-    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::group_by_at(setdiff(groups, "bar_color")) %>%
     dplyr::summarize(n = get_counts(.data, block_count)) %>%
     dplyr::left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
 
   total_text_ann_l <- dat %>%
     dplyr::filter(.data$l_flag == 1) %>%
-    dplyr::group_by_(.dots = setdiff(groups, "bar_color")) %>%
+    dplyr::group_by_at(setdiff(groups, "bar_color")) %>%
     dplyr::summarize(n = get_counts(.data, block_count)) %>%
     dplyr::left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
 
