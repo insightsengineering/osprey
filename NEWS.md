@@ -1,3 +1,6 @@
+# osprey 0.1.8.9000
+Issues with no news:
+
 # osprey 0.1.8
 ### Miscellaneous
 * Set up a `.lintr` configuration file.
