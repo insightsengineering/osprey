@@ -45,7 +45,6 @@ This function plots heatmap
 }
 \examples{
 library(random.cdisc.data)
-
 ADSL <- radsl(N = 30)
 ADEX <- radex(ADSL)
 ADAE <- radae(ADSL)
@@ -71,6 +70,7 @@ conmed_data <- ADCM
 conmed_var <- "CMDECOD"
 
 xlab = "Visit"; title = "Heatmap by Grade"
+
 g_heat_bygrade(
   exp_data,
   anno_data,

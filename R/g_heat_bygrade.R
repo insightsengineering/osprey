@@ -17,6 +17,8 @@
 #' @import ggplot2
 #' @importFrom stringr str_to_upper
 #' @importFrom tidyr replace_na
+#' @importFrom stats median
+#' @importFrom utils tail
 #'
 #' @export
 #'
@@ -25,7 +27,6 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#'
 #' ADSL <- radsl(N = 30)
 #' ADEX <- radex(ADSL)
 #' ADAE <- radae(ADSL)
@@ -51,6 +52,7 @@
 #' conmed_var <- "CMDECOD"
 #'
 #' xlab = "Visit"; title = "Heatmap by Grade"
+#'
 #' g_heat_bygrade(
 #'   exp_data,
 #'   anno_data,
@@ -138,23 +140,27 @@ g_heat_bygrade <- function(exp_data,
 
   conmed_data <- conmed_data %>%
     left_join(anl_data, by = "USUBJID") %>%
+    mutate(
+      conmed_num = as.numeric(.data$CMDECOD),
+      conmed_num_m = median(unique(.data$conmed_num), na.rm = TRUE)
+      ) %>%
     group_by(USUBJID) %>%
     mutate(
-      conmed_num = as.numeric(CMDECOD),
-      conmed_num_m = median(unique(conmed_num), na.rm = TRUE),
-      distance = (ifelse(conmed_num <= conmed_num_m, conmed_num - 1, conmed_num + 1) - conmed_num_m) / 5,
-      conmed_x = as.numeric(factor(AVISIT, levels = visit_levels)) + distance,
-      SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1)
+      distance = (ifelse(
+        .data$conmed_num <= .data$conmed_num_m,
+        .data$conmed_num - 1,
+        .data$conmed_num + 1
+        ) - .data$conmed_num_m) / 5,
+      conmed_x = as.numeric(factor(.data$AVISIT, levels = visit_levels)) + .data$distance,
+      SUBJ = tail(strsplit(.data$USUBJID, "-")[[1]], n = 1)
       ) %>%
     select(USUBJID, SUBJ, conmed_x, !!conmed_var)
-
-
   subj_levels <- unique(anl_data$SUBJ)
   p <- ggplot(
     data = anl_data,
     aes(x = AVISIT, y = factor(SUBJ, levels = c(subj_levels, "")))
     ) +
-    geom_tile(aes(fill = heat_color_max)) +
+    geom_tile(aes(fill = .data$heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
       name = "Highest grade of\nindividual events",
@@ -190,11 +196,11 @@ g_heat_bygrade <- function(exp_data,
     geom_point(
       data = conmed_data,
       aes(
-        x = conmed_x,
+        x = .data$conmed_x,
         y = as.numeric(factor(SUBJ, levels = rev(subj_levels))),
-        shape = conmed_data[[conmed_var]]
+        shape = .data[[conmed_var]]
         ),
-      size = 3
+      size = 2
       ) +
     scale_shape(name = rtables::var_labels(conmed_data)[conmed_var]) +
     theme_bw() +
