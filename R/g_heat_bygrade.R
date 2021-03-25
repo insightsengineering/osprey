@@ -10,8 +10,8 @@
 #' Usually is \code{ADCM}.
 #' @param heat_color_var (`character`)\cr
 #' @param heat_color_opt (`vector`)\cr
-#' @param conmed_data (`dataframe`)\cr
-#' @param conmed_var (`character`)\cr
+#' @param conmed_data (`dataframe`)\cr default is \code{NULL} (no conmed plotted)
+#' @param conmed_var (`character`)\cr default is \code{NULL} (no conmed plotted)
 #' @param xlab (`character`)\cr
 #' @param title (`character`)\cr
 #' @import ggplot2
@@ -44,8 +44,9 @@
 #' exp_data <- ADEX %>% filter(PARCAT1 == "INDIVIDUAL")
 #' anno_data <- ADSL
 #' anno_var <- c("SEX","COUNTRY")
-#' heat_data <- ADAE
 #' heat_color_var <- "AETOXGR"
+#' heat_data <- ADAE %>%
+#'   select(USUBJID, AVISIT, (!!heat_color_var))
 #' heat_color_opt <- c("0" = "gray90","1" = "lightsteelblue1", "2" = "steelblue1", "3" = "steelblue4",
 #'                     "4" = "maroon", "5" = "brown4")
 #' conmed_data <- ADCM
@@ -63,14 +64,23 @@
 #'   conmed_data,
 #'   conmed_var
 #'   )
+#'
+#' g_heat_bygrade(
+#'   exp_data,
+#'   anno_data,
+#'   anno_var,
+#'   heat_data,
+#'   heat_color_var,
+#'   heat_color_opt
+#'   )
 g_heat_bygrade <- function(exp_data,
                            anno_data,
                            anno_var,
                            heat_data,
                            heat_color_var,
                            heat_color_opt,
-                           conmed_data,
-                           conmed_var,
+                           conmed_data = NULL,
+                           conmed_var = NULL,
                            xlab = "Visit",
                            title = "Heatmap by Grade") {
   # check if all PARCAT1 in exp_data is "individual"
@@ -85,14 +95,13 @@ g_heat_bygrade <- function(exp_data,
       "invalid argument: heat_color_var should be a varaible name in heat_data"
       ),
     list(is_character_vector(heat_color_opt)),
-    list(is.data.frame(conmed_data)),
     list(
-      length(levels(conmed_data[[conmed_var]])) <= 3,
+      any(!is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var)),
+      "invalid argument: need to provide conmed_data and conmed_var"),
+    list(
+      is.null(conmed_var) | length(levels(conmed_data[[conmed_var]])) <= 3,
       "invalid argument: please only include no more than three conmeds for plotting")
   )
-
-  heat_data <- heat_data %>%
-    select(USUBJID, AVISIT, (!!heat_color_var))
 
   anno_data <- anno_data %>%
     select(!!anno_var, USUBJID) %>%
@@ -117,7 +126,6 @@ g_heat_bygrade <- function(exp_data,
 
   #dose reduction data
   ex_red <- exp_data %>%
-    #??is this filter needed??
     filter(PARAMCD == "DOSE") %>%
     group_by(USUBJID) %>%
     arrange(ASTDTM) %>%
@@ -137,24 +145,26 @@ g_heat_bygrade <- function(exp_data,
     select(USUBJID, SUBJ, AVISIT)
 
   visit_levels <- unique(anl_data$AVISIT)
-
-  conmed_data <- conmed_data %>%
-    left_join(anl_data, by = "USUBJID") %>%
-    mutate(
-      conmed_num = as.numeric(.data$CMDECOD),
-      conmed_num_m = median(unique(.data$conmed_num), na.rm = TRUE)
+  if (!is.null(conmed_data) & !is.null(conmed_var)) {
+    conmed_data <- conmed_data %>%
+      left_join(anl_data, by = "USUBJID") %>%
+      mutate(
+        conmed_num = as.numeric(.data$CMDECOD),
+        conmed_num_m = median(unique(.data$conmed_num), na.rm = TRUE)
       ) %>%
-    group_by(USUBJID) %>%
-    mutate(
-      distance = (ifelse(
-        .data$conmed_num <= .data$conmed_num_m,
-        .data$conmed_num - 1,
-        .data$conmed_num + 1
+      group_by(USUBJID) %>%
+      mutate(
+        distance = (ifelse(
+          .data$conmed_num <= .data$conmed_num_m,
+          .data$conmed_num - 1,
+          .data$conmed_num + 1
         ) - .data$conmed_num_m) / 5,
-      conmed_x = as.numeric(factor(.data$AVISIT, levels = visit_levels)) + .data$distance,
-      SUBJ = tail(strsplit(.data$USUBJID, "-")[[1]], n = 1)
+        conmed_x = as.numeric(factor(.data$AVISIT, levels = visit_levels)) + .data$distance,
+        SUBJ = tail(strsplit(.data$USUBJID, "-")[[1]], n = 1)
       ) %>%
-    select(USUBJID, SUBJ, conmed_x, !!conmed_var)
+      select(USUBJID, SUBJ, conmed_x, !!conmed_var)
+  }
+
   subj_levels <- unique(anl_data$SUBJ)
   p <- ggplot(
     data = anl_data,
@@ -191,18 +201,22 @@ g_heat_bygrade <- function(exp_data,
       arrow = arrow(length = unit(0.1, "cm")),
       size = .5,
       color = "black"
-      ) +
-    # plot conmed
-    geom_point(
-      data = conmed_data,
-      aes(
-        x = .data$conmed_x,
-        y = as.numeric(factor(SUBJ, levels = rev(subj_levels))),
-        shape = .data[[conmed_var]]
+      )
+  # plot conmed
+  if (!is.null(conmed_data) & !is.null(conmed_var)) {
+    p <- p +
+      geom_point(
+        data = conmed_data,
+        aes(
+          x = .data$conmed_x,
+          y = as.numeric(factor(SUBJ, levels = rev(subj_levels))),
+          shape = .data[[conmed_var]]
         ),
-      size = 2
+        size = 2
       ) +
-    scale_shape(name = rtables::var_labels(conmed_data)[conmed_var]) +
+      scale_shape(name = rtables::var_labels(conmed_data)[conmed_var])
+  }
+  p <- p +
     theme_bw() +
     theme(
       panel.background = element_blank(),
