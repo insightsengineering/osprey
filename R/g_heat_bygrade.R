@@ -209,20 +209,20 @@ g_heat_bygrade <- function(exp_data,
       size = .5,
       color = "black"
       )
+    if (!is.null(conmed_data) & !is.null(conmed_var)) {
+      p <- p +
+        geom_point(
+          data = conmed_data,
+          aes(
+            x = .data$conmed_x,
+            y = as.numeric(factor(SUBJ, levels = rev(subj_levels))),
+            shape = .data[[conmed_var]]
+            ),
+          size = 2
+          ) +
+        scale_shape(name = rtables::var_labels(conmed_data)[conmed_var])
+    }
 
-  if (!is.null(conmed_data) & !is.null(conmed_var)) {
-    p <- p +
-      geom_point(
-        data = conmed_data,
-        aes(
-          x = .data$conmed_x,
-          y = as.numeric(factor(SUBJ, levels = rev(subj_levels))),
-          shape = .data[[conmed_var]]
-        ),
-        size = 2
-      ) +
-      scale_shape(name = rtables::var_labels(conmed_data)[conmed_var])
-  }
   p <- p +
     theme_bw() +
     theme(
