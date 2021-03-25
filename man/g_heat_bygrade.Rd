@@ -11,8 +11,8 @@ g_heat_bygrade(
   heat_data,
   heat_color_var,
   heat_color_opt,
-  conmed_data,
-  conmed_var,
+  conmed_data = NULL,
+  conmed_var = NULL,
   xlab = "Visit",
   title = "Heatmap by Grade"
 )
@@ -32,9 +32,9 @@ Usually is \code{ADCM}.}
 
 \item{heat_color_opt}{(`vector`)\cr}
 
-\item{conmed_data}{(`dataframe`)\cr}
+\item{conmed_data}{(`dataframe`)\cr default is \code{NULL} (no conmed plotted)}
 
-\item{conmed_var}{(`character`)\cr}
+\item{conmed_var}{(`character`)\cr default is \code{NULL} (no conmed plotted)}
 
 \item{xlab}{(`character`)\cr}
 
@@ -62,10 +62,17 @@ rtables::var_labels(ADCM) <- ADCM_labs
 exp_data <- ADEX \%>\% filter(PARCAT1 == "INDIVIDUAL")
 anno_data <- ADSL
 anno_var <- c("SEX","COUNTRY")
-heat_data <- ADAE
 heat_color_var <- "AETOXGR"
-heat_color_opt <- c("0" = "gray90","1" = "lightsteelblue1", "2" = "steelblue1", "3" = "steelblue4",
-                    "4" = "maroon", "5" = "brown4")
+heat_data <- ADAE \%>\%
+  select(USUBJID, AVISIT, (!!heat_color_var))
+heat_color_opt <- c(
+  "No Event" = "gray90",
+  "1" = "lightsteelblue1",
+  "2" = "steelblue1",
+  "3" = "steelblue4",
+  "4" = "maroon",
+  "5" = "brown4"
+  )
 conmed_data <- ADCM
 conmed_var <- "CMDECOD"
 
@@ -80,6 +87,15 @@ g_heat_bygrade(
   heat_color_opt,
   conmed_data,
   conmed_var
+  )
+
+g_heat_bygrade(
+  exp_data,
+  anno_data,
+  anno_var,
+  heat_data,
+  heat_color_var,
+  heat_color_opt
   )
 }
 \author{

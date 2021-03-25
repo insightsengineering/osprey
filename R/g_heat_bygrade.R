@@ -47,8 +47,14 @@
 #' heat_color_var <- "AETOXGR"
 #' heat_data <- ADAE %>%
 #'   select(USUBJID, AVISIT, (!!heat_color_var))
-#' heat_color_opt <- c("0" = "gray90","1" = "lightsteelblue1", "2" = "steelblue1", "3" = "steelblue4",
-#'                     "4" = "maroon", "5" = "brown4")
+#' heat_color_opt <- c(
+#'   "No Event" = "gray90",
+#'   "1" = "lightsteelblue1",
+#'   "2" = "steelblue1",
+#'   "3" = "steelblue4",
+#'   "4" = "maroon",
+#'   "5" = "brown4"
+#'   )
 #' conmed_data <- ADCM
 #' conmed_var <- "CMDECOD"
 #'
@@ -115,7 +121,8 @@ g_heat_bygrade <- function(exp_data,
     mutate(heat_color_num = tidyr::replace_na(as.numeric(.data[[heat_color_var]]), 0)) %>%
     group_by(USUBJID, AVISIT) %>%
     arrange(AVISIT) %>%
-    mutate(heat_color_max = factor(max(heat_color_num), c("0", levels(.data[[heat_color_var]])))) %>%
+    mutate(heat_color_max = max(heat_color_num)) %>%
+    mutate(heat_color_max = replace(heat_color_max, heat_color_max == 0, "No Event")) %>%
     select(- (!!heat_color_var), -heat_color_num) %>%
     distinct() %>%
     left_join(anno_data, by = "USUBJID")
@@ -170,7 +177,7 @@ g_heat_bygrade <- function(exp_data,
     data = anl_data,
     aes(x = AVISIT, y = factor(SUBJ, levels = c(subj_levels, "")))
     ) +
-    geom_tile(aes(fill = .data$heat_color_max)) +
+    geom_tile(aes(fill = factor(heat_color_max, levels = unique(heat_color_max)))) +
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
       name = "Highest grade of\nindividual events",
@@ -202,7 +209,7 @@ g_heat_bygrade <- function(exp_data,
       size = .5,
       color = "black"
       )
-  # plot conmed
+
   if (!is.null(conmed_data) & !is.null(conmed_var)) {
     p <- p +
       geom_point(
