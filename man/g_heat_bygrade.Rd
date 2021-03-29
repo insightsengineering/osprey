@@ -20,10 +20,9 @@ g_heat_bygrade(
 \arguments{
 \item{exp_data}{(`dataframe`)\cr contains subject identifier. Usually it is \code{ADSL$USUBJID}.}
 
-\item{anno_data}{(`dataframe`)\cr to specify color for the heatmap plot.
-For example \code{ADAE$AETOXGR} or \code{ADCE$CETOXGR}.}
+\item{anno_data}{(`dataframe`)\cr to specify character}
 
-\item{anno_var}{(`vector`)\cr}
+\item{anno_var}{(`vector`) a vector of columns names to include for the annotation}
 
 \item{heat_data}{(`dataframe`)\cr contains the information needed for the text over heatmap
 Usually is \code{ADCM}.}
@@ -59,9 +58,15 @@ ADCM <- ADCM \%>\%
     ) \%>\%
   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
 rtables::var_labels(ADCM) <- ADCM_labs
-exp_data <- ADEX \%>\% filter(PARCAT1 == "INDIVIDUAL")
-anno_data <- ADSL
-anno_var <- c("SEX","COUNTRY")
+exp_data <- ADEX \%>\%
+  filter(PARCAT1 == "INDIVIDUAL") \%>\%
+  group_by(USUBJID) \%>\%
+  mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
+anno_data <- ADSL \%>\%
+  select(SEX, COUNTRY, USUBJID) \%>\%
+  group_by(USUBJID) \%>\%
+  mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
+anno_var <- c("SEX", "COUNTRY", "SUBJ")
 heat_color_var <- "AETOXGR"
 heat_data <- ADAE \%>\%
   select(USUBJID, AVISIT, (!!heat_color_var))

@@ -3,9 +3,8 @@
 #' This function plots heatmap
 #'
 #' @param exp_data (`dataframe`)\cr contains subject identifier. Usually it is \code{ADSL$USUBJID}.
-#' @param anno_data (`dataframe`)\cr to specify color for the heatmap plot.
-#' For example \code{ADAE$AETOXGR} or \code{ADCE$CETOXGR}.
-#' @param anno_var (`vector`)\cr
+#' @param anno_data (`dataframe`)\cr to specify character
+#' @param anno_var (`vector`) a vector of columns names to include for the annotation
 #' @param heat_data (`dataframe`)\cr contains the information needed for the text over heatmap
 #' Usually is \code{ADCM}.
 #' @param heat_color_var (`character`)\cr
@@ -41,9 +40,15 @@
 #'     ) %>%
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
 #' rtables::var_labels(ADCM) <- ADCM_labs
-#' exp_data <- ADEX %>% filter(PARCAT1 == "INDIVIDUAL")
-#' anno_data <- ADSL
-#' anno_var <- c("SEX","COUNTRY")
+#' exp_data <- ADEX %>%
+#'   filter(PARCAT1 == "INDIVIDUAL") %>%
+#'   group_by(USUBJID) %>%
+#'   mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
+#' anno_data <- ADSL %>%
+#'   select(SEX, COUNTRY, USUBJID) %>%
+#'   group_by(USUBJID) %>%
+#'   mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
+#' anno_var <- c("SEX", "COUNTRY", "SUBJ")
 #' heat_color_var <- "AETOXGR"
 #' heat_data <- ADAE %>%
 #'   select(USUBJID, AVISIT, (!!heat_color_var))
@@ -94,7 +99,10 @@ g_heat_bygrade <- function(exp_data,
     list(is.data.frame(exp_data)),
     list(!is.na(exp_data$AVISIT), "invalid argument: please only include 'INDIVIDUAL' record in exp_data"),
     list(is.data.frame(anno_data)),
-    list(all(anno_var %in% names(anno_data)), "invalid argument: anno_var should be variable(s) from anno_data"),
+    list(
+      length(anno_var) <= 3,
+      "invalid argument: anno_data can only contain 3 or less columns including subject ID"
+      ),
     list(is.data.frame(heat_data)),
     list(
       is_character_single(heat_color_var) && heat_color_var %in% names(heat_data),
@@ -109,11 +117,6 @@ g_heat_bygrade <- function(exp_data,
       "invalid argument: please only include no more than three conmeds for plotting")
   )
 
-  anno_data <- anno_data %>%
-    select(!!anno_var, USUBJID) %>%
-    group_by(USUBJID) %>%
-    mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
-
   anl_data <- exp_data %>%
     select(USUBJID, AVISIT) %>%
     left_join(heat_data, by = c("USUBJID", "AVISIT")) %>%
@@ -121,16 +124,10 @@ g_heat_bygrade <- function(exp_data,
     mutate(heat_color_num = tidyr::replace_na(as.numeric(.data[[heat_color_var]]), 0)) %>%
     group_by(USUBJID, AVISIT) %>%
     arrange(AVISIT) %>%
-    mutate(heat_color_max = max(heat_color_num)) %>%
-    mutate(heat_color_max = replace(heat_color_max, heat_color_max == 0, "No Event")) %>%
+    mutate(heat_color_max = factor(max(heat_color_num))) %>%
     select(- (!!heat_color_var), -heat_color_num) %>%
     distinct() %>%
     left_join(anno_data, by = "USUBJID")
-
-  exp_data <- exp_data %>%
-    group_by(USUBJID) %>%
-    mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
-
   #dose reduction data
   ex_red <- exp_data %>%
     filter(PARAMCD == "DOSE") %>%
@@ -173,11 +170,13 @@ g_heat_bygrade <- function(exp_data,
   }
 
   subj_levels <- unique(anl_data$SUBJ)
+  levels(anl_data$heat_color_max) <- sort(as.numeric(levels(anl_data$heat_color_max)))
+  levels(anl_data$heat_color_max)[levels(anl_data$heat_color_max) == "0"] <- "No Event"
   p <- ggplot(
     data = anl_data,
     aes(x = AVISIT, y = factor(SUBJ, levels = c(subj_levels, "")))
     ) +
-    geom_tile(aes(fill = factor(heat_color_max, levels = unique(heat_color_max)))) +
+    geom_tile(aes(fill = heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
       name = "Highest grade of\nindividual events",
@@ -242,7 +241,11 @@ g_heat_bygrade <- function(exp_data,
   }
 
   #plot left legend
-  t <- as.data.frame(anl_data[, c(anno_var, "SUBJ")]) %>% distinct()
+  t <- anl_data %>%
+    as.data.frame() %>%
+    select((!!anno_var), SUBJ) %>%
+    #as.data.frame(anl_data[, c(names(anno_data)[-(names(anno_data) == "USUBJID")], "SUBJ")]) %>%
+    distinct()
   my_theme <- ttheme_default(
     core = list(
       bg_params = list(fill = NA, col = NA),
