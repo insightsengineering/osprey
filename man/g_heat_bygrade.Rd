@@ -10,9 +10,10 @@ g_heat_bygrade(
   anno_var,
   heat_data,
   heat_color_var,
-  heat_color_opt,
+  heat_color_opt = NULL,
   conmed_data = NULL,
   conmed_var = NULL,
+  conmed_opt = NULL,
   xlab = "Visit",
   title = "Heatmap by Grade"
 )
@@ -34,6 +35,8 @@ Usually is \code{ADCM}.}
 \item{conmed_data}{(`dataframe`)\cr default is \code{NULL} (no conmed plotted)}
 
 \item{conmed_var}{(`character`)\cr default is \code{NULL} (no conmed plotted)}
+
+\item{conmed_opt}{(`vector`)\cr default is \code{NULL} (no conmed plotted)}
 
 \item{xlab}{(`character`)\cr}
 
@@ -61,7 +64,8 @@ rtables::var_labels(ADCM) <- ADCM_labs
 exp_data <- ADEX \%>\%
   filter(PARCAT1 == "INDIVIDUAL") \%>\%
   group_by(USUBJID) \%>\%
-  mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
+  mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
+  ungroup()
 anno_data <- ADSL \%>\%
   select(SEX, COUNTRY, USUBJID) \%>\%
   group_by(USUBJID) \%>\%
@@ -78,8 +82,12 @@ heat_color_opt <- c(
   "4" = "maroon",
   "5" = "brown4"
   )
-conmed_data <- ADCM
+conmed_data <- ADCM \%>\%
+  group_by(USUBJID) \%>\%
+  mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
+
 conmed_var <- "CMDECOD"
+conmed_opt <- c("green", "green3", "green4")
 
 xlab = "Visit"; title = "Heatmap by Grade"
 
@@ -91,7 +99,8 @@ g_heat_bygrade(
   heat_color_var,
   heat_color_opt,
   conmed_data,
-  conmed_var
+  conmed_var,
+  conmed_opt
   )
 
 g_heat_bygrade(
