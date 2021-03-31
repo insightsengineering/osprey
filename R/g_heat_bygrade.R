@@ -140,8 +140,8 @@ g_heat_bygrade <- function(id_var,
       "Please include a column named id_var in exp_data, anno_data, heat_data, and conmed_data"
     ),
     list(
-      table(c(names(exp_data), names(heat_data), names(conmed_data)))[visit_var] == 3,
-      "Please include a column named visit_var in exp_data, heat_data, and conmed_data"
+      table(c(names(exp_data), names(heat_data)))[visit_var] == 2,
+      "Please include a column named visit_var in exp_data and heat_data"
     )
   )
 
