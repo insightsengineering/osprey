@@ -152,26 +152,26 @@ g_heat_bygrade <- function(id_var,
     mutate(heat_color_num = tidyr::replace_na(as.numeric(.data[[heat_color_var]]), 0)) %>%
     group_by(!!sym(id_var), !!sym(visit_var)) %>%
     arrange(!!sym(visit_var)) %>%
-    mutate(heat_color_max = factor(max(heat_color_num))) %>%
-    select(- (!!heat_color_var), -heat_color_num) %>%
+    mutate(heat_color_max = factor(max(.data$heat_color_num))) %>%
+    select(- (!!heat_color_var), -.data$heat_color_num) %>%
     distinct() %>%
     left_join(anno_data, by = id_var)
   #dose reduction data
   ex_red <- exp_data %>%
-    filter(PARAMCD == "DOSE") %>%
+    filter(.data$PARAMCD == "DOSE") %>%
     group_by(!!sym(id_var)) %>%
-    arrange(ASTDTM) %>%
+    arrange(.data$ASTDTM) %>%
     mutate(
-      RANK = order(ASTDTM),
-      LASTDOSE = lag(AVAL),
-      DOSERED = ifelse(RANK != 1 & AVAL < LASTDOSE, "Y", "")
+      RANK = order(.data$ASTDTM),
+      LASTDOSE = lag(.data$AVAL),
+      DOSERED = ifelse(.data$RANK != 1 & .data$AVAL < .data$LASTDOSE, "Y", "")
       ) %>%
-    select(!!sym(id_var), !!sym(visit_var), RANK, AVAL, LASTDOSE, DOSERED) %>%
-    filter(DOSERED == "Y")
+    select(!!sym(id_var), !!sym(visit_var), .data$RANK, .data$AVAL, .data$LASTDOSE, .data$DOSERED) %>%
+    filter(.data$DOSERED == "Y")
   # does ongoing data
   exp_lst <- exp_data %>%
-    filter(PARAMCD == "DOSE") %>%
-    filter(str_to_upper(EOSSTT) == "ONGOING") %>%
+    filter(.data$PARAMCD == "DOSE") %>%
+    filter(str_to_upper(.data$EOSSTT) == "ONGOING") %>%
     arrange(!!sym(visit_var)) %>%
     slice_tail() %>%
     select(!!sym(id_var), !!sym(visit_var))
@@ -203,7 +203,7 @@ g_heat_bygrade <- function(id_var,
     data = anl_data,
     aes(x = !!sym(visit_var), y = factor(!!sym(id_var), levels = c(subj_levels, "")))
     ) +
-    geom_tile(aes(fill = heat_color_max)) +
+    geom_tile(aes(fill = .data$heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
       name = "Highest grade of\nindividual events",
