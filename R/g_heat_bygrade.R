@@ -66,12 +66,15 @@
 #'
 #' # include three conmed levels
 #' ADCM_labs <- rtables::var_labels(ADCM)
+#' # derive ADCM.AVISIT
+#' # this example is randomly assigned, please derive your own study-specific ADCM.AVISIT
+#' ADCM$AVISIT <- sample(unique(exp_data$AVISIT), nrow(ADCM), replace = TRUE)
 #' ADCM <- ADCM %>%
 #'   filter(
 #'     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
 #'     ) %>%
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
-#' rtables::var_labels(ADCM) <- ADCM_labs
+#' rtables::var_labels(ADCM) <- c(ADCM_labs, "Analysis Visit")
 #' conmed_data <- ADCM %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
@@ -136,12 +139,14 @@ g_heat_bygrade <- function(id_var,
       "invalid argument: please only include no more than three conmeds for plotting"
       ),
     list(
-      table(c(names(exp_data), names(anno_data), names(heat_data), names(conmed_data)))[id_var] == 4,
-      "Please include a column named id_var in exp_data, anno_data, heat_data, and conmed_data"
+      is.null(conmed_data) && table(c(names(exp_data), names(anno_data), names(heat_data)))[id_var] == 3 |
+        table(c(names(exp_data), names(anno_data), names(heat_data), names(conmed_data)))[id_var] == 4,
+      "Please include a column named id_var in exp_data, anno_data, heat_data, and conmed_data (if plotting conmed)"
     ),
     list(
-      table(c(names(exp_data), names(heat_data)))[visit_var] == 2,
-      "Please include a column named visit_var in exp_data and heat_data"
+      is.null(conmed_data) && table(c(names(exp_data), names(heat_data)))[visit_var] == 2 |
+        table(c(names(exp_data), names(heat_data), names(conmed_data)))[visit_var] == 3,
+      "Please include a column named visit_var in exp_data, heat_data, and conmed_data (if plotting conmed)"
     )
   )
 
@@ -179,7 +184,7 @@ g_heat_bygrade <- function(id_var,
   visit_levels <- unique(anl_data[[visit_var]])
   if (!is.null(conmed_data) & !is.null(conmed_var)) {
     conmed_data <- conmed_data %>%
-      left_join(anl_data, by = id_var) %>%
+      left_join(anl_data, by = c(id_var, visit_var)) %>%
       ungroup() %>%
       mutate(
         conmed_num = as.numeric(.data$CMDECOD),
@@ -198,7 +203,6 @@ g_heat_bygrade <- function(id_var,
   subj_levels <- unique(anl_data[[id_var]])
   levels(anl_data$heat_color_max) <- sort(as.numeric(levels(anl_data$heat_color_max)))
   levels(anl_data$heat_color_max)[levels(anl_data$heat_color_max) == "0"] <- "No Event"
-
   p <- ggplot(
     data = anl_data,
     aes(x = !!sym(visit_var), y = factor(!!sym(id_var), levels = c(subj_levels, "")))

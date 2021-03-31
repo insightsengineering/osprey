@@ -90,12 +90,15 @@ heat_color_opt <- c(
 
 # include three conmed levels
 ADCM_labs <- rtables::var_labels(ADCM)
+# derive ADCM.AVISIT
+# this example is randomly assigned, please derive your own study-specific ADCM.AVISIT
+ADCM$AVISIT <- sample(unique(exp_data$AVISIT), nrow(ADCM), replace = TRUE)
 ADCM <- ADCM \%>\%
   filter(
     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
     ) \%>\%
   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
-rtables::var_labels(ADCM) <- ADCM_labs
+rtables::var_labels(ADCM) <- c(ADCM_labs, "Analysis Visit")
 conmed_data <- ADCM \%>\%
   group_by(USUBJID) \%>\%
   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
