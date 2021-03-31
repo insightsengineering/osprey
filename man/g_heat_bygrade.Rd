@@ -5,6 +5,8 @@
 \title{Heatmap by Grade}
 \usage{
 g_heat_bygrade(
+  id_var,
+  visit_var,
   exp_data,
   anno_data,
   anno_var,
@@ -19,9 +21,14 @@ g_heat_bygrade(
 )
 }
 \arguments{
-\item{exp_data}{(`dataframe`)\cr contains subject identifier. Usually it is \code{ADSL$USUBJID}.}
+\item{id_var}{(`character`)\cr name of the column that contains the unique subject identifier shared by all data
+Usually it is \code{"USUBJID"}.}
 
-\item{anno_data}{(`dataframe`)\cr to specify character}
+\item{visit_var}{(`character`)\cr name of the column that contains the analysis visit. Usually it is \code{AVISIT}}
+
+\item{exp_data}{(`dataframe`)\cr exposure data. Usually it is \code{ADEX}.}
+
+\item{anno_data}{(`dataframe`)\cr annotation data contains subject level characteristics. Usually it is \code{ADSL}}
 
 \item{anno_var}{(`vector`) a vector of columns names to include for the annotation}
 
@@ -36,7 +43,7 @@ Usually is \code{ADCM}.}
 
 \item{conmed_var}{(`character`)\cr default is \code{NULL} (no conmed plotted)}
 
-\item{conmed_opt}{(`vector`)\cr default is \code{NULL} (no conmed plotted)}
+\item{conmed_opt}{(`vector`)\cr default is \code{NULL} (use default color or no conmed plotted)}
 
 \item{xlab}{(`character`)\cr}
 
@@ -53,27 +60,25 @@ ADAE <- radae(ADSL)
 ADCM <- radcm(ADSL)
 # add AVISIT in ADAE
 ADAE$AVISIT <- sample(unique(ADEX$AVISIT[!is.na(ADEX$AVISIT)]), nrow(ADAE), TRUE)
-# include three conmed levels
-ADCM_labs <- rtables::var_labels(ADCM)
-ADCM <- ADCM \%>\%
-  filter(
-    CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
-    ) \%>\%
-  mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
-rtables::var_labels(ADCM) <- ADCM_labs
 exp_data <- ADEX \%>\%
   filter(PARCAT1 == "INDIVIDUAL") \%>\%
   group_by(USUBJID) \%>\%
-  mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
+  # create a shorter subject identifier
+  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
   ungroup()
 anno_data <- ADSL \%>\%
   select(SEX, COUNTRY, USUBJID) \%>\%
   group_by(USUBJID) \%>\%
-  mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
-anno_var <- c("SEX", "COUNTRY", "SUBJ")
-heat_color_var <- "AETOXGR"
+  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
+  ungroup() \%>\%
+  select(-USUBJID)
+
 heat_data <- ADAE \%>\%
-  select(USUBJID, AVISIT, (!!heat_color_var))
+  select(USUBJID, AVISIT, AETOXGR) \%>\%
+  group_by(USUBJID) \%>\%
+  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
+  ungroup() \%>\%
+  select(-USUBJID)
 heat_color_opt <- c(
   "No Event" = "gray90",
   "1" = "lightsteelblue1",
@@ -82,33 +87,41 @@ heat_color_opt <- c(
   "4" = "maroon",
   "5" = "brown4"
   )
+
+# include three conmed levels
+ADCM_labs <- rtables::var_labels(ADCM)
+ADCM <- ADCM \%>\%
+  filter(
+    CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
+    ) \%>\%
+  mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
+rtables::var_labels(ADCM) <- ADCM_labs
 conmed_data <- ADCM \%>\%
   group_by(USUBJID) \%>\%
-  mutate(SUBJ = tail(strsplit(USUBJID, "-")[[1]], n = 1))
-
-conmed_var <- "CMDECOD"
-conmed_opt <- c("green", "green3", "green4")
-
-xlab = "Visit"; title = "Heatmap by Grade"
+  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
 
 g_heat_bygrade(
+  id_var = "SUBJ",
+  visit_var = "AVISIT",
   exp_data,
   anno_data,
-  anno_var,
+  anno_var = names(anno_data),
   heat_data,
-  heat_color_var,
+  heat_color_var = "AETOXGR",
   heat_color_opt,
   conmed_data,
-  conmed_var,
-  conmed_opt
+  conmed_var = "CMDECOD",
+  conmed_opt = c("green", "green3", "green4")
   )
 
 g_heat_bygrade(
+  id_var = "SUBJ",
+  visit_var = "AVISIT",
   exp_data,
   anno_data,
-  anno_var,
+  anno_var = names(anno_data),
   heat_data,
-  heat_color_var,
+  heat_color_var = "AETOXGR",
   heat_color_opt
   )
 }
