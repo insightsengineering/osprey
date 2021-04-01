@@ -220,7 +220,7 @@ g_waterfall <- function(bar_id,
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
         scale_y_continuous(breaks = ybreaks) +
-        scale_x_discrete(expand = expand_scale(add = 0.5)) +
+        scale_x_discrete(expand = expansion(add = 0.5)) +
         geom_hline(yintercept = 0, colour = "black") +
         theme_bw() +
         theme(
@@ -237,7 +237,7 @@ g_waterfall <- function(bar_id,
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
         scale_y_continuous(breaks = ybreaks) +
-        scale_x_discrete(expand = expand_scale(add = 0.5)) +
+        scale_x_discrete(expand = expansion(add = 0.5)) +
         geom_hline(yintercept = 0, colour = "black") +
         theme_bw() +
         theme(
@@ -257,7 +257,7 @@ g_waterfall <- function(bar_id,
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
         scale_y_continuous(breaks = ybreaks) +
-        scale_x_discrete(expand = expand_scale(add = 0.5)) +
+        scale_x_discrete(expand = expansion(add = 0.5)) +
         geom_hline(yintercept = 0, colour = "black") +
         theme_bw() +
         theme(
@@ -310,7 +310,7 @@ g_waterfall <- function(bar_id,
         geom_col(position = "identity", aes(fill = col_by)) +
         geom_rect(aes(xmin = 0.5, xmax = length(bar_id), ymin = gap_point, ymax = gap_point + 3), fill = "white") +
         scale_y_continuous(breaks =  ybreaks, labels = ylabels) +
-        scale_x_discrete(expand = expand_scale(add = 0.5)) +
+        scale_x_discrete(expand = expansion(add = 0.5)) +
         geom_hline(yintercept = 0, colour = "black") +
         theme_bw() +
         theme(
@@ -332,7 +332,7 @@ g_waterfall <- function(bar_id,
 
     if (!is.null(add_label)) {
       p <- p + geom_text(
-        aes(x = bar_id, y = 0, label = bar_data$add_label),
+        aes(x = bar_id, y = 0, label = add_label),
         size = 3,
         vjust = ifelse(bar_data$bar_height >= 0, 1.5, -0.5))
     }

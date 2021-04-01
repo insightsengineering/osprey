@@ -1,7 +1,10 @@
-# osprey 0.1.7.9000
+# osprey 0.1.8.9000
+Issues with no news:
 
-* Issues with no news:
-
+# osprey 0.1.8
+### Miscellaneous
+* Set up a `.lintr` configuration file.
+* Remove NA when calculating `max_day` in the example.
 
 # osprey 0.1.7
 ### Bug fixes

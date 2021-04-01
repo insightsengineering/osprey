@@ -159,7 +159,7 @@ g_events_term_id <- function(term,
     list(!is_empty(arm), "missing argument: arm must be specified"),
     list(
       is.factor(arm) & nlevels(arm) >= 2,
-      "arm needs to be a factor with more than 2 levels"
+      "arm needs to be a factor with at least 2 levels"
     ),
     list(
       !is_empty(arm_N),
