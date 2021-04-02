@@ -21,7 +21,6 @@ Depends:
 Imports:
   DescTools,
   checkmate,
-  tidyr,
   purrr,
   cowplot,
   grid,
@@ -33,7 +32,7 @@ Imports:
   tern (>= 0.7.1),
   tidyr (>= 1.0.0),
   utils.nest (>= 0.2.8),
-  DescTools
+  data.table
 Suggests:
   knitr,
   random.cdisc.data (>= 0.3.8),

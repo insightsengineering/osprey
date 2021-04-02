@@ -37,6 +37,7 @@
 #' @importFrom tidyr pivot_longer pivot_wider replace_na unite separate_rows
 #' @importFrom stringr str_dup str_replace_all str_c str_detect
 #' @importFrom DescTools BinomDiffCI
+#' @importFrom data.table ":="
 #' @export
 #'
 #' @examples
@@ -92,7 +93,8 @@ g_ae_sub <- function(term,
                      conf_level = 0.95,
                      diff_ci_method = c(
                        "wald", "waldcc", "ac", "score", "scorecc",
-                       "mn", "mee", "blj", "ha", "beal"),
+                       "mn", "mee", "blj", "ha", "beal"
+                       ),
                      fontsize = 4,
                      draw = TRUE) {
 
@@ -114,10 +116,10 @@ g_ae_sub <- function(term,
       bind_rows(c(level = "TOTAL__Total", label = "Overall")) %>%
       mutate(
         indents = str_dup(" ", if_else(
-        str_detect(level, "__Total"), 0, indent
+        str_detect(.data$level, "__Total"), 0, indent
       )),
       #create label with indents if not total
-      label = paste0(indents, label))
+      label = paste0(.data$indents, .data$label))
   }
   stop_if_not(
     list(
@@ -185,7 +187,7 @@ g_ae_sub <- function(term,
       cols = colnames(subgroups),
       values_to = "value"
     ) %>%
-    group_by(arm, strata, value) %>%
+    group_by(arm, .data$strata, .data$value) %>%
     summarise(n = n()) %>%
     full_join(df_ref, by = "arm") %>%
     replace_na(list(n = 0)) %>%
@@ -206,7 +208,7 @@ g_ae_sub <- function(term,
       cols = c(colnames(subgroups_sl), "TOTAL"),
       values_to = "value"
     ) %>%
-    group_by(arm, strata, value) %>%
+    group_by(arm, .data$strata, .data$value) %>%
     summarise(n = n()) %>%
     ungroup %>%
     pivot_wider(
@@ -219,7 +221,7 @@ g_ae_sub <- function(term,
 
   df <- df %>%
     left_join(df_sl, by = c("strata", "value")) %>%
-    group_by(strata, value) %>%
+    group_by(.data$strata, .data$value) %>%
     mutate(
       !!r1 := !!x1 / !!n1,
       !!r2 := !!x2 / !!n2,
@@ -238,27 +240,27 @@ g_ae_sub <- function(term,
       names_to = c(".value", "arm"),
       names_sep = "__") %>%
     ungroup %>%
-    unite("level", strata, value, remove = FALSE, sep = "__")
+    unite("level", .data$strata, .data$value, remove = FALSE, sep = "__")
 
   level_format_df <- df %>%
-    select(strata, value) %>%
+    select(.data$strata, .data$value) %>%
     unique %>%
-    group_by(strata) %>%
-    summarise(value = paste(c("Total", value), collapse = ",")) %>%
-    separate_rows(value, sep = ",") %>%
+    group_by(.data$strata) %>%
+    summarise(value = paste(c("Total", .data$value), collapse = ",")) %>%
+    separate_rows(.data$value, sep = ",") %>%
     unique %>%
-    unite("level", strata, value, sep = "__", remove = FALSE) %>%
-    mutate(order = if_else(strata == "TOTAL", integer(1), -row_number())) %>%
+    unite("level", .data$strata, .data$value, sep = "__", remove = FALSE) %>%
+    mutate(order = if_else(.data$strata == "TOTAL", integer(1), -row_number())) %>%
     arrange(order)
 
   if (is.null(subgroups_levels)) {
     level_format_df <- level_format_df %>%
       mutate(label = if_else(
-        strata == "TOTAL",
+        .data$strata == "TOTAL",
         "Overall",
-        if_else(value == "Total", strata, paste0(str_c(
+        if_else(.data$value == "Total", .data$strata, paste0(str_c(
           rep(" ", indent), collapse = ""
-        ), value))
+        ), .data$value))
       ))
   } else {
     level_format_df <- level_format_df %>%
@@ -300,7 +302,7 @@ g_ae_sub <- function(term,
     )
 
   df_risk <- df %>%
-    select(level, lower, upper, riskdiff) %>%
+    select(.data$level, .data$lower, .data$upper, .data$riskdiff) %>%
     unique
   if (xmax <= 0) {
     xmax <- max(abs(df_risk$upper), abs(df_risk$lower), na.rm = T)
@@ -308,7 +310,7 @@ g_ae_sub <- function(term,
   p1 <-
     ggplot(df_risk) +
     geom_point(
-      aes(x = riskdiff, y = level),
+      aes(x = .data$riskdiff, y = .data$level),
       size = fontsize
       ) +
     geom_vline(
@@ -318,7 +320,7 @@ g_ae_sub <- function(term,
       color = "grey"
     ) +
     geom_errorbarh(
-      aes(xmin = lower, xmax = upper, y = level),
+      aes(xmin = .data$lower, xmax = .data$upper, y = .data$level),
       height = 0.3) +
     mytheme +
     theme(
@@ -330,15 +332,15 @@ g_ae_sub <- function(term,
   p1_grob <- ggplotGrob(p1)
 
   df_total <- df %>%
-    group_by(level) %>%
-    summarise(n = sum(total)) %>%
+    group_by(.data$level) %>%
+    summarise(n = sum(.data$total)) %>%
     mutate(percent = n / length(arm_sl) * 100)
 
   p2 <- ggplot(df_total) +
     geom_text(aes(
       x = "Patients(%)",
-      y = level,
-      label = sprintf("%i (%.1f)", n, percent)
+      y = .data$level,
+      label = sprintf("%i (%.1f)", n, .data$percent)
     ), size = fontsize) +
     mytheme +
     y_axis +
@@ -357,12 +359,12 @@ g_ae_sub <- function(term,
       values_to = "v",
       cols = c("lower", "upper", "riskdiff", trt, ref)
     ) %>%
-    mutate(vlabel = sprintf("%.2f", v))
+    mutate(vlabel = sprintf("%.2f", .data$v))
 
 
   labels <- c("TRT", "CONT", "Diff", "Lower", "Upper")
   p3 <- ggplot(df_ci) +
-    geom_text(aes(x = x, y = level, label = vlabel), size = fontsize) +
+    geom_text(aes(x = .data$x, y = .data$level, label = .data$vlabel), size = fontsize) +
     mytheme +
     y_axis +
     scale_x_discrete(
