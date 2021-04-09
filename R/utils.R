@@ -251,7 +251,7 @@ grob_part <- function(gplot_grob, part) {
   if (is.na(part)) {
     return(zeroGrob())
   }
-  stopifnot(length(part) == 1 & is.character(part))
+  stopifnot(length(part) == 1 && is.character(part))
   index <- match(part, gplot_grob$layout$name)
   if (is.na(index)) {
     stop(c(part, " not in plot object. Allowed parts are ",
@@ -347,7 +347,7 @@ grob_part <- function(gplot_grob, part) {
   if (is.na(part)) {
     return(zeroGrob())
   }
-  stopifnot(length(part) == 1 & is.character(part))
+  stopifnot(length(part) == 1 && is.character(part))
   index <- match(part, gplot_grob$layout$name)
   if (is.na(index)) {
     stop(c(part, " not in plot object. Allowed parts are ",
@@ -361,10 +361,13 @@ grob_part <- function(gplot_grob, part) {
 #'
 #' @param gplot ggplot or grob object
 #' @param parts names vector of the parts to be extracted.
-#' @importFrom checkmate assert check_class
+#' @importFrom methods is
 #'
 grob_parts <- function(gplot, parts) {
-  assert(check_class(gplot, "ggplot"), check_class(gplot, "grob"))
+  stop_if_not(
+    list(is(gplot, "ggplot") || is(gplot, "grob"), "gplot must inherit from class 'ggplot' or 'grob'")
+  )
+
   if ("ggplot" %in% class(gplot)) {
     gplot_grob <- ggplotGrob(gplot)
   } else if ("grob" %in% class(gplot)) {
@@ -399,16 +402,18 @@ grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 #' @importFrom  ggplot2 theme .pt
 #' @param axis_side axis position
 #' @param fontsize font size in 'mm'
-theme_osprey <- function(axis_side = "left", fontsize = 4) {
+#' @param blank whether to have blank or background with grids and borders
+theme_osprey <- function(axis_side = "left", fontsize = 4, blank = FALSE) {
   theme(panel.background = element_rect(fill = "white", colour = "white"),
-        panel.grid.major.y = element_line(colour = "grey50", linetype = 2),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1),
+        panel.grid.major.y = if (blank) element_blank() else element_line(colour = "grey50", linetype = 2),
+        panel.border = if (blank) element_blank() else element_rect(colour = "black", fill = NA, size = 1),
         axis.title = element_blank(),
         legend.title = element_blank(),
         legend.position = "bottom",
         axis.ticks.y = element_blank(),
+        axis.ticks.x.top = element_blank(),
         axis.text = element_text(color = "black", size = fontsize * .pt),
-        axis.text.y = element_text(hjust = ifelse(axis_side == "left", 1, 0)),
+        axis.text.y = element_text(hjust = ifelse(axis_side == "left", 0, 1)),
         text = element_text(size = fontsize * .pt, face = "bold", color = "black"),
         legend.text = element_text(size = fontsize * .pt),
         plot.title = element_text(hjust = 0.5))

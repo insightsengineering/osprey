@@ -78,7 +78,6 @@ Draw adverse event category plot.
 there is no equivalent STREAM output
 }
 \examples{
-library(osprey)
 library(random.cdisc.data)
 library(grid)
 
@@ -97,15 +96,14 @@ subgroups_levels <- list(RACE = list("Total" = "Race",
                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
                                      "WHITE" = "White",
                                      "ASIAN" = "Asian",
-                                     "African" = "BLACK OR AFRICAN AMERICAN"),
+                                     "BLACK OR AFRICAN AMERICAN" = "African"),
                          STRATA1 = list("Total" = "Strata",
                                         "A" = "TypeA",
                                         "B" = "TypeB",
                                         "C" = "Typec"),
                          SEX = list("Total" = "Sex",
                                     "M" = "Male",
-                                    "F" = "Female",
-                                    "U" = "Unknown"))
+                                    "F" = "Female"))
 p <- g_ae_sub(term,
               id,
               arm,

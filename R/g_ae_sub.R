@@ -29,19 +29,16 @@
 #'
 #' @return grob object
 #'
-#' @import dplyr
-#' @import ggplot2
-#' @import utils.nest
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom grid unit.c unit
 #' @importFrom tidyr pivot_longer pivot_wider replace_na unite separate_rows
 #' @importFrom stringr str_dup str_replace_all str_c str_detect
 #' @importFrom DescTools BinomDiffCI
-#' @importFrom data.table ":="
+#' @importFrom rlang ":="
+#' @importFrom purrr map2
 #' @export
 #'
 #' @examples
-#' library(osprey)
 #' library(random.cdisc.data)
 #' library(grid)
 #'
@@ -60,15 +57,14 @@
 #'                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
 #'                                      "WHITE" = "White",
 #'                                      "ASIAN" = "Asian",
-#'                                      "African" = "BLACK OR AFRICAN AMERICAN"),
+#'                                      "BLACK OR AFRICAN AMERICAN" = "African"),
 #'                          STRATA1 = list("Total" = "Strata",
 #'                                         "A" = "TypeA",
 #'                                         "B" = "TypeB",
 #'                                         "C" = "Typec"),
 #'                          SEX = list("Total" = "Sex",
 #'                                     "M" = "Male",
-#'                                     "F" = "Female",
-#'                                     "U" = "Unknown"))
+#'                                     "F" = "Female"))
 #' p <- g_ae_sub(term,
 #'               id,
 #'               arm,
@@ -121,6 +117,7 @@ g_ae_sub <- function(term,
       #create label with indents if not total
       label = paste0(.data$indents, .data$label))
   }
+
   stop_if_not(
     list(
       length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1,
@@ -135,28 +132,42 @@ g_ae_sub <- function(term,
       "invalid arguments: trt and ref need to be from arm"
     ),
     list(
-      is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
+      is_numeric_single(conf_level) && between(conf_level, 0.5, 1),
       "invalid argument: conf_level should be a number between 0.5 and 1"
     ),
     list(
-      is_numeric_single(fontsize) & between(fontsize, 0, Inf),
+      is_numeric_single(fontsize) && between(fontsize, 0, Inf),
       "invalid argument: check that fontsize is a number greater than 0"
     ),
     list(
-      "data.frame" %in% class(subgroups) & nrow(subgroups) == length(arm),
+      is(subgroups, "data.frame") && nrow(subgroups) == length(arm),
       "invalid argument: subgroups needs to be a data.frame with nrow = length(arm)"
     ),
     list(
-      "data.frame" %in% class(subgroups_sl) & nrow(subgroups_sl) == length(arm_sl),
+      is(subgroups_sl, "data.frame") && nrow(subgroups_sl) == length(arm_sl),
       "invalid argument: subgroups_sl need to be a data.frame with nrow = length(arm_sl)"
     ),
     list(
-      is_numeric_single(indent) & between(indent, 0, Inf),
-      "invalid argument: indent must be a number >= 0"
+      is_numeric_single(indent) && indent >= 0 && is.finite(indent),
+      "invalid argument: indent must be a finite number >= 0"
       ),
     list(
       is_numeric_single(xmax),
-      "invalid argument: xmax must be a number")
+      "invalid argument: xmax must be a number"
+      ),
+    list(
+      all(names(subgroups_levels) %in% names(lapply(subgroups, levels))),
+      "invalid argument: please only use the subgroups column names as the lists names in subgroups_levels"
+    ),
+    list(
+      all(unlist(map2(
+        subgroups_levels,
+        apply(subgroups[names(subgroups_levels)], 2, unique),
+        ~ all(names(.x) %in% c("Total", .y))
+        ))),
+      "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels"
+    )
+
   )
 
 
@@ -190,7 +201,7 @@ g_ae_sub <- function(term,
     group_by(arm, .data$strata, .data$value) %>%
     summarise(n = n()) %>%
     full_join(df_ref, by = "arm") %>%
-    replace_na(list(n = 0)) %>%
+    tidyr::replace_na(list(n = 0)) %>%
     ungroup %>%
     pivot_wider(
       id_cols = c("strata", "value"),
@@ -269,30 +280,8 @@ g_ae_sub <- function(term,
 
   df <- df %>%
     semi_join(level_format_df, by = "level")
-  mytheme <-
-    theme(
-      panel.background = element_rect(fill = "white", colour = "white"),
-      panel.grid.major.y = element_blank(),
-      axis.title = element_blank(),
-      legend.title = element_blank(),
-      legend.position = "bottom",
-      axis.ticks = element_blank(),
-      axis.text.y = element_text(
-        face = "bold",
-        size = fontsize * .pt,
-        hjust = 0,
-        color = "black"
-      ),
-      axis.text.x = element_text(
-        face = "bold",
-        size = fontsize * .pt,
-        color = "black"
-      ),
-      text = element_text(size = fontsize * .pt),
-      legend.text = element_text(size = fontsize * 2.5),
-      plot.title = element_text(hjust = 0.5)
-    )
 
+  mytheme <- theme_osprey(fontsize = fontsize, blank = TRUE)
 
   y_axis <-
     scale_y_discrete(
@@ -305,7 +294,7 @@ g_ae_sub <- function(term,
     select(.data$level, .data$lower, .data$upper, .data$riskdiff) %>%
     unique
   if (xmax <= 0) {
-    xmax <- max(abs(df_risk$upper), abs(df_risk$lower), na.rm = T)
+    xmax <- max(abs(df_risk$upper), abs(df_risk$lower), na.rm = TRUE)
   }
   p1 <-
     ggplot(df_risk) +
