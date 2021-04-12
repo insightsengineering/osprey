@@ -189,6 +189,7 @@ g_ae_sub <- function(term,
 
   df_ref <- tibble(arm = c(ref, trt))
 
+  # a wide data frame contains event counts by arm in each subgroup
   df <- cbind(id = id, term = term, arm = arm, subgroups) %>%
     filter(arm %in% c(ref, trt)) %>%
     select(-term) %>%
@@ -211,6 +212,7 @@ g_ae_sub <- function(term,
       values_fill = list(n = 0)
     )
 
+  # a wide data frame contains total counts by arm in each subgroup
   df_sl <- cbind(arm = arm_sl, subgroups_sl) %>%
     filter(arm %in% c(ref, trt)) %>%
     mutate(TOTAL = "Total") %>%
@@ -230,6 +232,7 @@ g_ae_sub <- function(term,
       values_fill = list(n = 0)
     )
 
+  # calculate the risk difference and risk difference CI in each subgroup
   df <- df %>%
     left_join(df_sl, by = c("strata", "value")) %>%
     group_by(.data$strata, .data$value) %>%
@@ -253,6 +256,7 @@ g_ae_sub <- function(term,
     ungroup %>%
     unite("level", .data$strata, .data$value, remove = FALSE, sep = "__")
 
+  # create label for plotting
   level_format_df <- df %>%
     select(.data$strata, .data$value) %>%
     unique %>%

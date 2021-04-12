@@ -270,6 +270,8 @@ grob_part <- function(gplot_grob, part) {
 #'
 grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
   ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v), widths = unit.c(pad_h, unit(1, "null"), pad_h))
+  # t, b, l, r, z arguments do not need modification
+  # same effect can be achieved by modifying pad_v and pad_h
   ret <- gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
   ret <- gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
   return(ret)
@@ -377,25 +379,6 @@ grob_parts <- function(gplot, parts) {
   names(ret) <- parts
   return(ret)
 }
-
-
-#' Add padding to grob
-#' @param grob grob object
-#' @param pad_v padding to add vertically
-#' @param pad_h padding to add horizontally
-#' @importFrom gtable gtable_add_grob gtable
-#' @importFrom grid rectGrob
-#'
-grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
-  ret <- gtable(
-    heights = unit.c(pad_v, unit(1, "null"), pad_v),
-    widths = unit.c(pad_h, unit(1, "null"), pad_h)
-    )
-  ret <- gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
-  ret <- gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
-  return(ret)
-}
-
 
 
 #' this theme is used across many figures. can be safely removed if update the theme in each function

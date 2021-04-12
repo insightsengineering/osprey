@@ -31,7 +31,6 @@ Imports:
   tern (>= 0.7.1),
   tidyr (>= 1.0.0),
   utils.nest (>= 0.2.8),
-  data.table,
   methods
 Suggests:
   knitr,
