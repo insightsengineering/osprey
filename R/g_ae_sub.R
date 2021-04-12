@@ -162,7 +162,7 @@ g_ae_sub <- function(term,
     list(
       all(unlist(map2(
         subgroups_levels,
-        apply(subgroups[names(subgroups_levels)], 2, unique),
+        apply(subgroups[names(subgroups_levels)], 2, levels),
         ~ all(names(.x) %in% c("Total", .y))
         ))),
       "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels"
