@@ -1,4 +1,4 @@
-# osprey 0.1.5
+# osprey 0.1.9
 * Added new plot functions:
   - Adverse Event Category Plot `g_ae_sub`.
 
