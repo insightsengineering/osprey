@@ -167,7 +167,6 @@ g_ae_sub <- function(term,
         ))),
       "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels"
     )
-
   )
 
 
