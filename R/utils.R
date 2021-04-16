@@ -251,7 +251,7 @@ grob_part <- function(gplot_grob, part) {
   if (is.na(part)) {
     return(zeroGrob())
   }
-  stopifnot(length(part) == 1 & is.character(part))
+  stopifnot(length(part) == 1 && is.character(part))
   index <- match(part, gplot_grob$layout$name)
   if (is.na(index)) {
     stop(c(part, " not in plot object. Allowed parts are ",
@@ -270,6 +270,8 @@ grob_part <- function(gplot_grob, part) {
 #'
 grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
   ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v), widths = unit.c(pad_h, unit(1, "null"), pad_h))
+  # t, b, l, r, z arguments do not need modification
+  # same effect can be achieved by modifying pad_v and pad_h
   ret <- gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
   ret <- gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
   return(ret)
@@ -335,4 +337,67 @@ to_n <- function(x, n) {
   } else {
     stop("dimension mismatch")
   }
+}
+
+#' Extract specific part of a ggplot or grob
+#'
+#' @param gplot_grob ggplot or grob object
+#' @param part name of the part to be extracted. NA will return zeroGrob()
+#' @importFrom ggplot2 zeroGrob
+#'
+grob_part <- function(gplot_grob, part) {
+  if (is.na(part)) {
+    return(zeroGrob())
+  }
+  stopifnot(length(part) == 1 && is.character(part))
+  index <- match(part, gplot_grob$layout$name)
+  if (is.na(index)) {
+    stop(c(part, " not in plot object. Allowed parts are ",
+           paste(gplot_grob$layout$name, collapse = ", ")))
+  }
+  grob <- gplot_grob$grobs[[index]]
+  return(grob)
+}
+
+#' Extract specific parts of a ggplot or grob
+#'
+#' @param gplot ggplot or grob object
+#' @param parts names vector of the parts to be extracted.
+#' @importFrom methods is
+#'
+grob_parts <- function(gplot, parts) {
+  stop_if_not(
+    list(is(gplot, "ggplot") || is(gplot, "grob"), "gplot must inherit from class 'ggplot' or 'grob'")
+  )
+
+  if ("ggplot" %in% class(gplot)) {
+    gplot_grob <- ggplotGrob(gplot)
+  } else if ("grob" %in% class(gplot)) {
+    gplot_grob <- gplot
+  }
+  ret <- lapply(parts, grob_part, gplot = gplot_grob)
+  names(ret) <- parts
+  return(ret)
+}
+
+
+#' this theme is used across many figures. can be safely removed if update the theme in each function
+#' @importFrom  ggplot2 theme .pt
+#' @param axis_side axis position
+#' @param fontsize font size in 'mm'
+#' @param blank whether to have blank or background with grids and borders
+theme_osprey <- function(axis_side = "left", fontsize = 4, blank = FALSE) {
+  theme(panel.background = element_rect(fill = "white", colour = "white"),
+        panel.grid.major.y = if (blank) element_blank() else element_line(colour = "grey50", linetype = 2),
+        panel.border = if (blank) element_blank() else element_rect(colour = "black", fill = NA, size = 1),
+        axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "bottom",
+        axis.ticks.y = element_blank(),
+        axis.ticks.x.top = element_blank(),
+        axis.text = element_text(color = "black", size = fontsize * .pt),
+        axis.text.y = element_text(hjust = ifelse(axis_side == "left", 0, 1)),
+        text = element_text(size = fontsize * .pt, face = "bold", color = "black"),
+        legend.text = element_text(size = fontsize * .pt),
+        plot.title = element_text(hjust = 0.5))
 }

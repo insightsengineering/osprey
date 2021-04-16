@@ -19,6 +19,7 @@ Depends:
   dplyr (>= 0.8.0),
   ggplot2 (>= 2.0.0)
 Imports:
+  DescTools,
   purrr,
   cowplot,
   grid,
@@ -30,7 +31,7 @@ Imports:
   tern (>= 0.7.1),
   tidyr (>= 1.0.0),
   utils.nest (>= 0.2.8),
-  DescTools
+  methods
 Suggests:
   knitr,
   random.cdisc.data (>= 0.3.8),
