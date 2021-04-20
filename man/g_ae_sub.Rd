@@ -20,6 +20,7 @@ g_ae_sub(
   diff_ci_method = c("wald", "waldcc", "ac", "score", "scorecc", "mn", "mee", "blj",
     "ha", "beal"),
   fontsize = 4,
+  arm_n = FALSE,
   draw = TRUE
 )
 }
@@ -66,6 +67,8 @@ Default is "wald". Possible choices are methods supported in \code{\link[DescToo
 default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 
+\item{arm_n}{(`logical`)\cr whether to display the N in each arm.}
+
 \item{draw}{(`logical`)\cr whether to draw the plot.}
 }
 \value{
@@ -110,7 +113,8 @@ p <- g_ae_sub(term,
               arm_sl,
               subgroups,
               subgroups_sl,
-              subgroups_levels = subgroups_levels)
+              subgroups_levels = subgroups_levels,
+              arm_n = FALSE)
 grid.newpage()
 grid.draw(p)
 }

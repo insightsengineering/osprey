@@ -22,6 +22,7 @@
 #' @param xmax (`numeric`)\cr maximum range for the x-axis.
 #' x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
 #' xmax is 0 by default
+#' @param arm_n (`logical`)\cr whether to display the N in each arm.
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
 #'
@@ -71,7 +72,8 @@
 #'               arm_sl,
 #'               subgroups,
 #'               subgroups_sl,
-#'               subgroups_levels = subgroups_levels)
+#'               subgroups_levels = subgroups_levels,
+#'               arm_n = FALSE)
 #' grid.newpage()
 #' grid.draw(p)
 
@@ -92,6 +94,7 @@ g_ae_sub <- function(term,
                        "mn", "mee", "blj", "ha", "beal"
                        ),
                      fontsize = 4,
+                     arm_n = FALSE,
                      draw = TRUE) {
 
   diff_ci_method <- match.arg(diff_ci_method)
@@ -328,6 +331,20 @@ g_ae_sub <- function(term,
     summarise(n = sum(.data$total)) %>%
     mutate(percent = n / length(arm_sl) * 100)
 
+  if (arm_n) {
+    df_byarm <- df %>%
+      group_by(.data$level, .data$arm) %>%
+      summarise(n = sum(.data$total)) %>%
+      pivot_wider(names_from = arm, values_from = c(n))
+    names(df_byarm)[-1] <- c("n_trt", "n_ref")
+
+    df_total <- df_total %>%
+      left_join(df_byarm, by = "level") %>%
+      mutate(
+        percent_trt = .data$n_trt / .data$n * 100,
+        percent_ref = .data$n_ref / .data$n * 100)
+  }
+
   p2 <- ggplot(df_total) +
     geom_text(aes(
       x = "Patients(%)",
@@ -339,6 +356,33 @@ g_ae_sub <- function(term,
     scale_x_discrete(position = "top")
 
   p2_grob <- ggplotGrob(p2)
+
+  if (arm_n) {
+    p2_trt <- ggplot(df_total) +
+      geom_text(aes(
+        x = "TRT(%)",
+        y = .data$level,
+        label = sprintf("%i (%.1f)", .data$n_trt, .data$percent_trt)
+      ), size = fontsize) +
+      mytheme +
+      theme(axis.text.y = element_blank()) +
+      y_axis +
+      scale_x_discrete(position = "top")
+
+    p2_ref <- ggplot(df_total) +
+      geom_text(aes(
+        x = "CONT(%)",
+        y = .data$level,
+        label = sprintf("%i (%.1f)", .data$n_ref, .data$percent_ref)
+      ), size = fontsize) +
+      mytheme +
+      theme(axis.text.y = element_blank()) +
+      y_axis +
+      scale_x_discrete(position = "top")
+
+    p2_trt_grob <- ggplotGrob(p2_trt)
+    p2_ref_grob <- ggplotGrob(p2_ref)
+  }
 
   df_ci <- df %>%
     pivot_wider(
@@ -369,6 +413,10 @@ g_ae_sub <- function(term,
 
   grobs <- grob_parts(p1_grob, "axis-l")
   grobs <- append(grobs, grob_parts(p2_grob, c("axis-t", "panel")))
+  if (arm_n) {
+    grobs <- append(grobs, grob_parts(p2_trt_grob, c("axis-t", "panel")))
+    grobs <- append(grobs, grob_parts(p2_ref_grob, c("axis-t", "panel")))
+  }
   grobs <- append(grobs, grob_parts(p1_grob, c("panel", "axis-b")))
   grobs <- append(grobs, grob_parts(p3_grob, c("axis-t", "panel")))
   less_risk <- textGrob(
@@ -409,6 +457,21 @@ g_ae_sub <- function(term,
     unit(fontsize * .pt * 3, "pt")
   )
 
+  if (arm_n) {
+    widths <- unit.c(
+      grobWidth(grobs[[1]]),
+      unit(
+        c(rep(14 * fontsize, 3), 1, 50 * fontsize),
+        c(rep("pt", 3), "null", "pt")
+      )
+    )
+    heights <- unit.c(
+      grobHeight(grobs[[10]]),
+      unit(1, "null"),
+      rep(grobHeight(grobs[[9]]), 3),
+      unit(fontsize * .pt * 3, "pt")
+    )
+  }
 
   boldfont <- gpar(
     fontsize = fontsize * 4,
@@ -421,6 +484,14 @@ g_ae_sub <- function(term,
     c(NA, NA, 5, NA),
     c(NA, NA, 9, NA)
   )
+  if (arm_n) {
+    layout_matrix <- rbind(
+      c(1, 2, 4, 6, 12, 10),
+      c(1, 3, 5, 7, 8, 11),
+      c(NA, NA, NA, NA, 9, NA),
+      c(NA, NA, NA, NA, 13, NA)
+    )
+  }
   ret <- arrangeGrob(
     grobs = grobs,
     layout_matrix = layout_matrix,
