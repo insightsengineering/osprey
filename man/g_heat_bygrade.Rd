@@ -17,7 +17,7 @@ g_heat_bygrade(
   conmed_var = NULL,
   conmed_opt = NULL,
   xlab = "Visit",
-  title = "Heatmap by Grade"
+  title = NULL
 )
 }
 \arguments{
@@ -35,19 +35,22 @@ Usually it is \code{"USUBJID"}.}
 \item{heat_data}{(`dataframe`)\cr contains the information needed for the text over heatmap
 Usually is \code{ADCM}.}
 
-\item{heat_color_var}{(`character`)\cr}
+\item{heat_color_var}{(`character`)\cr name of the column that contains the heat grade}
 
-\item{heat_color_opt}{(`vector`)\cr}
+\item{heat_color_opt}{(`vector`)\cr vector defines heat color, default here is \code{NULL}}
 
-\item{conmed_data}{(`dataframe`)\cr default is \code{NULL} (no conmed plotted)}
+\item{conmed_data}{(`dataframe`)\cr concomitant medicine data. Usually it is \code{ADCM}
+default is \code{NULL} (no conmed plotted)}
 
-\item{conmed_var}{(`character`)\cr default is \code{NULL} (no conmed plotted)}
+\item{conmed_var}{(`character`)\cr concomitant medicine variable name. Must be included in conmed_data
+default is \code{NULL} (no conmed plotted)}
 
 \item{conmed_opt}{(`vector`)\cr default is \code{NULL} (use default color or no conmed plotted)}
 
-\item{xlab}{(`character`)\cr}
+\item{xlab}{(`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}}
 
-\item{title}{(`character`)\cr}
+\item{title}{(`character`)\cr string to be shown as title of the plot,
+default is \code{NULL} (no plot title is displayed)}
 }
 \description{
 This function plots heatmap
@@ -103,6 +106,7 @@ conmed_data <- ADCM \%>\%
   group_by(USUBJID) \%>\%
   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
 
+# example plotting conmed
 g_heat_bygrade(
   id_var = "SUBJ",
   visit_var = "AVISIT",
@@ -117,6 +121,7 @@ g_heat_bygrade(
   conmed_opt = c("green", "green3", "green4")
   )
 
+# example not plotting conmed
 g_heat_bygrade(
   id_var = "SUBJ",
   visit_var = "AVISIT",

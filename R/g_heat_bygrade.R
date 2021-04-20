@@ -10,13 +10,16 @@
 #' @param anno_var (`vector`) a vector of columns names to include for the annotation
 #' @param heat_data (`dataframe`)\cr contains the information needed for the text over heatmap
 #' Usually is \code{ADCM}.
-#' @param heat_color_var (`character`)\cr
-#' @param heat_color_opt (`vector`)\cr
-#' @param conmed_data (`dataframe`)\cr default is \code{NULL} (no conmed plotted)
-#' @param conmed_var (`character`)\cr default is \code{NULL} (no conmed plotted)
+#' @param heat_color_var (`character`)\cr name of the column that contains the heat grade
+#' @param heat_color_opt (`vector`)\cr vector defines heat color, default here is \code{NULL}
+#' @param conmed_data (`dataframe`)\cr concomitant medicine data. Usually it is \code{ADCM}
+#' default is \code{NULL} (no conmed plotted)
+#' @param conmed_var (`character`)\cr concomitant medicine variable name. Must be included in conmed_data
+#' default is \code{NULL} (no conmed plotted)
 #' @param conmed_opt (`vector`)\cr default is \code{NULL} (use default color or no conmed plotted)
-#' @param xlab (`character`)\cr
-#' @param title (`character`)\cr
+#' @param xlab (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}
+#' @param title (`character`)\cr string to be shown as title of the plot,
+#' default is \code{NULL} (no plot title is displayed)
 #' @import ggplot2
 #' @importFrom stringr str_to_upper
 #' @importFrom tidyr replace_na
@@ -79,6 +82,7 @@
 #'   group_by(USUBJID) %>%
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
 #'
+#'# example plotting conmed
 #' g_heat_bygrade(
 #'   id_var = "SUBJ",
 #'   visit_var = "AVISIT",
@@ -93,6 +97,7 @@
 #'   conmed_opt = c("green", "green3", "green4")
 #'   )
 #'
+#'# example not plotting conmed
 #' g_heat_bygrade(
 #'   id_var = "SUBJ",
 #'   visit_var = "AVISIT",
@@ -115,7 +120,7 @@ g_heat_bygrade <- function(id_var,
                            conmed_var = NULL,
                            conmed_opt = NULL,
                            xlab = "Visit",
-                           title = "Heatmap by Grade") {
+                           title = NULL) {
   # check if all PARCAT1 in exp_data is "individual"
   stop_if_not(
     list(is.data.frame(exp_data)),
