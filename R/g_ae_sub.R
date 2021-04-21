@@ -168,7 +168,6 @@ g_ae_sub <- function(term,
       #create label with indents if not total
       label = paste0(.data$indents, .data$label))
   }
-
   stop_if_not(
     list(
       length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1,
