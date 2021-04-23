@@ -15,7 +15,7 @@ g_heat_bygrade(
   heat_color_opt = NULL,
   conmed_data = NULL,
   conmed_var = NULL,
-  conmed_opt = NULL,
+  conmed_color_opt = NULL,
   xlab = "Visit",
   title = NULL
 )
@@ -46,7 +46,7 @@ default is \code{NULL} (no conmed plotted)}
 \item{conmed_var}{optional, (`character`)\cr concomitant medicine variable name. Must be a column name in conmed_data
 when conmed_data is provided. default is \code{NULL} (no conmed plotted)}
 
-\item{conmed_opt}{optional, (`character`)\cr vector of color name(s) to conmed_data}
+\item{conmed_color_opt}{optional, (`character`)\cr vector of color name(s) to conmed_data}
 
 \item{xlab}{optional, (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}}
 
@@ -119,7 +119,7 @@ g_heat_bygrade(
   heat_color_opt,
   conmed_data,
   conmed_var = "CMDECOD",
-  conmed_opt = c("green", "green3", "green4")
+  conmed_color_opt = c("green", "green3", "green4")
   )
 
 # example not plotting conmed

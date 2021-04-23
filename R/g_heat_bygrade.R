@@ -17,7 +17,7 @@
 #' default is \code{NULL} (no conmed plotted)
 #' @param conmed_var optional, (`character`)\cr concomitant medicine variable name. Must be a column name in conmed_data
 #' when conmed_data is provided. default is \code{NULL} (no conmed plotted)
-#' @param conmed_opt optional, (`character`)\cr vector of color name(s) to conmed_data
+#' @param conmed_color_opt optional, (`character`)\cr vector of color name(s) to conmed_data
 #' @param xlab optional, (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}
 #' @param title (`character`)\cr string to be shown as title of the plot.
 #' default is \code{NULL} (no plot title is displayed)
@@ -95,7 +95,7 @@
 #'   heat_color_opt,
 #'   conmed_data,
 #'   conmed_var = "CMDECOD",
-#'   conmed_opt = c("green", "green3", "green4")
+#'   conmed_color_opt = c("green", "green3", "green4")
 #'   )
 #'
 #'# example not plotting conmed
@@ -119,7 +119,7 @@ g_heat_bygrade <- function(id_var,
                            heat_color_opt = NULL,
                            conmed_data = NULL,
                            conmed_var = NULL,
-                           conmed_opt = NULL,
+                           conmed_color_opt = NULL,
                            xlab = "Visit",
                            title = NULL) {
   # check if all PARCAT1 in exp_data is "individual"
@@ -139,6 +139,14 @@ g_heat_bygrade <- function(id_var,
       "invalid argument: heat_color_var should be a varaible name in heat_data"
       ),
     list(
+      is.null(conmed_var) || is_character_single(conmed_var),
+      "invalid argument: conmed_var needs to be a single character string"
+    ),
+    list(
+      conmed_var %in% names(conmed_data),
+      "invalid argument: conmed_var must be one of the columns from conmed_data"
+    ),
+    list(
       any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var)),
       "invalid argument: need to provide conmed_data and conmed_var"
       ),
@@ -146,6 +154,10 @@ g_heat_bygrade <- function(id_var,
       is.null(conmed_var) || length(levels(conmed_data[[conmed_var]])) <= 3,
       "invalid argument: please only include no more than three conmeds for plotting"
       ),
+    list(
+      is.null(conmed_data) || length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]])),
+      "invalid argument: please specify conmed_color_opt for all unique conmed_var"
+    ),
     list(
       (is.null(conmed_data) && table(c(names(exp_data), names(anno_data), names(heat_data)))[id_var] == 3) ||
         table(c(names(exp_data), names(anno_data), names(heat_data), names(conmed_data)))[id_var] == 4,
@@ -267,7 +279,7 @@ g_heat_bygrade <- function(id_var,
           ) +
         scale_colour_manual(
           name = rtables::var_labels(conmed_data)[conmed_var],
-          values = if (!is.null(conmed_opt)) conmed_opt else rep("black", 5)
+          values = if (!is.null(conmed_color_opt)) conmed_color_opt else rep("black", 5)
           ) +
         scale_shape_manual(
           name = rtables::var_labels(conmed_data)[conmed_var],
