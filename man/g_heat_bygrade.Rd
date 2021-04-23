@@ -24,32 +24,33 @@ g_heat_bygrade(
 \item{id_var}{(`character`)\cr name of the column that contains the unique subject identifier shared by all data
 Usually it is \code{"USUBJID"}.}
 
-\item{visit_var}{(`character`)\cr name of the column that contains the analysis visit. Usually it is \code{AVISIT}}
+\item{visit_var}{(`character`)\cr name of the column that contains the analysis visit. Usually it is \code{"AVISIT"}}
 
-\item{exp_data}{(`dataframe`)\cr exposure data. Usually it is \code{ADEX}.}
+\item{exp_data}{(`data.frame`)\cr exposure data. Usually it is \code{ADEX}.}
 
-\item{anno_data}{(`dataframe`)\cr annotation data contains subject level characteristics. Usually it is \code{ADSL}}
+\item{anno_data}{(`data.frame`)\cr annotation data that contains subject level characteristics.
+Usually it is \code{ADSL}}
 
-\item{anno_var}{(`vector`) a vector of columns names to include for the annotation}
+\item{anno_var}{(`character`) a vector of columns name(s) to include for the annotation}
 
-\item{heat_data}{(`dataframe`)\cr contains the information needed for the text over heatmap
-Usually is \code{ADCM}.}
+\item{heat_data}{(`data.frame`)\cr data frame that contains the information needed for the text over heatmap
+Usually it is \code{ADCM}.}
 
 \item{heat_color_var}{(`character`)\cr name of the column that contains the heat grade}
 
-\item{heat_color_opt}{(`vector`)\cr vector defines heat color, default here is \code{NULL}}
+\item{heat_color_opt}{optional, (`character`)\cr a named vector that maps the names to heat colors}
 
-\item{conmed_data}{(`dataframe`)\cr concomitant medicine data. Usually it is \code{ADCM}
+\item{conmed_data}{optional, (`data.frame`)\cr concomitant medicine data. Usually it is \code{ADCM}
 default is \code{NULL} (no conmed plotted)}
 
-\item{conmed_var}{(`character`)\cr concomitant medicine variable name. Must be included in conmed_data
-default is \code{NULL} (no conmed plotted)}
+\item{conmed_var}{optional, (`character`)\cr concomitant medicine variable name. Must be a column name in conmed_data
+when conmed_data is provided. default is \code{NULL} (no conmed plotted)}
 
-\item{conmed_opt}{(`vector`)\cr default is \code{NULL} (use default color or no conmed plotted)}
+\item{conmed_opt}{optional, (`character`)\cr vector of color name(s) to conmed_data}
 
-\item{xlab}{(`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}}
+\item{xlab}{optional, (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}}
 
-\item{title}{(`character`)\cr string to be shown as title of the plot,
+\item{title}{(`character`)\cr string to be shown as title of the plot.
 default is \code{NULL} (no plot title is displayed)}
 }
 \description{

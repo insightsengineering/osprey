@@ -4,21 +4,22 @@
 #'
 #' @param id_var (`character`)\cr name of the column that contains the unique subject identifier shared by all data
 #' Usually it is \code{"USUBJID"}.
-#' @param visit_var (`character`)\cr name of the column that contains the analysis visit. Usually it is \code{AVISIT}
-#' @param exp_data (`dataframe`)\cr exposure data. Usually it is \code{ADEX}.
-#' @param anno_data (`dataframe`)\cr annotation data contains subject level characteristics. Usually it is \code{ADSL}
-#' @param anno_var (`vector`) a vector of columns names to include for the annotation
-#' @param heat_data (`dataframe`)\cr contains the information needed for the text over heatmap
-#' Usually is \code{ADCM}.
+#' @param visit_var (`character`)\cr name of the column that contains the analysis visit. Usually it is \code{"AVISIT"}
+#' @param exp_data (`data.frame`)\cr exposure data. Usually it is \code{ADEX}.
+#' @param anno_data (`data.frame`)\cr annotation data that contains subject level characteristics.
+#' Usually it is \code{ADSL}
+#' @param anno_var (`character`) a vector of columns name(s) to include for the annotation
+#' @param heat_data (`data.frame`)\cr data frame that contains the information needed for the text over heatmap
+#' Usually it is \code{ADCM}.
 #' @param heat_color_var (`character`)\cr name of the column that contains the heat grade
-#' @param heat_color_opt (`vector`)\cr vector defines heat color, default here is \code{NULL}
-#' @param conmed_data (`dataframe`)\cr concomitant medicine data. Usually it is \code{ADCM}
+#' @param heat_color_opt optional, (`character`)\cr a named vector that maps the names to heat colors
+#' @param conmed_data optional, (`data.frame`)\cr concomitant medicine data. Usually it is \code{ADCM}
 #' default is \code{NULL} (no conmed plotted)
-#' @param conmed_var (`character`)\cr concomitant medicine variable name. Must be included in conmed_data
-#' default is \code{NULL} (no conmed plotted)
-#' @param conmed_opt (`vector`)\cr default is \code{NULL} (use default color or no conmed plotted)
-#' @param xlab (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}
-#' @param title (`character`)\cr string to be shown as title of the plot,
+#' @param conmed_var optional, (`character`)\cr concomitant medicine variable name. Must be a column name in conmed_data
+#' when conmed_data is provided. default is \code{NULL} (no conmed plotted)
+#' @param conmed_opt optional, (`character`)\cr vector of color name(s) to conmed_data
+#' @param xlab optional, (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}
+#' @param title (`character`)\cr string to be shown as title of the plot.
 #' default is \code{NULL} (no plot title is displayed)
 #' @import ggplot2
 #' @importFrom stringr str_to_upper
@@ -123,6 +124,8 @@ g_heat_bygrade <- function(id_var,
                            title = NULL) {
   # check if all PARCAT1 in exp_data is "individual"
   stop_if_not(
+    list(is_character_single(id_var), "id_var must be a single character value"),
+    list(is_character_single(visit_var), "visit_var must be a single character value"),
     list(is.data.frame(exp_data)),
     list(!is.na(exp_data[[visit_var]]), "invalid argument: please only include 'INDIVIDUAL' record in exp_data"),
     list(is.data.frame(anno_data)),
@@ -136,22 +139,28 @@ g_heat_bygrade <- function(id_var,
       "invalid argument: heat_color_var should be a varaible name in heat_data"
       ),
     list(
-      any(!is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var)),
+      any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var)),
       "invalid argument: need to provide conmed_data and conmed_var"
       ),
     list(
-      is.null(conmed_var) | length(levels(conmed_data[[conmed_var]])) <= 3,
+      is.null(conmed_var) || length(levels(conmed_data[[conmed_var]])) <= 3,
       "invalid argument: please only include no more than three conmeds for plotting"
       ),
     list(
-      is.null(conmed_data) && table(c(names(exp_data), names(anno_data), names(heat_data)))[id_var] == 3 |
+      (is.null(conmed_data) && table(c(names(exp_data), names(anno_data), names(heat_data)))[id_var] == 3) ||
         table(c(names(exp_data), names(anno_data), names(heat_data), names(conmed_data)))[id_var] == 4,
-      "Please include a column named id_var in exp_data, anno_data, heat_data, and conmed_data (if plotting conmed)"
+      paste(
+        "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
+        id_var,
+        sep = " ")
     ),
     list(
-      is.null(conmed_data) && table(c(names(exp_data), names(heat_data)))[visit_var] == 2 |
+      (is.null(conmed_data) && table(c(names(exp_data), names(heat_data)))[visit_var] == 2) ||
         table(c(names(exp_data), names(heat_data), names(conmed_data)))[visit_var] == 3,
-      "Please include a column named visit_var in exp_data, heat_data, and conmed_data (if plotting conmed)"
+      paste(
+        "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
+        visit_var,
+        sep = " ")
     )
   )
 
