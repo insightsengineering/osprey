@@ -20,6 +20,7 @@ g_ae_sub(
   diff_ci_method = c("wald", "waldcc", "ac", "score", "scorecc", "mn", "mee", "blj",
     "ha", "beal"),
   fontsize = 4,
+  arm_n = FALSE,
   draw = TRUE
 )
 }
@@ -66,6 +67,8 @@ Default is "wald". Possible choices are methods supported in \code{\link[DescToo
 default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 
+\item{arm_n}{(`logical`)\cr whether to display the N in each arm.}
+
 \item{draw}{(`logical`)\cr whether to draw the plot.}
 }
 \value{
@@ -90,8 +93,6 @@ arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)
 subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
 subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
-trt <- "ARM A"
-ref <- "ARM C"
 subgroups_levels <- list(RACE = list("Total" = "Race",
                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
                                      "WHITE" = "White",
@@ -104,15 +105,66 @@ subgroups_levels <- list(RACE = list("Total" = "Race",
                          SEX = list("Total" = "Sex",
                                     "M" = "Male",
                                     "F" = "Female"))
-p <- g_ae_sub(term,
+# Example 1
+p1 <- g_ae_sub(term,
               id,
               arm,
               arm_sl,
               subgroups,
               subgroups_sl,
-              subgroups_levels = subgroups_levels)
+              trt = "ARM A",
+              ref = "ARM C",
+              subgroups_levels = subgroups_levels,
+              arm_n = FALSE)
 grid.newpage()
-grid.draw(p)
+
+# Example 2: display number of patients in each arm
+p2 <- g_ae_sub(term,
+              id,
+              arm,
+              arm_sl,
+              subgroups,
+              subgroups_sl,
+              trt = "ARM A",
+              ref = "ARM C",
+              subgroups_levels = subgroups_levels,
+              arm_n = TRUE)
+grid.newpage()
+
+# Example 3: preprocess data to only include treatment and control arm patients
+trt <- "ARM A"
+ref <- "ARM C"
+ADAE <- radae(cached = TRUE)
+ADSL <- radsl(cached = TRUE) \%>\%
+  filter(ACTARMCD \%in\% c(trt, ref))
+term <- as.character(ADAE$AEDECOD)
+id <- ADAE$USUBJID
+arm <- ADAE$ACTARMCD
+arm_sl <- as.character(ADSL$ACTARMCD)
+subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
+subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
+subgroups_levels <- list(RACE = list("Total" = "Race",
+                                     "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
+                                     "WHITE" = "White",
+                                     "ASIAN" = "Asian",
+                                     "BLACK OR AFRICAN AMERICAN" = "African"),
+                         STRATA1 = list("Total" = "Strata",
+                                        "A" = "TypeA",
+                                        "B" = "TypeB",
+                                        "C" = "Typec"),
+                         SEX = list("Total" = "Sex",
+                                    "M" = "Male",
+                                    "F" = "Female"))
+p3 <- g_ae_sub(term,
+              id,
+              arm,
+              arm_sl,
+              subgroups,
+              subgroups_sl,
+              trt,
+              ref,
+              subgroups_levels = subgroups_levels,
+              arm_n = FALSE)
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}

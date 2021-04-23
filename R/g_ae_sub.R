@@ -22,6 +22,7 @@
 #' @param xmax (`numeric`)\cr maximum range for the x-axis.
 #' x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
 #' xmax is 0 by default
+#' @param arm_n (`logical`)\cr whether to display the N in each arm.
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
 #'
@@ -51,8 +52,6 @@
 #' arm_sl <- as.character(ADSL$ACTARMCD)
 #' subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
 #' subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
-#' trt <- "ARM A"
-#' ref <- "ARM C"
 #' subgroups_levels <- list(RACE = list("Total" = "Race",
 #'                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
 #'                                      "WHITE" = "White",
@@ -65,15 +64,66 @@
 #'                          SEX = list("Total" = "Sex",
 #'                                     "M" = "Male",
 #'                                     "F" = "Female"))
-#' p <- g_ae_sub(term,
+#' # Example 1
+#' p1 <- g_ae_sub(term,
 #'               id,
 #'               arm,
 #'               arm_sl,
 #'               subgroups,
 #'               subgroups_sl,
-#'               subgroups_levels = subgroups_levels)
+#'               trt = "ARM A",
+#'               ref = "ARM C",
+#'               subgroups_levels = subgroups_levels,
+#'               arm_n = FALSE)
 #' grid.newpage()
-#' grid.draw(p)
+#'
+#' # Example 2: display number of patients in each arm
+#' p2 <- g_ae_sub(term,
+#'               id,
+#'               arm,
+#'               arm_sl,
+#'               subgroups,
+#'               subgroups_sl,
+#'               trt = "ARM A",
+#'               ref = "ARM C",
+#'               subgroups_levels = subgroups_levels,
+#'               arm_n = TRUE)
+#' grid.newpage()
+#'
+#' # Example 3: preprocess data to only include treatment and control arm patients
+#' trt <- "ARM A"
+#' ref <- "ARM C"
+#' ADAE <- radae(cached = TRUE)
+#' ADSL <- radsl(cached = TRUE) %>%
+#'   filter(ACTARMCD %in% c(trt, ref))
+#' term <- as.character(ADAE$AEDECOD)
+#' id <- ADAE$USUBJID
+#' arm <- ADAE$ACTARMCD
+#' arm_sl <- as.character(ADSL$ACTARMCD)
+#' subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
+#' subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
+#' subgroups_levels <- list(RACE = list("Total" = "Race",
+#'                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
+#'                                      "WHITE" = "White",
+#'                                      "ASIAN" = "Asian",
+#'                                      "BLACK OR AFRICAN AMERICAN" = "African"),
+#'                          STRATA1 = list("Total" = "Strata",
+#'                                         "A" = "TypeA",
+#'                                         "B" = "TypeB",
+#'                                         "C" = "Typec"),
+#'                          SEX = list("Total" = "Sex",
+#'                                     "M" = "Male",
+#'                                     "F" = "Female"))
+#' p3 <- g_ae_sub(term,
+#'               id,
+#'               arm,
+#'               arm_sl,
+#'               subgroups,
+#'               subgroups_sl,
+#'               trt,
+#'               ref,
+#'               subgroups_levels = subgroups_levels,
+#'               arm_n = FALSE)
 
 g_ae_sub <- function(term,
                      id,
@@ -92,6 +142,7 @@ g_ae_sub <- function(term,
                        "mn", "mee", "blj", "ha", "beal"
                        ),
                      fontsize = 4,
+                     arm_n = FALSE,
                      draw = TRUE) {
 
   diff_ci_method <- match.arg(diff_ci_method)
@@ -117,7 +168,6 @@ g_ae_sub <- function(term,
       #create label with indents if not total
       label = paste0(.data$indents, .data$label))
   }
-
   stop_if_not(
     list(
       length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1,
@@ -166,7 +216,8 @@ g_ae_sub <- function(term,
         ~ all(names(.x) %in% c("Total", .y))
         ))),
       "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels"
-    )
+    ),
+    list(is_logical_single(arm_n), "invalid argument: arm_n must be a logical value")
   )
 
 
@@ -328,6 +379,20 @@ g_ae_sub <- function(term,
     summarise(n = sum(.data$total)) %>%
     mutate(percent = n / length(arm_sl) * 100)
 
+  if (arm_n) {
+    df_byarm <- df %>%
+      group_by(.data$level, .data$arm) %>%
+      summarise(n = sum(.data$total)) %>%
+      pivot_wider(names_from = arm, values_from = n) %>%
+      rename("n_trt" = trt, "n_ref" = ref)
+
+    df_total <- df_total %>%
+      left_join(df_byarm, by = "level") %>%
+      mutate(
+        percent_trt = .data$n_trt / .data$n * 100,
+        percent_ref = .data$n_ref / .data$n * 100)
+  }
+
   p2 <- ggplot(df_total) +
     geom_text(aes(
       x = "Patients(%)",
@@ -339,6 +404,33 @@ g_ae_sub <- function(term,
     scale_x_discrete(position = "top")
 
   p2_grob <- ggplotGrob(p2)
+
+  if (arm_n) {
+    p2_trt <- ggplot(df_total) +
+      geom_text(aes(
+        x = "TRT",
+        y = .data$level,
+        label = sprintf("%i", .data$n_trt)
+      ), size = fontsize) +
+      mytheme +
+      theme(axis.text.y = element_blank()) +
+      y_axis +
+      scale_x_discrete(position = "top")
+
+    p2_ref <- ggplot(df_total) +
+      geom_text(aes(
+        x = "CONT",
+        y = .data$level,
+        label = sprintf("%i", .data$n_ref)
+      ), size = fontsize) +
+      mytheme +
+      theme(axis.text.y = element_blank()) +
+      y_axis +
+      scale_x_discrete(position = "top")
+
+    p2_trt_grob <- ggplotGrob(p2_trt)
+    p2_ref_grob <- ggplotGrob(p2_ref)
+  }
 
   df_ci <- df %>%
     pivot_wider(
@@ -369,6 +461,10 @@ g_ae_sub <- function(term,
 
   grobs <- grob_parts(p1_grob, "axis-l")
   grobs <- append(grobs, grob_parts(p2_grob, c("axis-t", "panel")))
+  if (arm_n) {
+    grobs <- append(grobs, grob_parts(p2_trt_grob, c("axis-t", "panel")))
+    grobs <- append(grobs, grob_parts(p2_ref_grob, c("axis-t", "panel")))
+  }
   grobs <- append(grobs, grob_parts(p1_grob, c("panel", "axis-b")))
   grobs <- append(grobs, grob_parts(p3_grob, c("axis-t", "panel")))
   less_risk <- textGrob(
@@ -395,32 +491,61 @@ g_ae_sub <- function(term,
     risk_label
   ))
 
-  widths <- unit.c(
-    grobWidth(grobs[[1]]),
-    unit(
-      c(14 * fontsize, 1, 50 * fontsize),
-      c("pt", "null", "pt")
+  widths <- if (arm_n) {
+    unit.c(
+      grobWidth(grobs[[1]]),
+      unit(
+        c(14 * fontsize, rep(10 * fontsize, 2), 1, 50 * fontsize),
+        c(rep("pt", 3), "null", "pt")
+      )
     )
-  )
-  heights <- unit.c(
-    grobHeight(grobs[[6]]),
-    unit(1, "null"),
-    grobHeight(grobs[[5]]),
-    unit(fontsize * .pt * 3, "pt")
-  )
+  } else {
+    unit.c(
+      grobWidth(grobs[[1]]),
+      unit(
+        c(14 * fontsize, 1, 50 * fontsize),
+        c("pt", "null", "pt")
+      )
+    )
+  }
 
+  heights <- if (arm_n) {
+    unit.c(
+      grobHeight(grobs[[10]]),
+      unit(1, "null"),
+      rep(grobHeight(grobs[[9]]), 3),
+      unit(fontsize * .pt, "pt")
+    )
+  } else {
+    unit.c(
+      grobHeight(grobs[[6]]),
+      unit(1, "null"),
+      grobHeight(grobs[[5]]),
+      unit(fontsize * .pt * 3, "pt")
+    )
+  }
 
   boldfont <- gpar(
     fontsize = fontsize * 4,
     fontface = "bold",
     lineheight = 1
   )
-  layout_matrix <- rbind(
-    c(NA, 2, 8, 6),
-    c(1, 3, 4, 7),
-    c(NA, NA, 5, NA),
-    c(NA, NA, 9, NA)
-  )
+  layout_matrix <- if (arm_n) {
+    rbind(
+      c(NA, 2, 4, 6, 12, 10),
+      c(1, 3, 5, 7, 8, 11),
+      c(NA, NA, NA, NA, 9, NA),
+      c(NA, NA, NA, NA, 13, NA)
+    )
+  } else {
+    rbind(
+      c(NA, 2, 8, 6),
+      c(1, 3, 4, 7),
+      c(NA, NA, 5, NA),
+      c(NA, NA, 9, NA)
+      )
+    }
+
   ret <- arrangeGrob(
     grobs = grobs,
     layout_matrix = layout_matrix,
