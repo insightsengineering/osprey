@@ -217,7 +217,7 @@ g_ae_sub <- function(term,
         ))),
       "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels"
     ),
-    list(is_logical_single(arm_n), "invalid argument: arm_n much be a logical value")
+    list(is_logical_single(arm_n), "invalid argument: arm_n must be a logical value")
   )
 
 
