@@ -5,7 +5,6 @@
 \title{Adverse Event Category Plot}
 \usage{
 g_ae_sub(
-  term,
   id,
   arm,
   arm_sl,
@@ -25,10 +24,7 @@ g_ae_sub(
 )
 }
 \arguments{
-\item{term}{(`character`)\cr event term vector.}
-
-\item{id}{(`vector`)\cr contains subject identifier. Length of \code{id} must be the
-same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.}
+\item{id}{(`vector`)\cr contains subject identifier. Usually it is \code{ADAE$USUBJID}.}
 
 \item{arm}{(`factor`)\cr vector that contains arm information in analysis data.
 For example, `ADAE$ACTARMCD`.}
@@ -87,7 +83,6 @@ library(grid)
 ADAE <- radae(cached = TRUE)
 ADSL <- radsl(cached = TRUE)
 
-term <- as.character(ADAE$AEDECOD)
 id <- ADAE$USUBJID
 arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)
@@ -106,8 +101,7 @@ subgroups_levels <- list(RACE = list("Total" = "Race",
                                     "M" = "Male",
                                     "F" = "Female"))
 # Example 1
-p1 <- g_ae_sub(term,
-              id,
+p1 <- g_ae_sub(id,
               arm,
               arm_sl,
               subgroups,
@@ -119,8 +113,7 @@ p1 <- g_ae_sub(term,
 grid.newpage()
 
 # Example 2: display number of patients in each arm
-p2 <- g_ae_sub(term,
-              id,
+p2 <- g_ae_sub(id,
               arm,
               arm_sl,
               subgroups,
@@ -137,7 +130,6 @@ ref <- "ARM C"
 ADAE <- radae(cached = TRUE)
 ADSL <- radsl(cached = TRUE) \%>\%
   filter(ACTARMCD \%in\% c(trt, ref))
-term <- as.character(ADAE$AEDECOD)
 id <- ADAE$USUBJID
 arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)
@@ -155,8 +147,7 @@ subgroups_levels <- list(RACE = list("Total" = "Race",
                          SEX = list("Total" = "Sex",
                                     "M" = "Male",
                                     "F" = "Female"))
-p3 <- g_ae_sub(term,
-              id,
+p3 <- g_ae_sub(id,
               arm,
               arm_sl,
               subgroups,
