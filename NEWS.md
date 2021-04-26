@@ -1,4 +1,5 @@
 # osprey 0.1.9
+* Added new plot function Heatmap by Grade Plot `g_heat_bygrade`.
 * Added new plot function Adverse Event Category Plot `g_ae_sub`.
 
 # osprey 0.1.8
