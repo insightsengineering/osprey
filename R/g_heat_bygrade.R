@@ -155,7 +155,8 @@ g_heat_bygrade <- function(id_var,
       "invalid argument: please only include no more than three conmeds for plotting"
       ),
     list(
-      is.null(conmed_data) || length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]])),
+      is.null(conmed_data) || is.null(conmed_color_opt) ||
+        length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]])),
       "invalid argument: please specify conmed_color_opt for all unique conmed_var"
     ),
     list(
