@@ -4,10 +4,10 @@
 
 `osprey` is a R package for crowd sourcing development of analysis functions to
 create TLGs. We also provide teal modules for outputs in `osprey` in the
-teal.osprey.
+`teal.osprey` package.
 
 There are two versions of webpage manual for this package, both the development version and the stable release version 
-can be found [here](http://go.roche.com/nest-docs/api-reference/). Use the drop down menu on the top right to choose the
+can be found [here](https://go.roche.com/nest-docs/api-reference/). Use the drop down menu on the top right to choose the
 desired version.
 
 ## Installation
@@ -16,7 +16,7 @@ Please install package dependencies as follows:
 
 ### Stable Version
 
-To access the stable version manual, select the latest version in the drop down menu on the top right of the [Web Manual](http://go.roche.com/nest-docs/api-reference/).
+To access the stable version manual, select the latest version in the drop down menu on the top right of the [Web Manual](https://go.roche.com/nest-docs/api-reference/).
 
 ```r
 devtools::install_github(
@@ -45,7 +45,7 @@ devtools::install_github(
 
 ### Development Version
 
-To access the development version manual, select `devel` in the drop down menu on the top right of the [Web Manual](http://go.roche.com/nest-docs/api-reference/).
+To access the development version manual, select `devel` in the drop down menu on the top right of the [Web Manual](https://go.roche.com/nest-docs/api-reference/).
 
 ```r
 devtools::install_github(
