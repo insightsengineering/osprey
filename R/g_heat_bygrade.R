@@ -4,8 +4,11 @@
 #'
 #' @param id_var (`character`)\cr name of the column that contains the unique subject identifier shared by all data
 #' Usually it is \code{"USUBJID"}.
-#' @param visit_var (`character`)\cr name of the column that contains the analysis visit. Usually it is \code{"AVISIT"}
 #' @param exp_data (`data.frame`)\cr exposure data. Usually it is \code{ADEX}.
+#' @param visit_var (`character`)\cr name of the column that contains the analysis visit. Usually it is \code{"AVISIT"}
+#' @param ongo_var (`character`)\cr name of the column in \code{exp_data} that contains the logical variable
+#' indicating whether the treatment is still ongoing.
+#' Usually it can be derived from \code{EOSSTT}
 #' @param anno_data (`data.frame`)\cr annotation data that contains subject level characteristics.
 #' Usually it is \code{ADSL}
 #' @param anno_var (`character`) a vector of columns name(s) to include for the annotation
@@ -22,7 +25,6 @@
 #' @param title (`character`)\cr string to be shown as title of the plot.
 #' default is \code{NULL} (no plot title is displayed)
 #' @import ggplot2
-#' @importFrom stringr str_to_upper
 #' @importFrom tidyr replace_na
 #' @importFrom stats median
 #' @importFrom grDevices terrain.colors
@@ -45,6 +47,7 @@
 #'   group_by(USUBJID) %>%
 #'   # create a shorter subject identifier
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) %>%
+#'   mutate(ongo_var = (EOSSTT == "ONGOING")) %>%
 #'   ungroup()
 #' anno_data <- ADSL %>%
 #'   select(SEX, COUNTRY, USUBJID) %>%
@@ -86,8 +89,9 @@
 #'# example plotting conmed
 #' g_heat_bygrade(
 #'   id_var = "SUBJ",
-#'   visit_var = "AVISIT",
 #'   exp_data,
+#'   visit_var = "AVISIT",
+#'   ongo_var = "ongo_var",
 #'   anno_data,
 #'   anno_var = names(anno_data),
 #'   heat_data,
@@ -101,8 +105,9 @@
 #'# example not plotting conmed
 #' g_heat_bygrade(
 #'   id_var = "SUBJ",
-#'   visit_var = "AVISIT",
 #'   exp_data,
+#'   visit_var = "AVISIT",
+#'   ongo_var = "ongo_var",
 #'   anno_data,
 #'   anno_var = names(anno_data),
 #'   heat_data,
@@ -110,8 +115,9 @@
 #'   heat_color_opt
 #'   )
 g_heat_bygrade <- function(id_var,
-                           visit_var,
                            exp_data,
+                           visit_var,
+                           ongo_var,
                            anno_data,
                            anno_var,
                            heat_data,
@@ -125,9 +131,14 @@ g_heat_bygrade <- function(id_var,
   # check if all PARCAT1 in exp_data is "individual"
   stop_if_not(
     list(is_character_single(id_var), "id_var must be a single character value"),
-    list(is_character_single(visit_var), "visit_var must be a single character value"),
     list(is.data.frame(exp_data)),
     list(!is.na(exp_data[[visit_var]]), "invalid argument: please only include 'INDIVIDUAL' record in exp_data"),
+    list(is_character_single(visit_var), "visit_var must be a single character value"),
+    list(is_character_single(ongo_var), "ongo_var must be a single character value"),
+    list(
+      ongo_var %in% names(exp_data) && is_logical_vector(exp_data[[ongo_var]]),
+      "ongo_var must be a logical column in exp_data"
+      ),
     list(is.data.frame(anno_data)),
     list(
       length(anno_var) <= 3,
@@ -196,25 +207,25 @@ g_heat_bygrade <- function(id_var,
     mutate(
       RANK = order(.data$ASTDTM),
       LASTDOSE = lag(.data$AVAL),
-      DOSERED = ifelse(.data$RANK != 1 & .data$AVAL < .data$LASTDOSE, "Y", "")
+      DOSERED = ifelse(.data$RANK != 1 & .data$AVAL < .data$LASTDOSE, TRUE, FALSE)
       ) %>%
     select(!!sym(id_var), !!sym(visit_var), .data$RANK, .data$AVAL, .data$LASTDOSE, .data$DOSERED) %>%
-    filter(.data$DOSERED == "Y")
+    filter(.data$DOSERED == TRUE)
   # does ongoing data
   exp_lst <- exp_data %>%
     filter(.data$PARAMCD == "DOSE") %>%
-    filter(str_to_upper(.data$EOSSTT) == "ONGOING") %>%
+    filter(!!sym(ongo_var) == TRUE) %>%
+    group_by(!!sym(id_var)) %>%
     arrange(!!sym(visit_var)) %>%
     slice_tail() %>%
     select(!!sym(id_var), !!sym(visit_var))
-
   visit_levels <- unique(anl_data[[visit_var]])
   if (!is.null(conmed_data) & !is.null(conmed_var)) {
     conmed_data <- conmed_data %>%
       left_join(anl_data, by = c(id_var, visit_var)) %>%
       ungroup() %>%
       mutate(
-        conmed_num = as.numeric(.data$CMDECOD),
+        conmed_num = as.numeric(.data[[conmed_var]]),
         conmed_num_m = median(unique(.data$conmed_num), na.rm = TRUE)
       ) %>%
       mutate(
@@ -226,7 +237,6 @@ g_heat_bygrade <- function(id_var,
         conmed_x = as.numeric(!!sym(visit_var)) + .data$distance
       )
   }
-
   subj_levels <- unique(anl_data[[id_var]])
   levels(anl_data$heat_color_max) <- sort(as.numeric(levels(anl_data$heat_color_max)))
   levels(anl_data$heat_color_max)[levels(anl_data$heat_color_max) == "0"] <- "No Event"
@@ -244,9 +254,9 @@ g_heat_bygrade <- function(id_var,
     geom_segment(
       data = ex_red,
       aes(
-        y = as.numeric(factor(!!sym(id_var), levels = subj_levels)) + 0.3,
+        y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))) + 0.3,
         x = as.numeric(factor(!!sym(visit_var), levels = visit_levels)),
-        yend = as.numeric(factor(!!sym(id_var), levels = subj_levels)) - 0.3,
+        yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))) - 0.3,
         xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels))
         ),
       arrow = arrow(length = unit(0.1, "cm")),
@@ -259,8 +269,8 @@ g_heat_bygrade <- function(id_var,
       aes(
         x = as.numeric(factor(!!sym(visit_var), levels = visit_levels)) + 0.5,
         xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels)) + 0.65,
-        y = as.numeric(factor(!!sym(id_var), levels = subj_levels)),
-        yend = as.numeric(factor(!!sym(id_var), levels = subj_levels))
+        y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))),
+        yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels)))
         ),
       arrow = arrow(length = unit(0.1, "cm")),
       size = .5,

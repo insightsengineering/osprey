@@ -6,8 +6,9 @@
 \usage{
 g_heat_bygrade(
   id_var,
-  visit_var,
   exp_data,
+  visit_var,
+  ongo_var,
   anno_data,
   anno_var,
   heat_data,
@@ -24,9 +25,13 @@ g_heat_bygrade(
 \item{id_var}{(`character`)\cr name of the column that contains the unique subject identifier shared by all data
 Usually it is \code{"USUBJID"}.}
 
+\item{exp_data}{(`data.frame`)\cr exposure data. Usually it is \code{ADEX}.}
+
 \item{visit_var}{(`character`)\cr name of the column that contains the analysis visit. Usually it is \code{"AVISIT"}}
 
-\item{exp_data}{(`data.frame`)\cr exposure data. Usually it is \code{ADEX}.}
+\item{ongo_var}{(`character`)\cr name of the column in \code{exp_data} that contains the logical variable
+indicating whether the treatment is still ongoing.
+Usually it can be derived from \code{EOSSTT}}
 
 \item{anno_data}{(`data.frame`)\cr annotation data that contains subject level characteristics.
 Usually it is \code{ADSL}}
@@ -69,6 +74,7 @@ exp_data <- ADEX \%>\%
   group_by(USUBJID) \%>\%
   # create a shorter subject identifier
   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
+  mutate(ongo_var = (EOSSTT == "ONGOING")) \%>\%
   ungroup()
 anno_data <- ADSL \%>\%
   select(SEX, COUNTRY, USUBJID) \%>\%
@@ -110,8 +116,9 @@ conmed_data <- ADCM \%>\%
 # example plotting conmed
 g_heat_bygrade(
   id_var = "SUBJ",
-  visit_var = "AVISIT",
   exp_data,
+  visit_var = "AVISIT",
+  ongo_var = "ongo_var",
   anno_data,
   anno_var = names(anno_data),
   heat_data,
@@ -125,8 +132,9 @@ g_heat_bygrade(
 # example not plotting conmed
 g_heat_bygrade(
   id_var = "SUBJ",
-  visit_var = "AVISIT",
   exp_data,
+  visit_var = "AVISIT",
+  ongo_var = "ongo_var",
   anno_data,
   anno_var = names(anno_data),
   heat_data,
