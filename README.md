@@ -2,7 +2,7 @@
 
 ## osprey
 
-`osprey` is a R package for crowd sourcing development of analysis functions to
+`osprey` is an R package for crowd sourcing development of analysis functions to
 create TLGs. We also provide teal modules for outputs in `osprey` in the
 `teal.osprey` package.
 
@@ -85,10 +85,10 @@ Everyone is welcome to share their R functions in `osprey`.
 
 To qualify to `osprey` package, TLG code has to:
 
-1. Be a function that produces a output
-2. Have working example
+1. Be a function that produces an output
+2. Have a working example
 3. Use [roxygen documentation](http://r-pkgs.had.co.nz/man.html) for creation of Help
-4. Have help page
+4. Have a help page
 5. Be compatible with pkgdown (should be when points 1-4 are OK)
 
 ### Instructions
@@ -102,7 +102,7 @@ package](https://streamingmedia.roche.com/media/Adding+TLG+functions+to+the+Ospr
 That is, follow the following steps:
 
 1. Clone the osprey repository
-2. Create branch
+2. Create a branch
 3. Develop a function
 4. Create roxygen comments (ctrl+shift+alt+R or copy from earlier)
 5. Document (ctrl+shift+D)
