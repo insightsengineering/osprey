@@ -2,9 +2,7 @@
 #'
 #' Draw adverse event category plot.
 #' @inheritParams argument_convention
-#' @param term (`character`)\cr event term vector.
-#' @param id (`vector`)\cr contains subject identifier. Length of \code{id} must be the
-#' same as the length or number of rows of \code{terms}. Usually it is \code{ADAE$USUBJID}.
+#' @param id (`vector`)\cr contains subject identifier. Usually it is \code{ADAE$USUBJID}.
 #' @param arm_sl (`vector`)\cr contains the subject level treatment variable.
 #' For example, \code{ADSL$ACTARM}.
 #' @param subgroups (`data.frame`)\cr Variables to conduct analysis.
@@ -46,7 +44,6 @@
 #' ADAE <- radae(cached = TRUE)
 #' ADSL <- radsl(cached = TRUE)
 #'
-#' term <- as.character(ADAE$AEDECOD)
 #' id <- ADAE$USUBJID
 #' arm <- ADAE$ACTARMCD
 #' arm_sl <- as.character(ADSL$ACTARMCD)
@@ -65,8 +62,7 @@
 #'                                     "M" = "Male",
 #'                                     "F" = "Female"))
 #' # Example 1
-#' p1 <- g_ae_sub(term,
-#'               id,
+#' p1 <- g_ae_sub(id,
 #'               arm,
 #'               arm_sl,
 #'               subgroups,
@@ -78,8 +74,7 @@
 #' grid.newpage()
 #'
 #' # Example 2: display number of patients in each arm
-#' p2 <- g_ae_sub(term,
-#'               id,
+#' p2 <- g_ae_sub(id,
 #'               arm,
 #'               arm_sl,
 #'               subgroups,
@@ -96,7 +91,6 @@
 #' ADAE <- radae(cached = TRUE)
 #' ADSL <- radsl(cached = TRUE) %>%
 #'   filter(ACTARMCD %in% c(trt, ref))
-#' term <- as.character(ADAE$AEDECOD)
 #' id <- ADAE$USUBJID
 #' arm <- ADAE$ACTARMCD
 #' arm_sl <- as.character(ADSL$ACTARMCD)
@@ -114,8 +108,7 @@
 #'                          SEX = list("Total" = "Sex",
 #'                                     "M" = "Male",
 #'                                     "F" = "Female"))
-#' p3 <- g_ae_sub(term,
-#'               id,
+#' p3 <- g_ae_sub(id,
 #'               arm,
 #'               arm_sl,
 #'               subgroups,
@@ -125,8 +118,7 @@
 #'               subgroups_levels = subgroups_levels,
 #'               arm_n = FALSE)
 
-g_ae_sub <- function(term,
-                     id,
+g_ae_sub <- function(id,
                      arm,
                      arm_sl,
                      subgroups,
@@ -147,7 +139,6 @@ g_ae_sub <- function(term,
 
   diff_ci_method <- match.arg(diff_ci_method)
   stop_if_not(
-    list(!is_empty(term), "missing argument: term must be specified"),
     list(!is_empty(id), "missing argument: id must be specified"),
     list(!is_empty(arm), "missing argument: arm must be specified"),
     list(!is_empty(arm_sl), "missing argument: arm_sl must be specified"),
@@ -170,8 +161,8 @@ g_ae_sub <- function(term,
   }
   stop_if_not(
     list(
-      length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1,
-      "invalid arguments: check that the length of id, term and arm are identical"
+      length(unique(vapply(list(id, arm), length, integer(1)))) == 1,
+      "invalid arguments: check that the length of id and arm are identical"
     ),
     list(
       is_character_vector(arm_sl, min_length = 2),
@@ -240,9 +231,8 @@ g_ae_sub <- function(term,
   df_ref <- tibble(arm = c(ref, trt))
 
   # a wide data frame contains event counts by arm in each subgroup
-  df <- cbind(id = id, term = term, arm = arm, subgroups) %>%
+  df <- cbind(id = id, arm = arm, subgroups) %>%
     filter(arm %in% c(ref, trt)) %>%
-    select(-term) %>%
     unique %>%
     pivot_longer(
       names_to = "strata",
