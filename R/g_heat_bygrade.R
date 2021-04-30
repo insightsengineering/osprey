@@ -40,8 +40,25 @@
 #' ADEX <- radex(ADSL)
 #' ADAE <- radae(ADSL)
 #' ADCM <- radcm(ADSL)
-#' # add AVISIT in ADAE
-#' ADAE$AVISIT <- sample(unique(ADEX$AVISIT[!is.na(ADEX$AVISIT)]), nrow(ADAE), TRUE)
+#' # function to derive AVISIT from ADEX
+#' add_visit <- function(data_need_visit){
+#'   visit_dates <- ADEX %>%
+#'     filter(PARAMCD == "DOSE") %>%
+#'     distinct(USUBJID, AVISIT, ASTDTM) %>%
+#'     group_by(USUBJID) %>%
+#'     arrange(ASTDTM) %>%
+#'     mutate(next_vis = lead(ASTDTM), is_last = ifelse(is.na(next_vis), TRUE, FALSE)) %>%
+#'     rename(this_vis = ASTDTM)
+#'   data_visit <- data_need_visit %>%
+#'     select(USUBJID, ASTDTM) %>%
+#'     left_join(visit_dates, by = "USUBJID") %>%
+#'     filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) %>%
+#'     left_join(data_need_visit)
+#'   return(data_visit)
+#'   }
+#' # add AVISIT in ADAE and ADCM
+#' ADAE <- add_visit(ADAE)
+#' ADCM <- add_visit(ADCM)
 #' exp_data <- ADEX %>%
 #'   filter(PARCAT1 == "INDIVIDUAL") %>%
 #'   group_by(USUBJID) %>%
@@ -70,22 +87,16 @@
 #'   "4" = "maroon",
 #'   "5" = "brown4"
 #'   )
-#'
-#' # include three conmed levels
-#' ADCM_labs <- rtables::var_labels(ADCM)
-#' # derive ADCM.AVISIT
-#' # this example is randomly assigned, please derive your own study-specific ADCM.AVISIT
-#' ADCM$AVISIT <- sample(unique(exp_data$AVISIT), nrow(ADCM), replace = TRUE)
+#' ADCM_lab <- rtables::var_labels(ADCM)
 #' ADCM <- ADCM %>%
 #'   filter(
 #'     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
 #'     ) %>%
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
-#' rtables::var_labels(ADCM) <- c(ADCM_labs, "Analysis Visit")
 #' conmed_data <- ADCM %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
-#'
+#' rtables::var_labels(ADCM) <- ADCM_lab
 #'# example plotting conmed
 #' g_heat_bygrade(
 #'   id_var = "SUBJ",
