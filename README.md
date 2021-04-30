@@ -2,17 +2,13 @@
 
 ## osprey
 
-`osprey` is a R package for crowd sourcing development of analysis functions to
-create TLGs. We also provide [teal](https://github.roche.com/Rpackages/teal)
-modules for outputs in `osprey` in the
-[teal.osprey](https://github.roche.com/Rpackages/teal.osprey) R package.
+`osprey` is an R package for crowd sourcing development of analysis functions to
+create TLGs. We also provide teal modules for outputs in `osprey` in the
+`teal.osprey` package.
 
-There are two versions of webpage manual for this package
-
-* development version: https://nest-docs.kubemea.science.roche.com/releases/devel/api-reference/osprey/
-
-* stable release version: https://go.roche.com/nest-docs/releases/latest/api-reference/osprey
-
+There are two versions of webpage manual for this package, both the development version and the stable release version 
+can be found [here](https://go.roche.com/nest-docs/api-reference/). Use the drop down menu on the top right to choose the
+desired version.
 
 ## Installation
 
@@ -20,7 +16,7 @@ Please install package dependencies as follows:
 
 ### Stable Version
 
-[Web Manual](https://go.roche.com/nest-docs/releases/latest/api-reference/osprey)
+To access the stable version manual, select the latest version in the drop down menu on the top right of the [Web Manual](https://go.roche.com/nest-docs/api-reference/).
 
 ```r
 devtools::install_github(
@@ -49,7 +45,7 @@ devtools::install_github(
 
 ### Development Version
 
-[Web Manual](https://nest-docs.kubemea.science.roche.com/releases/devel/api-reference/osprey/)
+To access the development version manual, select `devel` in the drop down menu on the top right of the [Web Manual](https://go.roche.com/nest-docs/api-reference/).
 
 ```r
 devtools::install_github(
@@ -89,10 +85,10 @@ Everyone is welcome to share their R functions in `osprey`.
 
 To qualify to `osprey` package, TLG code has to:
 
-1. Be a function that produces a output
-2. Have working example
+1. Be a function that produces an output
+2. Have a working example
 3. Use [roxygen documentation](http://r-pkgs.had.co.nz/man.html) for creation of Help
-4. Have help page
+4. Have a help page
 5. Be compatible with pkgdown (should be when points 1-4 are OK)
 
 ### Instructions
@@ -106,7 +102,7 @@ package](https://streamingmedia.roche.com/media/Adding+TLG+functions+to+the+Ospr
 That is, follow the following steps:
 
 1. Clone the osprey repository
-2. Create branch
+2. Create a branch
 3. Develop a function
 4. Create roxygen comments (ctrl+shift+alt+R or copy from earlier)
 5. Document (ctrl+shift+D)
