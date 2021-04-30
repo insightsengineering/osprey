@@ -120,7 +120,7 @@ g_heat_bygrade(
   visit_var = "AVISIT",
   ongo_var = "ongo_var",
   anno_data,
-  anno_var = names(anno_data),
+  anno_var = c("SEX", "COUNTRY"),
   heat_data,
   heat_color_var = "AETOXGR",
   heat_color_opt,
@@ -136,7 +136,7 @@ g_heat_bygrade(
   visit_var = "AVISIT",
   ongo_var = "ongo_var",
   anno_data,
-  anno_var = names(anno_data),
+  anno_var = c("SEX", "COUNTRY"),
   heat_data,
   heat_color_var = "AETOXGR",
   heat_color_opt

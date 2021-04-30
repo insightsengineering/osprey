@@ -93,7 +93,7 @@
 #'   visit_var = "AVISIT",
 #'   ongo_var = "ongo_var",
 #'   anno_data,
-#'   anno_var = names(anno_data),
+#'   anno_var = c("SEX", "COUNTRY"),
 #'   heat_data,
 #'   heat_color_var = "AETOXGR",
 #'   heat_color_opt,
@@ -109,7 +109,7 @@
 #'   visit_var = "AVISIT",
 #'   ongo_var = "ongo_var",
 #'   anno_data,
-#'   anno_var = names(anno_data),
+#'   anno_var = c("SEX", "COUNTRY"),
 #'   heat_data,
 #'   heat_color_var = "AETOXGR",
 #'   heat_color_opt
@@ -141,7 +141,7 @@ g_heat_bygrade <- function(id_var,
       ),
     list(is.data.frame(anno_data)),
     list(
-      length(anno_var) <= 3,
+      length(anno_var) <= 2,
       "invalid argument: anno_data can only contain 3 or less columns including subject ID"
       ),
     list(is.data.frame(heat_data)),
@@ -319,7 +319,7 @@ g_heat_bygrade <- function(id_var,
   #plot left legend
   t <- anl_data %>%
     as.data.frame() %>%
-    select((!!anno_var)) %>%
+    select((!!anno_var), (!!id_var)) %>%
     distinct()
   my_theme <- ttheme_default(
     core = list(
