@@ -93,10 +93,10 @@
 #'     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
 #'     ) %>%
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
+#' rtables::var_labels(ADCM) <- ADCM_lab
 #' conmed_data <- ADCM %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
-#' rtables::var_labels(ADCM) <- ADCM_lab
 #'# example plotting conmed
 #' g_heat_bygrade(
 #'   id_var = "SUBJ",
@@ -206,10 +206,11 @@ g_heat_bygrade <- function(id_var,
     mutate(heat_color_num = tidyr::replace_na(as.numeric(.data[[heat_color_var]]), 0)) %>%
     group_by(!!sym(id_var), !!sym(visit_var)) %>%
     arrange(!!sym(visit_var)) %>%
-    mutate(heat_color_max = factor(max(.data$heat_color_num))) %>%
+    mutate(heat_color_max = factor(max(.data$heat_color_num), levels = 0:5)) %>%
     select(- (!!heat_color_var), -.data$heat_color_num) %>%
     distinct() %>%
     left_join(anno_data, by = id_var)
+
   #dose reduction data
   ex_red <- exp_data %>%
     filter(.data$PARAMCD == "DOSE") %>%
@@ -249,11 +250,10 @@ g_heat_bygrade <- function(id_var,
       )
   }
   subj_levels <- unique(anl_data[[id_var]])
-  levels(anl_data$heat_color_max) <- sort(as.numeric(levels(anl_data$heat_color_max)))
   levels(anl_data$heat_color_max)[levels(anl_data$heat_color_max) == "0"] <- "No Event"
   p <- ggplot(
     data = anl_data,
-    aes(x = !!sym(visit_var), y = factor(!!sym(id_var), levels = c(subj_levels, "")))
+    aes(x = !!sym(visit_var), y = factor(!!sym(id_var), levels = c(rev(subj_levels), "")))
     ) +
     geom_tile(aes(fill = .data$heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
