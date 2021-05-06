@@ -68,7 +68,7 @@ ADEX <- radex(ADSL)
 ADAE <- radae(ADSL)
 ADCM <- radcm(ADSL)
 # function to derive AVISIT from ADEX
-add_visit <- function(data_need_visit){
+add_visit <- function(data_need_visit) {
   visit_dates <- ADEX \%>\%
     filter(PARAMCD == "DOSE") \%>\%
     distinct(USUBJID, AVISIT, ASTDTM) \%>\%

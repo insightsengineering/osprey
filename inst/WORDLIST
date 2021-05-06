@@ -17,7 +17,6 @@ AETOXGR
 AEs
 BCE
 CDISC
-conmed
 CMD
 CTCAE
 Cho
@@ -54,6 +53,7 @@ bdat
 catalogue
 cdisc
 chot
+conmed
 convwhere
 covr
 ctc
@@ -81,6 +81,8 @@ lintr
 lt
 meanrisk
 modularized
+multisessions
+multithreaded
 nnn
 npaszty
 osprey
@@ -115,8 +117,8 @@ ui
 waddella
 wald
 wd
+xmax
 zeroGrob
 zhanc
-multisessions
-multithreaded
-xmax
+PR
+PRs
