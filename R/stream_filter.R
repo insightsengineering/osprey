@@ -204,7 +204,7 @@ stream_filter_convwhere <- function(x) {
 
   inquotes <- rep(c(0, 1), length.out = length(this_rclause_quotes))
 
-  for (j in 1:length(inquotes)) {
+  for (j in seq_along(inquotes)) {
 
     # try and convert logic outside quotes
     if (inquotes[j] == 0) {

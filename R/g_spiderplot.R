@@ -256,7 +256,7 @@ g_spiderplot <- function(marker_x,
   }
 
   if (!is.null(vref_line)) {
-    for (i in 1:length(vref_line)) {
+    for (i in seq_along(vref_line)) {
       pl <- pl +
         annotate("segment",
                  x = vref_line[i],
