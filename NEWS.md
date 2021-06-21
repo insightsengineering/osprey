@@ -1,5 +1,6 @@
 # osprey 0.1.10
-.
+
+* Updated and cleaned up package internals.
 
 # osprey 0.1.9
 * Added new plot function Heatmap by Grade Plot `g_heat_bygrade`.
