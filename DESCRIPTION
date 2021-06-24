@@ -26,7 +26,7 @@ Imports:
   gridExtra,
   gtable,
   rlang,
-  rtables (>= 0.3.7),
+  rtables (>= 0.3.8),
   stringr,
   tern (>= 0.7.4),
   tidyr (>= 1.0.0),
