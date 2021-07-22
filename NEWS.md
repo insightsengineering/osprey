@@ -1,5 +1,7 @@
 # osprey 0.1.10.9000
 
+* Fixed the `sort_by` issue in `g_butterfly`.
+
 # osprey 0.1.10
 
 * Updated and cleaned up package internals.

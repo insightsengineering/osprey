@@ -312,7 +312,7 @@ g_butterfly <- function(category,
       plot.margin = unit(c(1.5, 1, 1, 1), "cm"),
       legend.position = if (show_legend) "right" else "none"
     ) +
-    scale_x_discrete(limits = levels(counts_r$y))
+    scale_x_discrete(limits = union(levels(counts_r$y), levels(counts_l$y)))
 
   # labs pl <- pl + labs(title = str_wrap(g2, width = 30))
   g_0 <- ggplotGrob(pl)
