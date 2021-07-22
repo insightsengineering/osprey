@@ -226,8 +226,9 @@ g_butterfly <- function(category,
 
 
   if (sort_by == "alphabetical") {
-    counts_r$y <- factor(counts_r$y, levels = unique(sort(as.character(counts_r$y), decreasing = TRUE)))
-    counts_l$y <- factor(counts_l$y, levels = unique(sort(as.character(counts_l$y), decreasing = TRUE)))
+    levels_all <- unique(sort(as.character(union(counts_l$y, counts_r$y)), decreasing = TRUE))
+    counts_r$y <- factor(counts_r$y, levels = levels_all)
+    counts_l$y <- factor(counts_l$y, levels = levels_all)
   } else if (sort_by == "count") {
     tot <- dplyr::bind_rows(total_text_ann_r, total_text_ann_l) %>%
       dplyr::group_by(.data$y) %>%
@@ -312,7 +313,7 @@ g_butterfly <- function(category,
       plot.margin = unit(c(1.5, 1, 1, 1), "cm"),
       legend.position = if (show_legend) "right" else "none"
     ) +
-    scale_x_discrete(limits = union(levels(counts_r$y), levels(counts_l$y)))
+    scale_x_discrete(limits = levels(counts_r$y))
 
   # labs pl <- pl + labs(title = str_wrap(g2, width = 30))
   g_0 <- ggplotGrob(pl)
