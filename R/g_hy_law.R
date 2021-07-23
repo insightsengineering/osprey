@@ -29,11 +29,34 @@ g_hy_law <-function(id,
                     anrhi,
                     folds = c(3,2),
                     text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
-                    caption = "Maximum values are those maximum values that occur post-baseline (no time constraints and not necessarily concurrent events).",
                     title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
+                    caption = "Maximum values are those maximum values that occur post-baseline (no time constraints and not necessarily concurrent events).",
                     xlab = "Maximum Alanine Aminotransferase (/ULN)",
                     ylab = "Maximum Total Bilirubin (/ULN)"
                     ){
+
+  required_vars <- c("id", "term", "aval", "arm", "term_selected", "anrhi")
+  passed_vars <- names(as.list(match.call())[-1])
+
+  assertthat::assert_that(all(required_vars %in% passed_vars),
+                          msg = paste("missing arguments:",
+                                      paste(setdiff(required_vars,passed_vars), collapse = ", "),
+                                      "must be specified"))
+
+  assertthat::assert_that(is.character(term_selected) & length(term_selected) == 2,
+                          msg = "invalid argument: term_selected must be a character array of length 2")
+  assertthat::assert_that(is.numeric(folds) & length(folds) == 2,
+                          msg = "invalid argument: folds must be a numeric array of length 2")
+  assertthat::assert_that(is.character(text) & length(text) == 4,
+                          msg = "invalid argument: text must be a character array of length 4")
+
+  character_vars <- c("title", "caption", "xlab", "ylab")
+
+  for (parameter in character_vars){
+    assertthat::assert_that(is.character(parameter) & length(parameter) == 1,
+                            msg = paste("invalid argument:", parameter, "must be a string"))
+  }
+
 
   anl <- data.frame(id, term, aval, arm, anrhi)
 
