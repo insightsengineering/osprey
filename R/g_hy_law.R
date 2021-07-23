@@ -69,7 +69,7 @@
 #' adsl <- radsl(N=30)
 #' adlb <- radlb(adsl) %>% mutate(ANRHI = 50)
 #'
-#' # Example 1, - Hy's law template
+#' # Example 1, - Hy's law template (3 and 2 X ULN)
 #' g_hy_law(
 #'   id = adlb$USUBJID,
 #'   term = adlb$PARAMCD,
