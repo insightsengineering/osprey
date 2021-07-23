@@ -115,7 +115,6 @@ g_hy_law <- function(id,
                     caption = paste("Maximum values are those maximum values that occur",
                                     "post-baseline (no time constraints and not necessarily concurrent events)."),
                     title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
-                    caption = "Maximum values are those maximum values that occur post-baseline (no time constraints and not necessarily concurrent events).",
                     xlab = "Maximum Alanine Aminotransferase (/ULN)",
                     ylab = "Maximum Total Bilirubin (/ULN)"
                     ) {
