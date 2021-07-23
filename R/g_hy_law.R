@@ -69,7 +69,7 @@
 #' adsl <- radsl(N=30)
 #' adlb <- radlb(adsl) %>% mutate(ANRHI = 50)
 #'
-#' # Example 1, # of AEs
+#' # Example 1, - Hy's law template
 #' g_hy_law(
 #'   id = adlb$USUBJID,
 #'   term = adlb$PARAMCD,
@@ -85,7 +85,7 @@
 #'   ylab = "Maximum Total Bilirubin (/ULN)"
 #' )
 #'
-#' # Example 2, # change the quadrant lines and labels
+#' # Example 2, - change the quadrant lines and labels
 #' g_hy_law(
 #'   id = adlb$USUBJID,
 #'   term = adlb$PARAMCD,
