@@ -80,7 +80,7 @@ scale_x_continuous(
     color = "grey"
   ) +
   geom_segment(
-    aes(x = log10(0), y = log10(folds[2]), xend = log10(50), yend = log10(folds[2])),
+    aes(x = log10(0), y = log10(folds[2]), xend = log10(65), yend = log10(folds[2])),
     size = 0.25,
     color = "grey"
   ) +
@@ -95,13 +95,17 @@ scale_x_continuous(
     color = "black"
   ) +
   annotate("text", label = paste0(folds[1],"XULN"), x = log10(folds[1]), y = log10(90)) +
-  annotate("text", label = paste0(folds[2],"XULN"), x = log10(75), y = log10(folds[2])) +
+  annotate("text", label = paste0(folds[2],"XULN"), x = log10(85), y = log10(folds[2])) +
   annotate("text", label = text[1], x = log10(0.2), y = log10(0.12)) +
   annotate("text", label = text[2], x = log10(0.2), y = log10(80)) +
   annotate("text", label = text[3], x = log10(40), y = log10(80)) +
   annotate("text", label = text[4], x = log10(40), y = log10(0.12)) +
   geom_point(aes(x = log10(.data[[term_selected[1]]]), y = log10(.data[[term_selected[2]]]), shape=arm, color = arm)) +
-  scale_shape_manual(values = c(1:3))
+  scale_shape_manual(values = c(1:length(unique(arm))))
 
-p
+g <- ggplotGrob(p)
+
+grid.newpage()
+grid.draw(g)
+invisible(g)
 }
