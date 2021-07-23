@@ -101,7 +101,7 @@ scale_x_continuous(
   annotate("text", label = text[3], x = log10(40), y = log10(80)) +
   annotate("text", label = text[4], x = log10(40), y = log10(0.12)) +
   geom_point(aes(x = log10(.data[[term_selected[1]]]), y = log10(.data[[term_selected[2]]]), shape=arm, color = arm)) +
-  scale_shape_manual(values = c(1:3))
+  scale_shape_manual(values = c(1:length(unique(arm))))
 
 g0 <- ggplotGrob(p)
 #g1 <- gtable_add_cols(g0, sum(tb$widths), 0)
