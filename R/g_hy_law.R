@@ -79,7 +79,8 @@
 #'   anrhi = adlb$ANRHI,
 #'   folds = c(3,2),
 #'   text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
-#'   caption = "Maximum values are those maximum values that occur post-baseline (no time constraints and not necessarily concurrent events).",
+#'   caption = paste("Maximum values are those maximum values that occur",
+#'   "post-baseline (no time constraints and not necessarily concurrent events)."),
 #'   title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
 #'   xlab = "Maximum Alanine Aminotransferase (/ULN)",
 #'   ylab = "Maximum Total Bilirubin (/ULN)"
@@ -95,35 +96,37 @@
 #'   anrhi = adlb$ANRHI,
 #'   folds = c(10,15),
 #'   text = c("Quadrant 1", "Quadrant 2", "Quadrant 3", "Quadrant 4"),
-#'   caption = "Maximum values are those maximum values that occur post-baseline (no time constraints and not necessarily concurrent events).",
+#'   caption = paste("Maximum values are those maximum values that occur",
+#'   "post-baseline (no time constraints and not necessarily concurrent events)."),
 #'   title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
 #'   xlab = "Maximum Alanine Aminotransferase (/ULN)",
 #'   ylab = "Maximum Total Bilirubin (/ULN)"
 #' )
 #'
 
-g_hy_law <-function(id,
+g_hy_law <- function(id,
                     term,
                     aval,
                     arm,
                     term_selected,
                     anrhi,
-                    folds = c(3,2),
+                    folds = c(3, 2),
                     text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
-                    caption = "Maximum values are those maximum values that occur post-baseline (no time constraints and not necessarily concurrent events).",
+                    caption = paste("Maximum values are those maximum values that occur",
+                                    "post-baseline (no time constraints and not necessarily concurrent events)."),
                     title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
                     xlab = "Maximum Alanine Aminotransferase (/ULN)",
                     ylab = "Maximum Total Bilirubin (/ULN)"
-                    ){
+                    ) {
 
   anl <- data.frame(id, term, aval, arm, anrhi)
 
   anl <- anl %>%
     filter(term %in% term_selected) %>%
-    group_by(id,term) %>%
+    group_by(id, term) %>%
     mutate(MAX = max(aval)) %>%
     slice(1) %>%
-    mutate(ULN = MAX/anrhi) %>%
+    mutate(ULN = MAX / anrhi) %>%
     pivot_wider(id_cols = c(id, arm), names_from = term, values_from = ULN)
 
 p <- ggplot(data = anl) +
@@ -133,14 +136,14 @@ scale_x_continuous(
     breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
     limits = c(-1, 2),
     labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
-    expand = c(0.01,0.01)
+    expand = c(0.01, 0.01)
   ) +
   scale_y_continuous(
     name = ylab,
     breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
     limits = c(-1, 2),
     labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
-    expand = c(0.01,0.01)
+    expand = c(0.01, 0.01)
   ) +
 
   labs(title = title,
@@ -175,13 +178,16 @@ scale_x_continuous(
     size = 0.25,
     color = "black"
   ) +
-  annotate("text", label = paste0(folds[1],"XULN"), x = log10(folds[1]), y = log10(90)) +
-  annotate("text", label = paste0(folds[2],"XULN"), x = log10(85), y = log10(folds[2])) +
+  annotate("text", label = paste0(folds[1], "XULN"), x = log10(folds[1]), y = log10(90)) +
+  annotate("text", label = paste0(folds[2], "XULN"), x = log10(85), y = log10(folds[2])) +
   annotate("text", label = text[1], x = log10(0.2), y = log10(0.12)) +
   annotate("text", label = text[2], x = log10(0.2), y = log10(80)) +
   annotate("text", label = text[3], x = log10(40), y = log10(80)) +
   annotate("text", label = text[4], x = log10(40), y = log10(0.12)) +
-  geom_point(aes(x = log10(.data[[term_selected[1]]]), y = log10(.data[[term_selected[2]]]), shape=arm, color = arm)) +
+  geom_point(aes(x = log10(.data[[term_selected[1]]]),
+                 y = log10(.data[[term_selected[2]]]),
+                 shape = arm,
+                 color = arm)) +
   scale_shape_manual(values = c(1:length(unique(arm))))
 
 g <- ggplotGrob(p)
