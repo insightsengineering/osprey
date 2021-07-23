@@ -103,5 +103,13 @@ scale_x_continuous(
   geom_point(aes(x = log10(.data[[term_selected[1]]]), y = log10(.data[[term_selected[2]]]), shape=arm, color = arm)) +
   scale_shape_manual(values = c(1:3))
 
-p
+g0 <- ggplotGrob(p)
+#g1 <- gtable_add_cols(g0, sum(tb$widths), 0)
+#g <- gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
+
+g <- g0
+
+grid.newpage()
+grid.draw(g)
+invisible(g)
 }
