@@ -9,6 +9,8 @@ library(tidyr)
 anrhi <- data.frame(ANRHI = c(50,50), PARAMCD = c("ALT","CRP"))
 
 adsl <- radsl(N=30)
+arm <- adsl %>%
+  select(USUBJID,ARM)
 adlb <- radlb(adsl) %>%
   filter(AVISITN>0 & PARAMCD %in% c("CRP","ALT")) %>%
   group_by(USUBJID,PARAMCD) %>%
@@ -16,10 +18,12 @@ adlb <- radlb(adsl) %>%
   slice(1) %>%
   left_join(anrhi) %>%
   mutate(ULN = MAX/ANRHI) %>%
-  pivot_wider(id_cols = USUBJID, names_from = PARAMCD, values_from = ULN)
+  pivot_wider(id_cols = USUBJID, names_from = PARAMCD, values_from = ULN) %>%
+  left_join(arm)
+
 
 p <- ggplot(data = adlb) +
-  
+
 scale_x_continuous(
     name = "Maximum Alanine Aminotransferase (/ULN)",
     breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
@@ -71,4 +75,6 @@ scale_x_continuous(
   annotate("text", label = "Hyperbilirubinemia", x = log10(0.2), y = log10(80)) +
   annotate("text", label = "Possible Hy's Law Range", x = log10(40), y = log10(80)) +
   annotate("text", label = "Normal Range", x = log10(0.2), y = log10(0.1)) +
-  annotate("text", label = "Temple's Corollary", x = log10(40), y = log10(0.1)) 
+  annotate("text", label = "Temple's Corollary", x = log10(40), y = log10(0.1)) +
+  geom_point(aes(x = log10(ALT), y = log10(CRP), shape=ARM, color = ARM)) +
+  scale_shape_manual(values = c(1:3))
