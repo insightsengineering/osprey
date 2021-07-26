@@ -75,9 +75,9 @@
 #'   term = adlb$PARAMCD,
 #'   aval = adlb$AVAL,
 #'   arm = adlb$ARM,
-#'   term_selected = c("ALT","CRP"),
+#'   term_selected = c("ALT", "CRP"),
 #'   anrhi = adlb$ANRHI,
-#'   folds = c(3,2),
+#'   folds = c(3, 2),
 #'   text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
 #'   caption = paste("Maximum values are those maximum values that occur",
 #'   "post-baseline (no time constraints and not necessarily concurrent events)."),
@@ -92,9 +92,9 @@
 #'   term = adlb$PARAMCD,
 #'   aval = adlb$AVAL,
 #'   arm = adlb$ARM,
-#'   term_selected = c("ALT","CRP"),
+#'   term_selected = c("ALT", "CRP"),
 #'   anrhi = adlb$ANRHI,
-#'   folds = c(10,15),
+#'   folds = c(10, 15),
 #'   text = c("Quadrant 1", "Quadrant 2", "Quadrant 3", "Quadrant 4"),
 #'   caption = paste("Maximum values are those maximum values that occur",
 #'   "post-baseline (no time constraints and not necessarily concurrent events)."),
@@ -124,7 +124,7 @@ g_hy_law <- function(id,
 
   assertthat::assert_that(all(required_vars %in% passed_vars),
                           msg = paste("missing arguments:",
-                                      paste(setdiff(required_vars,passed_vars), collapse = ", "),
+                                      paste(setdiff(required_vars, passed_vars), collapse = ", "),
                                       "must be specified"))
 
   assertthat::assert_that(is.character(term_selected) & length(term_selected) == 2,
@@ -136,7 +136,7 @@ g_hy_law <- function(id,
 
   character_vars <- c("title", "caption", "xlab", "ylab")
 
-  for (parameter in character_vars){
+  for (parameter in character_vars) {
     assertthat::assert_that(is.character(parameter) & length(parameter) == 1,
                             msg = paste("invalid argument:", parameter, "must be a string"))
   }
@@ -211,7 +211,7 @@ scale_x_continuous(
                  y = log10(.data[[term_selected[2]]]),
                  shape = arm,
                  color = arm)) +
-  scale_shape_manual(values = c(1:length(unique(arm))))
+  scale_shape_manual(values = c(1:n_distinct(arm)))
 
 g <- ggplotGrob(p)
 
