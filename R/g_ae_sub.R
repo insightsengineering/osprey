@@ -38,11 +38,11 @@
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #' library(grid)
 #'
-#' ADAE <- radae(cached = TRUE)
-#' ADSL <- radsl(cached = TRUE)
+#' ADAE <- synthetic_cdisc_data("latest")$adae
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
 #'
 #' id <- ADAE$USUBJID
 #' arm <- ADAE$ACTARMCD
@@ -548,3 +548,4 @@ g_ae_sub <- function(id,
   }
   invisible(ret)
 }
+
