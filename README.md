@@ -20,7 +20,13 @@ To access the stable version manual, select the latest version in the drop down 
 
 ```r
 devtools::install_github(
-  repo = "NEST/random.cdisc.data",
+  repo = "NEST/scda",
+  ref = "master",
+  host = "https://github.roche.com/api/v3",
+  upgrade_dependencies = FALSE
+)
+devtools::install_github(
+  repo = "NEST/scda.2021",
   ref = "master",
   host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
@@ -49,8 +55,15 @@ To access the development version manual, select `devel` in the drop down menu o
 
 ```r
 devtools::install_github(
-  repo = "NEST/random.cdisc.data",
-  ref = "master",
+  repo = "NEST/scda",
+  ref = "devel",
+  host = "https://github.roche.com/api/v3",
+  upgrade_dependencies = FALSE
+)
+
+devtools::install_github(
+  repo = "NEST/scda.2021",
+  ref = "devel",
   host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
 )
@@ -94,7 +107,7 @@ To qualify to `osprey` package, TLG code has to:
 ### Instructions
 
 For this to work you need to have access to libraries `pkgdown` and
-`random.cdisc.data`. Please start by watching the following video:
+`scda`. Please start by watching the following video:
 
 * [Add a TLG function to the osprey R
 package](https://streamingmedia.roche.com/media/Adding+TLG+functions+to+the+Osprey+R+package/1_4newkk7i)

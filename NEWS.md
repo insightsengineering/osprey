@@ -1,6 +1,7 @@
 # osprey 0.1.10.9000
 
 * Fixed the `sort_by` issue in `g_butterfly`.
+* Update example and tests using `scda` synthetic data to replace `random.cdisc.data`.
 
 # osprey 0.1.10
 
