@@ -127,8 +127,8 @@ grid.newpage()
 # Example 3: preprocess data to only include treatment and control arm patients
 trt <- "ARM A"
 ref <- "ARM C"
-ADAE <- radae(cached = TRUE)
-ADSL <- radsl(cached = TRUE) \%>\%
+ADAE <- synthetic_cdisc_data("latest")$adae
+ADSL <- synthetic_cdisc_data("latest")$adsl \%>\%
   filter(ACTARMCD \%in\% c(trt, ref))
 id <- ADAE$USUBJID
 arm <- ADAE$ACTARMCD
