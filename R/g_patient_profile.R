@@ -919,4 +919,3 @@ domain_check <- function(domain, name) {
   }
   return(select)
 }
-
