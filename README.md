@@ -25,6 +25,12 @@ devtools::install_github(
   host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
 )
+devtools::install_github(
+  repo = "NEST/scda.2021",
+  ref = "master",
+  host = "https://github.roche.com/api/v3",
+  upgrade_dependencies = FALSE
+)
 
 devtools::install_github("Roche/rtables")
 
@@ -50,6 +56,13 @@ To access the development version manual, select `devel` in the drop down menu o
 ```r
 devtools::install_github(
   repo = "NEST/scda",
+  ref = "devel",
+  host = "https://github.roche.com/api/v3",
+  upgrade_dependencies = FALSE
+)
+
+devtools::install_github(
+  repo = "NEST/scda.2021",
   ref = "devel",
   host = "https://github.roche.com/api/v3",
   upgrade_dependencies = FALSE
