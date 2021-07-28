@@ -19,6 +19,7 @@ Depends:
   dplyr (>= 0.8.0),
   ggplot2 (>= 2.0.0)
 Imports:
+  assertthat,
   DescTools,
   purrr,
   cowplot,

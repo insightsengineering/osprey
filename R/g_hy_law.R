@@ -1,8 +1,28 @@
 #' Hy's Law Plot
 #'
+#' A scatter plot typically used to display maximum total bilirubin values (TBL) versus
+#' maximum alanine transaminase (ALT) values.
+#'
+#' @param id unique subject identifier.
+#' @param term the term of the observation.
+#' @param aval analysis value.
+#' @param arm treatment arm. Used as fill color in the plot.
+#' @param term_selected string vector of length 2 - the two terms selected to be used in the plot. First value
+#' corresponds to parameter plotted on the x-axis. Second value corresponds to that plotted on the y-axis.
+#' @param anrhi the high limit of normal range.
+#' @param folds numeric vector of length two. Indicates the position of the reference lines to be drawn.
+#' Default `c(3,2)` corresponds to a line at position 3 on the x-axis and 2 on the y-axis.
+#' @param text string vector of length four with the labele to be shown on each quadrant.
+#' First value corresponds to label shown in the bottom left quadrant. Subsequent values move through
+#' the graph clockwise.
+#' @param caption string of text for footnote. Details of methodology can be shown here.
+#' @param title string of text for plot title.
+#' @param x_lab string of text for x axis label.
+#' @param y_lab string of text for y axis label.
+#'
+#' @details
 #' This graphic is based upon the eDISH (evaluation of Drug Induced Serious Hepatotoxicity)
-#' plot of Watkins et al in a 2008 publication from Hepatology. Maximum total bilirubin values
-#' (TBL) are plotted versus maximum alanine transaminase (ALT) values. Maximum values are
+#' plot of Watkins et al in a 2008 publication from Hepatology. Maximum values are
 #' defined as the maximum post-baseline value at any time during the entire length of the
 #' observation period. Both axes are in log scale to control for the dispersion of the data.
 #' The values are plotted in ‘times upper limit of normal’ where a value of 1 would mean that
@@ -11,41 +31,18 @@
 #' be read as ‘3 times the upper limit of normal’. Reference lines are included to determine
 #' various states, based upon clinical interpretation of the values and includes the following:
 #'
-#' Hyperbilirubinemia TBL at least 2 xULN and ALT less than 3 xULN
-#' Normal Range TBL <= 1 xULN and ALT <= 1xULN
-#' Temple’s Corollary TBL <= 1 xULN and ALT at least 3 xULN
-#' Possible Hy’s Law TBL at least 2 xULN and ALT at least 3 xULN
+#' * Hyperbilirubinemia TBL at least 2 xULN and ALT less than 3 xULN
+#' * Normal Range TBL <= 1 xULN and ALT <= 1xULN
+#' * Temple’s Corollary TBL <= 1 xULN and ALT at least 3 xULN
+#' * Possible Hy’s Law TBL at least 2 xULN and ALT at least 3 xULN
 #'
 #' This plot can easily be adjusted for other lab parameters and reference ranges as needed.
 #' Consultation with a clinical expert to determine which associations would be clinically
 #' meaningful and how to interpret those associations is recommended.
 #'
-#' @param id unique subject identifier variable. Usually it is USUBJID
-#' @param term the term of the observation. Usually it is PARAMCD
-#' @param aval the value corresponding to the observation
-#' @param arm the treatment ARM corresponding to the observation
-#' @param term_selected string vector of length 2 - the two terms selected to be drawn. First value
-#' corresponds to that plotted on the x-axis. Second value corresponds to that plotted on the y-axis
-#' @param anrhi the high limit of normal range.
-#' @param folds numeric vector of length 2 - the position of the lines to be drawn.
-#' Default = c(3,2) which corresponds to a line at position 3 on the x-axis and 2 on the y-axis.
-#' @param text string vector of length 4 - the text to be shown on four squares.
-#' First value corresponds to that shown in the bottom left quadrant. subsequent values move through
-#' the graph clockwise.
-#' Default = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary")
-#' @param caption string of text for footnote. Details of methodology can be shown here.
-#' Default = "Maximum values are those maximum values that occur post-baseline (no time constraints
-#' and not necessarily concurrent events)."
-#' @param title string of text for title, default
-#' Default = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase"
-#' @param x_lab string of text for x axis label
-#' Default = "Maximum Alanine Aminotransferase (/ULN)"
-#' @param y_lab string of text for y axis label
-#' Default = "Maximum Total Bilirubin (/ULN)"
+#' There is no equivalent STREAM output.
 #'
-#' @details there is no equivalent STREAM output
-#'
-#' @return ggplot object
+#' @return plot object
 #'
 #' @importFrom stringr str_wrap
 #' @importFrom rlang .data
@@ -60,8 +57,6 @@
 #'
 #' @examples
 #' library(random.cdisc.data)
-#' library(dplyr)
-#' library(tidyr)
 #'
 #' #Note: CRP is being used in place of Bilirubin here because this is the only available data
 #' #available in random.cdisc.data
@@ -112,44 +107,35 @@ g_hy_law <- function(id,
                      folds = c(3, 2),
                      text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
                      caption = paste("Maximum values are those maximum values that occur",
-                                     "post-baseline (no time constraints and not necessarily concurrent events)."),
+                                    "post-baseline (no time constraints and not necessarily concurrent events)."),
                      title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
                      xlab = "Maximum Alanine Aminotransferase (/ULN)",
                      ylab = "Maximum Total Bilirubin (/ULN)"
 ) {
 
-  required_vars <- c("id", "term", "aval", "arm", "term_selected", "anrhi")
-  passed_vars <- names(as.list(match.call())[-1])
-
-  assertthat::assert_that(all(required_vars %in% passed_vars),
-                          msg = paste("missing arguments:",
-                                      paste(setdiff(required_vars, passed_vars), collapse = ", "),
-                                      "must be specified"))
-
-  assertthat::assert_that(is.character(term_selected) & length(term_selected) == 2,
+  assert_that(is.character(term_selected) && length(term_selected) == 2,
                           msg = "invalid argument: term_selected must be a character array of length 2")
-  assertthat::assert_that(is.numeric(folds) & length(folds) == 2,
+  assert_that(is.numeric(folds) && length(folds) == 2,
                           msg = "invalid argument: folds must be a numeric array of length 2")
-  assertthat::assert_that(is.character(text) & length(text) == 4,
+  assert_that(is.character(text) && length(text) == 4,
                           msg = "invalid argument: text must be a character array of length 4")
 
   character_vars <- c("title", "caption", "xlab", "ylab")
 
   for (parameter in character_vars) {
-    assertthat::assert_that(is.character(parameter) & length(parameter) == 1,
+    assert_that(is.character(parameter) && length(parameter) == 1,
                             msg = paste("invalid argument:", parameter, "must be a string"))
   }
-
 
   anl <- data.frame(id, term, aval, arm, anrhi)
 
   anl <- anl %>%
-    filter(term %in% term_selected) %>%
-    group_by(id, term) %>%
-    mutate(MAX = max(aval)) %>%
-    slice(1) %>%
-    mutate(ULN = MAX / anrhi) %>%
-    pivot_wider(id_cols = c(id, arm), names_from = term, values_from = ULN)
+    dplyr::filter(term %in% term_selected) %>%
+    dplyr::group_by(id, term) %>%
+    dplyr::mutate(MAX = max(aval)) %>%
+    dplyr::slice(1) %>%
+    dplyr::mutate(ULN = MAX / anrhi) %>%
+    tidyr::pivot_wider(id_cols = c(id, arm), names_from = term, values_from = ULN)
 
   p <- ggplot(data = anl) +
 
