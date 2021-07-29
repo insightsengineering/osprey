@@ -69,13 +69,13 @@
 #' @export
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #' library(utils.nest)
 #' library(tern)
 #' library(dplyr)
 #'
 #' # ADSL
-#' rADSL <- radsl(cached = TRUE)
+#' rADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADSL <-  rADSL %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(
@@ -87,7 +87,7 @@
 #'
 #'
 #' # Example 1 Exposure "ADEX"
-#' rADEX <- radex(cached = TRUE)
+#' rADEX <- synthetic_cdisc_data("latest")$adex
 #' ADEX <- rADEX %>%
 #'   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 #' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
@@ -136,7 +136,7 @@
 #' # If AENDY and ASTDY occur on the same day only AENDY will be shown.
 #'
 #' # Adverse Event ADAE
-#' rADAE <- radae(cached = TRUE)
+#' rADAE <- synthetic_cdisc_data("latest")$adae
 #' ADAE <- rADAE %>%
 #'   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 #' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
@@ -173,7 +173,7 @@
 #' p2
 #'
 #' # Example 3 Tumor Response "ADRS"
-#' rADRS <- radrs(cached = TRUE)
+#' rADRS <- synthetic_cdisc_data("latest")$adrs
 #' ADRS <- rADRS %>%
 #'   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
@@ -209,7 +209,7 @@
 #' p3
 #'
 #' # Example 4 Concomitant Med "ADCM"
-#' rADCM <- radcm(cached = TRUE)
+#' rADCM <- synthetic_cdisc_data("latest")$adcm
 #' ADCM <- rADCM %>%
 #'   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 #' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
@@ -233,7 +233,7 @@
 #' p4
 #'
 #' # Example 5 Laboratory "ADLB"
-#' rADLB <- radlb(cached = TRUE)
+#' rADLB <- synthetic_cdisc_data("latest")$adlb
 #' ADLB <- rADLB %>%
 #'   select(
 #'     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE,
@@ -588,13 +588,13 @@ patient_domain_profile <- function(domain = NULL,
 #' @seealso \code{\link{patient_domain_profile}}
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #' library(utils.nest)
 #' library(tern)
 #' library(dplyr)
 #'
 #' # ADSL
-#' rADSL <- radsl(cached = TRUE)
+#' rADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADSL <-  rADSL %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(
@@ -605,7 +605,7 @@ patient_domain_profile <- function(domain = NULL,
 #'   filter(USUBJID == rADSL$USUBJID[1])
 #'
 #' # ADEX
-#' rADEX <- radex(cached = TRUE)
+#' rADEX <- synthetic_cdisc_data("latest")$adex
 #' ADEX <- rADEX %>%
 #'         select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 #' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
@@ -623,25 +623,25 @@ patient_domain_profile <- function(domain = NULL,
 #'       as.Date(TRTSDT) + 1))
 #'
 #' # ADAE
-#' rADAE <- radae(cached = TRUE)
+#' rADAE <- synthetic_cdisc_data("latest")$adae
 #' ADAE <- rADAE %>%
 #'         select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 #' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADRS
-#' rADRS <- radrs(cached = TRUE)
+#' rADRS <- synthetic_cdisc_data("latest")$adrs
 #' ADRS <- rADRS %>%
 #'         select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADCM
-#' rADCM <- radcm(cached = TRUE)
+#' rADCM <- synthetic_cdisc_data("latest")$adcm
 #' ADCM <- rADCM %>%
 #'         select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 #' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADLB
-#' rADLB <- radlb(cached = TRUE)
+#' rADLB <- synthetic_cdisc_data("latest")$adlb
 #' ADLB <- rADLB %>%
 #'         select(
 #'           USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
