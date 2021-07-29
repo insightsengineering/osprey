@@ -47,13 +47,13 @@
 #' @author Molly He (hey59) \email{hey59@gene.com}
 #'
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #' library(rtables)
 #' library(dplyr)
 #' library(grid)
 #'
-#' ADSL <- radsl(cached = TRUE)
-#' ADAE <- radae(cached = TRUE)
+#' ADSL <- synthetic_cdisc_data("latest")$adsl
+#' ADAE <- synthetic_cdisc_data("latest")$adae
 #'
 #' # add additional dummy causality flags
 #' ADAE <- ADAE %>%
@@ -451,11 +451,11 @@ g_events_term_id <- function(term,
 #' @details in this function, all flags are expressions calls, for simpler usage.
 #' @export
 #' @examples
-#' library(random.cdisc.data)
+#' library(scda)
 #' library(rtables)
 #' library(dplyr)
 #'
-#' ADAE <- radae(cached = TRUE)
+#' ADAE <- synthetic_cdisc_data("latest")$adae
 #'
 #' # add additional dummy causality flags
 #' ADAE <- ADAE %>%

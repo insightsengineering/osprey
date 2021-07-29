@@ -56,11 +56,11 @@ create AE overview flags
 in this function, all flags are expressions calls, for simpler usage.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 library(rtables)
 library(dplyr)
 
-ADAE <- radae(cached = TRUE)
+ADAE <- synthetic_cdisc_data("latest")$adae
 
 # add additional dummy causality flags
 ADAE <- ADAE \%>\%
