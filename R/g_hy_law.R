@@ -1,44 +1,50 @@
 #' Hy's Law Plot
 #'
-#' A scatter plot typically used to display maximum total bilirubin values (TBL) versus
-#' maximum alanine transaminase (ALT) values.
+#' A scatter plot typically used to display maximum total bilirubin values (TBL)
+#' versus maximum alanine transaminase (ALT) values.
 #'
 #' @param id unique subject identifier.
 #' @param term the term of the observation.
 #' @param aval analysis value.
 #' @param arm treatment arm. Used as fill color in the plot.
-#' @param term_selected string vector of length 2 - the two terms selected to be used in the plot. First value
-#' corresponds to parameter plotted on the x-axis. Second value corresponds to that plotted on the y-axis.
+#' @param term_selected string vector of length 2 - the two terms selected to be
+#'   used in the plot. First value corresponds to parameter plotted on the
+#'   x-axis. Second value corresponds to that plotted on the y-axis.
 #' @param anrhi the high limit of normal range.
-#' @param folds numeric vector of length two. Indicates the position of the reference lines to be drawn.
-#' Default `c(3,2)` corresponds to a line at position 3 on the x-axis and 2 on the y-axis.
-#' @param text string vector of length four with the labele to be shown on each quadrant.
-#' First value corresponds to label shown in the bottom left quadrant. Subsequent values move through
-#' the graph clockwise.
-#' @param caption string of text for footnote. Details of methodology can be shown here.
+#' @param folds numeric vector of length two. Indicates the position of the
+#'   reference lines to be drawn. Default `c(3,2)` corresponds to a line at
+#'   position 3 on the x-axis and 2 on the y-axis.
+#' @param text string vector of length four with the labele to be shown on each
+#'   quadrant. First value corresponds to label shown in the bottom left
+#'   quadrant. Subsequent values move through the graph clockwise.
+#' @param caption string of text for footnote. Details of methodology can be
+#'   shown here.
 #' @param title string of text for plot title.
 #' @param x_lab string of text for x axis label.
 #' @param y_lab string of text for y axis label.
 #'
 #' @details
-#' This graphic is based upon the eDISH (evaluation of Drug Induced Serious Hepatotoxicity)
-#' plot of Watkins et al in a 2008 publication from Hepatology. Maximum values are
-#' defined as the maximum post-baseline value at any time during the entire length of the
-#' observation period. Both axes are in log scale to control for the dispersion of the data.
-#' The values are plotted in ‘times upper limit of normal’ where a value of 1 would mean that
-#' the result was normal. Any value above or below 1 would be considered above the upper limit
-#' or normal or below the upper limit of normal respectively. For instance, a value of 3 would
-#' be read as ‘3 times the upper limit of normal’. Reference lines are included to determine
-#' various states, based upon clinical interpretation of the values and includes the following:
+#' This graphic is based upon the eDISH (evaluation of Drug Induced Serious
+#' Hepatotoxicity) plot of Watkins et al in a 2008 publication from Hepatology.
+#' Maximum values are defined as the maximum post-baseline value at any time
+#' during the entire length of the observation period. Both axes are in log
+#' scale to control for the dispersion of the data. The values are plotted in
+#' ‘times upper limit of normal’ where a value of 1 would mean that the result
+#' was normal. Any value above or below 1 would be considered above the upper
+#' limit or normal or below the upper limit of normal respectively. For
+#' instance, a value of 3 would be read as ‘3 times the upper limit of normal’.
+#' Reference lines are included to determine various states, based upon clinical
+#' interpretation of the values and includes the following:
 #'
 #' * Hyperbilirubinemia TBL at least 2 xULN and ALT less than 3 xULN
 #' * Normal Range TBL <= 1 xULN and ALT <= 1xULN
 #' * Temple’s Corollary TBL <= 1 xULN and ALT at least 3 xULN
 #' * Possible Hy’s Law TBL at least 2 xULN and ALT at least 3 xULN
 #'
-#' This plot can easily be adjusted for other lab parameters and reference ranges as needed.
-#' Consultation with a clinical expert to determine which associations would be clinically
-#' meaningful and how to interpret those associations is recommended.
+#' This plot can easily be adjusted for other lab parameters and reference
+#' ranges as needed. Consultation with a clinical expert to determine which
+#' associations would be clinically meaningful and how to interpret those
+#' associations is recommended.
 #'
 #' There is no equivalent STREAM output.
 #'
@@ -58,8 +64,8 @@
 #' @examples
 #' library(random.cdisc.data)
 #'
-#' #Note: CRP is being used in place of Bilirubin here because this is the only available data
-#' #available in random.cdisc.data
+#' # Note: CRP is being used in place of Bilirubin here because this is the only available data
+#' # available in random.cdisc.data
 #' adsl <- radsl(N=30)
 #' adlb <- radlb(adsl) %>% mutate(ANRHI = 50)
 #'
@@ -113,12 +119,18 @@ g_hy_law <- function(id,
                      ylab = "Maximum Total Bilirubin (/ULN)"
 ) {
 
-  assert_that(is.character(term_selected) && length(term_selected) == 2, msg = "invalid argument: term_selected must b
-              e a character array of length 2")
-  assert_that(is.numeric(folds) && length(folds) == 2, msg = "invalid argument: folds must be a numeric array of length
-              2")
-  assert_that(is.character(text) && length(text) == 4, msg = "invalid argument: text must be a character array of length
-              4")
+  assert_that(
+    is.character(term_selected) && length(term_selected) == 2,
+    msg = "invalid argument: term_selected must be a character array of length 2"
+  )
+  assert_that(
+    is.numeric(folds) && length(folds) == 2,
+    msg = "invalid argument: folds must be a numeric array of length 2"
+  )
+  assert_that(
+    is.character(text) && length(text) == 4,
+    msg = "invalid argument: text must be a character array of length 4"
+  )
 
   character_vars <- c("title", "caption", "xlab", "ylab")
 
@@ -138,47 +150,49 @@ g_hy_law <- function(id,
     tidyr::pivot_wider(id_cols = c(id, arm), names_from = term, values_from = ULN)
 
   p <- ggplot(data = anl) +
-
-    scale_x_continuous(name = xlab,
-                       breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
-                       limits = c(-1, 2),
-                       labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
-                       expand = c(0.01, 0.01)
+    scale_x_continuous(
+      name = xlab,
+      breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
+      limits = c(-1, 2),
+      labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
+      expand = c(0.01, 0.01)
     ) +
-    scale_y_continuous(name = ylab,
-                       breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
-                       limits = c(-1, 2),
-                       labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
-                       expand = c(0.01, 0.01)
+    scale_y_continuous(
+      name = ylab,
+      breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
+      limits = c(-1, 2),
+      labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
+      expand = c(0.01, 0.01)
     ) +
-
-    labs(title = title,
-         caption = caption) +
-
+    labs(title = title, caption = caption) +
     theme_bw(base_size = 14, base_family = "Arial") +
-
-    theme(plot.title = element_text(hjust = 0.5),
-          plot.title.position = "plot",
-          plot.caption = element_text(hjust = 0),
-          plot.caption.position = "plot",
-          legend.title = element_blank(),
-          panel.grid = element_blank()) +
-
-    geom_segment(aes(x = log10(folds[1]), y = log10(0), xend = log10(folds[1]), yend = log10(75)),
-                 size = 0.25,
-                 color = "grey"
+    theme(
+      plot.title = element_text(hjust = 0.5),
+      plot.title.position = "plot",
+      plot.caption = element_text(hjust = 0),
+      plot.caption.position = "plot",
+      legend.title = element_blank(),
+      panel.grid = element_blank()
     ) +
-    geom_segment(aes(x = log10(0), y = log10(folds[2]), xend = log10(65), yend = log10(folds[2])),
-                 size = 0.25,
-                 color = "grey"
+    geom_segment(
+      aes(x = log10(folds[1]), y = log10(0), xend = log10(folds[1]), yend = log10(75)),
+      size = 0.25,
+      color = "grey"
     ) +
-    geom_segment(aes(x = log10(1), y = log10(0), xend = log10(1), yend = log10(1)),
-                 size = 0.25,
-                 color = "black"
+    geom_segment(
+      aes(x = log10(0), y = log10(folds[2]), xend = log10(65), yend = log10(folds[2])),
+      size = 0.25,
+      color = "grey"
     ) +
-    geom_segment(aes(x = log10(0), y = log10(1), xend = log10(1), yend = log10(1)),
-                 size = 0.25,
-                 color = "black"
+    geom_segment(
+      aes(x = log10(1), y = log10(0), xend = log10(1), yend = log10(1)),
+      size = 0.25,
+      color = "black"
+    ) +
+    geom_segment(
+      aes(x = log10(0), y = log10(1), xend = log10(1), yend = log10(1)),
+      size = 0.25,
+      color = "black"
     ) +
     annotate("text", label = paste0(folds[1], "XULN"), x = log10(folds[1]), y = log10(90)) +
     annotate("text", label = paste0(folds[2], "XULN"), x = log10(85), y = log10(folds[2])) +
