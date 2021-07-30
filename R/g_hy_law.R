@@ -106,25 +106,25 @@ g_hy_law <- function(id,
                      anrhi,
                      folds = c(3, 2),
                      text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
-                     caption = paste("Maximum values are those maximum values that occur",
-                                    "post-baseline (no time constraints and not necessarily concurrent events)."),
+                     caption = paste("Maximum values are those maximum values that occur", "post-baseline (no time
+                                     constraints and not necessarily concurrent events)."),
                      title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
                      xlab = "Maximum Alanine Aminotransferase (/ULN)",
                      ylab = "Maximum Total Bilirubin (/ULN)"
 ) {
 
-  assert_that(is.character(term_selected) && length(term_selected) == 2,
-                          msg = "invalid argument: term_selected must be a character array of length 2")
-  assert_that(is.numeric(folds) && length(folds) == 2,
-                          msg = "invalid argument: folds must be a numeric array of length 2")
-  assert_that(is.character(text) && length(text) == 4,
-                          msg = "invalid argument: text must be a character array of length 4")
+  assert_that(is.character(term_selected) && length(term_selected) == 2, msg = "invalid argument: term_selected must b
+              e a character array of length 2")
+  assert_that(is.numeric(folds) && length(folds) == 2, msg = "invalid argument: folds must be a numeric array of length
+              2")
+  assert_that(is.character(text) && length(text) == 4, msg = "invalid argument: text must be a character array of length
+              4")
 
   character_vars <- c("title", "caption", "xlab", "ylab")
 
   for (parameter in character_vars) {
     assert_that(is.character(parameter) && length(parameter) == 1,
-                            msg = paste("invalid argument:", parameter, "must be a string"))
+                msg = paste("invalid argument:", parameter, "must be a string"))
   }
 
   anl <- data.frame(id, term, aval, arm, anrhi)
@@ -140,16 +140,16 @@ g_hy_law <- function(id,
   p <- ggplot(data = anl) +
 
     scale_x_continuous(name = xlab,
-      breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
-      limits = c(-1, 2),
-      labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
-      expand = c(0.01, 0.01)
+                       breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
+                       limits = c(-1, 2),
+                       labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
+                       expand = c(0.01, 0.01)
     ) +
     scale_y_continuous(name = ylab,
-      breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
-      limits = c(-1, 2),
-      labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
-      expand = c(0.01, 0.01)
+                       breaks = log10(c(seq(0.1, 1, 0.1), seq(2, 10, 1), seq(20, 100, 10))),
+                       limits = c(-1, 2),
+                       labels = c(0.1, rep(" ", 8), 1, rep(" ", 8), 10, rep(" ", 8), 100),
+                       expand = c(0.01, 0.01)
     ) +
 
     labs(title = title,
@@ -165,20 +165,20 @@ g_hy_law <- function(id,
           panel.grid = element_blank()) +
 
     geom_segment(aes(x = log10(folds[1]), y = log10(0), xend = log10(folds[1]), yend = log10(75)),
-      size = 0.25,
-      color = "grey"
+                 size = 0.25,
+                 color = "grey"
     ) +
     geom_segment(aes(x = log10(0), y = log10(folds[2]), xend = log10(65), yend = log10(folds[2])),
-      size = 0.25,
-      color = "grey"
+                 size = 0.25,
+                 color = "grey"
     ) +
     geom_segment(aes(x = log10(1), y = log10(0), xend = log10(1), yend = log10(1)),
-      size = 0.25,
-      color = "black"
+                 size = 0.25,
+                 color = "black"
     ) +
     geom_segment(aes(x = log10(0), y = log10(1), xend = log10(1), yend = log10(1)),
-      size = 0.25,
-      color = "black"
+                 size = 0.25,
+                 color = "black"
     ) +
     annotate("text", label = paste0(folds[1], "XULN"), x = log10(folds[1]), y = log10(90)) +
     annotate("text", label = paste0(folds[2], "XULN"), x = log10(85), y = log10(folds[2])) +

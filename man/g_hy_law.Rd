@@ -15,7 +15,7 @@ g_hy_law(
   text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range",
     "Temple's Corollary"),
   caption = paste("Maximum values are those maximum values that occur",
-    "post-baseline (no time constraints and not necessarily concurrent events)."),
+    "post-baseline (no time\\n                                     constraints and not necessarily concurrent events)."),
  
     title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
