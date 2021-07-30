@@ -15,7 +15,7 @@ g_hy_law(
   text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range",
     "Temple's Corollary"),
   caption = paste("Maximum values are those maximum values that occur",
-    "post-baseline (no time\\n                                     constraints and not necessarily concurrent events)."),
+    "post-baseline (no time constraints and not necessarily concurrent events)."),
  
     title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
@@ -31,19 +31,22 @@ g_hy_law(
 
 \item{arm}{treatment arm. Used as fill color in the plot.}
 
-\item{term_selected}{string vector of length 2 - the two terms selected to be used in the plot. First value
-corresponds to parameter plotted on the x-axis. Second value corresponds to that plotted on the y-axis.}
+\item{term_selected}{string vector of length 2 - the two terms selected to be
+used in the plot. First value corresponds to parameter plotted on the
+x-axis. Second value corresponds to that plotted on the y-axis.}
 
 \item{anrhi}{the high limit of normal range.}
 
-\item{folds}{numeric vector of length two. Indicates the position of the reference lines to be drawn.
-Default `c(3,2)` corresponds to a line at position 3 on the x-axis and 2 on the y-axis.}
+\item{folds}{numeric vector of length two. Indicates the position of the
+reference lines to be drawn. Default c(3, 2) corresponds to a line at
+position 3 on the x-axis and 2 on the y-axis.}
 
-\item{text}{string vector of length four with the labele to be shown on each quadrant.
-First value corresponds to label shown in the bottom left quadrant. Subsequent values move through
-the graph clockwise.}
+\item{text}{string vector of length four with the label to be shown on each
+quadrant. First value corresponds to label shown in the bottom left
+quadrant. Subsequent values move through the graph clockwise.}
 
-\item{caption}{string of text for footnote. Details of methodology can be shown here.}
+\item{caption}{string of text for footnote. Details of methodology can be
+shown here.}
 
 \item{title}{string of text for plot title.}
 
@@ -55,36 +58,39 @@ the graph clockwise.}
 plot object
 }
 \description{
-A scatter plot typically used to display maximum total bilirubin values (TBL) versus
-maximum alanine transaminase (ALT) values.
+A scatter plot typically used to display maximum total bilirubin values (TBL)
+versus maximum alanine transaminase (ALT) values.
 }
 \details{
-This graphic is based upon the eDISH (evaluation of Drug Induced Serious Hepatotoxicity)
-plot of Watkins et al in a 2008 publication from Hepatology. Maximum values are
-defined as the maximum post-baseline value at any time during the entire length of the
-observation period. Both axes are in log scale to control for the dispersion of the data.
-The values are plotted in ‘times upper limit of normal’ where a value of 1 would mean that
-the result was normal. Any value above or below 1 would be considered above the upper limit
-or normal or below the upper limit of normal respectively. For instance, a value of 3 would
-be read as ‘3 times the upper limit of normal’. Reference lines are included to determine
-various states, based upon clinical interpretation of the values and includes the following:
+This graphic is based upon the eDISH (evaluation of Drug Induced Serious
+Hepatotoxicity) plot of Watkins et. al. in a 2008 publication from Hepatology.
+Maximum values are defined as the maximum post-baseline value at any time
+during the entire length of the observation period. Both axes are in log
+scale to control for the dispersion of the data. The values are plotted in
+'times upper limit of normal' where a value of 1 would mean that the result
+was normal. Any value above or below 1 would be considered above the upper
+limit or normal or below the upper limit of normal respectively. For
+instance, a value of 3 would be read as '3 times the upper limit of normal'.
+Reference lines are included to determine various states, based upon clinical
+interpretation of the values and includes the following:
 
 * Hyperbilirubinemia TBL at least 2 xULN and ALT less than 3 xULN
 * Normal Range TBL <= 1 xULN and ALT <= 1xULN
 * Temple’s Corollary TBL <= 1 xULN and ALT at least 3 xULN
-* Possible Hy’s Law TBL at least 2 xULN and ALT at least 3 xULN
+* Possible Hy's Law TBL at least 2 xULN and ALT at least 3 xULN
 
-This plot can easily be adjusted for other lab parameters and reference ranges as needed.
-Consultation with a clinical expert to determine which associations would be clinically
-meaningful and how to interpret those associations is recommended.
+This plot can easily be adjusted for other lab parameters and reference
+ranges as needed. Consultation with a clinical expert to determine which
+associations would be clinically meaningful and how to interpret those
+associations is recommended.
 
 There is no equivalent STREAM output.
 }
 \examples{
 library(random.cdisc.data)
 
-#Note: CRP is being used in place of Bilirubin here because this is the only available data
-#available in random.cdisc.data
+# Note: CRP is being used in place of Bilirubin here because this is the only available data
+# available in random.cdisc.data
 adsl <- radsl(N=30)
 adlb <- radlb(adsl) \%>\% mutate(ANRHI = 50)
 

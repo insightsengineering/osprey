@@ -12,9 +12,9 @@
 #'   x-axis. Second value corresponds to that plotted on the y-axis.
 #' @param anrhi the high limit of normal range.
 #' @param folds numeric vector of length two. Indicates the position of the
-#'   reference lines to be drawn. Default `c(3,2)` corresponds to a line at
+#'   reference lines to be drawn. Default c(3, 2) corresponds to a line at
 #'   position 3 on the x-axis and 2 on the y-axis.
-#' @param text string vector of length four with the labele to be shown on each
+#' @param text string vector of length four with the label to be shown on each
 #'   quadrant. First value corresponds to label shown in the bottom left
 #'   quadrant. Subsequent values move through the graph clockwise.
 #' @param caption string of text for footnote. Details of methodology can be
@@ -25,21 +25,21 @@
 #'
 #' @details
 #' This graphic is based upon the eDISH (evaluation of Drug Induced Serious
-#' Hepatotoxicity) plot of Watkins et al in a 2008 publication from Hepatology.
+#' Hepatotoxicity) plot of Watkins et. al. in a 2008 publication from Hepatology.
 #' Maximum values are defined as the maximum post-baseline value at any time
 #' during the entire length of the observation period. Both axes are in log
 #' scale to control for the dispersion of the data. The values are plotted in
-#' ‘times upper limit of normal’ where a value of 1 would mean that the result
+#' 'times upper limit of normal' where a value of 1 would mean that the result
 #' was normal. Any value above or below 1 would be considered above the upper
 #' limit or normal or below the upper limit of normal respectively. For
-#' instance, a value of 3 would be read as ‘3 times the upper limit of normal’.
+#' instance, a value of 3 would be read as '3 times the upper limit of normal'.
 #' Reference lines are included to determine various states, based upon clinical
 #' interpretation of the values and includes the following:
 #'
 #' * Hyperbilirubinemia TBL at least 2 xULN and ALT less than 3 xULN
 #' * Normal Range TBL <= 1 xULN and ALT <= 1xULN
 #' * Temple’s Corollary TBL <= 1 xULN and ALT at least 3 xULN
-#' * Possible Hy’s Law TBL at least 2 xULN and ALT at least 3 xULN
+#' * Possible Hy's Law TBL at least 2 xULN and ALT at least 3 xULN
 #'
 #' This plot can easily be adjusted for other lab parameters and reference
 #' ranges as needed. Consultation with a clinical expert to determine which
@@ -112,8 +112,8 @@ g_hy_law <- function(id,
                      anrhi,
                      folds = c(3, 2),
                      text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
-                     caption = paste("Maximum values are those maximum values that occur", "post-baseline (no time
-                                     constraints and not necessarily concurrent events)."),
+                     caption = paste("Maximum values are those maximum values that occur",
+                                     "post-baseline (no time constraints and not necessarily concurrent events)."),
                      title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
                      xlab = "Maximum Alanine Aminotransferase (/ULN)",
                      ylab = "Maximum Total Bilirubin (/ULN)"
@@ -203,11 +203,8 @@ g_hy_law <- function(id,
     geom_point(aes(x = log10(.data[[term_selected[1]]]),
                    y = log10(.data[[term_selected[2]]]),
                    shape = arm,
-                   color = arm)) +
-    scale_shape_manual(values = c(1:n_distinct(arm)))
-
-  g <- ggplotGrob(p)
-
+                   color = arm)) + scale_shape_manual(values = c(1:n_distinct(arm)))
+  g <- ggplotGrob(p) # nolint
   grid.newpage()
   grid.draw(g)
   invisible(g)
