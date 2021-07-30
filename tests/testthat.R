@@ -1,4 +1,4 @@
 library(testthat)
-library(random.cdisc.data) # nolint
+library(scda) # nolint
 
 test_check("osprey")

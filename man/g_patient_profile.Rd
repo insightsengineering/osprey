@@ -76,13 +76,13 @@ function assembles all requested domain plots into one patient profile.
 The plot output will not include domains with data unspecified
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
 library(utils.nest)
 library(tern)
 library(dplyr)
 
 # ADSL
-rADSL <- radsl(cached = TRUE)
+rADSL <- synthetic_cdisc_data("latest")$adsl
 ADSL <-  rADSL \%>\%
   group_by(USUBJID) \%>\%
   mutate(
@@ -93,7 +93,7 @@ ADSL <-  rADSL \%>\%
   filter(USUBJID == rADSL$USUBJID[1])
 
 # ADEX
-rADEX <- radex(cached = TRUE)
+rADEX <- synthetic_cdisc_data("latest")$adex
 ADEX <- rADEX \%>\%
         select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
@@ -111,25 +111,25 @@ ADEX <- ADEX \%>\%
       as.Date(TRTSDT) + 1))
 
 # ADAE
-rADAE <- radae(cached = TRUE)
+rADAE <- synthetic_cdisc_data("latest")$adae
 ADAE <- rADAE \%>\%
         select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
 # ADRS
-rADRS <- radrs(cached = TRUE)
+rADRS <- synthetic_cdisc_data("latest")$adrs
 ADRS <- rADRS \%>\%
         select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 
 # ADCM
-rADCM <- radcm(cached = TRUE)
+rADCM <- synthetic_cdisc_data("latest")$adcm
 ADCM <- rADCM \%>\%
         select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 
 # ADLB
-rADLB <- radlb(cached = TRUE)
+rADLB <- synthetic_cdisc_data("latest")$adlb
 ADLB <- rADLB \%>\%
         select(
           USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
