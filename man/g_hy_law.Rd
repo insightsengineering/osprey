@@ -16,8 +16,7 @@ g_hy_law(
     "Temple's Corollary"),
   caption = paste("Maximum values are those maximum values that occur post-baseline",
     "(no time constraints and not necessarily concurrent events)."),
- 
-    title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
+  title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
   ylab = "Maximum Total Bilirubin (/ULN)"
 )
@@ -87,12 +86,14 @@ associations is recommended.
 There is no equivalent STREAM output.
 }
 \examples{
-library(random.cdisc.data)
+library(scda)
+library(dplyr)
 
 # Note: CRP is being used in place of Bilirubin here because this is the only available data
-# available in random.cdisc.data
-adsl <- radsl(N=30)
-adlb <- radlb(adsl) \%>\% mutate(ANRHI = 50)
+# available in SCDA
+latest_dfs <- synthetic_cdisc_data("latest")
+adsl <- latest_dfs[["adsl"]]
+adlb <- latest_dfs[["adlb"]] \%>\% mutate(ANRHI = 50)
 
 # Example 1, - Hy's law template (3 and 2 X ULN)
 g_hy_law(
@@ -106,7 +107,7 @@ g_hy_law(
   text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
   caption = paste("Maximum values are those maximum values that occur",
   "post-baseline (no time constraints and not necessarily concurrent events)."),
-  title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
+  title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
   ylab = "Maximum Total Bilirubin (/ULN)"
 )
@@ -123,7 +124,7 @@ g_hy_law(
   text = c("Quadrant 1", "Quadrant 2", "Quadrant 3", "Quadrant 4"),
   caption = paste("Maximum values are those maximum values that occur",
   "post-baseline (no time constraints and not necessarily concurrent events)."),
-  title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
+  title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
   ylab = "Maximum Total Bilirubin (/ULN)"
 )
