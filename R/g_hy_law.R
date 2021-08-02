@@ -20,8 +20,8 @@
 #' @param caption string of text for footnote. Details of methodology can be
 #'   shown here.
 #' @param title string of text for plot title.
-#' @param x_lab string of text for x axis label.
-#' @param y_lab string of text for y axis label.
+#' @param xlab string of text for x axis label.
+#' @param ylab string of text for y axis label.
 #'
 #' @details
 #' This graphic is based upon the eDISH (evaluation of Drug Induced Serious
