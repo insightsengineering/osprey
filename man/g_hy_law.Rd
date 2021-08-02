@@ -50,9 +50,9 @@ shown here.}
 
 \item{title}{string of text for plot title.}
 
-\item{x_lab}{string of text for x axis label.}
+\item{xlab}{string of text for x axis label.}
 
-\item{y_lab}{string of text for y axis label.}
+\item{ylab}{string of text for y axis label.}
 }
 \value{
 plot object
