@@ -5,7 +5,7 @@
 #'
 #' @importFrom grDevices colors dev.off pdf
 #' @importFrom stats na.omit
-#' @import dplyr ggplot2 utils.nest
+#' @import dplyr ggplot2 utils.nest assertthat
 #' @import rtables
 #' @rawNamespace import(gridExtra, except = combine)
 #' @docType package
