@@ -165,7 +165,7 @@ g_hy_law <- function(id,
       expand = c(0.01, 0.01)
     ) +
     labs(title = title, caption = caption) +
-    theme_bw(base_size = 14, base_family = "Arial") +
+    theme_bw(base_size = 14) +
     theme(
       plot.title = element_text(hjust = 0.5),
       plot.title.position = "plot",
