@@ -16,8 +16,8 @@ g_hy_law(
     "Temple's Corollary"),
   caption = paste("Maximum values are those maximum values that occur post-baseline",
     "(no time constraints and not necessarily concurrent events)."),
-  title = paste("Scatter Plot of Maximum Total Bilirubin versus Maximum",
-    "Alanine Aminotransferase"),
+ 
+    title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
   ylab = "Maximum Total Bilirubin (/ULN)"
 )

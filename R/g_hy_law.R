@@ -111,12 +111,11 @@ g_hy_law <- function(id,
                      term_selected,
                      anrhi,
                      folds = c(3, 2),
-                     text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range",
-                              "Temple's Corollary"),
+                     text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
                      caption = paste("Maximum values are those maximum values that occur post-baseline",
-                                     "(no time constraints and not necessarily concurrent events)."),
-                     title = paste("Scatter Plot of Maximum Total Bilirubin versus Maximum",
-                                   "Alanine Aminotransferase"),
+                                     "(no time constraints and not necessarily concurrent events)."
+                     ),
+                     title = "Scatter Plot of Maximum Total Bilirubin versus Maximum Alanine Aminotransferase",
                      xlab = "Maximum Alanine Aminotransferase (/ULN)",
                      ylab = "Maximum Total Bilirubin (/ULN)"
 ) {
@@ -205,8 +204,11 @@ g_hy_law <- function(id,
     geom_point(aes(x = log10(.data[[term_selected[1]]]),
                    y = log10(.data[[term_selected[2]]]),
                    shape = arm,
-                   color = arm)) + scale_shape_manual(values = c(1:n_distinct(arm)))
-  g <- ggplotGrob(p) # nolint
+                   color = arm)
+    ) +
+    scale_shape_manual(values = c(1:n_distinct(arm)))
+
+  g <- ggplotGrob(p)
   grid.newpage()
   grid.draw(g)
   invisible(g)
