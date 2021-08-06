@@ -1,4 +1,3 @@
-url: https://go.roche.com/nest-docs/releases/latest/api-reference/osprey
 
 template:
   params:
@@ -7,7 +6,7 @@ template:
 navbar:
   right:
     - icon: fa-github
-      href: https://github.roche.com/NEST/osprey
+      href: https://github.com/insightsengineering/osprey
 
 reference:
   - title: Package

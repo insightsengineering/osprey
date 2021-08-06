@@ -6,85 +6,77 @@
 create TLGs. We also provide teal modules for outputs in `osprey` in the
 `teal.osprey` package.
 
-There are two versions of webpage manual for this package, both the development version and the stable release version 
-can be found [here](https://go.roche.com/nest-docs/api-reference/). Use the drop down menu on the top right to choose the
-desired version.
-
 ## Installation
 
 Please install package dependencies as follows:
 
 ### Stable Version
 
-To access the stable version manual, select the latest version in the drop down menu on the top right of the [Web Manual](https://go.roche.com/nest-docs/api-reference/).
-
 ```r
 devtools::install_github(
-  repo = "NEST/scda",
-  ref = "master",
-  host = "https://github.roche.com/api/v3",
+  repo = "insightsengineering/scda",
+  ref = "releases",
+  host = "https://github.com/api/v3",
   upgrade_dependencies = FALSE
 )
 devtools::install_github(
-  repo = "NEST/scda.2021",
-  ref = "master",
-  host = "https://github.roche.com/api/v3",
+  repo = "insightsengineering/scda.2021",
+  ref = "releases",
+  host = "https://github.com/api/v3",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github("Roche/rtables")
 
 devtools::install_github(
-  repo = "NEST/tern",
-  ref = "master",
-  host = "https://github.roche.com/api/v3",
+  repo = "insightsengineering/tern",
+  ref = "releases",
+  host = "https://github.com/api/v3",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
-  repo = "NEST/osprey",
-  ref = "master",
-  host = "https://github.roche.com/api/v3",
+  repo = "insightsengineering/osprey",
+  ref = "releases",
+  host = "https://github.com/api/v3",
   upgrade_dependencies = FALSE
 )
 ```
 
 ### Development Version
 
-To access the development version manual, select `devel` in the drop down menu on the top right of the [Web Manual](https://go.roche.com/nest-docs/api-reference/).
-
 ```r
 devtools::install_github(
-  repo = "NEST/scda",
-  ref = "devel",
-  host = "https://github.roche.com/api/v3",
+  repo = "insightsengineering/scda",
+  ref = "main",
+  host = "https://github.com/api/v3",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
-  repo = "NEST/scda.2021",
-  ref = "devel",
-  host = "https://github.roche.com/api/v3",
+  repo = "insightsengineering/scda.2021",
+  ref = "main",
+  host = "https://github.com/api/v3",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
   repo = "Roche/rtables",
-  ref = "devel",
+  ref = "main",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
-  repo = "NEST/tern",
-  ref = "devel",
-  host = "https://github.roche.com/api/v3",
+  repo = "insightsengineering/tern",
+  ref = "main",
+  host = "https://github.com/api/v3",
   upgrade_dependencies = FALSE
 )
 
 devtools::install_github(
-  repo = "NEST/osprey",
-  ref = "devel",
-  host = "https://github.roche.com/api/v3",
+  repo = "insightsengineering/osprey",
+  ref = "main",
+  host = "https://github.com/api/v3",
   upgrade_dependencies = FALSE
 )
 ```
@@ -107,10 +99,7 @@ To qualify to `osprey` package, TLG code has to:
 ### Instructions
 
 For this to work you need to have access to libraries `pkgdown` and
-`scda`. Please start by watching the following video:
-
-* [Add a TLG function to the osprey R
-package](https://streamingmedia.roche.com/media/Adding+TLG+functions+to+the+Osprey+R+package/1_4newkk7i)
+`scda`.
 
 That is, follow the following steps:
 
