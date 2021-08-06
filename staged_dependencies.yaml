@@ -7,10 +7,6 @@ current_repo:
 upstream_repos:
 - repo: insightsengineering/tern
   host: https://github.com
-- repo: insightsengineering/random.cdisc.data
-  host: https://github.com
-- repo: insightsengineering/scda.2021
-  host: https://github.com
 
 downstream_repos:
 - repo: insightsengineering/teal.osprey
