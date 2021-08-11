@@ -11,7 +11,7 @@ Authors@R: c(
   person("Mika", "Maekinen", email = "mika.maekinen@roche.com", role = c("aut"))
   )
 Description: Community effort to collect TLG code and create a catalogue.
-License: file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Depends:
@@ -41,7 +41,7 @@ Suggests:
   testthat (>= 2.0)
 RoxygenNote: 7.1.1
 URL:
-  https://github.roche.com/NEST/osprey/
+  https://github.com/insightsengineering/osprey
 BugReports:
-  https://github.roche.com/NEST/osprey/issues
+  https://github.com/insightsengineering/osprey/issues
 VignetteBuilder: knitr
