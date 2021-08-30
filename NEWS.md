@@ -3,6 +3,7 @@
 * Fixed the `sort_by` issue in `g_butterfly`.
 * Update example and tests using `scda` synthetic data to replace `random.cdisc.data`.
 * Removed mentions of Roche internal services from the README file.
+* Added `error_on_lint: TRUE` to `.lintr`.
 
 # osprey 0.1.10
 
@@ -29,7 +30,7 @@
   - `t_ae`: AE summary table by preferred terms.
   - `t_ae_ctc`: AE summary table by highest NCI-CTCAE grade.
   - `t_ds`: Disposition table.
-  
+
 # osprey 0.1.6
 
 * Refactored `g_events_term_id` to use `dplyr` and `tidyr` functions over `data.table`.
