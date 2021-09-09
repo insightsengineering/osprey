@@ -10,8 +10,6 @@
 #'
 #' @noRd
 #'
-#' @importFrom rtables var_labels var_labels<-
-#'
 #' @examples
 #'
 #' duplicate_with_var(iris, Species = "Total")
@@ -23,12 +21,12 @@ duplicate_with_var <- function(x, ...) { # nolint # nousage
     stop("not all names in ... are existent or in X")
   }
   x_copy <- x
-  vl <- var_labels(x)
+  vl <- rtables::var_labels(x)
   for (var in nms) {
     x_copy[[var]] <- dots[[var]]
   }
   y <- rbind(x, x_copy)
-  var_labels(y) <- vl
+  rtables::var_labels(y) <- vl
   y
 }
 
