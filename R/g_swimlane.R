@@ -279,9 +279,9 @@ g_swimlane <- function(bar_id,
 
   # if sort by a variable, reorder bar_id; otherwise sort by bar length
   if (!is.null(sort_by)) {
-    t <- t[with(t, order(sort_by, -bar_length, bar_id)), -c(2, 3)]
+    t <- t[with(t, order(sort_by, -bar_length, levels(as.factor(bar_id)))), -c(2, 3)]
   } else {
-    t <- t[with(t, order(-bar_length, bar_id)), -c(2, 3)]
+    t <- t[with(t, order(-bar_length, levels(as.factor(bar_id)))), -c(2, 3)]
   }
 
   t <- as.data.frame(t)
