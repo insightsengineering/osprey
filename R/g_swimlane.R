@@ -225,11 +225,10 @@ g_swimlane <- function(bar_id,
       p <- p + guides(color = FALSE)
     }
 
-
     p <- p +
       scale_shape_manual(
         name = "Marker Shape",
-        breaks = marker_data$marker_shape,
+        breaks = levels(factor(marker_data$marker_shape)),
         values = if (!is.null(marker_shape_opt)) marker_shape_opt else c(15:25, 0:14)
       )
 
