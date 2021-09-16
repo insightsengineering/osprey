@@ -235,7 +235,7 @@ g_swimlane <- function(bar_id,
     if (!is.null(marker_color_opt) || all(marker_data$marker_color == "x")) {
       p <- p + scale_color_manual(
         name = "Marker Color",
-        breaks = marker_data$marker_color,
+        breaks = levels(factor(marker_data$marker_color)),
         values = if (!is.null(marker_color_opt)) {
           marker_color_opt
         } else {
