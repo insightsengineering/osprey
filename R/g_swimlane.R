@@ -190,7 +190,7 @@ g_swimlane <- function(bar_id,
     ylab(ylab)
 
   if (is.null(col_by)) {
-    p <- p + guides(fill = FALSE)
+    p <- p + guides(fill = "none")
   } else {
     p <- p +
       guides(fill = guide_legend("Bar Color", order = 1, ncol = 1)) +
@@ -216,13 +216,13 @@ g_swimlane <- function(bar_id,
     if (!is.null(marker_shape)) {
       p <- p + guides(shape = guide_legend("Marker Shape", order = 2))
     } else {
-      p <- p + guides(shape = FALSE)
+      p <- p + guides(shape = "none")
     }
 
     if (!is.null(marker_color)) {
       p <- p + guides(color = guide_legend("Marker Color", order = 3))
     } else {
-      p <- p + guides(color = FALSE)
+      p <- p + guides(color = "none")
     }
 
     p <- p +
@@ -278,9 +278,9 @@ g_swimlane <- function(bar_id,
 
   # if sort by a variable, reorder bar_id; otherwise sort by bar length
   if (!is.null(sort_by)) {
-    t <- t[with(t, order(sort_by, -bar_length, bar_id)), -c(2, 3)]
+    t <- t[with(t, order(sort_by, -bar_length, levels(as.factor(bar_id)))), -c(2, 3)]
   } else {
-    t <- t[with(t, order(-bar_length, bar_id)), -c(2, 3)]
+    t <- t[with(t, order(-bar_length, levels(as.factor(bar_id)))), -c(2, 3)]
   }
 
   t <- as.data.frame(t)

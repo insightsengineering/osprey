@@ -5,6 +5,7 @@
 * Removed mentions of Roche internal services from the README file.
 * Added `error_on_lint: TRUE` to `.lintr`.
 * Removed unneeded `importFrom` statements.
+* Fixed bug in `g_swimlane` that incorrectly orders the legend in certain scenarios. 
 
 # osprey 0.1.10
 
