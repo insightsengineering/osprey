@@ -245,7 +245,7 @@ g_swimlane <- function(bar_id,
     } else {
       p <- p + scale_color_discrete(
         name = "Marker Color",
-        breaks = marker_data$marker_color
+        breaks = levels(factor(marker_data$marker_color))
       )
     }
 
