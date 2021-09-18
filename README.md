@@ -23,7 +23,7 @@ create TLGs. We also provide teal modules for outputs in `osprey` in the
       Password: your_token_goes_here
       ```
 
-    1. Using SSH. If set up properly, the repository is ready to be cloned executing:
+   1. Using SSH. If set up properly, the repository is ready to be cloned executing:
 
        ```shell
        git clone https://github.com/insightsengineering/osprey.git
