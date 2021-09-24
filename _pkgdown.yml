@@ -1,7 +1,9 @@
 url: https://insightsengineering.github.io/osprey
+
 template:
   params:
     bootswatch: cerulean
+    ganalytics: "UA-125641273-1"
 
 navbar:
   right:
