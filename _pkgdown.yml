@@ -28,6 +28,7 @@ reference:
       - as_pdf
       - create_flag_vars
       - grobs2pdf
+      - grob_parts
       - stream_filter
       - stream_filter_convwhere
       - stream_filter_index
