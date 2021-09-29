@@ -141,11 +141,11 @@ g_events_term_id <- function(term,
     term <- lapply(term, function(x) {
       term_levels[x]
     })
-    df <- data.frame(id, arm, I(term)) %>%
+    df <- tibble::tibble(id, arm, term) %>%
       tidyr::unnest(term)
   } else {
     term_levels <- `if`(is.factor(term), levels(term), unique(term))
-    df <- data.frame(id, arm, term)
+    df <- tibble::tibble(id, arm, term)
   }
 
   # argument validation

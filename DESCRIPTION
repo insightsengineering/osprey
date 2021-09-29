@@ -26,13 +26,14 @@ Imports:
   grid,
   gridExtra,
   gtable,
+  methods,
   rlang,
   rtables (>= 0.3.8),
   stringr,
   tern (>= 0.7.5),
+  tibble,
   tidyr (>= 1.0.0),
   utils.nest (>= 0.2.11),
-  methods
 Suggests:
   knitr,
   scda(>= 0.1.1),
