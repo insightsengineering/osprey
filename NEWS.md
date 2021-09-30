@@ -1,8 +1,8 @@
 # osprey 0.1.11
 
+* Updated `LICENCE` and `README` with new package reference.
 * Fixed the `sort_by` issue in `g_butterfly`.
 * Update example and tests using `scda` synthetic data to replace `random.cdisc.data`.
-* Removed mentions of Roche internal services from the README file.
 * Added `error_on_lint: TRUE` to `.lintr`.
 * Removed unneeded `importFrom` statements.
 * Fixed bug in `g_swimlane` that incorrectly orders the legend in certain scenarios. 
