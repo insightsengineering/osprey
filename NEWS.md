@@ -1,6 +1,6 @@
 # osprey 0.1.11
 
-* Updated `LICENCE` and `README` with new package reference.
+* Updated `LICENCE` and `README` with new package references.
 * Fixed the `sort_by` issue in `g_butterfly`.
 * Update example and tests using `scda` synthetic data to replace `random.cdisc.data`.
 * Added `error_on_lint: TRUE` to `.lintr`.
