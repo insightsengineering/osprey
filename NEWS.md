@@ -1,5 +1,7 @@
 # osprey 0.1.11.9000
 
+* Updated R version requirement to >= 3.6.
+
 # osprey 0.1.11
 
 * Updated `LICENCE` and `README` with new package references.
