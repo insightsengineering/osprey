@@ -1,48 +1,47 @@
-Package: osprey
 Type: Package
+Package: osprey
 Title: R package to create TLGs
-Version: 0.1.11.9000
+Version: 0.1.11.9001
 Date: 2021-10-13
 Authors@R: c(
-  person("Nina", "Qi", email = "qit3@gene.com", role = c("aut", "cre")),
-  person("Chendi", "Liao", email = "chendi.liao@roche.com", role = c("aut")),
-  person("Mahdi", "About", email = "mahdi.about@roche.com", role = c("aut")),
-  person("Fei", "Wang", email = "fei.wang.fw6@roche.com", role = c("aut")),
-  person("Mika", "Maekinen", email = "mika.maekinen@roche.com", role = c("aut"))
+    person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
+    person("Chendi", "Liao", , "chendi.liao@roche.com", role = "aut"),
+    person("Mahdi", "About", , "mahdi.about@roche.com", role = "aut"),
+    person("Fei", "Wang", , "fei.wang.fw6@roche.com", role = "aut"),
+    person("Mika", "Maekinen", , "mika.maekinen@roche.com", role = "aut")
   )
 Description: Community effort to collect TLG code and create a catalogue.
 License: Apache License 2.0 | file LICENSE
+URL:https://github.com/insightsengineering/osprey
+BugReports:https://github.com/insightsengineering/osprey/issues
+Depends:
+    dplyr (>= 0.8.0),
+    ggplot2 (>= 2.0.0),
+    R (>= 3.6)
+Imports:
+    assertthat,
+    cowplot,
+    DescTools,
+    grid,
+    gridExtra,
+    gtable,
+    methods,
+    purrr,
+    rlang,
+    rtables (>= 0.3.8),
+    stringr,
+    tern (>= 0.7.5),
+    tibble,
+    tidyr (>= 1.0.0),
+    utils.nest (>= 0.2.11)
+Suggests:
+    knitr,
+    scda.2021(>= 0.1.1),
+    scda(>= 0.1.1),
+    test.nest (>= 0.2.11),
+    testthat (>= 2.0)
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 LazyData: true
-Depends:
-  R (>= 3.6),
-  dplyr (>= 0.8.0),
-  ggplot2 (>= 2.0.0)
-Imports:
-  assertthat,
-  DescTools,
-  purrr,
-  cowplot,
-  grid,
-  gridExtra,
-  gtable,
-  methods,
-  rlang,
-  rtables (>= 0.3.8),
-  stringr,
-  tern (>= 0.7.5),
-  tibble,
-  tidyr (>= 1.0.0),
-  utils.nest (>= 0.2.11),
-Suggests:
-  knitr,
-  scda(>= 0.1.1),
-  scda.2021(>= 0.1.1),
-  test.nest (>= 0.2.11),
-  testthat (>= 2.0)
 RoxygenNote: 7.1.2
-URL:
-  https://github.com/insightsengineering/osprey
-BugReports:
-  https://github.com/insightsengineering/osprey/issues
-VignetteBuilder: knitr
