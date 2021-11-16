@@ -1,4 +1,4 @@
-# osprey 0.1.11.9003
+# osprey 0.1.11.9004
 
 * Updated R version requirement to >= 3.6.
 
