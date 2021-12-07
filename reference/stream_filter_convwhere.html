@@ -85,7 +85,7 @@ All quoted values will be returned with single quotes - may fail if have quotes 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9005</span>
       </span>
     </div>
 
@@ -155,10 +155,12 @@ All quoted values will be returned with single quotes - may fail if have quotes 
     <p>Iain Bennett</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='fu'>stream_filter_convwhere</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"where X in (1 2 3 4) and Y gt 4 "</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "  X %in% c(1 , 2 , 3 , 4) &amp; Y &gt; 4  "</div><div class='input'><span class='fu'>stream_filter_convwhere</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"where X = \"fred\" and Y gt 4 "</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "  X == 'fred' &amp; Y &gt; 4  "</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='fu'>stream_filter_convwhere</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"where X in (1 2 3 4) and Y gt 4 "</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "  X %in% c(1 , 2 , 3 , 4) &amp; Y &gt; 4  "</span>
+<span class='r-in'><span class='fu'>stream_filter_convwhere</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"where X = \"fred\" and Y gt 4 "</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "  X == 'fred' &amp; Y &gt; 4  "</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

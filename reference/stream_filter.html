@@ -83,7 +83,7 @@ In case of failure a sensible error message should be returned." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9005</span>
       </span>
     </div>
 
@@ -178,47 +178,55 @@ In case of failure a sensible error message should be returned.</p>
     <p>Iain Bennett</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='va'>ASL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>
-<span class='va'>ATE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adaette</span>
-<span class='va'>filters</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://roche.github.io/rtables/reference/rbind.html'>rbind</a></span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"IT"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"SLREF"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where 1 eq 1"</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"BIO"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"SLREF"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where BMRKR1 ge 4.3"</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"M"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"SLREF"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where SEX eq 'M'"</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"PFS"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"ANL"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where PARAMCD eq 'PFS'"</span><span class='op'>)</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"OS"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"ANL"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where PARAMCD eq 'OS'"</span><span class='op'>)</span>
-<span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>ANL</span> <span class='op'>&lt;-</span> <span class='fu'>stream_filter</span><span class='op'>(</span>
-  slref <span class='op'>=</span> <span class='va'>ASL</span>,
-  anl <span class='op'>=</span> <span class='va'>ATE</span>,
-  suffix <span class='op'>=</span> <span class='st'>"IT_PFS_BIO"</span>,
-  filters <span class='op'>=</span> <span class='va'>filters</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: `filter_()` was deprecated in dplyr 0.7.0.</span>
-#&gt; <span class='warning'>Please use `filter()` instead.</span>
-#&gt; <span class='warning'>See vignette('programming') for more help</span></div><div class='output co'>#&gt; 
-#&gt; Filter IT applied 
-#&gt; SAS code: where 1 eq 1 
-#&gt; was converted to
-#&gt; R code:   1 == 1  
-#&gt; 400 of 400 observations selected from SLREF 
-#&gt; 
-#&gt; Filter PFS applied 
-#&gt; SAS code: where PARAMCD eq 'PFS' 
-#&gt; was converted to
-#&gt; R code:   PARAMCD == 'PFS'  
-#&gt; 0 of 3600 observations selected from ANL 
-#&gt; 
-#&gt; Filter BIO applied 
-#&gt; SAS code: where BMRKR1 ge 4.3 
-#&gt; was converted to
-#&gt; R code:   BMRKR1 &gt;= 4.3  
-#&gt; 231 of 400 observations selected from SLREF </div><div class='output co'>#&gt; <span class='warning'>Warning: `transmute_()` was deprecated in dplyr 0.7.0.</span>
-#&gt; <span class='warning'>Please use `transmute()` instead.</span>
-#&gt; <span class='warning'>See vignette('programming') for more help</span></div><div class='output co'>#&gt; 
-#&gt; Suffix IT_PFS_BIO was applied
-#&gt; 0 of 3600 observations selected from ANL</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ASL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span></span>
+<span class='r-in'><span class='va'>ATE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adaette</span></span>
+<span class='r-in'><span class='va'>filters</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://roche.github.io/rtables/reference/rbind.html'>rbind</a></span><span class='op'>(</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"IT"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"SLREF"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where 1 eq 1"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"BIO"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"SLREF"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where BMRKR1 ge 4.3"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"M"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"SLREF"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where SEX eq 'M'"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"PFS"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"ANL"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where PARAMCD eq 'PFS'"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>ID <span class='op'>=</span> <span class='st'>"OS"</span>, FLTTARGET <span class='op'>=</span> <span class='st'>"ANL"</span>, FLTWHERE <span class='op'>=</span> <span class='st'>"where PARAMCD eq 'OS'"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ANL</span> <span class='op'>&lt;-</span> <span class='fu'>stream_filter</span><span class='op'>(</span></span>
+<span class='r-in'>  slref <span class='op'>=</span> <span class='va'>ASL</span>,</span>
+<span class='r-in'>  anl <span class='op'>=</span> <span class='va'>ATE</span>,</span>
+<span class='r-in'>  suffix <span class='op'>=</span> <span class='st'>"IT_PFS_BIO"</span>,</span>
+<span class='r-in'>  filters <span class='op'>=</span> <span class='va'>filters</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`filter_()` was deprecated in dplyr 0.7.0.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> Please use `filter()` instead.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> See vignette('programming') for more help</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>This warning is displayed once every 8 hours.</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Filter IT applied </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SAS code: where 1 eq 1 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> was converted to</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> R code:   1 == 1  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 400 of 400 observations selected from SLREF </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Filter PFS applied </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SAS code: where PARAMCD eq 'PFS' </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> was converted to</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> R code:   PARAMCD == 'PFS'  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0 of 3600 observations selected from ANL </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Filter BIO applied </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> SAS code: where BMRKR1 ge 4.3 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> was converted to</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> R code:   BMRKR1 &gt;= 4.3  </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 231 of 400 observations selected from SLREF </span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`transmute_()` was deprecated in dplyr 0.7.0.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> Please use `transmute()` instead.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> See vignette('programming') for more help</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>This warning is displayed once every 8 hours.</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span style='color: #555555;'>Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Suffix IT_PFS_BIO was applied</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 0 of 3600 observations selected from ANL</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

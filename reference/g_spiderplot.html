@@ -83,7 +83,7 @@ patient plot of an endpoint over time by group." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9005</span>
       </span>
     </div>
 
@@ -245,54 +245,56 @@ default here is <code>FALSE</code></p></td>
     <p>Carolyn Zhang (zhanc107) <a href='mailto:carolyn.zhang@duke.edu'>carolyn.zhang@duke.edu</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># simple example</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-
-<span class='va'>ADTR</span> <span class='op'>&lt;-</span> <span class='va'>rADTR</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>STUDYID</span>, <span class='va'>USUBJID</span>, <span class='va'>ADY</span>, <span class='va'>AVISIT</span>, <span class='va'>CHG</span>, <span class='va'>PCHG</span>, <span class='va'>PARAMCD</span><span class='op'>)</span>
-<span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='va'>rADSL</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>STUDYID</span>, <span class='va'>USUBJID</span>, <span class='va'>RACE</span>, <span class='va'>SEX</span>, <span class='va'>ARM</span><span class='op'>)</span>
-<span class='va'>ANL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADTR</span>, <span class='va'>ADSL</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"STUDYID"</span>, <span class='st'>"USUBJID"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>ANL</span> <span class='op'>&lt;-</span> <span class='va'>ANL</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>PARAMCD</span> <span class='op'>==</span> <span class='st'>"SLDINV"</span> <span class='op'>&amp;</span> <span class='va'>AVISIT</span> <span class='op'>!=</span> <span class='st'>"POST-BASELINE MINIMUM"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>RACE</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"WHITE"</span>, <span class='st'>"ASIAN"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>USUBJID</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>ADY</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
-    CHG <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>AVISIT</span> <span class='op'>==</span> <span class='st'>"Screening"</span>, <span class='fl'>0</span>, <span class='va'>CHG</span><span class='op'>)</span>,
-    PCHG <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>AVISIT</span> <span class='op'>==</span> <span class='st'>"Screening"</span>, <span class='fl'>0</span>, <span class='va'>PCHG</span><span class='op'>)</span>
-  <span class='op'>)</span>
-<span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span><span class='op'>(</span><span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>, <span class='fl'>14</span>, <span class='fl'>18</span><span class='op'>)</span>
-
-<span class='co'># Plot 1 - default color and shape mapping</span>
-<span class='fu'>g_spiderplot</span><span class='op'>(</span>
-  marker_x <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>ADY</span>,
-  marker_id <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,
-  marker_y <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>PCHG</span>,
-  line_colby <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,
-  marker_shape <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,
-  <span class='co'># marker_size = 5,</span>
-  datalabel_txt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>txt_ann <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span>,
-  <span class='co'># facet_rows = data.frame(sex = ANL$SEX),</span>
-  <span class='co'># facet_columns = data.frame(arm = ANL$ARM),</span>
-  vref_line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>42</span>, <span class='fl'>86</span><span class='op'>)</span>,
-  href_line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>20</span><span class='op'>)</span>,
-  x_label <span class='op'>=</span> <span class='st'>"Time (Days)"</span>,
-  y_label <span class='op'>=</span> <span class='st'>"Change (%) from Baseline"</span>,
-  show_legend <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Plot 2 - with line color mapping</span>
-<span class='fu'>g_spiderplot</span><span class='op'>(</span>
-  marker_x <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>AVISIT</span>,
-  marker_id <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,
-  marker_y <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>CHG</span>,
-  line_colby <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>RACE</span>,
-  line_color_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"WHITE"</span> <span class='op'>=</span> <span class='st'>"red"</span>, <span class='st'>"ASIAN"</span> <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>,
-  marker_shape <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,
-  x_label <span class='op'>=</span> <span class='st'>"Visit"</span>,
-  y_label <span class='op'>=</span> <span class='st'>"Change from Baseline"</span>,
-  show_legend <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='g_spiderplot-2.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># simple example</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ADTR</span> <span class='op'>&lt;-</span> <span class='va'>rADTR</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>STUDYID</span>, <span class='va'>USUBJID</span>, <span class='va'>ADY</span>, <span class='va'>AVISIT</span>, <span class='va'>CHG</span>, <span class='va'>PCHG</span>, <span class='va'>PARAMCD</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='va'>rADSL</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>STUDYID</span>, <span class='va'>USUBJID</span>, <span class='va'>RACE</span>, <span class='va'>SEX</span>, <span class='va'>ARM</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ANL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADTR</span>, <span class='va'>ADSL</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"STUDYID"</span>, <span class='st'>"USUBJID"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ANL</span> <span class='op'>&lt;-</span> <span class='va'>ANL</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>PARAMCD</span> <span class='op'>==</span> <span class='st'>"SLDINV"</span> <span class='op'>&amp;</span> <span class='va'>AVISIT</span> <span class='op'>!=</span> <span class='st'>"POST-BASELINE MINIMUM"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>RACE</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"WHITE"</span>, <span class='st'>"ASIAN"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>USUBJID</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>ADY</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span></span>
+<span class='r-in'>    CHG <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>AVISIT</span> <span class='op'>==</span> <span class='st'>"Screening"</span>, <span class='fl'>0</span>, <span class='va'>CHG</span><span class='op'>)</span>,</span>
+<span class='r-in'>    PCHG <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>AVISIT</span> <span class='op'>==</span> <span class='st'>"Screening"</span>, <span class='fl'>0</span>, <span class='va'>PCHG</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span><span class='op'>(</span><span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>, <span class='fl'>14</span>, <span class='fl'>18</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Plot 1 - default color and shape mapping</span></span>
+<span class='r-in'><span class='fu'>g_spiderplot</span><span class='op'>(</span></span>
+<span class='r-in'>  marker_x <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>ADY</span>,</span>
+<span class='r-in'>  marker_id <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,</span>
+<span class='r-in'>  marker_y <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>PCHG</span>,</span>
+<span class='r-in'>  line_colby <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,</span>
+<span class='r-in'>  marker_shape <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,</span>
+<span class='r-in'>  <span class='co'># marker_size = 5,</span></span>
+<span class='r-in'>  datalabel_txt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>txt_ann <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span>,</span>
+<span class='r-in'>  <span class='co'># facet_rows = data.frame(sex = ANL$SEX),</span></span>
+<span class='r-in'>  <span class='co'># facet_columns = data.frame(arm = ANL$ARM),</span></span>
+<span class='r-in'>  vref_line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>42</span>, <span class='fl'>86</span><span class='op'>)</span>,</span>
+<span class='r-in'>  href_line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>20</span>, <span class='fl'>20</span><span class='op'>)</span>,</span>
+<span class='r-in'>  x_label <span class='op'>=</span> <span class='st'>"Time (Days)"</span>,</span>
+<span class='r-in'>  y_label <span class='op'>=</span> <span class='st'>"Change (%) from Baseline"</span>,</span>
+<span class='r-in'>  show_legend <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt img'><img src='g_spiderplot-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Plot 2 - with line color mapping</span></span>
+<span class='r-in'><span class='fu'>g_spiderplot</span><span class='op'>(</span></span>
+<span class='r-in'>  marker_x <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>AVISIT</span>,</span>
+<span class='r-in'>  marker_id <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,</span>
+<span class='r-in'>  marker_y <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>CHG</span>,</span>
+<span class='r-in'>  line_colby <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>RACE</span>,</span>
+<span class='r-in'>  line_color_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"WHITE"</span> <span class='op'>=</span> <span class='st'>"red"</span>, <span class='st'>"ASIAN"</span> <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  marker_shape <span class='op'>=</span> <span class='va'>ANL</span><span class='op'>$</span><span class='va'>USUBJID</span>,</span>
+<span class='r-in'>  x_label <span class='op'>=</span> <span class='st'>"Visit"</span>,</span>
+<span class='r-in'>  y_label <span class='op'>=</span> <span class='st'>"Change from Baseline"</span>,</span>
+<span class='r-in'>  show_legend <span class='op'>=</span> <span class='cn'>TRUE</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-plt img'><img src='g_spiderplot-2.png' alt='' width='700' height='433' /></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

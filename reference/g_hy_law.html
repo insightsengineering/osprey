@@ -83,7 +83,7 @@ versus maximum alanine transaminase (ALT) values." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9005</span>
       </span>
     </div>
 
@@ -241,50 +241,54 @@ associations is recommended.</p>
 <p>William Holmes (holmesw) <a href='mailto:william.holmes@roche.com'>william.holmes@roche.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-
-<span class='co'># Note: CRP is being used in place of Bilirubin here because this is the only available data</span>
-<span class='co'># available in SCDA</span>
-<span class='va'>latest_dfs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span>
-<span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='va'>latest_dfs</span><span class='op'>[[</span><span class='st'>"adsl"</span><span class='op'>]</span><span class='op'>]</span>
-<span class='va'>adlb</span> <span class='op'>&lt;-</span> <span class='va'>latest_dfs</span><span class='op'>[[</span><span class='st'>"adlb"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>ANRHI <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
-
-<span class='co'># Example 1, - Hy's law template (3 and 2 X ULN)</span>
-<span class='fu'>g_hy_law</span><span class='op'>(</span>
-  id <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>USUBJID</span>,
-  term <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>PARAMCD</span>,
-  aval <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>AVAL</span>,
-  arm <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>ARM</span>,
-  term_selected <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ALT"</span>, <span class='st'>"CRP"</span><span class='op'>)</span>,
-  anrhi <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>ANRHI</span>,
-  folds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span>,
-  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Normal Range"</span>, <span class='st'>"Hyperbilirubinemia"</span>, <span class='st'>"Possible Hy's Law Range"</span>, <span class='st'>"Temple's Corollary"</span><span class='op'>)</span>,
-  caption <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Maximum values are those maximum values that occur"</span>,
-  <span class='st'>"post-baseline (no time constraints and not necessarily concurrent events)."</span><span class='op'>)</span>,
-  title <span class='op'>=</span> <span class='st'>"Max. Total Bilirubin vs. Max. Alanine Aminotransferase"</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Maximum Alanine Aminotransferase (/ULN)"</span>,
-  ylab <span class='op'>=</span> <span class='st'>"Maximum Total Bilirubin (/ULN)"</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='g_hy_law-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Example 2, - change the quadrant lines and labels</span>
-<span class='fu'>g_hy_law</span><span class='op'>(</span>
-  id <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>USUBJID</span>,
-  term <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>PARAMCD</span>,
-  aval <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>AVAL</span>,
-  arm <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>ARM</span>,
-  term_selected <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ALT"</span>, <span class='st'>"CRP"</span><span class='op'>)</span>,
-  anrhi <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>ANRHI</span>,
-  folds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>15</span><span class='op'>)</span>,
-  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Quadrant 1"</span>, <span class='st'>"Quadrant 2"</span>, <span class='st'>"Quadrant 3"</span>, <span class='st'>"Quadrant 4"</span><span class='op'>)</span>,
-  caption <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Maximum values are those maximum values that occur"</span>,
-  <span class='st'>"post-baseline (no time constraints and not necessarily concurrent events)."</span><span class='op'>)</span>,
-  title <span class='op'>=</span> <span class='st'>"Max. Total Bilirubin vs. Max. Alanine Aminotransferase"</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Maximum Alanine Aminotransferase (/ULN)"</span>,
-  ylab <span class='op'>=</span> <span class='st'>"Maximum Total Bilirubin (/ULN)"</span>
-<span class='op'>)</span>
-</div><div class='img'><img src='g_hy_law-2.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Note: CRP is being used in place of Bilirubin here because this is the only available data</span></span>
+<span class='r-in'><span class='co'># available in SCDA</span></span>
+<span class='r-in'><span class='va'>latest_dfs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>adsl</span> <span class='op'>&lt;-</span> <span class='va'>latest_dfs</span><span class='op'>[[</span><span class='st'>"adsl"</span><span class='op'>]</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>adlb</span> <span class='op'>&lt;-</span> <span class='va'>latest_dfs</span><span class='op'>[[</span><span class='st'>"adlb"</span><span class='op'>]</span><span class='op'>]</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>ANRHI <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 1, - Hy's law template (3 and 2 X ULN)</span></span>
+<span class='r-in'><span class='fu'>g_hy_law</span><span class='op'>(</span></span>
+<span class='r-in'>  id <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>USUBJID</span>,</span>
+<span class='r-in'>  term <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>PARAMCD</span>,</span>
+<span class='r-in'>  aval <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>AVAL</span>,</span>
+<span class='r-in'>  arm <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>ARM</span>,</span>
+<span class='r-in'>  term_selected <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ALT"</span>, <span class='st'>"CRP"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  anrhi <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>ANRHI</span>,</span>
+<span class='r-in'>  folds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>)</span>,</span>
+<span class='r-in'>  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Normal Range"</span>, <span class='st'>"Hyperbilirubinemia"</span>, <span class='st'>"Possible Hy's Law Range"</span>, <span class='st'>"Temple's Corollary"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  caption <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Maximum values are those maximum values that occur"</span>,</span>
+<span class='r-in'>  <span class='st'>"post-baseline (no time constraints and not necessarily concurrent events)."</span><span class='op'>)</span>,</span>
+<span class='r-in'>  title <span class='op'>=</span> <span class='st'>"Max. Total Bilirubin vs. Max. Alanine Aminotransferase"</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Maximum Alanine Aminotransferase (/ULN)"</span>,</span>
+<span class='r-in'>  ylab <span class='op'>=</span> <span class='st'>"Maximum Total Bilirubin (/ULN)"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Removed 400 rows containing missing values (geom_point).</span>
+<span class='r-plt img'><img src='g_hy_law-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 2, - change the quadrant lines and labels</span></span>
+<span class='r-in'><span class='fu'>g_hy_law</span><span class='op'>(</span></span>
+<span class='r-in'>  id <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>USUBJID</span>,</span>
+<span class='r-in'>  term <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>PARAMCD</span>,</span>
+<span class='r-in'>  aval <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>AVAL</span>,</span>
+<span class='r-in'>  arm <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>ARM</span>,</span>
+<span class='r-in'>  term_selected <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ALT"</span>, <span class='st'>"CRP"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  anrhi <span class='op'>=</span> <span class='va'>adlb</span><span class='op'>$</span><span class='va'>ANRHI</span>,</span>
+<span class='r-in'>  folds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>, <span class='fl'>15</span><span class='op'>)</span>,</span>
+<span class='r-in'>  text <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Quadrant 1"</span>, <span class='st'>"Quadrant 2"</span>, <span class='st'>"Quadrant 3"</span>, <span class='st'>"Quadrant 4"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  caption <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Maximum values are those maximum values that occur"</span>,</span>
+<span class='r-in'>  <span class='st'>"post-baseline (no time constraints and not necessarily concurrent events)."</span><span class='op'>)</span>,</span>
+<span class='r-in'>  title <span class='op'>=</span> <span class='st'>"Max. Total Bilirubin vs. Max. Alanine Aminotransferase"</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Maximum Alanine Aminotransferase (/ULN)"</span>,</span>
+<span class='r-in'>  ylab <span class='op'>=</span> <span class='st'>"Maximum Total Bilirubin (/ULN)"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Removed 400 rows containing missing values (geom_point).</span>
+<span class='r-plt img'><img src='g_hy_law-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

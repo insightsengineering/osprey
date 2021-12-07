@@ -85,7 +85,7 @@ adverse events (ADAE), response (ADRS), concomitant medications
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9005</span>
       </span>
     </div>
 
@@ -266,209 +266,288 @@ default is <code>NULL</code> (no shape marker is specified)</p></li>
 <p>Ting Qi (qit3) <a href='mailto:qit3@gene.com'>qit3@gene.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>utils.nest</span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/insightsengineering/tern'>tern</a></span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
-
-<span class='co'># ADSL</span>
-<span class='va'>rADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>
-<span class='va'>ADSL</span> <span class='op'>&lt;-</span>  <span class='va'>rADSL</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>USUBJID</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
-    TRTSDT <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>TRTSDTM</span><span class='op'>)</span>,
-    max_date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>LSTALVDT</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>DTHDT</span><span class='op'>)</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-    max_day <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>max_date</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>TRTSDT</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>TRTSDT</span> , <span class='va'>max_day</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>USUBJID</span> <span class='op'>==</span> <span class='va'>rADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='output co'>#&gt; <span class='warning'>Warning: no non-missing arguments to max; returning -Inf</span></div><div class='input'>
-
-<span class='co'># Example 1 Exposure "ADEX"</span>
-<span class='va'>rADEX</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adex</span>
-<span class='va'>ADEX</span> <span class='op'>&lt;-</span> <span class='va'>rADEX</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>ASTDTM</span>, <span class='va'>PARCAT2</span>, <span class='va'>AVAL</span>, <span class='va'>AVALU</span>, <span class='va'>PARAMCD</span><span class='op'>)</span>
-<span class='va'>ADEX</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADEX</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>ADEX</span> <span class='op'>&lt;-</span> <span class='va'>ADEX</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>PARAMCD</span> <span class='op'>==</span> <span class='st'>"DOSE"</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>PARCAT2</span>, <span class='va'>PARAMCD</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>diff <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span><span class='op'>(</span><span class='va'>AVAL</span>, lag <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
-    Modification <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>diff</span> <span class='op'>&lt;</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"Decrease"</span>,
-    <span class='va'>diff</span> <span class='op'>&gt;</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"Increase"</span>,
-    <span class='va'>diff</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"None"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>
-    ASTDT_dur <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span>
-      <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span>
-        <span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>ASTDTM</span><span class='op'>)</span>, <span class='fl'>1</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>TRTSDT</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span>
-  domain <span class='op'>=</span> <span class='st'>"Exposure (ADEX)"</span>,
-  var_names <span class='op'>=</span> <span class='va'>ADEX</span><span class='op'>$</span><span class='va'>PARCAT2</span>,
-  marker_pos <span class='op'>=</span> <span class='va'>ADEX</span><span class='op'>$</span><span class='va'>ASTDT_dur</span>,
-  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,
-  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,
-  line_col_list <span class='op'>=</span> <span class='cn'>NULL</span>,
-  line_width <span class='op'>=</span> <span class='fl'>1</span>,
-  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,
-  no_enddate_extention <span class='op'>=</span> <span class='fl'>0</span>,
-  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    marker_col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADEX</span><span class='op'>$</span><span class='va'>Modification</span><span class='op'>)</span>,
-    marker_col_opt <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Increase"</span> <span class='op'>=</span> <span class='st'>"red"</span>, <span class='st'>"Decrease"</span> <span class='op'>=</span> <span class='st'>"green"</span>, <span class='st'>"None"</span> <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>,
-    marker_col_legend <span class='op'>=</span> <span class='cn'>NULL</span>
-  <span class='op'>)</span>,
-  marker_shape_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    marker_shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADEX</span><span class='op'>$</span><span class='va'>Modification</span><span class='op'>)</span>,
-    marker_shape_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Increase"</span> <span class='op'>=</span> <span class='fl'>24</span>, <span class='st'>"Decrease"</span> <span class='op'>=</span> <span class='fl'>25</span>, <span class='st'>"None"</span> <span class='op'>=</span> <span class='fl'>23</span><span class='op'>)</span>,
-    marker_shape_legend <span class='op'>=</span> <span class='st'>"Dose Modification"</span>
-  <span class='op'>)</span>,
-  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>28</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,
-  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>p1</span>
-</div><div class='img'><img src='patient_domain_profile-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Example 2 Adverse Event "ADAE"</span>
-<span class='co'># Note that ASTDY is represented by a circle and AENDY is represented by a square.</span>
-<span class='co'># If AENDY and ASTDY occur on the same day only AENDY will be shown.</span>
-
-<span class='co'># Adverse Event ADAE</span>
-<span class='va'>rADAE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adae</span>
-<span class='va'>ADAE</span> <span class='op'>&lt;-</span> <span class='va'>rADAE</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>AESOC</span>, <span class='va'>AEDECOD</span>, <span class='va'>AESER</span>, <span class='va'>AETOXGR</span>, <span class='va'>AEREL</span>, <span class='va'>ASTDY</span>, <span class='va'>AENDY</span><span class='op'>)</span>
-<span class='va'>ADAE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADAE</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span>
-  domain <span class='op'>=</span> <span class='st'>"Adverse Event (ADAE)"</span>,
-  var_names <span class='op'>=</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>AEDECOD</span>,
-  marker_pos <span class='op'>=</span> <span class='va'>ADAE</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ASTDY"</span>, <span class='st'>"AENDY"</span><span class='op'>)</span><span class='op'>]</span>,
-  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,
-  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,
-  line_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    line_col <span class='op'>=</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>AESER</span>,
-    line_col_legend <span class='op'>=</span> <span class='st'>"Serious"</span>,
-    line_col_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"blue"</span>,<span class='st'>"green"</span><span class='op'>)</span>
-  <span class='op'>)</span>,
-  line_width <span class='op'>=</span> <span class='fl'>1</span>,
-  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,
-  no_enddate_extention <span class='op'>=</span> <span class='fl'>0</span>,
-  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    marker_col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADAE</span><span class='op'>$</span><span class='va'>AETOXGR</span><span class='op'>)</span>,
-    marker_col_opt <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"3"</span> <span class='op'>=</span> <span class='st'>"yellow"</span>, <span class='st'>"4"</span> <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,
-    marker_col_legend <span class='op'>=</span> <span class='cn'>NULL</span>
-  <span class='op'>)</span>,
-  marker_shape_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    marker_shape <span class='op'>=</span> <span class='cn'>NULL</span>,
-    marker_shape_opt <span class='op'>=</span> <span class='cn'>NULL</span>,
-    marker_shape_legend <span class='op'>=</span> <span class='st'>"Grade"</span>
-  <span class='op'>)</span>,
-  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>28</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,
-  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span></div><div class='input'><span class='va'>p2</span>
-</div><div class='img'><img src='patient_domain_profile-2.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Example 3 Tumor Response "ADRS"</span>
-<span class='va'>rADRS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adrs</span>
-<span class='va'>ADRS</span> <span class='op'>&lt;-</span> <span class='va'>rADRS</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>PARAMCD</span>, <span class='va'>PARAM</span>, <span class='va'>AVALC</span>, <span class='va'>AVAL</span>, <span class='va'>ADY</span>, <span class='va'>ADTM</span><span class='op'>)</span>
-<span class='va'>ADRS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADRS</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>p3</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span>
-  domain <span class='op'>=</span> <span class='st'>"Tumor Response (ADRS)"</span>,
-  var_names <span class='op'>=</span> <span class='va'>ADRS</span><span class='op'>$</span><span class='va'>PARAMCD</span>,
-  marker_pos <span class='op'>=</span> <span class='va'>ADRS</span><span class='op'>$</span><span class='va'>ADY</span>,
-  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,
-  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,
-  line_col_list <span class='op'>=</span> <span class='cn'>NULL</span>,
-  line_width <span class='op'>=</span> <span class='fl'>1</span>,
-  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,
-  no_enddate_extention <span class='op'>=</span> <span class='fl'>0</span>,
-  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    marker_col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADRS</span><span class='op'>$</span><span class='va'>AVALC</span><span class='op'>)</span>,
-    marker_col_opt <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CR"</span> <span class='op'>=</span> <span class='st'>"green"</span>, <span class='st'>"PR"</span> <span class='op'>=</span> <span class='st'>"blue"</span>,
-      <span class='st'>"SD"</span> <span class='op'>=</span> <span class='st'>"yellow"</span>, <span class='st'>"PD"</span> <span class='op'>=</span> <span class='st'>"red"</span>, <span class='st'>"NE"</span> <span class='op'>=</span> <span class='st'>"pink"</span>,
-      <span class='st'>"Y"</span> <span class='op'>=</span> <span class='st'>"lightblue"</span>, <span class='st'>"N"</span> <span class='op'>=</span> <span class='st'>"darkred"</span><span class='op'>)</span>,
-    marker_col_legend <span class='op'>=</span> <span class='cn'>NULL</span>
-  <span class='op'>)</span>,
-  marker_shape_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    marker_shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADRS</span><span class='op'>$</span><span class='va'>AVALC</span><span class='op'>)</span>,
-    marker_shape_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CR"</span> <span class='op'>=</span> <span class='fl'>21</span>, <span class='st'>"PR"</span> <span class='op'>=</span> <span class='fl'>24</span>,
-      <span class='st'>"SD"</span> <span class='op'>=</span> <span class='fl'>23</span>, <span class='st'>"PD"</span> <span class='op'>=</span> <span class='fl'>22</span>, <span class='st'>"NE"</span> <span class='op'>=</span> <span class='fl'>14</span>,
-      <span class='st'>"Y"</span> <span class='op'>=</span> <span class='fl'>11</span>, <span class='st'>"N"</span> <span class='op'>=</span> <span class='fl'>8</span><span class='op'>)</span>,
-    marker_shape_legend <span class='op'>=</span> <span class='st'>"Response"</span>
-  <span class='op'>)</span>,
-  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>28</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,
-  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>p3</span>
-</div><div class='img'><img src='patient_domain_profile-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Example 4 Concomitant Med "ADCM"</span>
-<span class='va'>rADCM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adcm</span>
-<span class='va'>ADCM</span> <span class='op'>&lt;-</span> <span class='va'>rADCM</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>ASTDTM</span>, <span class='va'>AENDTM</span>, <span class='va'>CMDECOD</span>, <span class='va'>ASTDY</span>, <span class='va'>AENDY</span><span class='op'>)</span>
-<span class='va'>ADCM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADCM</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>p4</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span>
-  domain <span class='op'>=</span> <span class='st'>"Concomitant Med (ADCM)"</span>,
-  var_names <span class='op'>=</span> <span class='va'>ADCM</span><span class='op'>$</span><span class='va'>CMDECOD</span>,
-  marker_pos <span class='op'>=</span> <span class='va'>ADCM</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ASTDY"</span>, <span class='st'>"AENDY"</span><span class='op'>)</span><span class='op'>]</span>,
-  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,
-  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,
-  line_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>line_col_opt <span class='op'>=</span> <span class='st'>"orange"</span><span class='op'>)</span>,
-  line_width <span class='op'>=</span> <span class='fl'>1</span>,
-  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,
-  no_enddate_extention <span class='op'>=</span> <span class='fl'>50</span>,
-  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>marker_col_opt <span class='op'>=</span> <span class='st'>"orange"</span><span class='op'>)</span>,
-  marker_shape_list <span class='op'>=</span> <span class='cn'>NULL</span>,
-  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>28</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,
-  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span></div><div class='input'><span class='va'>p4</span>
-</div><div class='img'><img src='patient_domain_profile-4.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># Example 5 Laboratory "ADLB"</span>
-<span class='va'>rADLB</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adlb</span>
-<span class='va'>ADLB</span> <span class='op'>&lt;-</span> <span class='va'>rADLB</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span>
-    <span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>LBSEQ</span>, <span class='va'>PARAMCD</span>, <span class='va'>BASETYPE</span>,
-    <span class='va'>ADTM</span>, <span class='va'>ADY</span>, <span class='va'>ATPTN</span>, <span class='va'>AVISITN</span>, <span class='va'>LBTESTCD</span>, <span class='va'>ANRIND</span><span class='op'>)</span>
-<span class='va'>ADLB</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADLB</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>ADLB</span> <span class='op'>&lt;-</span> <span class='va'>ADLB</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>USUBJID</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>ANRIND <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ANRIND</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"LOW"</span>, <span class='st'>"NORMAL"</span>, <span class='st'>"HIGH"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-
-<span class='va'>p5</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span>
-  domain <span class='op'>=</span> <span class='st'>"Laboratory (ADLB)"</span>,
-  var_names <span class='op'>=</span> <span class='va'>ADLB</span><span class='op'>$</span><span class='va'>LBTESTCD</span>,
-  marker_pos <span class='op'>=</span> <span class='va'>ADLB</span><span class='op'>$</span><span class='va'>ADY</span>,
-  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,
-  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,
-  line_col_list <span class='op'>=</span> <span class='cn'>NULL</span>,
-  line_width <span class='op'>=</span> <span class='fl'>1</span>,
-  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,
-  no_enddate_extention <span class='op'>=</span> <span class='fl'>0</span>,
-  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    marker_col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADLB</span><span class='op'>$</span><span class='va'>ANRIND</span><span class='op'>)</span>,
-    marker_col_opt <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HIGH"</span> <span class='op'>=</span> <span class='st'>"red"</span>, <span class='st'>"LOW"</span> <span class='op'>=</span> <span class='st'>"blue"</span>,
-      <span class='st'>"NORMAL"</span> <span class='op'>=</span> <span class='st'>"green"</span>, <span class='st'>"NA"</span> <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span>
-  <span class='op'>)</span>,
-  marker_shape_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    marker_shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADLB</span><span class='op'>$</span><span class='va'>ANRIND</span><span class='op'>)</span>,
-    marker_shape_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HIGH"</span> <span class='op'>=</span> <span class='fl'>24</span>, <span class='st'>"LOW"</span> <span class='op'>=</span> <span class='fl'>25</span>,
-      <span class='st'>"NORMAL"</span> <span class='op'>=</span> <span class='fl'>23</span>, <span class='st'>"NA"</span> <span class='op'>=</span> <span class='fl'>23</span><span class='op'>)</span>,
-    marker_shape_legend <span class='op'>=</span> <span class='st'>"Labs Abnormality"</span>
-  <span class='op'>)</span>,
-  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>30</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,
-  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,
-  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span>
-<span class='op'>)</span>
-<span class='va'>p5</span>
-</div><div class='img'><img src='patient_domain_profile-5.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>utils.nest</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/insightsengineering/tern'>tern</a></span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ADSL</span></span>
+<span class='r-in'><span class='va'>rADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span></span>
+<span class='r-in'><span class='va'>ADSL</span> <span class='op'>&lt;-</span>  <span class='va'>rADSL</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>USUBJID</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span></span>
+<span class='r-in'>    TRTSDT <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>TRTSDTM</span><span class='op'>)</span>,</span>
+<span class='r-in'>    max_date <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>LSTALVDT</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>DTHDT</span><span class='op'>)</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,</span>
+<span class='r-in'>    max_day <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>max_date</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>TRTSDT</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>TRTSDT</span> , <span class='va'>max_day</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>USUBJID</span> <span class='op'>==</span> <span class='va'>rADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 1 Exposure "ADEX"</span></span>
+<span class='r-in'><span class='va'>rADEX</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adex</span></span>
+<span class='r-in'><span class='va'>ADEX</span> <span class='op'>&lt;-</span> <span class='va'>rADEX</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>ASTDTM</span>, <span class='va'>PARCAT2</span>, <span class='va'>AVAL</span>, <span class='va'>AVALU</span>, <span class='va'>PARAMCD</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADEX</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADEX</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADEX</span> <span class='op'>&lt;-</span> <span class='va'>ADEX</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>PARAMCD</span> <span class='op'>==</span> <span class='st'>"DOSE"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>PARCAT2</span>, <span class='va'>PARAMCD</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>diff <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fu'><a href='https://rdrr.io/r/base/diff.html'>diff</a></span><span class='op'>(</span><span class='va'>AVAL</span>, lag <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span></span>
+<span class='r-in'>    Modification <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='va'>diff</span> <span class='op'>&lt;</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"Decrease"</span>,</span>
+<span class='r-in'>    <span class='va'>diff</span> <span class='op'>&gt;</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"Increase"</span>,</span>
+<span class='r-in'>    <span class='va'>diff</span> <span class='op'>==</span> <span class='fl'>0</span> <span class='op'>~</span> <span class='st'>"None"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span></span>
+<span class='r-in'>    ASTDT_dur <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span></span>
+<span class='r-in'>      <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span></span>
+<span class='r-in'>        <span class='fu'><a href='https://rdrr.io/r/base/substr.html'>substr</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>ASTDTM</span><span class='op'>)</span>, <span class='fl'>1</span>, <span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='va'>TRTSDT</span><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span></span>
+<span class='r-in'>  domain <span class='op'>=</span> <span class='st'>"Exposure (ADEX)"</span>,</span>
+<span class='r-in'>  var_names <span class='op'>=</span> <span class='va'>ADEX</span><span class='op'>$</span><span class='va'>PARCAT2</span>,</span>
+<span class='r-in'>  marker_pos <span class='op'>=</span> <span class='va'>ADEX</span><span class='op'>$</span><span class='va'>ASTDT_dur</span>,</span>
+<span class='r-in'>  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,</span>
+<span class='r-in'>  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  line_col_list <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span class='r-in'>  line_width <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,</span>
+<span class='r-in'>  no_enddate_extention <span class='op'>=</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    marker_col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADEX</span><span class='op'>$</span><span class='va'>Modification</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_col_opt <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Increase"</span> <span class='op'>=</span> <span class='st'>"red"</span>, <span class='st'>"Decrease"</span> <span class='op'>=</span> <span class='st'>"green"</span>, <span class='st'>"None"</span> <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_col_legend <span class='op'>=</span> <span class='cn'>NULL</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  marker_shape_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    marker_shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADEX</span><span class='op'>$</span><span class='va'>Modification</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_shape_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Increase"</span> <span class='op'>=</span> <span class='fl'>24</span>, <span class='st'>"Decrease"</span> <span class='op'>=</span> <span class='fl'>25</span>, <span class='st'>"None"</span> <span class='op'>=</span> <span class='fl'>23</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_shape_legend <span class='op'>=</span> <span class='st'>"Dose Modification"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>28</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,</span>
+<span class='r-in'>  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p1</span></span>
+<span class='r-plt img'><img src='patient_domain_profile-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 2 Adverse Event "ADAE"</span></span>
+<span class='r-in'><span class='co'># Note that ASTDY is represented by a circle and AENDY is represented by a square.</span></span>
+<span class='r-in'><span class='co'># If AENDY and ASTDY occur on the same day only AENDY will be shown.</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Adverse Event ADAE</span></span>
+<span class='r-in'><span class='va'>rADAE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adae</span></span>
+<span class='r-in'><span class='va'>ADAE</span> <span class='op'>&lt;-</span> <span class='va'>rADAE</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>AESOC</span>, <span class='va'>AEDECOD</span>, <span class='va'>AESER</span>, <span class='va'>AETOXGR</span>, <span class='va'>AEREL</span>, <span class='va'>ASTDY</span>, <span class='va'>AENDY</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADAE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADAE</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span></span>
+<span class='r-in'>  domain <span class='op'>=</span> <span class='st'>"Adverse Event (ADAE)"</span>,</span>
+<span class='r-in'>  var_names <span class='op'>=</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>AEDECOD</span>,</span>
+<span class='r-in'>  marker_pos <span class='op'>=</span> <span class='va'>ADAE</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ASTDY"</span>, <span class='st'>"AENDY"</span><span class='op'>)</span><span class='op'>]</span>,</span>
+<span class='r-in'>  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,</span>
+<span class='r-in'>  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  line_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    line_col <span class='op'>=</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>AESER</span>,</span>
+<span class='r-in'>    line_col_legend <span class='op'>=</span> <span class='st'>"Serious"</span>,</span>
+<span class='r-in'>    line_col_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"blue"</span>,<span class='st'>"green"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  line_width <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,</span>
+<span class='r-in'>  no_enddate_extention <span class='op'>=</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    marker_col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADAE</span><span class='op'>$</span><span class='va'>AETOXGR</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_col_opt <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"3"</span> <span class='op'>=</span> <span class='st'>"yellow"</span>, <span class='st'>"4"</span> <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_col_legend <span class='op'>=</span> <span class='cn'>NULL</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  marker_shape_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    marker_shape <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span class='r-in'>    marker_shape_opt <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span class='r-in'>    marker_shape_legend <span class='op'>=</span> <span class='st'>"Grade"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>28</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,</span>
+<span class='r-in'>  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
+<span class='r-in'><span class='va'>p2</span></span>
+<span class='r-plt img'><img src='patient_domain_profile-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 3 Tumor Response "ADRS"</span></span>
+<span class='r-in'><span class='va'>rADRS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adrs</span></span>
+<span class='r-in'><span class='va'>ADRS</span> <span class='op'>&lt;-</span> <span class='va'>rADRS</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>PARAMCD</span>, <span class='va'>PARAM</span>, <span class='va'>AVALC</span>, <span class='va'>AVAL</span>, <span class='va'>ADY</span>, <span class='va'>ADTM</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADRS</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADRS</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p3</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span></span>
+<span class='r-in'>  domain <span class='op'>=</span> <span class='st'>"Tumor Response (ADRS)"</span>,</span>
+<span class='r-in'>  var_names <span class='op'>=</span> <span class='va'>ADRS</span><span class='op'>$</span><span class='va'>PARAMCD</span>,</span>
+<span class='r-in'>  marker_pos <span class='op'>=</span> <span class='va'>ADRS</span><span class='op'>$</span><span class='va'>ADY</span>,</span>
+<span class='r-in'>  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,</span>
+<span class='r-in'>  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  line_col_list <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span class='r-in'>  line_width <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,</span>
+<span class='r-in'>  no_enddate_extention <span class='op'>=</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    marker_col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADRS</span><span class='op'>$</span><span class='va'>AVALC</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_col_opt <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CR"</span> <span class='op'>=</span> <span class='st'>"green"</span>, <span class='st'>"PR"</span> <span class='op'>=</span> <span class='st'>"blue"</span>,</span>
+<span class='r-in'>      <span class='st'>"SD"</span> <span class='op'>=</span> <span class='st'>"yellow"</span>, <span class='st'>"PD"</span> <span class='op'>=</span> <span class='st'>"red"</span>, <span class='st'>"NE"</span> <span class='op'>=</span> <span class='st'>"pink"</span>,</span>
+<span class='r-in'>      <span class='st'>"Y"</span> <span class='op'>=</span> <span class='st'>"lightblue"</span>, <span class='st'>"N"</span> <span class='op'>=</span> <span class='st'>"darkred"</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_col_legend <span class='op'>=</span> <span class='cn'>NULL</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  marker_shape_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    marker_shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADRS</span><span class='op'>$</span><span class='va'>AVALC</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_shape_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CR"</span> <span class='op'>=</span> <span class='fl'>21</span>, <span class='st'>"PR"</span> <span class='op'>=</span> <span class='fl'>24</span>,</span>
+<span class='r-in'>      <span class='st'>"SD"</span> <span class='op'>=</span> <span class='fl'>23</span>, <span class='st'>"PD"</span> <span class='op'>=</span> <span class='fl'>22</span>, <span class='st'>"NE"</span> <span class='op'>=</span> <span class='fl'>14</span>,</span>
+<span class='r-in'>      <span class='st'>"Y"</span> <span class='op'>=</span> <span class='fl'>11</span>, <span class='st'>"N"</span> <span class='op'>=</span> <span class='fl'>8</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_shape_legend <span class='op'>=</span> <span class='st'>"Response"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>28</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,</span>
+<span class='r-in'>  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p3</span></span>
+<span class='r-plt img'><img src='patient_domain_profile-3.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 4 Concomitant Med "ADCM"</span></span>
+<span class='r-in'><span class='va'>rADCM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adcm</span></span>
+<span class='r-in'><span class='va'>ADCM</span> <span class='op'>&lt;-</span> <span class='va'>rADCM</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>ASTDTM</span>, <span class='va'>AENDTM</span>, <span class='va'>CMDECOD</span>, <span class='va'>ASTDY</span>, <span class='va'>AENDY</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADCM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADCM</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p4</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span></span>
+<span class='r-in'>  domain <span class='op'>=</span> <span class='st'>"Concomitant Med (ADCM)"</span>,</span>
+<span class='r-in'>  var_names <span class='op'>=</span> <span class='va'>ADCM</span><span class='op'>$</span><span class='va'>CMDECOD</span>,</span>
+<span class='r-in'>  marker_pos <span class='op'>=</span> <span class='va'>ADCM</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"ASTDY"</span>, <span class='st'>"AENDY"</span><span class='op'>)</span><span class='op'>]</span>,</span>
+<span class='r-in'>  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,</span>
+<span class='r-in'>  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  line_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>line_col_opt <span class='op'>=</span> <span class='st'>"orange"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  line_width <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,</span>
+<span class='r-in'>  no_enddate_extention <span class='op'>=</span> <span class='fl'>50</span>,</span>
+<span class='r-in'>  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>marker_col_opt <span class='op'>=</span> <span class='st'>"orange"</span><span class='op'>)</span>,</span>
+<span class='r-in'>  marker_shape_list <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span class='r-in'>  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>28</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,</span>
+<span class='r-in'>  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>`guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
+<span class='r-in'><span class='va'>p4</span></span>
+<span class='r-plt img'><img src='patient_domain_profile-4.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 5 Laboratory "ADLB"</span></span>
+<span class='r-in'><span class='va'>rADLB</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adlb</span></span>
+<span class='r-in'><span class='va'>ADLB</span> <span class='op'>&lt;-</span> <span class='va'>rADLB</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='va'>USUBJID</span>, <span class='va'>STUDYID</span>, <span class='va'>LBSEQ</span>, <span class='va'>PARAMCD</span>, <span class='va'>BASETYPE</span>,</span>
+<span class='r-in'>    <span class='va'>ADTM</span>, <span class='va'>ADY</span>, <span class='va'>ATPTN</span>, <span class='va'>AVISITN</span>, <span class='va'>LBTESTCD</span>, <span class='va'>ANRIND</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>ADLB</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>ADSL</span>, <span class='va'>ADLB</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"USUBJID"</span>, <span class='st'>"STUDYID"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ADLB</span> <span class='op'>&lt;-</span> <span class='va'>ADLB</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>USUBJID</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>ANRIND <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ANRIND</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"LOW"</span>, <span class='st'>"NORMAL"</span>, <span class='st'>"HIGH"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>p5</span> <span class='op'>&lt;-</span> <span class='fu'>patient_domain_profile</span><span class='op'>(</span></span>
+<span class='r-in'>  domain <span class='op'>=</span> <span class='st'>"Laboratory (ADLB)"</span>,</span>
+<span class='r-in'>  var_names <span class='op'>=</span> <span class='va'>ADLB</span><span class='op'>$</span><span class='va'>LBTESTCD</span>,</span>
+<span class='r-in'>  marker_pos <span class='op'>=</span> <span class='va'>ADLB</span><span class='op'>$</span><span class='va'>ADY</span>,</span>
+<span class='r-in'>  arrow_end <span class='op'>=</span> <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span>,</span>
+<span class='r-in'>  xtick_at <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/waiver.html'>waiver</a></span><span class='op'>(</span><span class='op'>)</span>,</span>
+<span class='r-in'>  line_col_list <span class='op'>=</span> <span class='cn'>NULL</span>,</span>
+<span class='r-in'>  line_width <span class='op'>=</span> <span class='fl'>1</span>,</span>
+<span class='r-in'>  arrow_size <span class='op'>=</span> <span class='fl'>0.1</span>,</span>
+<span class='r-in'>  no_enddate_extention <span class='op'>=</span> <span class='fl'>0</span>,</span>
+<span class='r-in'>  marker_col_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    marker_col <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADLB</span><span class='op'>$</span><span class='va'>ANRIND</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_col_opt <span class='op'>=</span>  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HIGH"</span> <span class='op'>=</span> <span class='st'>"red"</span>, <span class='st'>"LOW"</span> <span class='op'>=</span> <span class='st'>"blue"</span>,</span>
+<span class='r-in'>      <span class='st'>"NORMAL"</span> <span class='op'>=</span> <span class='st'>"green"</span>, <span class='st'>"NA"</span> <span class='op'>=</span> <span class='st'>"green"</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  marker_shape_list <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    marker_shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>ADLB</span><span class='op'>$</span><span class='va'>ANRIND</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_shape_opt <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"HIGH"</span> <span class='op'>=</span> <span class='fl'>24</span>, <span class='st'>"LOW"</span> <span class='op'>=</span> <span class='fl'>25</span>,</span>
+<span class='r-in'>      <span class='st'>"NORMAL"</span> <span class='op'>=</span> <span class='fl'>23</span>, <span class='st'>"NA"</span> <span class='op'>=</span> <span class='fl'>23</span><span class='op'>)</span>,</span>
+<span class='r-in'>    marker_shape_legend <span class='op'>=</span> <span class='st'>"Labs Abnormality"</span></span>
+<span class='r-in'>  <span class='op'>)</span>,</span>
+<span class='r-in'>  show_days_label <span class='op'>=</span> <span class='cn'>TRUE</span>,</span>
+<span class='r-in'>  xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>30</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>max_day</span><span class='op'>)</span>,</span>
+<span class='r-in'>  xlab <span class='op'>=</span> <span class='st'>"Study Day"</span>,</span>
+<span class='r-in'>  title <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Patient Profile: "</span>, <span class='va'>ADSL</span><span class='op'>$</span><span class='va'>USUBJID</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p5</span></span>
+<span class='r-plt img'><img src='patient_domain_profile-5.png' alt='' width='700' height='433' /></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

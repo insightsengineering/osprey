@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9005</span>
       </span>
     </div>
 
@@ -238,86 +238,89 @@ default unit "mm", if you want "points" you will need to divide the point number
     <p>Liming Li (Lil128) <a href='mailto:liming.li@roche.com'>liming.li@roche.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>)</span>
-
-<span class='va'>ADAE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adae</span>
-<span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span>
-
-<span class='va'>id</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>USUBJID</span>
-<span class='va'>arm</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>ACTARMCD</span>
-<span class='va'>arm_sl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>ADSL</span><span class='op'>$</span><span class='va'>ACTARMCD</span><span class='op'>)</span>
-<span class='va'>subgroups_sl</span> <span class='op'>&lt;-</span> <span class='va'>ADSL</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"RACE"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span><span class='op'>]</span>
-<span class='va'>subgroups</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"RACE"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span><span class='op'>]</span>
-<span class='va'>subgroups_levels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>RACE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Race"</span>,
-                                     <span class='st'>"AMERICAN INDIAN OR ALASKA NATIVE"</span> <span class='op'>=</span> <span class='st'>"American"</span>,
-                                     <span class='st'>"WHITE"</span> <span class='op'>=</span> <span class='st'>"White"</span>,
-                                     <span class='st'>"ASIAN"</span> <span class='op'>=</span> <span class='st'>"Asian"</span>,
-                                     <span class='st'>"BLACK OR AFRICAN AMERICAN"</span> <span class='op'>=</span> <span class='st'>"African"</span><span class='op'>)</span>,
-                         STRATA1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Strata"</span>,
-                                        <span class='st'>"A"</span> <span class='op'>=</span> <span class='st'>"TypeA"</span>,
-                                        <span class='st'>"B"</span> <span class='op'>=</span> <span class='st'>"TypeB"</span>,
-                                        <span class='st'>"C"</span> <span class='op'>=</span> <span class='st'>"Typec"</span><span class='op'>)</span>,
-                         SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Sex"</span>,
-                                    <span class='st'>"M"</span> <span class='op'>=</span> <span class='st'>"Male"</span>,
-                                    <span class='st'>"F"</span> <span class='op'>=</span> <span class='st'>"Female"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># Example 1</span>
-<span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'>g_ae_sub</span><span class='op'>(</span><span class='va'>id</span>,
-              <span class='va'>arm</span>,
-              <span class='va'>arm_sl</span>,
-              <span class='va'>subgroups</span>,
-              <span class='va'>subgroups_sl</span>,
-              trt <span class='op'>=</span> <span class='st'>"ARM A"</span>,
-              ref <span class='op'>=</span> <span class='st'>"ARM C"</span>,
-              subgroups_levels <span class='op'>=</span> <span class='va'>subgroups_levels</span>,
-              arm_n <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='img'><img src='g_ae_sub-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grid/grid.newpage.html'>grid.newpage</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># Example 2: display number of patients in each arm</span>
-<span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'>g_ae_sub</span><span class='op'>(</span><span class='va'>id</span>,
-              <span class='va'>arm</span>,
-              <span class='va'>arm_sl</span>,
-              <span class='va'>subgroups</span>,
-              <span class='va'>subgroups_sl</span>,
-              trt <span class='op'>=</span> <span class='st'>"ARM A"</span>,
-              ref <span class='op'>=</span> <span class='st'>"ARM C"</span>,
-              subgroups_levels <span class='op'>=</span> <span class='va'>subgroups_levels</span>,
-              arm_n <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='img'><img src='g_ae_sub-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/grid/grid.newpage.html'>grid.newpage</a></span><span class='op'>(</span><span class='op'>)</span>
-
-<span class='co'># Example 3: preprocess data to only include treatment and control arm patients</span>
-<span class='va'>trt</span> <span class='op'>&lt;-</span> <span class='st'>"ARM A"</span>
-<span class='va'>ref</span> <span class='op'>&lt;-</span> <span class='st'>"ARM C"</span>
-<span class='va'>ADAE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adae</span>
-<span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>ACTARMCD</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>ref</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>id</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>USUBJID</span>
-<span class='va'>arm</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>ACTARMCD</span>
-<span class='va'>arm_sl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>ADSL</span><span class='op'>$</span><span class='va'>ACTARMCD</span><span class='op'>)</span>
-<span class='va'>subgroups_sl</span> <span class='op'>&lt;-</span> <span class='va'>ADSL</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"RACE"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span><span class='op'>]</span>
-<span class='va'>subgroups</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"RACE"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span><span class='op'>]</span>
-<span class='va'>subgroups_levels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>RACE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Race"</span>,
-                                     <span class='st'>"AMERICAN INDIAN OR ALASKA NATIVE"</span> <span class='op'>=</span> <span class='st'>"American"</span>,
-                                     <span class='st'>"WHITE"</span> <span class='op'>=</span> <span class='st'>"White"</span>,
-                                     <span class='st'>"ASIAN"</span> <span class='op'>=</span> <span class='st'>"Asian"</span>,
-                                     <span class='st'>"BLACK OR AFRICAN AMERICAN"</span> <span class='op'>=</span> <span class='st'>"African"</span><span class='op'>)</span>,
-                         STRATA1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Strata"</span>,
-                                        <span class='st'>"A"</span> <span class='op'>=</span> <span class='st'>"TypeA"</span>,
-                                        <span class='st'>"B"</span> <span class='op'>=</span> <span class='st'>"TypeB"</span>,
-                                        <span class='st'>"C"</span> <span class='op'>=</span> <span class='st'>"Typec"</span><span class='op'>)</span>,
-                         SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Sex"</span>,
-                                    <span class='st'>"M"</span> <span class='op'>=</span> <span class='st'>"Male"</span>,
-                                    <span class='st'>"F"</span> <span class='op'>=</span> <span class='st'>"Female"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>p3</span> <span class='op'>&lt;-</span> <span class='fu'>g_ae_sub</span><span class='op'>(</span><span class='va'>id</span>,
-              <span class='va'>arm</span>,
-              <span class='va'>arm_sl</span>,
-              <span class='va'>subgroups</span>,
-              <span class='va'>subgroups_sl</span>,
-              <span class='va'>trt</span>,
-              <span class='va'>ref</span>,
-              subgroups_levels <span class='op'>=</span> <span class='va'>subgroups_levels</span>,
-              arm_n <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='img'><img src='g_ae_sub-3.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>scda</span><span class='op'>)</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>grid</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>ADAE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adae</span></span>
+<span class='r-in'><span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>USUBJID</span></span>
+<span class='r-in'><span class='va'>arm</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>ACTARMCD</span></span>
+<span class='r-in'><span class='va'>arm_sl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>ADSL</span><span class='op'>$</span><span class='va'>ACTARMCD</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>subgroups_sl</span> <span class='op'>&lt;-</span> <span class='va'>ADSL</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"RACE"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>subgroups</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"RACE"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>subgroups_levels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>RACE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Race"</span>,</span>
+<span class='r-in'>                                     <span class='st'>"AMERICAN INDIAN OR ALASKA NATIVE"</span> <span class='op'>=</span> <span class='st'>"American"</span>,</span>
+<span class='r-in'>                                     <span class='st'>"WHITE"</span> <span class='op'>=</span> <span class='st'>"White"</span>,</span>
+<span class='r-in'>                                     <span class='st'>"ASIAN"</span> <span class='op'>=</span> <span class='st'>"Asian"</span>,</span>
+<span class='r-in'>                                     <span class='st'>"BLACK OR AFRICAN AMERICAN"</span> <span class='op'>=</span> <span class='st'>"African"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                         STRATA1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Strata"</span>,</span>
+<span class='r-in'>                                        <span class='st'>"A"</span> <span class='op'>=</span> <span class='st'>"TypeA"</span>,</span>
+<span class='r-in'>                                        <span class='st'>"B"</span> <span class='op'>=</span> <span class='st'>"TypeB"</span>,</span>
+<span class='r-in'>                                        <span class='st'>"C"</span> <span class='op'>=</span> <span class='st'>"Typec"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                         SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Sex"</span>,</span>
+<span class='r-in'>                                    <span class='st'>"M"</span> <span class='op'>=</span> <span class='st'>"Male"</span>,</span>
+<span class='r-in'>                                    <span class='st'>"F"</span> <span class='op'>=</span> <span class='st'>"Female"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># Example 1</span></span>
+<span class='r-in'><span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'>g_ae_sub</span><span class='op'>(</span><span class='va'>id</span>,</span>
+<span class='r-in'>              <span class='va'>arm</span>,</span>
+<span class='r-in'>              <span class='va'>arm_sl</span>,</span>
+<span class='r-in'>              <span class='va'>subgroups</span>,</span>
+<span class='r-in'>              <span class='va'>subgroups_sl</span>,</span>
+<span class='r-in'>              trt <span class='op'>=</span> <span class='st'>"ARM A"</span>,</span>
+<span class='r-in'>              ref <span class='op'>=</span> <span class='st'>"ARM C"</span>,</span>
+<span class='r-in'>              subgroups_levels <span class='op'>=</span> <span class='va'>subgroups_levels</span>,</span>
+<span class='r-in'>              arm_n <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='g_ae_sub-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/grid/grid.newpage.html'>grid.newpage</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 2: display number of patients in each arm</span></span>
+<span class='r-in'><span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'>g_ae_sub</span><span class='op'>(</span><span class='va'>id</span>,</span>
+<span class='r-in'>              <span class='va'>arm</span>,</span>
+<span class='r-in'>              <span class='va'>arm_sl</span>,</span>
+<span class='r-in'>              <span class='va'>subgroups</span>,</span>
+<span class='r-in'>              <span class='va'>subgroups_sl</span>,</span>
+<span class='r-in'>              trt <span class='op'>=</span> <span class='st'>"ARM A"</span>,</span>
+<span class='r-in'>              ref <span class='op'>=</span> <span class='st'>"ARM C"</span>,</span>
+<span class='r-in'>              subgroups_levels <span class='op'>=</span> <span class='va'>subgroups_levels</span>,</span>
+<span class='r-in'>              arm_n <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='g_ae_sub-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/grid/grid.newpage.html'>grid.newpage</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Example 3: preprocess data to only include treatment and control arm patients</span></span>
+<span class='r-in'><span class='va'>trt</span> <span class='op'>&lt;-</span> <span class='st'>"ARM A"</span></span>
+<span class='r-in'><span class='va'>ref</span> <span class='op'>&lt;-</span> <span class='st'>"ARM C"</span></span>
+<span class='r-in'><span class='va'>ADAE</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adae</span></span>
+<span class='r-in'><span class='va'>ADSL</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html'>synthetic_cdisc_data</a></span><span class='op'>(</span><span class='st'>"latest"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>adsl</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span class='r-in'>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>ACTARMCD</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>trt</span>, <span class='va'>ref</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>id</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>USUBJID</span></span>
+<span class='r-in'><span class='va'>arm</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>$</span><span class='va'>ACTARMCD</span></span>
+<span class='r-in'><span class='va'>arm_sl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>ADSL</span><span class='op'>$</span><span class='va'>ACTARMCD</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>subgroups_sl</span> <span class='op'>&lt;-</span> <span class='va'>ADSL</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"RACE"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>subgroups</span> <span class='op'>&lt;-</span> <span class='va'>ADAE</span><span class='op'>[</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SEX"</span>, <span class='st'>"RACE"</span>, <span class='st'>"STRATA1"</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>subgroups_levels</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>RACE <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Race"</span>,</span>
+<span class='r-in'>                                     <span class='st'>"AMERICAN INDIAN OR ALASKA NATIVE"</span> <span class='op'>=</span> <span class='st'>"American"</span>,</span>
+<span class='r-in'>                                     <span class='st'>"WHITE"</span> <span class='op'>=</span> <span class='st'>"White"</span>,</span>
+<span class='r-in'>                                     <span class='st'>"ASIAN"</span> <span class='op'>=</span> <span class='st'>"Asian"</span>,</span>
+<span class='r-in'>                                     <span class='st'>"BLACK OR AFRICAN AMERICAN"</span> <span class='op'>=</span> <span class='st'>"African"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                         STRATA1 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Strata"</span>,</span>
+<span class='r-in'>                                        <span class='st'>"A"</span> <span class='op'>=</span> <span class='st'>"TypeA"</span>,</span>
+<span class='r-in'>                                        <span class='st'>"B"</span> <span class='op'>=</span> <span class='st'>"TypeB"</span>,</span>
+<span class='r-in'>                                        <span class='st'>"C"</span> <span class='op'>=</span> <span class='st'>"Typec"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                         SEX <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"Total"</span> <span class='op'>=</span> <span class='st'>"Sex"</span>,</span>
+<span class='r-in'>                                    <span class='st'>"M"</span> <span class='op'>=</span> <span class='st'>"Male"</span>,</span>
+<span class='r-in'>                                    <span class='st'>"F"</span> <span class='op'>=</span> <span class='st'>"Female"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>p3</span> <span class='op'>&lt;-</span> <span class='fu'>g_ae_sub</span><span class='op'>(</span><span class='va'>id</span>,</span>
+<span class='r-in'>              <span class='va'>arm</span>,</span>
+<span class='r-in'>              <span class='va'>arm_sl</span>,</span>
+<span class='r-in'>              <span class='va'>subgroups</span>,</span>
+<span class='r-in'>              <span class='va'>subgroups_sl</span>,</span>
+<span class='r-in'>              <span class='va'>trt</span>,</span>
+<span class='r-in'>              <span class='va'>ref</span>,</span>
+<span class='r-in'>              subgroups_levels <span class='op'>=</span> <span class='va'>subgroups_levels</span>,</span>
+<span class='r-in'>              arm_n <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='g_ae_sub-3.png' alt='' width='700' height='433' /></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -84,7 +84,7 @@ full path to program and the output for easy tracking and archiving." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.11.9005</span>
       </span>
     </div>
 
@@ -192,28 +192,28 @@ title is set to <code>fontsize</code> + 1 (default = 10) and for footnotes set t
     <p>Chendi Liao (liaoc10) <a href='mailto:chendi.liao@roche.com'>chendi.liao@roche.com</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span>
-
-<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>iris</span>, <span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplotGrob.html'>ggplotGrob</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/qplot.html'>qplot</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span>, <span class='va'>Sepal.Width</span>, col <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplotGrob.html'>ggplotGrob</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/qplot.html'>qplot</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span>, <span class='va'>Petal.Length</span>, col <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span>,
-    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplotGrob.html'>ggplotGrob</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/qplot.html'>qplot</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span>, <span class='va'>Petal.Width</span>, col <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='op'>)</span>
-<span class='op'>}</span><span class='op'>)</span>
-
-<span class='fu'>grobs2pdf</span><span class='op'>(</span>
-  grobs <span class='op'>=</span> <span class='va'>g</span>,
-  titles <span class='op'>=</span> <span class='st'>"Visualization of Iris Data"</span>,
-  footnotes <span class='op'>=</span> <span class='st'>"This is a footnote"</span>,
-  progpath <span class='op'>=</span> <span class='st'>"~/example_prog.R"</span>,
-  outpath <span class='op'>=</span> <span class='st'>"~/example_grobs2pdf.pdf"</span>
-<span class='op'>)</span>
-<span class='op'>}</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggplot2.tidyverse.org'>ggplot2</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>iris</span>, <span class='op'>{</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span></span>
+<span class='r-in'>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplotGrob.html'>ggplotGrob</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/qplot.html'>qplot</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span>, <span class='va'>Sepal.Width</span>, col <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplotGrob.html'>ggplotGrob</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/qplot.html'>qplot</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span>, <span class='va'>Petal.Length</span>, col <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span>,</span>
+<span class='r-in'>    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplotGrob.html'>ggplotGrob</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/qplot.html'>qplot</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span>, <span class='va'>Petal.Width</span>, col <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>grobs2pdf</span><span class='op'>(</span></span>
+<span class='r-in'>  grobs <span class='op'>=</span> <span class='va'>g</span>,</span>
+<span class='r-in'>  titles <span class='op'>=</span> <span class='st'>"Visualization of Iris Data"</span>,</span>
+<span class='r-in'>  footnotes <span class='op'>=</span> <span class='st'>"This is a footnote"</span>,</span>
+<span class='r-in'>  progpath <span class='op'>=</span> <span class='st'>"~/example_prog.R"</span>,</span>
+<span class='r-in'>  outpath <span class='op'>=</span> <span class='st'>"~/example_grobs2pdf.pdf"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
