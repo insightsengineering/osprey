@@ -308,7 +308,7 @@ g_waterfall <- function(bar_id,
         ylabels <- c(ylabel1, ylabel2)
       } else {
         dif <- length(ylabel1) + length(ylabel2) - length(ybreaks)
-        ylabel2 <- ylabel2[-(1:dif)]
+        ylabel2 <- ylabel2[-(1:dif)] # nolint
         ylabels <- c(ylabel1, ylabel2)
       }
 

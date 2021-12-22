@@ -210,7 +210,7 @@ g_heat_bygrade <- function(id_var,
     group_by(!!sym(id_var), !!sym(visit_var)) %>%
     arrange(!!sym(visit_var)) %>%
     mutate(heat_color_max = factor(max(.data$heat_color_num), levels = 0:5)) %>%
-    select(-(!!heat_color_var), -.data$heat_color_num) %>%
+    select(-(!!heat_color_var), -.data$heat_color_num) %>% # nolint
     distinct() %>%
     left_join(anno_data, by = id_var)
 
