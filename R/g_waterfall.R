@@ -48,7 +48,7 @@
 #' )
 #'
 #' # Example 1
-#' ADSL <- rADSL[1:15,]
+#' ADSL <- rADSL[1:15, ]
 #' ADRS <- rADRS %>%
 #'   filter(USUBJID %in% ADSL$USUBJID)
 #' ADTR <- rADTR %>%
@@ -66,7 +66,7 @@
 #'   spread(PARAMCD, AVALC)
 #'
 #' ANL <- TR_SL %>%
-#'   left_join(SUB_ADRS,"USUBJID")
+#'   left_join(SUB_ADRS, "USUBJID")
 #'
 #' anno_txt_vars <- c("TRTDURD", "BESRSPI", "OBJRSPI", "SEX", "BMK2")
 #'
@@ -106,7 +106,7 @@
 #'   title = "Waterfall Plot"
 #' )
 #'
-#'  # Example 3 extreme value
+#' # Example 3 extreme value
 #' ANL$PCHG[3] <- 99
 #' ANL$PCHG[5] <- 199
 #' ANL$PCHG[7] <- 599
@@ -129,7 +129,6 @@
 #'   y_label = "Best % Change from Baseline",
 #'   title = "Waterfall Plot"
 #' )
-#'
 g_waterfall <- function(bar_id,
                         bar_height,
                         sort_by = NULL,
@@ -147,11 +146,13 @@ g_waterfall <- function(bar_id,
   # check data
   check_input_length <- c(nrow(data.frame(bar_id)), nrow(data.frame(bar_height)))
 
-  if (length(unique(check_input_length)) > 1)
+  if (length(unique(check_input_length)) > 1) {
     stop("invalid arguments: check that the length of input arguments are identical")
+  }
 
-  if (any(check_input_length == 0))
+  if (any(check_input_length == 0)) {
     stop("invalid arguments: check that inputs are not null")
+  }
 
   if (!is.null(bar_color_opt)) {
     if (is.null(col_by)) {
@@ -215,7 +216,8 @@ g_waterfall <- function(bar_id,
       ybreaks <- seq(
         ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
         ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-        by = ytick_at)
+        by = ytick_at
+      )
 
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
@@ -252,7 +254,8 @@ g_waterfall <- function(bar_id,
       ybreaks <- seq(
         ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
         ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-        by = ytick_at)
+        by = ytick_at
+      )
 
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
@@ -287,29 +290,32 @@ g_waterfall <- function(bar_id,
       ylabel1 <- seq(
         ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
         ytick_at * floor(gap_point / ytick_at),
-        by = ytick_at)
+        by = ytick_at
+      )
       ylabel2 <- seq(
         ytick_at * floor((gap_point + length_cut) / ytick_at),
         ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),
-        by = ytick_at)
+        by = ytick_at
+      )
 
       ybreaks <- seq(
         ytick_at * floor(min(bar_data$new_bar_height, na.rm = TRUE) / ytick_at),
         ytick_at * ceiling(max(bar_data$new_bar_height, na.rm = TRUE) / ytick_at),
-        by = ytick_at)
+        by = ytick_at
+      )
 
       if (length(ylabel1) + length(ylabel2) == length(ybreaks)) {
         ylabels <- c(ylabel1, ylabel2)
       } else {
         dif <- length(ylabel1) + length(ylabel2) - length(ybreaks)
-        ylabel2 <- ylabel2[- (1:dif)]
+        ylabel2 <- ylabel2[-(1:dif)]
         ylabels <- c(ylabel1, ylabel2)
       }
 
       p <- ggplot(data = bar_data, aes_string(x = "bar_id", y = "new_bar_height")) +
         geom_col(position = "identity", aes(fill = col_by)) +
         geom_rect(aes(xmin = 0.5, xmax = length(bar_id), ymin = gap_point, ymax = gap_point + 3), fill = "white") +
-        scale_y_continuous(breaks =  ybreaks, labels = ylabels) +
+        scale_y_continuous(breaks = ybreaks, labels = ylabels) +
         scale_x_discrete(expand = expansion(add = 0.5)) +
         geom_hline(yintercept = 0, colour = "black") +
         theme_bw() +
@@ -327,14 +333,16 @@ g_waterfall <- function(bar_id,
       p <- p + geom_text(
         label = format(bar_data$bar_height, digits = 1),
         size = 2.5,
-        vjust = ifelse(bar_data$bar_height >= 0, -0.5, 1.5))
+        vjust = ifelse(bar_data$bar_height >= 0, -0.5, 1.5)
+      )
     }
 
     if (!is.null(add_label)) {
       p <- p + geom_text(
         aes(x = bar_id, y = 0, label = add_label),
         size = 3,
-        vjust = ifelse(bar_data$bar_height >= 0, 1.5, -0.5))
+        vjust = ifelse(bar_data$bar_height >= 0, 1.5, -0.5)
+      )
     }
 
     if (is.null(col_by)) {
@@ -399,26 +407,30 @@ g_waterfall <- function(bar_id,
       my_theme <- ttheme_default(
         core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
         rowhead = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
-        padding = unit(c(0, 4), "mm"))
+        padding = unit(c(0, 4), "mm")
+      )
 
       tb <- tableGrob(
         t_anno,
         rows = NULL,
         cols = NULL,
-        theme = my_theme)
+        theme = my_theme
+      )
 
       tb$widths <- unit(rep(1 / (ncol(tb)), ncol(tb)), "null")
       tb <- gtable_add_grob(
         tb,
         grobs = rectGrob(gp = gpar(fill = NA, lwd = 2)),
-        t = 1, b = nrow(tb), l = 1, r = ncol(tb))
+        t = 1, b = nrow(tb), l = 1, r = ncol(tb)
+      )
 
       t_anno_name <- names(anno_txt)
       tb_rowname <- tableGrob(
         t_anno_name,
         rows = NULL,
         cols = NULL,
-        theme = ttheme_minimal(core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8))))
+        theme = ttheme_minimal(core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)))
+      )
 
       # grab plot and table as one plot
       g0 <- ggplotGrob(p)
@@ -428,7 +440,8 @@ g_waterfall <- function(bar_id,
         tb,
         t = -1,
         l = g1$layout[g1$layout$name == "panel", 2],
-        r = g1$layout[g1$layout$name == "panel", 4])
+        r = g1$layout[g1$layout$name == "panel", 4]
+      )
       g3 <- gtable_add_cols(g2, tb_rowname$widths, pos = 0)
       g <- gtable_add_grob(g3, tb_rowname, t = -1, l = 2)
     } else {
@@ -457,7 +470,6 @@ g_waterfall <- function(bar_id,
       y_label = y_label,
       title = title
     )
-
   } else {
     facet_by <- factor(facet_by)
     g_list <- rep(list(NA), length(levels(facet_by)))

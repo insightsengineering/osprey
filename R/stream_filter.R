@@ -109,10 +109,11 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
         nrow(new_df),
         " of ",
         nrow(this_df),
-        " observations selected from ", this_filter_df$FLTTARGET)
+        " observations selected from ", this_filter_df$FLTTARGET
+      )
       cat(paste("\nFilter", this_filter, "applied", msg1, msg2, "\n"))
       actual_suffix <- if (is.null(actual_suffix)) {
-         this_filter
+        this_filter
       } else {
         paste(actual_suffix, this_filter, sep = "_")
       }
@@ -238,7 +239,6 @@ stream_filter_convwhere <- function(x) {
 
     if (length(temp1_str) != 2) {
       stop("ERROR - function can't handle multiple IN operators.")
-
     } else {
       left_str <- temp1_str[1]
       in_right_str <- temp1_str[2]

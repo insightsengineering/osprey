@@ -173,7 +173,8 @@ g_spiderplot <- function(marker_x,
 
 
   pl <- pl +
-    geom_line(mapping = if (!is.null(line_colby)) {
+    geom_line(
+      mapping = if (!is.null(line_colby)) {
         aes_string(color = "l_col")
       } else {
         NULL
@@ -187,45 +188,48 @@ g_spiderplot <- function(marker_x,
   if (!is.null(marker_shape)) {
     pl <- pl +
       geom_point(mapping = if (!is.null(line_colby)) {
-          aes_string(shape = "sh", color = "l_col")
-        } else {
-          aes_string(shape = "sh")
-        }, size = marker_size, show.legend = show_legend)
-
+        aes_string(shape = "sh", color = "l_col")
+      } else {
+        aes_string(shape = "sh")
+      }, size = marker_size, show.legend = show_legend)
   } else if (is.null(marker_shape)) {
-      pl <- pl +
-        geom_point(mapping = if (!is.null(line_colby)) {
-            aes_string(color = "l_col")
-          } else {
-            NULL
-          }, size = 3, show.legend = show_legend)
-    }
+    pl <- pl +
+      geom_point(mapping = if (!is.null(line_colby)) {
+        aes_string(color = "l_col")
+      } else {
+        NULL
+      }, size = 3, show.legend = show_legend)
+  }
 
   # label at last data point---------
   if (!is.null(datalabel_txt)) {
     if (!is.null(datalabel_txt$txt_ann) && is.null(datalabel_txt$mrkr_all) && is.null(datalabel_txt$mrkr_ann)) {
       pl <- pl +
-        geom_text(data = dat,
-                  aes_string(x = "x", y = "y", label = "lab"), hjust = -0.3,
-                  size = 4,
-                  show.legend = FALSE)
+        geom_text(
+          data = dat,
+          aes_string(x = "x", y = "y", label = "lab"), hjust = -0.3,
+          size = 4,
+          show.legend = FALSE
+        )
     } else if (is.null(datalabel_txt$txt_ann) &&
-               !is.null(datalabel_txt$mrkr_all) &&
-               !is.null(datalabel_txt$mrkr_ann)) {
+      !is.null(datalabel_txt$mrkr_all) &&
+      !is.null(datalabel_txt$mrkr_ann)) {
       dat_arrow <- dat %>%
         dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
         group_by(.data$id) %>%
         dplyr::filter(.data$x == last(.data$x))
       pl <- pl +
-        geom_segment(data = dat_arrow,
-                     mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
-                     arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
-                     size = 0.4,
-                     color = "black",
-                     show.legend = FALSE)
+        geom_segment(
+          data = dat_arrow,
+          mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+          arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+          size = 0.4,
+          color = "black",
+          show.legend = FALSE
+        )
     } else if (!is.null(datalabel_txt$txt_ann) &&
-               !is.null(datalabel_txt$mrkr_all) &&
-               !is.null(datalabel_txt$mrkr_ann)) {
+      !is.null(datalabel_txt$mrkr_all) &&
+      !is.null(datalabel_txt$mrkr_ann)) {
       pl <- pl +
         geom_text(
           data = dat,
@@ -241,12 +245,14 @@ g_spiderplot <- function(marker_x,
         dplyr::filter(.data$x == last(.data$x))
 
       pl <- pl +
-        geom_segment(data = dat_arrow,
-                     mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
-                     arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
-                     size = 0.4,
-                     color = "black",
-                     show.legend = FALSE)
+        geom_segment(
+          data = dat_arrow,
+          mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+          arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+          size = 0.4,
+          color = "black",
+          show.legend = FALSE
+        )
     }
   }
 
@@ -259,12 +265,13 @@ g_spiderplot <- function(marker_x,
     for (i in seq_along(vref_line)) {
       pl <- pl +
         annotate("segment",
-                 x = vref_line[i],
-                 y = -Inf,
-                 xend = vref_line[i],
-                 yend = Inf,
-                 linetype = "dotted",
-                 color = "black")
+          x = vref_line[i],
+          y = -Inf,
+          xend = vref_line[i],
+          yend = Inf,
+          linetype = "dotted",
+          color = "black"
+        )
     }
   }
 

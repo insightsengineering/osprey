@@ -45,7 +45,6 @@ footnotes in accordance with IDM specification and export as PDF file with
 full path to program and the output for easy tracking and archiving.
 }
 \examples{
-
 \dontrun{
 library(ggplot2)
 

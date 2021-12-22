@@ -128,20 +128,26 @@ g_swimlane <- function(bar_id,
                        title) {
 
   # check data
-  if (!is.null(sort_by))
+  if (!is.null(sort_by)) {
     check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
-  if (!is.null(col_by))
+  }
+  if (!is.null(col_by)) {
     check_same_N(bar_id = bar_id, bar_length = bar_length, col_by = col_by)
+  }
 
-  if (!is.null(marker_id) & length(which(!marker_id %in% bar_id)) > 0)
+  if (!is.null(marker_id) & length(which(!marker_id %in% bar_id)) > 0) {
     stop("marker_id ", marker_id[which(!marker_id %in% bar_id)], " is not in bar_id")
+  }
 
-  if (!is.null(marker_id) & !is.null(marker_pos))
+  if (!is.null(marker_id) & !is.null(marker_pos)) {
     check_same_N(marker_id = marker_id, marker_pos = marker_pos)
-  if (!is.null(marker_id) & !is.null(marker_shape))
+  }
+  if (!is.null(marker_id) & !is.null(marker_shape)) {
     check_same_N(marker_id = marker_id, marker_shape = marker_shape)
-  if (!is.null(marker_id) & !is.null(marker_color))
+  }
+  if (!is.null(marker_id) & !is.null(marker_color)) {
     check_same_N(marker_id = marker_id, marker_color = marker_color)
+  }
 
   # data for plot
   bar_data <- data.frame(
@@ -163,11 +169,11 @@ g_swimlane <- function(bar_id,
   # if sort by a variable, reorder bar_id by sort var and then bar length; otherwise sort by bar length
   if (!is.null(sort_by)) {
     bar_data$bar_id <- factor(bar_data$bar_id,
-                              levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by, -bar_data$bar_length)]))
+      levels = rev(unique(bar_data$bar_id[order(bar_data$sort_by, -bar_data$bar_length)]))
     )
   } else {
     bar_data$bar_id <- factor(bar_data$bar_id,
-                              levels = rev(unique(bar_data$bar_id[order(-bar_data$bar_length)]))
+      levels = rev(unique(bar_data$bar_id[order(-bar_data$bar_length)]))
     )
   }
 
@@ -200,7 +206,8 @@ g_swimlane <- function(bar_id,
         legend.key = element_rect(fill = NA),
         legend.key.size = unit(1, "line"),
         legend.spacing.y = unit(0, "cm"),
-        legend.key.height = unit(1, "line"))
+        legend.key.height = unit(1, "line")
+      )
   }
 
 
@@ -209,7 +216,7 @@ g_swimlane <- function(bar_id,
     p <- p + geom_point(
       data = marker_data,
       aes(x = marker_id, y = marker_pos, shape = marker_shape, color = marker_color),
-      size = 2.5, na.rm = T
+      size = 2.5, na.rm = TRUE
     ) +
       scale_y_continuous(limits = c(0, max(bar_length, marker_pos) + 5), breaks = ytick_at, expand = c(0, 0))
 
@@ -248,7 +255,6 @@ g_swimlane <- function(bar_id,
         breaks = levels(factor(marker_data$marker_color))
       )
     }
-
   }
 
   # plot reference lines
@@ -267,12 +273,12 @@ g_swimlane <- function(bar_id,
   # create annotation as a separate table plot
   if (is.null(anno_txt)) {
     t <- data.frame(bar_id, bar_length,
-                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length))
+      sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length))
     )
   } else {
     t <- data.frame(bar_id, bar_length,
-                    sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
-                    anno_txt
+      sort_by = if (is.null(sort_by)) "x" else to_n(sort_by, length(bar_length)),
+      anno_txt
     )
   }
 

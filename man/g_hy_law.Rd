@@ -105,8 +105,10 @@ g_hy_law(
   anrhi = adlb$ANRHI,
   folds = c(3, 2),
   text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
-  caption = paste("Maximum values are those maximum values that occur",
-  "post-baseline (no time constraints and not necessarily concurrent events)."),
+  caption = paste(
+    "Maximum values are those maximum values that occur",
+    "post-baseline (no time constraints and not necessarily concurrent events)."
+  ),
   title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
   ylab = "Maximum Total Bilirubin (/ULN)"
@@ -122,13 +124,14 @@ g_hy_law(
   anrhi = adlb$ANRHI,
   folds = c(10, 15),
   text = c("Quadrant 1", "Quadrant 2", "Quadrant 3", "Quadrant 4"),
-  caption = paste("Maximum values are those maximum values that occur",
-  "post-baseline (no time constraints and not necessarily concurrent events)."),
+  caption = paste(
+    "Maximum values are those maximum values that occur",
+    "post-baseline (no time constraints and not necessarily concurrent events)."
+  ),
   title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
   ylab = "Maximum Total Bilirubin (/ULN)"
 )
-
 }
 \author{
 Katie Withycombe (withycok) \email{katie.withycombe@roche.com}

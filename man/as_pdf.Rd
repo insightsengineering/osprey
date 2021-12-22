@@ -23,7 +23,6 @@ a pdf file
 This is an utility function to output a decorated grob (gTree) object
 }
 \examples{
-
 \dontrun{
 library(ggplot2)
 g <- with(iris, {

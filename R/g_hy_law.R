@@ -81,8 +81,10 @@
 #'   anrhi = adlb$ANRHI,
 #'   folds = c(3, 2),
 #'   text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
-#'   caption = paste("Maximum values are those maximum values that occur",
-#'   "post-baseline (no time constraints and not necessarily concurrent events)."),
+#'   caption = paste(
+#'     "Maximum values are those maximum values that occur",
+#'     "post-baseline (no time constraints and not necessarily concurrent events)."
+#'   ),
 #'   title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
 #'   xlab = "Maximum Alanine Aminotransferase (/ULN)",
 #'   ylab = "Maximum Total Bilirubin (/ULN)"
@@ -98,14 +100,14 @@
 #'   anrhi = adlb$ANRHI,
 #'   folds = c(10, 15),
 #'   text = c("Quadrant 1", "Quadrant 2", "Quadrant 3", "Quadrant 4"),
-#'   caption = paste("Maximum values are those maximum values that occur",
-#'   "post-baseline (no time constraints and not necessarily concurrent events)."),
+#'   caption = paste(
+#'     "Maximum values are those maximum values that occur",
+#'     "post-baseline (no time constraints and not necessarily concurrent events)."
+#'   ),
 #'   title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
 #'   xlab = "Maximum Alanine Aminotransferase (/ULN)",
 #'   ylab = "Maximum Total Bilirubin (/ULN)"
 #' )
-#'
-
 g_hy_law <- function(id,
                      term,
                      aval,
@@ -114,14 +116,13 @@ g_hy_law <- function(id,
                      anrhi,
                      folds = c(3, 2),
                      text = c("Normal Range", "Hyperbilirubinemia", "Possible Hy's Law Range", "Temple's Corollary"),
-                     caption = paste("Maximum values are those maximum values that occur post-baseline",
-                                     "(no time constraints and not necessarily concurrent events)."
+                     caption = paste(
+                       "Maximum values are those maximum values that occur post-baseline",
+                       "(no time constraints and not necessarily concurrent events)."
                      ),
                      title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
                      xlab = "Maximum Alanine Aminotransferase (/ULN)",
-                     ylab = "Maximum Total Bilirubin (/ULN)"
-) {
-
+                     ylab = "Maximum Total Bilirubin (/ULN)") {
   assert_that(
     is.character(term_selected) && length(term_selected) == 2,
     msg = "invalid argument: term_selected must be a character array of length 2"
@@ -139,7 +140,8 @@ g_hy_law <- function(id,
 
   for (parameter in character_vars) {
     assert_that(is.character(parameter) && length(parameter) == 1,
-                msg = paste("invalid argument:", parameter, "must be a string"))
+      msg = paste("invalid argument:", parameter, "must be a string")
+    )
   }
 
   anl <- data.frame(id, term, aval, arm, anrhi)
@@ -203,11 +205,12 @@ g_hy_law <- function(id,
     annotate("text", label = text[2], x = log10(0.2), y = log10(80)) +
     annotate("text", label = text[3], x = log10(40), y = log10(80)) +
     annotate("text", label = text[4], x = log10(40), y = log10(0.12)) +
-    geom_point(aes(x = log10(.data[[term_selected[1]]]),
-                   y = log10(.data[[term_selected[2]]]),
-                   shape = arm,
-                   color = arm)
-    ) +
+    geom_point(aes(
+      x = log10(.data[[term_selected[1]]]),
+      y = log10(.data[[term_selected[2]]]),
+      shape = arm,
+      color = arm
+    )) +
     scale_shape_manual(values = c(1:n_distinct(arm)))
 
   g <- ggplotGrob(p)

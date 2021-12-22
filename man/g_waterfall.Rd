@@ -77,7 +77,7 @@ g_waterfall(
 )
 
 # Example 1
-ADSL <- rADSL[1:15,]
+ADSL <- rADSL[1:15, ]
 ADRS <- rADRS \%>\%
   filter(USUBJID \%in\% ADSL$USUBJID)
 ADTR <- rADTR \%>\%
@@ -95,7 +95,7 @@ SUB_ADRS <- ADRS \%>\%
   spread(PARAMCD, AVALC)
 
 ANL <- TR_SL \%>\%
-  left_join(SUB_ADRS,"USUBJID")
+  left_join(SUB_ADRS, "USUBJID")
 
 anno_txt_vars <- c("TRTDURD", "BESRSPI", "OBJRSPI", "SEX", "BMK2")
 
@@ -135,7 +135,7 @@ g_waterfall(
   title = "Waterfall Plot"
 )
 
- # Example 3 extreme value
+# Example 3 extreme value
 ANL$PCHG[3] <- 99
 ANL$PCHG[5] <- 199
 ANL$PCHG[7] <- 599
@@ -158,7 +158,6 @@ g_waterfall(
   y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
-
 }
 \author{
 Xuefeng Hou (houx14) \email{houx14@gene.com}

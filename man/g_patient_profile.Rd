@@ -83,19 +83,20 @@ library(dplyr)
 
 # ADSL
 rADSL <- synthetic_cdisc_data("latest")$adsl
-ADSL <-  rADSL \%>\%
+ADSL <- rADSL \%>\%
   group_by(USUBJID) \%>\%
   mutate(
     TRTSDT = as.Date(TRTSDTM),
     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
-    max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) \%>\%
-  select(USUBJID, STUDYID, TRTSDT , max_day) \%>\%
+    max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
+  ) \%>\%
+  select(USUBJID, STUDYID, TRTSDT, max_day) \%>\%
   filter(USUBJID == rADSL$USUBJID[1])
 
 # ADEX
 rADEX <- synthetic_cdisc_data("latest")$adex
 ADEX <- rADEX \%>\%
-        select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
+  select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 
 ADEX <- ADEX \%>\%
@@ -105,94 +106,97 @@ ADEX <- ADEX \%>\%
   mutate(Modification = case_when(
     diff < 0 ~ "Decrease",
     diff > 0 ~ "Increase",
-    diff == 0 ~ "None")) \%>\%
+    diff == 0 ~ "None"
+  )) \%>\%
   mutate(ASTDT_dur = as.numeric(
     as.Date(substr(as.character(ASTDTM), 1, 10)) -
-      as.Date(TRTSDT) + 1))
+      as.Date(TRTSDT) + 1
+  ))
 
 # ADAE
 rADAE <- synthetic_cdisc_data("latest")$adae
 ADAE <- rADAE \%>\%
-        select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
+  select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
 # ADRS
 rADRS <- synthetic_cdisc_data("latest")$adrs
 ADRS <- rADRS \%>\%
-        select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
+  select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 
 # ADCM
 rADCM <- synthetic_cdisc_data("latest")$adcm
 ADCM <- rADCM \%>\%
-        select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
+  select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 
 # ADLB
 rADLB <- synthetic_cdisc_data("latest")$adlb
 ADLB <- rADLB \%>\%
-        select(
-          USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
-          ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
+  select(
+    USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
+    ADY, ATPTN, AVISITN, LBTESTCD, ANRIND
+  )
 ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 
 ADLB <- ADLB \%>\%
-        group_by(USUBJID) \%>\%
-        mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
+  group_by(USUBJID) \%>\%
+  mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
 
 # Example Patient Profile plot 5 domains
 g_patient_profile(
   ex = list(
     data = ADEX,
     var = ADEX$PARCAT2
-    ),
+  ),
   ae = list(
     data = ADAE,
     var = ADAE$AEDECOD,
     line_col = factor(ADAE$AESER),
     line_col_legend = "Serious",
     line_col_opt = c("Y" = "red", "N" = "blue")
-    ),
+  ),
   rs = list(
     data = ADRS,
     var = ADRS$PARAMCD
-    ),
+  ),
   cm = list(
     data = ADCM,
     var = ADCM$CMDECOD
-    ),
+  ),
   lb = list(
     data = ADLB,
     var = ADLB$LBTESTCD
-    ),
+  ),
   arrow_end_day = ADSL$max_day,
   xlim = c(-28, ADSL$max_day),
   xlab = "Study Day",
   title = paste("Patient Profile: ", ADSL$USUBJID)
-  )
+)
 
 # Example Patient Profile plot without ADCM and ADLB
 g_patient_profile(
   ex = list(
     data = ADEX,
     var = ADEX$PARCAT2
-    ),
+  ),
   ae = list(
     data = ADAE,
     var = ADAE$AEDECOD,
     line_col = factor(ADAE$AESER),
     line_col_legend = "Serious",
     line_col_opt = c("Y" = "red", "N" = "blue")
-    ),
+  ),
   rs = list(
     data = ADRS,
     var = ADRS$PARAMCD
-    ),
+  ),
   arrow_end_day = ADSL$max_day,
   xlim = c(-28, ADSL$max_day),
   xlab = "Study Day",
   title = paste("Patient Profile: ", ADSL$USUBJID)
-  )
+)
 }
 \seealso{
 \code{\link{patient_domain_profile}}

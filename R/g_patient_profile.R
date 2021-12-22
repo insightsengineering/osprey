@@ -76,13 +76,14 @@
 #'
 #' # ADSL
 #' rADSL <- synthetic_cdisc_data("latest")$adsl
-#' ADSL <-  rADSL %>%
+#' ADSL <- rADSL %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(
 #'     TRTSDT = as.Date(TRTSDTM),
 #'     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
-#'     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) %>%
-#'   select(USUBJID, STUDYID, TRTSDT , max_day) %>%
+#'     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
+#'   ) %>%
+#'   select(USUBJID, STUDYID, TRTSDT, max_day) %>%
 #'   filter(USUBJID == rADSL$USUBJID[1])
 #'
 #'
@@ -96,13 +97,19 @@
 #'   arrange(PARCAT2, PARAMCD) %>%
 #'   mutate(diff = c(0, diff(AVAL, lag = 1))) %>%
 #'   mutate(
-#'     Modification = case_when(diff < 0 ~ "Decrease",
-#'     diff > 0 ~ "Increase",
-#'     diff == 0 ~ "None")) %>%
+#'     Modification = case_when(
+#'       diff < 0 ~ "Decrease",
+#'       diff > 0 ~ "Increase",
+#'       diff == 0 ~ "None"
+#'     )
+#'   ) %>%
 #'   mutate(
 #'     ASTDT_dur = as.numeric(
 #'       as.Date(
-#'         substr(as.character(ASTDTM), 1, 10)) - as.Date(TRTSDT) + 1))
+#'         substr(as.character(ASTDTM), 1, 10)
+#'       ) - as.Date(TRTSDT) + 1
+#'     )
+#'   )
 #'
 #' p1 <- patient_domain_profile(
 #'   domain = "Exposure (ADEX)",
@@ -116,7 +123,7 @@
 #'   no_enddate_extention = 0,
 #'   marker_col_list = list(
 #'     marker_col = factor(ADEX$Modification),
-#'     marker_col_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
+#'     marker_col_opt = c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
 #'     marker_col_legend = NULL
 #'   ),
 #'   marker_shape_list = list(
@@ -150,14 +157,14 @@
 #'   line_col_list = list(
 #'     line_col = ADAE$AESER,
 #'     line_col_legend = "Serious",
-#'     line_col_opt = c("blue","green")
+#'     line_col_opt = c("blue", "green")
 #'   ),
 #'   line_width = 1,
 #'   arrow_size = 0.1,
 #'   no_enddate_extention = 0,
 #'   marker_col_list = list(
 #'     marker_col = factor(ADAE$AETOXGR),
-#'     marker_col_opt =  c("3" = "yellow", "4" = "red"),
+#'     marker_col_opt = c("3" = "yellow", "4" = "red"),
 #'     marker_col_legend = NULL
 #'   ),
 #'   marker_shape_list = list(
@@ -189,16 +196,20 @@
 #'   no_enddate_extention = 0,
 #'   marker_col_list = list(
 #'     marker_col = factor(ADRS$AVALC),
-#'     marker_col_opt =  c("CR" = "green", "PR" = "blue",
+#'     marker_col_opt = c(
+#'       "CR" = "green", "PR" = "blue",
 #'       "SD" = "yellow", "PD" = "red", "NE" = "pink",
-#'       "Y" = "lightblue", "N" = "darkred"),
+#'       "Y" = "lightblue", "N" = "darkred"
+#'     ),
 #'     marker_col_legend = NULL
 #'   ),
 #'   marker_shape_list = list(
 #'     marker_shape = factor(ADRS$AVALC),
-#'     marker_shape_opt = c("CR" = 21, "PR" = 24,
+#'     marker_shape_opt = c(
+#'       "CR" = 21, "PR" = 24,
 #'       "SD" = 23, "PD" = 22, "NE" = 14,
-#'       "Y" = 11, "N" = 8),
+#'       "Y" = 11, "N" = 8
+#'     ),
 #'     marker_shape_legend = "Response"
 #'   ),
 #'   show_days_label = TRUE,
@@ -237,7 +248,8 @@
 #' ADLB <- rADLB %>%
 #'   select(
 #'     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE,
-#'     ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#'     ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND
+#'   )
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
@@ -256,13 +268,17 @@
 #'   no_enddate_extention = 0,
 #'   marker_col_list = list(
 #'     marker_col = factor(ADLB$ANRIND),
-#'     marker_col_opt =  c("HIGH" = "red", "LOW" = "blue",
-#'       "NORMAL" = "green", "NA" = "green")
+#'     marker_col_opt = c(
+#'       "HIGH" = "red", "LOW" = "blue",
+#'       "NORMAL" = "green", "NA" = "green"
+#'     )
 #'   ),
 #'   marker_shape_list = list(
 #'     marker_shape = factor(ADLB$ANRIND),
-#'     marker_shape_opt = c("HIGH" = 24, "LOW" = 25,
-#'       "NORMAL" = 23, "NA" = 23),
+#'     marker_shape_opt = c(
+#'       "HIGH" = 24, "LOW" = 25,
+#'       "NORMAL" = 23, "NA" = 23
+#'     ),
 #'     marker_shape_legend = "Labs Abnormality"
 #'   ),
 #'   show_days_label = TRUE,
@@ -271,7 +287,6 @@
 #'   title = paste("Patient Profile: ", ADSL$USUBJID)
 #' )
 #' p5
-
 patient_domain_profile <- function(domain = NULL,
                                    var_names,
                                    marker_pos,
@@ -300,26 +315,32 @@ patient_domain_profile <- function(domain = NULL,
   marker_shape_opt <- marker_shape_list[["marker_shape_opt"]]
   marker_shape_legend <- marker_shape_list[["marker_shape_legend"]]
 
-  #check user input
+  # check user input
   stop_if_not(
     list(
       length(unique(nrow(data.frame(var_names)), nrow(data.frame(marker_pos)), nrow(data.frame(arrow_end)))) == 1,
-      "invalid arguments: check that the length of input arguments are identical"),
+      "invalid arguments: check that the length of input arguments are identical"
+    ),
     list(
       ncol(data.frame(marker_pos)) <= 2,
-      "invalid argument: check that marker_pos is either a vector or a data frame with two columns"),
+      "invalid argument: check that marker_pos is either a vector or a data frame with two columns"
+    ),
     list(
       is.null(line_col) || length(line_col) == length(var_names),
-      "invalid arguments: check that the length of line_col is equal as other inputs"),
+      "invalid arguments: check that the length of line_col is equal as other inputs"
+    ),
     list(
       is.null(marker_col) || length(marker_col) == length(var_names),
-      "invalid arguments: check that the length of marker_col is equal as other inputs"),
+      "invalid arguments: check that the length of marker_col is equal as other inputs"
+    ),
     list(
       is.null(marker_shape) || length(marker_shape) == length(var_names),
-      "invalid arguments: check that the length of marker_shape is equal as other inputs"),
+      "invalid arguments: check that the length of marker_shape is equal as other inputs"
+    ),
     list(
       is_numeric_vector(xlim, min_length = 2, max_length = 2),
-      "invalid arguments: check that xlim is of type numeric vector")
+      "invalid arguments: check that xlim is of type numeric vector"
+    )
   )
 
   marker_data <- data.frame(
@@ -327,7 +348,7 @@ patient_domain_profile <- function(domain = NULL,
     marker_pos = if (is.null(marker_pos)) to_n("x", length(var_names)) else marker_pos,
     marker_shape = if (is.null(marker_shape)) to_n("x", length(var_names)) else marker_shape,
     marker_col = if (is.null(marker_col)) to_n("x", length(var_names)) else marker_col
-    )
+  )
 
   # plot lines
   if (length(dim(marker_pos)) == 2) {
@@ -338,7 +359,7 @@ patient_domain_profile <- function(domain = NULL,
       line_end = unname(marker_pos[, 2]),
       line_min = rep(xlim[1], length(var_names)),
       line_max = rep(arrow_end + no_enddate_extention, length(var_names))
-      )
+    )
     names(line_data) <- c("var_names", "line_col", "line_start", "line_end", "line_min", "line_max")
 
     p <- ggplot() +
@@ -349,11 +370,12 @@ patient_domain_profile <- function(domain = NULL,
           y = line_start,
           xend = var_names,
           yend = line_end,
-          color = line_col),
+          color = line_col
+        ),
         lineend = "round", linejoin = "round",
         size = line_width, arrow = NULL, show.legend = NA,
         na.rm = TRUE
-        ) +
+      ) +
       scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       geom_segment(
@@ -364,7 +386,7 @@ patient_domain_profile <- function(domain = NULL,
           xend = var_names,
           yend = line_max,
           color = line_col
-          ),
+        ),
         lineend = "round", linejoin = "round",
         size = line_width, show.legend = FALSE,
         arrow = arrow(length = unit(arrow_size, "inches")),
@@ -394,7 +416,7 @@ patient_domain_profile <- function(domain = NULL,
         shape = 21,
         size = 5,
         na.rm = TRUE
-        ) +
+      ) +
       geom_point(
         data = marker_data,
         aes(x = var_names, y = marker_data[, 3], fill = factor(marker_col)),
@@ -435,7 +457,6 @@ patient_domain_profile <- function(domain = NULL,
     } else {
       p <- p + guides(shape = FALSE)
     }
-
   } else {
     p <- ggplot() +
       geom_point(
@@ -445,8 +466,9 @@ patient_domain_profile <- function(domain = NULL,
           y = marker_pos,
           shape = marker_shape,
           fill = marker_col
-          ),
-        size = 3, na.rm = TRUE) +
+        ),
+        size = 3, na.rm = TRUE
+      ) +
       scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
       coord_flip(xlim = c(1, length(unique(var_names)))) +
       theme_bw() +
@@ -455,7 +477,8 @@ patient_domain_profile <- function(domain = NULL,
         panel.grid = element_blank(),
         axis.line = element_line(colour = "black")
       ) +
-      ylab(xlab) + xlab(domain)
+      ylab(xlab) +
+      xlab(domain)
 
     if (is.null(marker_col_legend)) {
       if (length(setdiff(marker_col, marker_shape)) == 0) {
@@ -478,12 +501,11 @@ patient_domain_profile <- function(domain = NULL,
       )
 
     if (is.null(marker_shape_opt)) marker_shape_opt <- 1:25
-      p <- p + scale_shape_manual(
-        name = marker_shape_legend,
-        breaks = marker_data$marker_shape,
-        values = marker_shape_opt
-        )
-
+    p <- p + scale_shape_manual(
+      name = marker_shape_legend,
+      breaks = marker_data$marker_shape,
+      values = marker_shape_opt
+    )
   }
 
   # plot title and labels
@@ -595,19 +617,20 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #' # ADSL
 #' rADSL <- synthetic_cdisc_data("latest")$adsl
-#' ADSL <-  rADSL %>%
+#' ADSL <- rADSL %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(
 #'     TRTSDT = as.Date(TRTSDTM),
 #'     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
-#'     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) %>%
-#'   select(USUBJID, STUDYID, TRTSDT , max_day) %>%
+#'     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
+#'   ) %>%
+#'   select(USUBJID, STUDYID, TRTSDT, max_day) %>%
 #'   filter(USUBJID == rADSL$USUBJID[1])
 #'
 #' # ADEX
 #' rADEX <- synthetic_cdisc_data("latest")$adex
 #' ADEX <- rADEX %>%
-#'         select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
+#'   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 #' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 #'
 #' ADEX <- ADEX %>%
@@ -617,95 +640,97 @@ patient_domain_profile <- function(domain = NULL,
 #'   mutate(Modification = case_when(
 #'     diff < 0 ~ "Decrease",
 #'     diff > 0 ~ "Increase",
-#'     diff == 0 ~ "None")) %>%
+#'     diff == 0 ~ "None"
+#'   )) %>%
 #'   mutate(ASTDT_dur = as.numeric(
 #'     as.Date(substr(as.character(ASTDTM), 1, 10)) -
-#'       as.Date(TRTSDT) + 1))
+#'       as.Date(TRTSDT) + 1
+#'   ))
 #'
 #' # ADAE
 #' rADAE <- synthetic_cdisc_data("latest")$adae
 #' ADAE <- rADAE %>%
-#'         select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
+#'   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 #' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADRS
 #' rADRS <- synthetic_cdisc_data("latest")$adrs
 #' ADRS <- rADRS %>%
-#'         select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
+#'   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADCM
 #' rADCM <- synthetic_cdisc_data("latest")$adcm
 #' ADCM <- rADCM %>%
-#'         select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
+#'   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 #' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADLB
 #' rADLB <- synthetic_cdisc_data("latest")$adlb
 #' ADLB <- rADLB %>%
-#'         select(
-#'           USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
-#'           ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
+#'   select(
+#'     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
+#'     ADY, ATPTN, AVISITN, LBTESTCD, ANRIND
+#'   )
 #' ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 #'
 #' ADLB <- ADLB %>%
-#'         group_by(USUBJID) %>%
-#'         mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
+#'   group_by(USUBJID) %>%
+#'   mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
 #'
 #' # Example Patient Profile plot 5 domains
 #' g_patient_profile(
 #'   ex = list(
 #'     data = ADEX,
 #'     var = ADEX$PARCAT2
-#'     ),
+#'   ),
 #'   ae = list(
 #'     data = ADAE,
 #'     var = ADAE$AEDECOD,
 #'     line_col = factor(ADAE$AESER),
 #'     line_col_legend = "Serious",
 #'     line_col_opt = c("Y" = "red", "N" = "blue")
-#'     ),
+#'   ),
 #'   rs = list(
 #'     data = ADRS,
 #'     var = ADRS$PARAMCD
-#'     ),
+#'   ),
 #'   cm = list(
 #'     data = ADCM,
 #'     var = ADCM$CMDECOD
-#'     ),
+#'   ),
 #'   lb = list(
 #'     data = ADLB,
 #'     var = ADLB$LBTESTCD
-#'     ),
+#'   ),
 #'   arrow_end_day = ADSL$max_day,
 #'   xlim = c(-28, ADSL$max_day),
 #'   xlab = "Study Day",
 #'   title = paste("Patient Profile: ", ADSL$USUBJID)
-#'   )
+#' )
 #'
 #' # Example Patient Profile plot without ADCM and ADLB
 #' g_patient_profile(
 #'   ex = list(
 #'     data = ADEX,
 #'     var = ADEX$PARCAT2
-#'     ),
+#'   ),
 #'   ae = list(
 #'     data = ADAE,
 #'     var = ADAE$AEDECOD,
 #'     line_col = factor(ADAE$AESER),
 #'     line_col_legend = "Serious",
 #'     line_col_opt = c("Y" = "red", "N" = "blue")
-#'     ),
+#'   ),
 #'   rs = list(
 #'     data = ADRS,
 #'     var = ADRS$PARAMCD
-#'     ),
+#'   ),
 #'   arrow_end_day = ADSL$max_day,
 #'   xlim = c(-28, ADSL$max_day),
 #'   xlab = "Study Day",
 #'   title = paste("Patient Profile: ", ADSL$USUBJID)
-#'   )
-
+#' )
 g_patient_profile <- function(ex = NULL,
                               ae = NULL,
                               rs = NULL,
@@ -739,7 +764,7 @@ g_patient_profile <- function(ex = NULL,
       no_enddate_extention = 0,
       marker_col_list = list(
         marker_col = factor(ex$data$Modification),
-        marker_col_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue")
+        marker_col_opt = c("Increase" = "red", "Decrease" = "green", "None" = "blue")
       ),
       marker_shape_list = list(
         marker_shape = factor(ex$data$Modification),
@@ -751,7 +776,7 @@ g_patient_profile <- function(ex = NULL,
       xlab = xlab,
       show_title = show_title[1],
       title = title
-      )
+    )
   } else {
     p1 <- NULL
   }
@@ -782,7 +807,7 @@ g_patient_profile <- function(ex = NULL,
       xlab = xlab,
       show_title = show_title[2],
       title = title
-      )
+    )
   } else {
     p2 <- NULL
   }
@@ -803,8 +828,10 @@ g_patient_profile <- function(ex = NULL,
       marker_col_list = list(
         marker_col = factor(rs$data$AVALC),
         marker_col_opt =
-          c("CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
-            "NE" = "pink", "Y" = "lightblue", "N" = "darkred")
+          c(
+            "CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
+            "NE" = "pink", "Y" = "lightblue", "N" = "darkred"
+          )
       ),
       marker_shape_list = list(
         marker_shape = factor(rs$data$AVALC),
@@ -816,7 +843,7 @@ g_patient_profile <- function(ex = NULL,
       xlab = xlab,
       show_title = show_title[3],
       title = title
-      )
+    )
   } else {
     p3 <- NULL
   }
@@ -841,7 +868,7 @@ g_patient_profile <- function(ex = NULL,
       xlab = xlab,
       show_title = show_title[4],
       title = title
-      )
+    )
   } else {
     p4 <- NULL
   }
@@ -860,7 +887,7 @@ g_patient_profile <- function(ex = NULL,
       no_enddate_extention = 0,
       marker_col_list = list(
         marker_col = factor(lb$data$ANRIND),
-        marker_col_opt =  c("HIGH" = "red", "LOW" = "blue", "NORMAL" = "green")
+        marker_col_opt = c("HIGH" = "red", "LOW" = "blue", "NORMAL" = "green")
       ),
       marker_shape_list = list(
         marker_shape = factor(lb$data$ANRIND),
@@ -872,7 +899,7 @@ g_patient_profile <- function(ex = NULL,
       xlab = xlab,
       show_title = show_title[5],
       title = title
-      )
+    )
   } else {
     p5 <- NULL
   }
@@ -886,7 +913,7 @@ g_patient_profile <- function(ex = NULL,
   var_list <- var_list %>%
     lapply(unique) %>%
     lapply(length) %>%
-    unlist %>%
+    unlist() %>%
     cbind(.data, select) %>%
     as.data.frame() %>%
     # keep the selected domains
