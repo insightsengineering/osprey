@@ -514,7 +514,7 @@ create_flag_vars <- function(df,
   df <- as.data.frame(df)
   ret <- lapply(argnames, function(t) {
     tryCatch(
-      { # nolint
+      expr = {
         with(df, eval(args[[t]]))
       },
       error = function(w) {
