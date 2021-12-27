@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://insightsengineering.github.io/osprey/404.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/osprey/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/osprey/authors.html</loc>
+  </url>
+  <url>
     <loc>https://insightsengineering.github.io/osprey/index.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/osprey/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/osprey/pull_request_template.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/osprey/reference/argument_convention.html</loc>
@@ -53,6 +68,9 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/osprey/reference/grobs2pdf.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/osprey/reference/index.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/osprey/reference/meddra.html</loc>
