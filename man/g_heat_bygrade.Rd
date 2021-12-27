@@ -83,7 +83,7 @@ add_visit <- function(data_need_visit) {
     filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) \%>\%
     left_join(data_need_visit)
   return(data_visit)
-  }
+}
 # add AVISIT in ADAE and ADCM
 ADAE <- add_visit(ADAE)
 ADCM <- add_visit(ADCM)
@@ -114,12 +114,12 @@ heat_color_opt <- c(
   "3" = "steelblue4",
   "4" = "maroon",
   "5" = "brown4"
-  )
+)
 ADCM_lab <- rtables::var_labels(ADCM)
 ADCM <- ADCM \%>\%
   filter(
     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
-    ) \%>\%
+  ) \%>\%
   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
 rtables::var_labels(ADCM) <- ADCM_lab
 conmed_data <- ADCM \%>\%
@@ -139,7 +139,7 @@ g_heat_bygrade(
   conmed_data,
   conmed_var = "CMDECOD",
   conmed_color_opt = c("green", "green3", "green4")
-  )
+)
 
 # example not plotting conmed
 g_heat_bygrade(
@@ -152,7 +152,7 @@ g_heat_bygrade(
   heat_data,
   heat_color_var = "AETOXGR",
   heat_color_opt
-  )
+)
 }
 \author{
 Nina Qi (qit3) \email{qit3@gene.com}

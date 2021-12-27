@@ -56,7 +56,7 @@
 #'     filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) %>%
 #'     left_join(data_need_visit)
 #'   return(data_visit)
-#'   }
+#' }
 #' # add AVISIT in ADAE and ADCM
 #' ADAE <- add_visit(ADAE)
 #' ADCM <- add_visit(ADCM)
@@ -87,18 +87,18 @@
 #'   "3" = "steelblue4",
 #'   "4" = "maroon",
 #'   "5" = "brown4"
-#'   )
+#' )
 #' ADCM_lab <- rtables::var_labels(ADCM)
 #' ADCM <- ADCM %>%
 #'   filter(
 #'     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
-#'     ) %>%
+#'   ) %>%
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
 #' rtables::var_labels(ADCM) <- ADCM_lab
 #' conmed_data <- ADCM %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
-#'# example plotting conmed
+#' # example plotting conmed
 #' g_heat_bygrade(
 #'   id_var = "SUBJ",
 #'   exp_data,
@@ -112,9 +112,9 @@
 #'   conmed_data,
 #'   conmed_var = "CMDECOD",
 #'   conmed_color_opt = c("green", "green3", "green4")
-#'   )
+#' )
 #'
-#'# example not plotting conmed
+#' # example not plotting conmed
 #' g_heat_bygrade(
 #'   id_var = "SUBJ",
 #'   exp_data,
@@ -125,7 +125,7 @@
 #'   heat_data,
 #'   heat_color_var = "AETOXGR",
 #'   heat_color_opt
-#'   )
+#' )
 g_heat_bygrade <- function(id_var,
                            exp_data,
                            visit_var,
@@ -150,17 +150,17 @@ g_heat_bygrade <- function(id_var,
     list(
       ongo_var %in% names(exp_data) && is_logical_vector(exp_data[[ongo_var]]),
       "ongo_var must be a logical column in exp_data"
-      ),
+    ),
     list(is.data.frame(anno_data)),
     list(
       length(anno_var) <= 2,
       "invalid argument: anno_data can only contain 3 or less columns including subject ID"
-      ),
+    ),
     list(is.data.frame(heat_data)),
     list(
       is_character_single(heat_color_var) && heat_color_var %in% names(heat_data),
       "invalid argument: heat_color_var should be a varaible name in heat_data"
-      ),
+    ),
     list(
       is.null(conmed_var) || is_character_single(conmed_var),
       "invalid argument: conmed_var needs to be a single character string"
@@ -172,11 +172,11 @@ g_heat_bygrade <- function(id_var,
     list(
       any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var)),
       "invalid argument: need to provide conmed_data and conmed_var"
-      ),
+    ),
     list(
       is.null(conmed_var) || length(levels(conmed_data[[conmed_var]])) <= 3,
       "invalid argument: please only include no more than three conmeds for plotting"
-      ),
+    ),
     list(
       is.null(conmed_data) || is.null(conmed_color_opt) ||
         length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]])),
@@ -188,7 +188,8 @@ g_heat_bygrade <- function(id_var,
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
         id_var,
-        sep = " ")
+        sep = " "
+      )
     ),
     list(
       (is.null(conmed_data) && table(c(names(exp_data), names(heat_data)))[visit_var] == 2) ||
@@ -196,7 +197,8 @@ g_heat_bygrade <- function(id_var,
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
         visit_var,
-        sep = " ")
+        sep = " "
+      )
     )
   )
 
@@ -208,11 +210,11 @@ g_heat_bygrade <- function(id_var,
     group_by(!!sym(id_var), !!sym(visit_var)) %>%
     arrange(!!sym(visit_var)) %>%
     mutate(heat_color_max = factor(max(.data$heat_color_num), levels = 0:5)) %>%
-    select(- (!!heat_color_var), -.data$heat_color_num) %>%
+    select(-(!!heat_color_var), -.data$heat_color_num) %>% # nolint
     distinct() %>%
     left_join(anno_data, by = id_var)
 
-  #dose reduction data
+  # dose reduction data
   ex_red <- exp_data %>%
     filter(.data$PARAMCD == "DOSE") %>%
     group_by(!!sym(id_var)) %>%
@@ -221,7 +223,7 @@ g_heat_bygrade <- function(id_var,
       RANK = order(.data$ASTDTM),
       LASTDOSE = lag(.data$AVAL),
       DOSERED = ifelse(.data$RANK != 1 & .data$AVAL < .data$LASTDOSE, TRUE, FALSE)
-      ) %>%
+    ) %>%
     select(!!sym(id_var), !!sym(visit_var), .data$RANK, .data$AVAL, .data$LASTDOSE, .data$DOSERED) %>%
     filter(.data$DOSERED == TRUE)
   # does ongoing data
@@ -255,13 +257,13 @@ g_heat_bygrade <- function(id_var,
   p <- ggplot(
     data = anl_data,
     aes(x = !!sym(visit_var), y = factor(!!sym(id_var), levels = c(rev(subj_levels), "")))
-    ) +
+  ) +
     geom_tile(aes(fill = .data$heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
       name = "Highest grade of\nindividual events",
       values = if (!is.null(heat_color_opt)) heat_color_opt else rev(terrain.colors(6))
-      ) +
+    ) +
     # plot dose reduction
     geom_segment(
       data = ex_red,
@@ -270,11 +272,11 @@ g_heat_bygrade <- function(id_var,
         x = as.numeric(factor(!!sym(visit_var), levels = visit_levels)),
         yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))) - 0.3,
         xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels))
-        ),
+      ),
       arrow = arrow(length = unit(0.1, "cm")),
       size = .5,
       color = "black"
-      ) +
+    ) +
     # plot ongoing
     geom_segment(
       data = exp_lst,
@@ -283,32 +285,32 @@ g_heat_bygrade <- function(id_var,
         xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels)) + 0.65,
         y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))),
         yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels)))
-        ),
+      ),
       arrow = arrow(length = unit(0.1, "cm")),
       size = .5,
       color = "black"
+    )
+  if (!is.null(conmed_data) & !is.null(conmed_var)) {
+    p <- p +
+      geom_point(
+        data = conmed_data,
+        aes(
+          x = .data$conmed_x,
+          y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))),
+          shape = .data[[conmed_var]],
+          color = .data[[conmed_var]]
+        ),
+        size = 2
+      ) +
+      scale_colour_manual(
+        name = rtables::var_labels(conmed_data)[conmed_var],
+        values = if (!is.null(conmed_color_opt)) conmed_color_opt else rep("black", 5)
+      ) +
+      scale_shape_manual(
+        name = rtables::var_labels(conmed_data)[conmed_var],
+        values = c(15:17)
       )
-    if (!is.null(conmed_data) & !is.null(conmed_var)) {
-      p <- p +
-        geom_point(
-          data = conmed_data,
-          aes(
-            x = .data$conmed_x,
-            y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))),
-            shape = .data[[conmed_var]],
-            color = .data[[conmed_var]]
-            ),
-          size = 2
-          ) +
-        scale_colour_manual(
-          name = rtables::var_labels(conmed_data)[conmed_var],
-          values = if (!is.null(conmed_color_opt)) conmed_color_opt else rep("black", 5)
-          ) +
-        scale_shape_manual(
-          name = rtables::var_labels(conmed_data)[conmed_var],
-          values = c(15:17)
-          )
-    }
+  }
 
   p <- p +
     theme_bw() +
@@ -328,7 +330,7 @@ g_heat_bygrade <- function(id_var,
       theme(plot.title = element_text(face = "bold"))
   }
 
-  #plot left legend
+  # plot left legend
   t <- anl_data %>%
     as.data.frame() %>%
     select((!!anno_var), (!!id_var)) %>%

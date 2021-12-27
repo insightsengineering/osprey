@@ -49,40 +49,50 @@
 #' arm_sl <- as.character(ADSL$ACTARMCD)
 #' subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
 #' subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
-#' subgroups_levels <- list(RACE = list("Total" = "Race",
-#'                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
-#'                                      "WHITE" = "White",
-#'                                      "ASIAN" = "Asian",
-#'                                      "BLACK OR AFRICAN AMERICAN" = "African"),
-#'                          STRATA1 = list("Total" = "Strata",
-#'                                         "A" = "TypeA",
-#'                                         "B" = "TypeB",
-#'                                         "C" = "Typec"),
-#'                          SEX = list("Total" = "Sex",
-#'                                     "M" = "Male",
-#'                                     "F" = "Female"))
+#' subgroups_levels <- list(
+#'   RACE = list(
+#'     "Total" = "Race",
+#'     "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
+#'     "WHITE" = "White",
+#'     "ASIAN" = "Asian",
+#'     "BLACK OR AFRICAN AMERICAN" = "African"
+#'   ),
+#'   STRATA1 = list(
+#'     "Total" = "Strata",
+#'     "A" = "TypeA",
+#'     "B" = "TypeB",
+#'     "C" = "Typec"
+#'   ),
+#'   SEX = list(
+#'     "Total" = "Sex",
+#'     "M" = "Male",
+#'     "F" = "Female"
+#'   )
+#' )
 #' # Example 1
 #' p1 <- g_ae_sub(id,
-#'               arm,
-#'               arm_sl,
-#'               subgroups,
-#'               subgroups_sl,
-#'               trt = "ARM A",
-#'               ref = "ARM C",
-#'               subgroups_levels = subgroups_levels,
-#'               arm_n = FALSE)
+#'   arm,
+#'   arm_sl,
+#'   subgroups,
+#'   subgroups_sl,
+#'   trt = "ARM A",
+#'   ref = "ARM C",
+#'   subgroups_levels = subgroups_levels,
+#'   arm_n = FALSE
+#' )
 #' grid.newpage()
 #'
 #' # Example 2: display number of patients in each arm
 #' p2 <- g_ae_sub(id,
-#'               arm,
-#'               arm_sl,
-#'               subgroups,
-#'               subgroups_sl,
-#'               trt = "ARM A",
-#'               ref = "ARM C",
-#'               subgroups_levels = subgroups_levels,
-#'               arm_n = TRUE)
+#'   arm,
+#'   arm_sl,
+#'   subgroups,
+#'   subgroups_sl,
+#'   trt = "ARM A",
+#'   ref = "ARM C",
+#'   subgroups_levels = subgroups_levels,
+#'   arm_n = TRUE
+#' )
 #' grid.newpage()
 #'
 #' # Example 3: preprocess data to only include treatment and control arm patients
@@ -96,28 +106,36 @@
 #' arm_sl <- as.character(ADSL$ACTARMCD)
 #' subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
 #' subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
-#' subgroups_levels <- list(RACE = list("Total" = "Race",
-#'                                      "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
-#'                                      "WHITE" = "White",
-#'                                      "ASIAN" = "Asian",
-#'                                      "BLACK OR AFRICAN AMERICAN" = "African"),
-#'                          STRATA1 = list("Total" = "Strata",
-#'                                         "A" = "TypeA",
-#'                                         "B" = "TypeB",
-#'                                         "C" = "Typec"),
-#'                          SEX = list("Total" = "Sex",
-#'                                     "M" = "Male",
-#'                                     "F" = "Female"))
+#' subgroups_levels <- list(
+#'   RACE = list(
+#'     "Total" = "Race",
+#'     "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
+#'     "WHITE" = "White",
+#'     "ASIAN" = "Asian",
+#'     "BLACK OR AFRICAN AMERICAN" = "African"
+#'   ),
+#'   STRATA1 = list(
+#'     "Total" = "Strata",
+#'     "A" = "TypeA",
+#'     "B" = "TypeB",
+#'     "C" = "Typec"
+#'   ),
+#'   SEX = list(
+#'     "Total" = "Sex",
+#'     "M" = "Male",
+#'     "F" = "Female"
+#'   )
+#' )
 #' p3 <- g_ae_sub(id,
-#'               arm,
-#'               arm_sl,
-#'               subgroups,
-#'               subgroups_sl,
-#'               trt,
-#'               ref,
-#'               subgroups_levels = subgroups_levels,
-#'               arm_n = FALSE)
-
+#'   arm,
+#'   arm_sl,
+#'   subgroups,
+#'   subgroups_sl,
+#'   trt,
+#'   ref,
+#'   subgroups_levels = subgroups_levels,
+#'   arm_n = FALSE
+#' )
 g_ae_sub <- function(id,
                      arm,
                      arm_sl,
@@ -132,11 +150,10 @@ g_ae_sub <- function(id,
                      diff_ci_method = c(
                        "wald", "waldcc", "ac", "score", "scorecc",
                        "mn", "mee", "blj", "ha", "beal"
-                       ),
+                     ),
                      fontsize = 4,
                      arm_n = FALSE,
                      draw = TRUE) {
-
   diff_ci_method <- match.arg(diff_ci_method)
   stop_if_not(
     list(!is_empty(id), "missing argument: id must be specified"),
@@ -150,14 +167,15 @@ g_ae_sub <- function(id,
       tibble(
         level = str_replace_all(names(labels), "\\.", "__"),
         label = labels
-        ) %>%
+      ) %>%
       bind_rows(c(level = "TOTAL__Total", label = "Overall")) %>%
       mutate(
         indents = str_dup(" ", if_else(
-        str_detect(.data$level, "__Total"), 0, indent
-      )),
-      #create label with indents if not total
-      label = paste0(.data$indents, .data$label))
+          str_detect(.data$level, "__Total"), 0, indent
+        )),
+        # create label with indents if not total
+        label = paste0(.data$indents, .data$label)
+      )
   }
   stop_if_not(
     list(
@@ -191,11 +209,11 @@ g_ae_sub <- function(id,
     list(
       is_numeric_single(indent) && indent >= 0 && is.finite(indent),
       "invalid argument: indent must be a finite number >= 0"
-      ),
+    ),
     list(
       is_numeric_single(xmax),
       "invalid argument: xmax must be a number"
-      ),
+    ),
     list(
       all(names(subgroups_levels) %in% names(lapply(subgroups, levels))),
       "invalid argument: please only use the subgroups column names as the lists names in subgroups_levels"
@@ -205,7 +223,7 @@ g_ae_sub <- function(id,
         subgroups_levels,
         apply(subgroups[names(subgroups_levels)], 2, levels),
         ~ all(names(.x) %in% c("Total", .y))
-        ))),
+      ))),
       "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels"
     ),
     list(is_logical_single(arm_n), "invalid argument: arm_n must be a logical value")
@@ -233,7 +251,7 @@ g_ae_sub <- function(id,
   # a wide data frame contains event counts by arm in each subgroup
   df <- cbind(id = id, arm = arm, subgroups) %>%
     filter(arm %in% c(ref, trt)) %>%
-    unique %>%
+    unique() %>%
     pivot_longer(
       names_to = "strata",
       cols = colnames(subgroups),
@@ -243,7 +261,7 @@ g_ae_sub <- function(id,
     summarise(n = n()) %>%
     full_join(df_ref, by = "arm") %>%
     tidyr::replace_na(list(n = 0)) %>%
-    ungroup %>%
+    ungroup() %>%
     pivot_wider(
       id_cols = c("strata", "value"),
       names_from = "arm",
@@ -263,7 +281,7 @@ g_ae_sub <- function(id,
     ) %>%
     group_by(arm, .data$strata, .data$value) %>%
     summarise(n = n()) %>%
-    ungroup %>%
+    ungroup() %>%
     pivot_wider(
       id_cols = c("strata", "value"),
       names_from = "arm",
@@ -281,29 +299,32 @@ g_ae_sub <- function(id,
       !!r2 := !!x2 / !!n2,
       lower = BinomDiffCI(
         !!x1, !!n1, !!x2, !!n2,
-        conf_level, method = diff_ci_method
-        )[2],
+        conf_level,
+        method = diff_ci_method
+      )[2],
       upper = BinomDiffCI(
         !!x1, !!n1, !!x2, !!n2,
-        conf_level, method = diff_ci_method
-        )[3],
+        conf_level,
+        method = diff_ci_method
+      )[3],
       riskdiff = !!r1 - !!r2
     ) %>%
     pivot_longer(
       matches("__"),
       names_to = c(".value", "arm"),
-      names_sep = "__") %>%
-    ungroup %>%
+      names_sep = "__"
+    ) %>%
+    ungroup() %>%
     unite("level", .data$strata, .data$value, remove = FALSE, sep = "__")
 
   # create label for plotting
   level_format_df <- df %>%
     select(.data$strata, .data$value) %>%
-    unique %>%
+    unique() %>%
     group_by(.data$strata) %>%
     summarise(value = paste(c("Total", .data$value), collapse = ",")) %>%
     separate_rows(.data$value, sep = ",") %>%
-    unique %>%
+    unique() %>%
     unite("level", .data$strata, .data$value, sep = "__", remove = FALSE) %>%
     mutate(order = if_else(.data$strata == "TOTAL", integer(1), -row_number())) %>%
     arrange(order)
@@ -314,7 +335,8 @@ g_ae_sub <- function(id,
         .data$strata == "TOTAL",
         "Overall",
         if_else(.data$value == "Total", .data$strata, paste0(str_c(
-          rep(" ", indent), collapse = ""
+          rep(" ", indent),
+          collapse = ""
         ), .data$value))
       ))
   } else {
@@ -336,7 +358,7 @@ g_ae_sub <- function(id,
 
   df_risk <- df %>%
     select(.data$level, .data$lower, .data$upper, .data$riskdiff) %>%
-    unique
+    unique()
   if (xmax <= 0) {
     xmax <- max(abs(df_risk$upper), abs(df_risk$lower), na.rm = TRUE)
   }
@@ -345,7 +367,7 @@ g_ae_sub <- function(id,
     geom_point(
       aes(x = .data$riskdiff, y = .data$level),
       size = fontsize
-      ) +
+    ) +
     geom_vline(
       data = NULL,
       xintercept = 0,
@@ -354,12 +376,13 @@ g_ae_sub <- function(id,
     ) +
     geom_errorbarh(
       aes(xmin = .data$lower, xmax = .data$upper, y = .data$level),
-      height = 0.3) +
+      height = 0.3
+    ) +
     mytheme +
     theme(
       axis.ticks.x = element_line(),
       axis.line.x = element_line()
-      ) +
+    ) +
     y_axis +
     coord_cartesian(xlim = c(-xmax, xmax))
   p1_grob <- ggplotGrob(p1)
@@ -380,7 +403,8 @@ g_ae_sub <- function(id,
       left_join(df_byarm, by = "level") %>%
       mutate(
         percent_trt = .data$n_trt / .data$n * 100,
-        percent_ref = .data$n_ref / .data$n * 100)
+        percent_ref = .data$n_ref / .data$n * 100
+      )
   }
 
   p2 <- ggplot(df_total) +
@@ -533,8 +557,8 @@ g_ae_sub <- function(id,
       c(1, 3, 4, 7),
       c(NA, NA, 5, NA),
       c(NA, NA, 9, NA)
-      )
-    }
+    )
+  }
 
   ret <- arrangeGrob(
     grobs = grobs,

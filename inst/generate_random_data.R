@@ -8,7 +8,7 @@
 library(dplyr)
 
 #Function to sample random data for factor variables
-sample_fct <- function(x, N, ...) {
+sample_fct <- function(x, N, ...) { # nolint
   factor(sample(x, N, replace = TRUE, ...), levels = x)
 }
 
@@ -20,7 +20,7 @@ ifgen_fct <- function(t, tx, tp = NULL, fx, fp = NULL) {
 }
 
 #Function to sample random data for factor variables
-sample_char <- function(x, N, ...) {
+sample_char <- function(x, N, ...) { # nolint
   sample(x, N, replace = TRUE, ...)
 }
 
@@ -37,16 +37,16 @@ ifgen_char <- function(t, tx, tp = NULL, fx, fp = NULL) {
 
 set.seed(12345)
 
-N <- 50
+N <- 50 # nolint
 
-ADSL <- tibble(
-  SUBJID  = paste("id", sprintf(paste0("%0",nchar(N),"d"), seq_len(N)), sep = "-"),
+ADSL <- tibble( # nolint
+  SUBJID  = paste("id", sprintf(paste0("%0", nchar(N), "d"), seq_len(N)), sep = "-"),
   STUDYID = rep("AB12345", N),
   SITEID  = paste0("XYZ", 1:3) %>% sample_fct(N),
   USUBJID = paste(STUDYID, SITEID, SUBJID, sep = "-"),
   AGE     = sapply(floor(rnorm(N, mean = 20, sd = 20)), max, 0) + 20,
   SEX     = c("F", "M", "U", "UNDIFFERENTIATED") %>% sample_fct(N, prob = c(.5, .48, .015, .005)),
-  ARMCD   = c("ARM A", "ARM B", "ARM C") %>%sample_fct(N),
+  ARMCD   = c("ARM A", "ARM B", "ARM C") %>% sample_fct(N),
   COUNTRY = c("FRA", "DNK", "ESP", "AUS") %>% sample_fct(N),
   RACE    = c("WHITE", "ASIAN", "BLACK OR AFRICAN AMERICAN", "NATIVE HAWAIIAN OR OTHER PACIFIC ISLANDER",
               "AMERICAN INDIAN OR ALASKA NATIVE", "UNKNOWN") %>% sample_fct(N, prob = c(.4, .2, .2, .05, .05, .1)),
@@ -56,34 +56,36 @@ ADSL <- tibble(
   BMK2    = c("Low", "Medium", "High") %>% sample_fct(N),
   SAFFL   = c("Y", "N") %>% sample_fct(N, prob = c(.9, .1)),
   EOSSTT  = c("Completed", "Discontinued", "Ongoing") %>% sample_fct(N, prob = c(.3, .3, .4))
-) %>% dplyr::mutate(
-  ARM         = recode(ARMCD, "ARM A" = "A: Placebo", "ARM B" = "B: Drug X", "ARM C" = "C: Combination"),
-  ACTARM      = ARM,
-  ACTARMCD    = ARMCD,
-  AGEGR1      = ifelse(AGE < 65, "<65", ">=65"),
-  TRTDURD     = ifelse(EOSSTT == "Completed",
-                       84 + floor(runif(N, min = 0, max = 10)),
-                       floor(runif(N, min = 2, max = 83))),
-  EOSDY       = ifelse(EOSSTT == "Discontinued", TRTDURD,
-                       ifelse(EOSSTT == "Completed", TRTDURD + floor(runif(N, min = 28, max = 36)), NA)),
-  DCSREAS     = ifgen_char(EOSSTT == "Discontinued",
-                           tx = c("Adverse Event", "Death", "Progressive Disease",
-                                  "Symptomatic Deterioation", "Withdrawal by Subject", "Physician Decision"),
-                           tp = c(.2, .2, .2, .2, .1, .1), fx = ""),
-  DCSREASP    = ifelse(DCSREAS != "", paste(DCSREAS, "Reason", sample(1:5, N, replace=T)), ""),
-  DCSREAS_GRP = ifelse(DCSREAS == "", "", ifelse(DCSREAS %in% c("Adverse Event", "Death"), "Safety", "Non-Safety")),
-  DTHFL       = ifelse(DCSREAS == "Death", "Y",
-                       ifgen_char(EOSSTT != "Ongoing", tx = c("Y", "N"), tp = c(.2, .8), fx = "N")),
-  DTHCAUS     = ifgen_char(DTHFL == "Y",
-                           tx = c("Progressive Disease", "Adverse Event", "Other Medical Conditions"), tp = c(0.5, 0.2, 0.3),
-                           fx = ""),
-  AEWITHFL    = ifelse(DCSREAS == "Adverse Event" | DTHCAUS == "Adverse Event", "Y", "N")
+) %>%
+  dplyr::mutate(
+    ARM         = recode(ARMCD, "ARM A" = "A: Placebo", "ARM B" = "B: Drug X", "ARM C" = "C: Combination"),
+    ACTARM      = ARM,
+    ACTARMCD    = ARMCD,
+    AGEGR1      = ifelse(AGE < 65, "<65", ">=65"),
+    TRTDURD     = ifelse(EOSSTT == "Completed",
+                         84 + floor(runif(N, min = 0, max = 10)),
+                         floor(runif(N, min = 2, max = 83))),
+    EOSDY       = ifelse(EOSSTT == "Discontinued", TRTDURD,
+                         ifelse(EOSSTT == "Completed", TRTDURD + floor(runif(N, min = 28, max = 36)), NA)),
+    DCSREAS     = ifgen_char(EOSSTT == "Discontinued",
+                             tx = c("Adverse Event", "Death", "Progressive Disease",
+                                    "Symptomatic Deterioation", "Withdrawal by Subject", "Physician Decision"),
+                             tp = c(.2, .2, .2, .2, .1, .1), fx = ""),
+    DCSREASP    = ifelse(DCSREAS != "", paste(DCSREAS, "Reason", sample(1:5, N, replace = TRUE)), ""),
+    DCSREAS_GRP = ifelse(DCSREAS == "", "", ifelse(DCSREAS %in% c("Adverse Event", "Death"), "Safety", "Non-Safety")),
+    DTHFL       = ifelse(DCSREAS == "Death", "Y",
+                         ifgen_char(EOSSTT != "Ongoing", tx = c("Y", "N"), tp = c(.2, .8), fx = "N")),
+    DTHCAUS     = ifgen_char(DTHFL == "Y",
+                             tx = c("Progressive Disease", "Adverse Event", "Other Medical Conditions"),
+                             tp = c(0.5, 0.2, 0.3),
+                             fx = ""),
+    AEWITHFL    = ifelse(DCSREAS == "Adverse Event" | DTHCAUS == "Adverse Event", "Y", "N")
 )
 
 
 #####------ ADAE - Adverse Event Analysis Dataset ------#####
 
-#meddra <- haven::read_sas("C:/Users/liaoc10/Desktop/meddra_hierarchy.sas7bdat")
+#meddra <- haven::read_sas("C:/Users/liaoc10/Desktop/meddra_hierarchy.sas7bdat") # nolint
 meddra <- read_bce("/opt/BIOSTAT/prod/acp/libraries/meddra_hierarchy.sas7bdat")
 
 meddra <- meddra %>%
@@ -97,32 +99,35 @@ meddra <- meddra %>%
          AEBDSYCD = AESOCCD,
          AETERM   = toupper(AEDECOD))
 
-ADAE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
+ADAE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) { # nolint
   nae <- sample(1:10, 1)
 
-  AE <- cbind(
+  AE <- cbind( # nolint
     pinfo,
-    meddra[sample(1:nrow(meddra), nae),],
+    meddra[sample(seq_len(nrow(meddra)), nae), ],
     tibble(
-      AESEQ   = 1:nae,
+      AESEQ   = seq_len(nae),
       AEREL   = c("Y", "N") %>% sample_char(nae, prob = c(.2, .8)),
       AESER   = c("Y", "N") %>% sample_char(nae, prob = c(.2, .8)),
-      AEACN   = c("DRUG INTERRUPTED", "DOSE INCREASED","DOSE NOT CHANGED", "DOSE REDUCED", "UNKNOWN", "NOT APPLICABLE") %>%
+      AEACN   = c("DRUG INTERRUPTED", "DOSE INCREASED", "DOSE NOT CHANGED",
+                  "DOSE REDUCED", "UNKNOWN", "NOT APPLICABLE") %>%
         sample_char(nae, prob = c(.18, .02, .5, .1, .05, .15)),
-      AEOUT   = c("NOT RECOVERED/NOT RESOLVED", "RECOVERED/RESOLVED WITH SEQUELAE", "RECOVERING/RESOLVING", "RECOVERED/RESOLVED", "UNKNOWN") %>%
-        sample_char(nae, prob = c(.2, .1, .1, .5,.1)),
+      AEOUT   = c("NOT RECOVERED/NOT RESOLVED", "RECOVERED/RESOLVED WITH SEQUELAE",
+                  "RECOVERING/RESOLVING", "RECOVERED/RESOLVED", "UNKNOWN") %>%
+        sample_char(nae, prob = c(.2, .1, .1, .5, .1)),
       AETOXGR = paste(1:4) %>% sample_char(nae, prob =  c(.4, .3, .2, .1))
     )
-  ) %>% dplyr::mutate(
-    AESDTH  = "N",
-    TRTEMFL = "Y",
-    AREL    = AEREL,
-    ATOXGR  = AETOXGR
-  )
+  ) %>%
+    dplyr::mutate(
+      AESDTH  = "N",
+      TRTEMFL = "Y",
+      AREL    = AEREL,
+      ATOXGR  = AETOXGR
+    )
 
   # Edit last AE record if AE lead to withdrawl according to ADSL$AEWITHFL
   if (pinfo$AEWITHFL == "Y") {
-    AE <- AE %>% dplyr::mutate(
+    AE <- AE %>% dplyr::mutate( # nolint
       AESER = ifelse(AESEQ == nae, "Y", AESER),
       AEACN = ifelse(AESEQ == nae, "DRUG WITHDRAWN", AEACN)
     )
@@ -130,7 +135,7 @@ ADAE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
 
   # Edit last AE record if AE lead to death according to ADSL$DTHCAUS
   if (pinfo$DTHCAUS == "Adverse Event") {
-    AE <- AE %>% dplyr::mutate(
+    AE <- AE %>% dplyr::mutate( # nolint
       AEOUT   = ifelse(AESEQ == nae, "FATAL", AEOUT),
       AESER   = ifelse(AESEQ == nae, "Y", AESER),
       AETOXGR = ifelse(AESEQ == nae, "5", AETOXGR),
@@ -141,44 +146,47 @@ ADAE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
 
   AE
 
-})  %>% Reduce(rbind, .)
+})  %>%
+  Reduce(rbind, .)
 
 
 #####----- ADTTE - Time-to-Event Analysis Dataset -----######
 
-lookup_ADTTE <- tribble(
-  ~ARMCD,  ~PARAMCD, ~PARAM, ~LAMBDA, ~CNSR_P,
-  "ARM A", "OS",   "Overall Survival",          1/100,  0.2,
-  "ARM B", "OS",   "Overall Survival",          1/80,   0.4,
-  "ARM C", "OS",   "Overall Survival",          1/60,   0.42,
-  "ARM A", "PFS",  "Progression Free Survival", 1/150,  0.1,
-  "ARM B", "PFS",  "Progression Free Survival", 1/100,  0.3,
-  "ARM C", "PFS",  "Progression Free Survival", 1/80,   0.32,
-  "ARM A", "EFS",  "Event Free Survival",       1/100,  0.08,
-  "ARM B", "EFS",  "Event Free Survival",       1/80,   0.2,
-  "ARM C", "EFS",  "Event Free Survival",       1/60,   0.23
+lookup_ADTTE <- tribble( # nolint
+  ~ARMCD,  ~PARAMCD, ~PARAM, ~LAMBDA, ~CNSR_P, # nolint
+  "ARM A", "OS",   "Overall Survival",          1 / 100,  0.2,
+  "ARM B", "OS",   "Overall Survival",          1 / 80,   0.4,
+  "ARM C", "OS",   "Overall Survival",          1 / 60,   0.42,
+  "ARM A", "PFS",  "Progression Free Survival", 1 / 150,  0.1,
+  "ARM B", "PFS",  "Progression Free Survival", 1 / 100,  0.3,
+  "ARM C", "PFS",  "Progression Free Survival", 1 / 80,   0.32,
+  "ARM A", "EFS",  "Event Free Survival",       1 / 100,  0.08,
+  "ARM B", "EFS",  "Event Free Survival",       1 / 80,   0.2,
+  "ARM C", "EFS",  "Event Free Survival",       1 / 60,   0.23
 )
 
 evntdescr_sel <- c(
-  'Death',
-  'Disease Progression',
-  'Last Tumor Assessment',
-  'Adverse Event',
-  'Last Date Known To Be Alive'
+  "Death",
+  "Disease Progression",
+  "Last Tumor Assessment",
+  "Adverse Event",
+  "Last Date Known To Be Alive"
 )
 
+ADTTE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) { # nolint
 
-ADTTE <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
-
-  lookup_ADTTE %>% dplyr::filter(ARMCD == as.character(pinfo$ACTARMCD)) %>%
+  lookup_ADTTE %>%
+    dplyr::filter(ARMCD == as.character(pinfo$ACTARMCD)) %>%
     rowwise() %>%
-    dplyr::mutate(CNSR = sample(c(0, 1), 1, prob = c(1-CNSR_P, CNSR_P)),
+    dplyr::mutate(CNSR = sample(c(0, 1), 1, prob = c(1 - CNSR_P, CNSR_P)),
            AVAL = rexp(1, LAMBDA),
            AVALU = "DAYS",
-           EVNTDESC = if (CNSR == 1) sample(evntdescr_sel[-c(1:2)], 1) else sample(evntdescr_sel, 1)
-    ) %>% select(-ARMCD, -LAMBDA, -CNSR_P) %>% cbind(pinfo, .)
+           EVNTDESC = if (CNSR == 1) sample(evntdescr_sel[-c(1:2)], 1) else sample(evntdescr_sel, 1)) %>%
+    select(-ARMCD, -LAMBDA, -CNSR_P) %>%
+    cbind(pinfo, .)
 
-})  %>% Reduce(rbind, .)
+})  %>%
+  Reduce(rbind, .)
 
 #Clean up
 rm(evntdescr_sel, lookup_ADTTE)
@@ -189,7 +197,7 @@ rm(evntdescr_sel, lookup_ADTTE)
 # PARAM, PARAMCD, AVAL, AVALC, AVISIT, AVISITN
 param_codes <- setNames(1:5, c("CR", "PR", "SD", "PD", "NE"))
 
-lookup_ADRS <- expand.grid(
+lookup_ADRS <- expand.grid( # nolint
   ARMCD = c("ARM A", "ARM B", "ARM C"),
   AVALC = names(param_codes)
 ) %>% dplyr::mutate(
@@ -199,9 +207,7 @@ lookup_ADRS <- expand.grid(
   p_eot = c(c(.2, .3, .5), c(.1, .2, .3), c(.2, .2, .1), c(.5, .3, .1), rep(0, 3))
 )
 
-#pinfo <- split(ADSL, ADSL$USUBJID)[[1]]
-ADRS <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
-
+ADRS <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) { # nolint
   probs <- lookup_ADRS %>%
     dplyr::filter(ARMCD == as.character(pinfo$ACTARMCD))
 
@@ -222,35 +228,35 @@ ADRS <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
   best_rsp_i <- which.min(param_codes[c(rsp_c6, rsp_c12, rsp_eot)])
   obj_rsp <- ifelse(names(param_codes)[best_rsp] %in% c("CR", "PR"), "Y", "N")
 
-  avisit = c("Cycle 6 Day 1", "Cycle 12 Day 1", "End of Treatment")
-  ady    = c(ady_c6, ady_c12, ady_eot)
+  avisit <- c("Cycle 6 Day 1", "Cycle 12 Day 1", "End of Treatment")
+  ady <- c(ady_c6, ady_c12, ady_eot)
 
   tibble(
-    PARAMCD = c(rep("OVRINV", 3), "BESRSPI", "OBJRSPI" ,"LSTASDI"),
-    PARAM   = recode(PARAMCD, OVRINV = "Overall Response by Investigator",
+    PARAMCD = c(rep("OVRINV", 3), "BESRSPI", "OBJRSPI", "LSTASDI"),
+    PARAM = recode(PARAMCD, OVRINV = "Overall Response by Investigator",
                      BESRSPI = "Best Overall Response by Investigator",
                      OBJRSPI  = "Objective Responders by Investigator",
                      LSTASDI = "Last Tumor Assessment by Investigator"),
-    AVALC   = c(rsp_c6, rsp_c12, rsp_eot,
+    AVALC = c(rsp_c6, rsp_c12, rsp_eot,
                 names(param_codes)[best_rsp],
                 obj_rsp,
                 rsp_eot),
-    AVAL    = ifelse(PARAMCD != "OBJRSPI", param_codes[AVALC],
+    AVAL = ifelse(PARAMCD != "OBJRSPI", param_codes[AVALC],
                     ifelse(AVALC == "Y", 1, 0)),
-    AVISIT  = factor(c(avisit, rep(avisit[best_rsp_i],2), avisit[3]), levels = avisit),
+    AVISIT  = factor(c(avisit, rep(avisit[best_rsp_i], 2), avisit[3]), levels = avisit),
     AVISITN = as.numeric(AVISIT),
     ADY     = c(ady, rep(ady[best_rsp_i], 2), ady[3])
   ) %>% cbind(pinfo, .)
-}) %>% Reduce(rbind, .)
+}) %>%
+  Reduce(rbind, .)
 
 #Clean up
 rm(param_codes, lookup_ADRS)
 
 #####--------- ADTR - Tumor Burden Analysis Dataset -------#####
-
 # PARAM, PARAMCD, AVAL, AVALC, AVISIT, AVISITN
 
-lookup_ADTR <- expand.grid(
+lookup_ADTR <- expand.grid( # nolint
   ARMCD  = c("ARM A", "ARM B", "ARM C"),
   type = c("mean", "sd")
 ) %>% dplyr::mutate(
@@ -260,7 +266,7 @@ lookup_ADTR <- expand.grid(
   pchg_eot = c(c(30, 0, -30), c(20, 30, 30))
 )
 
-ADTR <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
+ADTR <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) { # nolint
 
   probs <- lookup_ADTR %>%
     dplyr::filter(ARMCD == as.character(pinfo$ACTARMCD))
@@ -280,7 +286,7 @@ ADTR <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
   pchg_eot <- do.call(rnorm, as.list(c(1, probs$pchg_eot)))
   ady_eot  <- ady_c12 + floor(runif(1, min = 28, max = 36))
 
-  avisit = c("Screening", "Cycle 6 Day 1", "Cycle 12 Day 1","End of Treatment")
+  avisit <- c("Screening", "Cycle 6 Day 1", "Cycle 12 Day 1", "End of Treatment")
 
   tr <- tibble(
     PARAMCD = "SLDINV",
@@ -291,19 +297,20 @@ ADTR <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
     AVALU   = rep("mm", 4),
     BASE    = rep(aval_scr, 4),
     PCHG    = c(NA, pchg_c6, pchg_c12, pchg_eot),
-    ABLFL   = c("Y", rep("",3)),
-    ONTRTFL = c("", rep("Y",3)),
+    ABLFL   = c("Y", rep("", 3)),
+    ONTRTFL = c("", rep("Y", 3)),
     ANL01FL = rep("Y", 4),
     ANL02FL = c("Y", "", "", "Y"),
-    ANL03FL = c("Y", rep("",3)),
+    ANL03FL = c("Y", rep("", 3)),
     DTYPE   = rep("", 4)
   ) %>% dplyr::mutate(
-    CHG     = BASE * (PCHG/100),
+    CHG     = BASE * (PCHG / 100),
     AVAL    = BASE + CHG,
     AVALC   = as.character(AVAL)
   )
 
-  tr_min <- tr %>% slice(which.min(AVAL)) %>%
+  tr_min <- tr %>%
+    slice(which.min(AVAL)) %>%
     dplyr::mutate(AVISIT  = "POST-BASELINE MINIMUM",
            ANL01FL = "",
            ANL02FL = "",
@@ -312,7 +319,8 @@ ADTR <- split(ADSL, ADSL$USUBJID) %>% lapply(FUN = function(pinfo) {
 
   rbind(tr, tr_min) %>% cbind(pinfo, .)
 
-}) %>% Reduce(rbind, .)
+}) %>%
+  Reduce(rbind, .)
 
 
 #Clean up
@@ -330,9 +338,8 @@ match_label <- function(target, source) {
   if (is.null(source_names)) stop("source dataset does not have any variables")
 
   map_varnames <- match(target_names, source_names)
-  #map_varnames <- map_varnames[!is.na(map_varnames)]
 
-  if (sum(map_varnames, na.rm = T) < 1) stop("no matching variable name between source and target")
+  if (sum(map_varnames, na.rm = TRUE) < 1) stop("no matching variable name between source and target")
 
   for (i in seq_along(map_varnames)) {
     attr(target[[i]], "label") <- attr(source[[map_varnames[[i]]]], "label")
@@ -343,7 +350,7 @@ match_label <- function(target, source) {
 
 
 #Attach labels to variables
-rADSL <- ADSL %>%
+rADSL <- ADSL %>% # nolint
   var_relabel(
     STUDYID = "Study Identifier",
     SUBJID  = "Subject Identifier for the Study",
@@ -355,7 +362,7 @@ rADSL <- ADSL %>%
     RACE    = "Race",
     ARMCD   = "Planned Arm Code",
     ARM     = "Description of Planned Arm",
-    ACTARMCD= "Actual Arm Code",
+    ACTARMCD = "Actual Arm Code",
     ACTARM  = "Description of Actual Arm",
     COUNTRY = "Country",
     BMK1    = "Cont. Biomarker 1",
@@ -370,11 +377,12 @@ rADSL <- ADSL %>%
     DCSREAS_GRP = "Grouped Reason for Disc. from Study",
     DTHFL   = "Subject Death Flag",
     DTHCAUS = "Cause of Death",
-    AEWITHFL= "AE Leading to Drug Withdrawal Flag"
+    AEWITHFL = "AE Leading to Drug Withdrawal Flag"
   )
 
 
-rADAE <- ADAE %>% match_label(rADSL) %>%
+rADAE <- ADAE %>% # nolint
+  match_label(rADSL) %>%
   var_relabel(
     AEDECOD  = "Dictionary Derived Term",
     AEPTCD   = "Dictionary Derived Term Code",
@@ -399,7 +407,8 @@ rADAE <- ADAE %>% match_label(rADSL) %>%
     ATOXGR   = "Analysis Toxicity Grade"
   )
 
-rADTR <- ADTR %>% match_label(rADSL) %>%
+rADTR <- ADTR %>% # nolint
+  match_label(rADSL) %>%
   var_relabel(
     PARAM   = "Parameter Description",
     PARAMCD = "Parameter Code",
@@ -421,14 +430,15 @@ rADTR <- ADTR %>% match_label(rADSL) %>%
   )
 
 
-rADTTE <- ADTTE %>%
+rADTTE <- ADTTE %>% # nolint
   match_label(rADTR) %>%
   var_relabel(
     EVNTDESC = "Event Description",
     CNSR     = "Censoring Status Value(1=cens, 0=evt)"
   )
 
-rADRS <- ADRS %>% match_label(rADTR)
+rADRS <- ADRS %>% # nolint
+  match_label(rADTR)
 
 
 rm(ADSL, ADAE, ADRS, ADTTE, ADTR)

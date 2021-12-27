@@ -13,7 +13,6 @@
 #' @examples
 #'
 #' duplicate_with_var(iris, Species = "Total")
-#'
 duplicate_with_var <- function(x, ...) { # nolint # nousage
   dots <- list(...)
   nms <- names(dots)
@@ -50,7 +49,6 @@ duplicate_with_var <- function(x, ...) { # nolint # nousage
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
 #'
 #' @examples
-#'
 #' \dontrun{
 #' library(ggplot2)
 #' g <- with(iris, {
@@ -70,7 +68,6 @@ duplicate_with_var <- function(x, ...) { # nolint # nousage
 as_pdf <- function(grobs,
                    outpath,
                    pagesize = "letter.landscape") {
-
   paper_sizes <- paper_size(pagesize)
   paper_width <- paper_sizes[1]
   paper_height <- paper_sizes[2]
@@ -137,7 +134,6 @@ paper_size <- function(pagesize) {
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
 #'
 #' @examples
-#'
 #' \dontrun{
 #' library(ggplot2)
 #'
@@ -252,8 +248,10 @@ grob_part <- function(gplot_grob, part) {
   stopifnot(length(part) == 1 && is.character(part))
   index <- match(part, gplot_grob$layout$name)
   if (is.na(index)) {
-    stop(c(part, " not in plot object. Allowed parts are ",
-           paste(gplot_grob$layout$name, collapse = ", ")))
+    stop(c(
+      part, " not in plot object. Allowed parts are ",
+      paste(gplot_grob$layout$name, collapse = ", ")
+    ))
   }
   grob <- gplot_grob$grobs[[index]]
   return(grob)
@@ -281,39 +279,43 @@ grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 #' @param fontsize font size in 'mm'
 #'
 theme_osprey <- function(axis_side = "left", fontsize = 4) {
-  theme(panel.background = element_rect(fill = "white", colour = "white"),
-        panel.grid.major.y = element_line(colour = "grey50", linetype = 2),
-        panel.border = element_rect(colour = "black", fill = NA, size = 1),
-        axis.title = element_blank(),
-        legend.title = element_blank(),
-        legend.position = "bottom",
-        axis.ticks.y = element_blank(),
-        axis.text = element_text(color = "black", size = fontsize * .pt),
-        axis.text.y = element_text(hjust = ifelse(axis_side == "left", 1, 0)),
-        text = element_text(size = fontsize * .pt, face = "bold", color = "black"),
-        legend.text = element_text(size = fontsize * .pt),
-        plot.title = element_text(hjust = 0.5))
+  theme(
+    panel.background = element_rect(fill = "white", colour = "white"),
+    panel.grid.major.y = element_line(colour = "grey50", linetype = 2),
+    panel.border = element_rect(colour = "black", fill = NA, size = 1),
+    axis.title = element_blank(),
+    legend.title = element_blank(),
+    legend.position = "bottom",
+    axis.ticks.y = element_blank(),
+    axis.text = element_text(color = "black", size = fontsize * .pt),
+    axis.text.y = element_text(hjust = ifelse(axis_side == "left", 1, 0)),
+    text = element_text(size = fontsize * .pt, face = "bold", color = "black"),
+    legend.text = element_text(size = fontsize * .pt),
+    plot.title = element_text(hjust = 0.5)
+  )
 }
 
 check_same_N <- function(..., omit_null = TRUE) { # nolint
   dots <- list(...)
 
-  n_list <- Map(function(x, name) {
-    if (is.null(x)) {
-      if (omit_null) {
-        NA_integer_
+  n_list <- Map(
+    function(x, name) {
+      if (is.null(x)) {
+        if (omit_null) {
+          NA_integer_
+        } else {
+          stop("arg", name, "is not supposed to be NULL")
+        }
+      } else if (is.data.frame(x)) {
+        nrow(x)
+      } else if (is.atomic(x)) {
+        length(x)
       } else {
-        stop("arg", name, "is not supposed to be NULL")
+        stop("data structure for ", name, "is currently not supported")
       }
-    } else if (is.data.frame(x)) {
-      nrow(x)
-    } else if (is.atomic(x)) {
-      length(x)
-    } else {
-      stop("data structure for ", name, "is currently not supported")
-    }
-  },
-  dots, names(dots))
+    },
+    dots, names(dots)
+  )
 
   n <- na.omit(unlist(n_list))
 
@@ -350,8 +352,10 @@ grob_part <- function(gplot_grob, part) {
   stopifnot(length(part) == 1 && is.character(part))
   index <- match(part, gplot_grob$layout$name)
   if (is.na(index)) {
-    stop(c(part, " not in plot object. Allowed parts are ",
-           paste(gplot_grob$layout$name, collapse = ", ")))
+    stop(c(
+      part, " not in plot object. Allowed parts are ",
+      paste(gplot_grob$layout$name, collapse = ", ")
+    ))
   }
   grob <- gplot_grob$grobs[[index]]
   return(grob)
@@ -385,17 +389,19 @@ grob_parts <- function(gplot, parts) {
 #' @param fontsize font size in 'mm'
 #' @param blank whether to have blank or background with grids and borders
 theme_osprey <- function(axis_side = "left", fontsize = 4, blank = FALSE) {
-  theme(panel.background = element_rect(fill = "white", colour = "white"),
-        panel.grid.major.y = if (blank) element_blank() else element_line(colour = "grey50", linetype = 2),
-        panel.border = if (blank) element_blank() else element_rect(colour = "black", fill = NA, size = 1),
-        axis.title = element_blank(),
-        legend.title = element_blank(),
-        legend.position = "bottom",
-        axis.ticks.y = element_blank(),
-        axis.ticks.x.top = element_blank(),
-        axis.text = element_text(color = "black", size = fontsize * .pt),
-        axis.text.y = element_text(hjust = ifelse(axis_side == "left", 0, 1)),
-        text = element_text(size = fontsize * .pt, face = "bold", color = "black"),
-        legend.text = element_text(size = fontsize * .pt),
-        plot.title = element_text(hjust = 0.5))
+  theme(
+    panel.background = element_rect(fill = "white", colour = "white"),
+    panel.grid.major.y = if (blank) element_blank() else element_line(colour = "grey50", linetype = 2),
+    panel.border = if (blank) element_blank() else element_rect(colour = "black", fill = NA, size = 1),
+    axis.title = element_blank(),
+    legend.title = element_blank(),
+    legend.position = "bottom",
+    axis.ticks.y = element_blank(),
+    axis.ticks.x.top = element_blank(),
+    axis.text = element_text(color = "black", size = fontsize * .pt),
+    axis.text.y = element_text(hjust = ifelse(axis_side == "left", 0, 1)),
+    text = element_text(size = fontsize * .pt, face = "bold", color = "black"),
+    legend.text = element_text(size = fontsize * .pt),
+    plot.title = element_text(hjust = 0.5)
+  )
 }

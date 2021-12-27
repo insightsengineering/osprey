@@ -108,13 +108,14 @@ library(dplyr)
 
 # ADSL
 rADSL <- synthetic_cdisc_data("latest")$adsl
-ADSL <-  rADSL \%>\%
+ADSL <- rADSL \%>\%
   group_by(USUBJID) \%>\%
   mutate(
     TRTSDT = as.Date(TRTSDTM),
     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
-    max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1) \%>\%
-  select(USUBJID, STUDYID, TRTSDT , max_day) \%>\%
+    max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
+  ) \%>\%
+  select(USUBJID, STUDYID, TRTSDT, max_day) \%>\%
   filter(USUBJID == rADSL$USUBJID[1])
 
 
@@ -128,13 +129,19 @@ ADEX <- ADEX \%>\%
   arrange(PARCAT2, PARAMCD) \%>\%
   mutate(diff = c(0, diff(AVAL, lag = 1))) \%>\%
   mutate(
-    Modification = case_when(diff < 0 ~ "Decrease",
-    diff > 0 ~ "Increase",
-    diff == 0 ~ "None")) \%>\%
+    Modification = case_when(
+      diff < 0 ~ "Decrease",
+      diff > 0 ~ "Increase",
+      diff == 0 ~ "None"
+    )
+  ) \%>\%
   mutate(
     ASTDT_dur = as.numeric(
       as.Date(
-        substr(as.character(ASTDTM), 1, 10)) - as.Date(TRTSDT) + 1))
+        substr(as.character(ASTDTM), 1, 10)
+      ) - as.Date(TRTSDT) + 1
+    )
+  )
 
 p1 <- patient_domain_profile(
   domain = "Exposure (ADEX)",
@@ -148,7 +155,7 @@ p1 <- patient_domain_profile(
   no_enddate_extention = 0,
   marker_col_list = list(
     marker_col = factor(ADEX$Modification),
-    marker_col_opt =  c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
+    marker_col_opt = c("Increase" = "red", "Decrease" = "green", "None" = "blue"),
     marker_col_legend = NULL
   ),
   marker_shape_list = list(
@@ -182,14 +189,14 @@ p2 <- patient_domain_profile(
   line_col_list = list(
     line_col = ADAE$AESER,
     line_col_legend = "Serious",
-    line_col_opt = c("blue","green")
+    line_col_opt = c("blue", "green")
   ),
   line_width = 1,
   arrow_size = 0.1,
   no_enddate_extention = 0,
   marker_col_list = list(
     marker_col = factor(ADAE$AETOXGR),
-    marker_col_opt =  c("3" = "yellow", "4" = "red"),
+    marker_col_opt = c("3" = "yellow", "4" = "red"),
     marker_col_legend = NULL
   ),
   marker_shape_list = list(
@@ -221,16 +228,20 @@ p3 <- patient_domain_profile(
   no_enddate_extention = 0,
   marker_col_list = list(
     marker_col = factor(ADRS$AVALC),
-    marker_col_opt =  c("CR" = "green", "PR" = "blue",
+    marker_col_opt = c(
+      "CR" = "green", "PR" = "blue",
       "SD" = "yellow", "PD" = "red", "NE" = "pink",
-      "Y" = "lightblue", "N" = "darkred"),
+      "Y" = "lightblue", "N" = "darkred"
+    ),
     marker_col_legend = NULL
   ),
   marker_shape_list = list(
     marker_shape = factor(ADRS$AVALC),
-    marker_shape_opt = c("CR" = 21, "PR" = 24,
+    marker_shape_opt = c(
+      "CR" = 21, "PR" = 24,
       "SD" = 23, "PD" = 22, "NE" = 14,
-      "Y" = 11, "N" = 8),
+      "Y" = 11, "N" = 8
+    ),
     marker_shape_legend = "Response"
   ),
   show_days_label = TRUE,
@@ -269,7 +280,8 @@ rADLB <- synthetic_cdisc_data("latest")$adlb
 ADLB <- rADLB \%>\%
   select(
     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE,
-    ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND)
+    ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND
+  )
 ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 
 ADLB <- ADLB \%>\%
@@ -288,13 +300,17 @@ p5 <- patient_domain_profile(
   no_enddate_extention = 0,
   marker_col_list = list(
     marker_col = factor(ADLB$ANRIND),
-    marker_col_opt =  c("HIGH" = "red", "LOW" = "blue",
-      "NORMAL" = "green", "NA" = "green")
+    marker_col_opt = c(
+      "HIGH" = "red", "LOW" = "blue",
+      "NORMAL" = "green", "NA" = "green"
+    )
   ),
   marker_shape_list = list(
     marker_shape = factor(ADLB$ANRIND),
-    marker_shape_opt = c("HIGH" = 24, "LOW" = 25,
-      "NORMAL" = 23, "NA" = 23),
+    marker_shape_opt = c(
+      "HIGH" = 24, "LOW" = 25,
+      "NORMAL" = 23, "NA" = 23
+    ),
     marker_shape_legend = "Labs Abnormality"
   ),
   show_days_label = TRUE,

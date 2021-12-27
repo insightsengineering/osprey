@@ -247,10 +247,11 @@ g_events_term_id <- function(term,
             ref_total,
             conf_level,
             method = diff_ci_method
-            )[1, ], # wald
-          meanrisk = (.data$trt_count + .data$ref_count) / (trt_total + ref_total)))
-        )
-      ) %>%
+          )[1, ], # wald
+          meanrisk = (.data$trt_count + .data$ref_count) / (trt_total + ref_total)
+        ))
+      )
+    ) %>%
     ungroup() %>%
     rename(riskdiff = .data$est, lower_ci = .data$lwr.ci, upper_ci = .data$upr.ci)
 
@@ -260,8 +261,8 @@ g_events_term_id <- function(term,
       data.frame(
         risk = c(.data$trt_count / trt_total, .data$ref_count / ref_total),
         arm = c(trt, ref)
-        )
-      ) %>%
+      )
+    ) %>%
     ungroup()
 
   names(color) <- arms
@@ -335,7 +336,8 @@ g_events_term_id <- function(term,
       color = arm,
       shape = arm
     ),
-    size = fontsize * 0.7) +
+    size = fontsize * 0.7
+    ) +
     mytheme +
     ggtitle("Proportion") +
     scale_color_manual(values = color, labels = labels) +
@@ -511,15 +513,17 @@ create_flag_vars <- function(df,
   argnames <- unique(names(args))
   df <- as.data.frame(df)
   ret <- lapply(argnames, function(t) {
-    tryCatch({
-      with(df, eval(args[[t]]))
-    },
-    error = function(w) {
-      NULL
-    },
-    warning = function(w) {
-      NULL
-    })
+    tryCatch(
+      expr = {
+        with(df, eval(args[[t]]))
+      },
+      error = function(w) {
+        NULL
+      },
+      warning = function(w) {
+        NULL
+      }
+    )
   })
   names(ret) <- argnames
   valid <- vapply(argnames, function(x) {

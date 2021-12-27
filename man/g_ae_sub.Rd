@@ -88,40 +88,50 @@ arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)
 subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
 subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
-subgroups_levels <- list(RACE = list("Total" = "Race",
-                                     "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
-                                     "WHITE" = "White",
-                                     "ASIAN" = "Asian",
-                                     "BLACK OR AFRICAN AMERICAN" = "African"),
-                         STRATA1 = list("Total" = "Strata",
-                                        "A" = "TypeA",
-                                        "B" = "TypeB",
-                                        "C" = "Typec"),
-                         SEX = list("Total" = "Sex",
-                                    "M" = "Male",
-                                    "F" = "Female"))
+subgroups_levels <- list(
+  RACE = list(
+    "Total" = "Race",
+    "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
+    "WHITE" = "White",
+    "ASIAN" = "Asian",
+    "BLACK OR AFRICAN AMERICAN" = "African"
+  ),
+  STRATA1 = list(
+    "Total" = "Strata",
+    "A" = "TypeA",
+    "B" = "TypeB",
+    "C" = "Typec"
+  ),
+  SEX = list(
+    "Total" = "Sex",
+    "M" = "Male",
+    "F" = "Female"
+  )
+)
 # Example 1
 p1 <- g_ae_sub(id,
-              arm,
-              arm_sl,
-              subgroups,
-              subgroups_sl,
-              trt = "ARM A",
-              ref = "ARM C",
-              subgroups_levels = subgroups_levels,
-              arm_n = FALSE)
+  arm,
+  arm_sl,
+  subgroups,
+  subgroups_sl,
+  trt = "ARM A",
+  ref = "ARM C",
+  subgroups_levels = subgroups_levels,
+  arm_n = FALSE
+)
 grid.newpage()
 
 # Example 2: display number of patients in each arm
 p2 <- g_ae_sub(id,
-              arm,
-              arm_sl,
-              subgroups,
-              subgroups_sl,
-              trt = "ARM A",
-              ref = "ARM C",
-              subgroups_levels = subgroups_levels,
-              arm_n = TRUE)
+  arm,
+  arm_sl,
+  subgroups,
+  subgroups_sl,
+  trt = "ARM A",
+  ref = "ARM C",
+  subgroups_levels = subgroups_levels,
+  arm_n = TRUE
+)
 grid.newpage()
 
 # Example 3: preprocess data to only include treatment and control arm patients
@@ -135,27 +145,36 @@ arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)
 subgroups_sl <- ADSL[, c("SEX", "RACE", "STRATA1")]
 subgroups <- ADAE[, c("SEX", "RACE", "STRATA1")]
-subgroups_levels <- list(RACE = list("Total" = "Race",
-                                     "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
-                                     "WHITE" = "White",
-                                     "ASIAN" = "Asian",
-                                     "BLACK OR AFRICAN AMERICAN" = "African"),
-                         STRATA1 = list("Total" = "Strata",
-                                        "A" = "TypeA",
-                                        "B" = "TypeB",
-                                        "C" = "Typec"),
-                         SEX = list("Total" = "Sex",
-                                    "M" = "Male",
-                                    "F" = "Female"))
+subgroups_levels <- list(
+  RACE = list(
+    "Total" = "Race",
+    "AMERICAN INDIAN OR ALASKA NATIVE" = "American",
+    "WHITE" = "White",
+    "ASIAN" = "Asian",
+    "BLACK OR AFRICAN AMERICAN" = "African"
+  ),
+  STRATA1 = list(
+    "Total" = "Strata",
+    "A" = "TypeA",
+    "B" = "TypeB",
+    "C" = "Typec"
+  ),
+  SEX = list(
+    "Total" = "Sex",
+    "M" = "Male",
+    "F" = "Female"
+  )
+)
 p3 <- g_ae_sub(id,
-              arm,
-              arm_sl,
-              subgroups,
-              subgroups_sl,
-              trt,
-              ref,
-              subgroups_levels = subgroups_levels,
-              arm_n = FALSE)
+  arm,
+  arm_sl,
+  subgroups,
+  subgroups_sl,
+  trt,
+  ref,
+  subgroups_levels = subgroups_levels,
+  arm_n = FALSE
+)
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}

@@ -48,7 +48,9 @@
 #' @examples
 #' library(dplyr)
 #'
-#' ADSL <- rADSL %>% select(USUBJID, STUDYID, SEX, ARM, RACE) %>% dplyr::filter(SEX %in% c("F", "M"))
+#' ADSL <- rADSL %>%
+#'   select(USUBJID, STUDYID, SEX, ARM, RACE) %>%
+#'   dplyr::filter(SEX %in% c("F", "M"))
 #' AAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 #'
 #' ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
@@ -93,7 +95,6 @@
 #'   sort_by = "count",
 #'   show_legend = TRUE
 #' )
-#'
 g_butterfly <- function(category,
                         right_flag,
                         left_flag,
@@ -111,46 +112,48 @@ g_butterfly <- function(category,
     list(!is_empty(category), "missing argument: category must be specified"),
     list(!is_empty(right_flag), "missing argument: right_flag must be specified"),
     list(!is_empty(left_flag), "missing argument: left_flag must be specified"),
-
     list(
       length(unique(vapply(list(category, right_flag, left_flag), length, integer(1)))) == 1,
-      "invalid arguments: check that the length of input arguments are identical"),
-
+      "invalid arguments: check that the length of input arguments are identical"
+    ),
     list(
       all(union(right_flag, left_flag) %in% c(1, 0)),
-      "invalid arguments: right_flag or left_flag contains values other than 1/TRUE or 0/FALSE"),
-
+      "invalid arguments: right_flag or left_flag contains values other than 1/TRUE or 0/FALSE"
+    ),
     list(
       any(union(right_flag, left_flag) == 1),
-      "invalid arguments: right_flag and left_flag contain only 0/FALSE values"),
-
+      "invalid arguments: right_flag and left_flag contain only 0/FALSE values"
+    ),
     list(
       is.null(block_color) || length(block_color) == length(category),
-      "invalid arguments: check that the length of block_color is equal as other inputs"),
-
+      "invalid arguments: check that the length of block_color is equal as other inputs"
+    ),
     list(
       block_count %in% c("# of patients", "# of AEs"),
-      'invalid arguments: sort_by should be "# of patients" or "# of AEs"'),
+      'invalid arguments: sort_by should be "# of patients" or "# of AEs"'
+    ),
     list(
       !(block_count == "# of patients" && is.null(id)),
-      "invalid arguments: for '# of patients' id have to be specified"),
+      "invalid arguments: for '# of patients' id have to be specified"
+    ),
     list(
       is.null(id) || length(id) == length(category),
-      "invalid arguments: check that the length of block_color is equal as other inputs"),
-
+      "invalid arguments: check that the length of block_color is equal as other inputs"
+    ),
     list(
       is.null(facet_rows) ||
         (length(facet_rows) == length(category)) ||
         (is.data.frame(facet_rows) && nrow(facet_rows) == length(category)),
-      "invalid arguments: check that the length of block_color is equal as other inputs"),
-
+      "invalid arguments: check that the length of block_color is equal as other inputs"
+    ),
     list(is_character_single(x_label), "invalid arguments: check that x_label is of type character"),
     list(is_character_single(y_label), "invalid arguments: check that y_label is of type character"),
     list(is_character_single(legend_label), "invalid arguments: check that legend_label is of type character"),
     list(is_character_single(sort_by), "invalid arguments: check that sort_by is of type character"),
-
-    list(sort_by %in% c("count", "alphabetical", "right", "left"),
-         'invalid arguments: sort_by should be "count" or "alphabetical"')
+    list(
+      sort_by %in% c("count", "alphabetical", "right", "left"),
+      'invalid arguments: sort_by should be "count" or "alphabetical"'
+    )
   )
 
   # set up data-------
@@ -275,7 +278,8 @@ g_butterfly <- function(category,
       geom_text(data = total_text_ann_r, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
       geom_text(
         data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"),
-        fontface = "bold", hjust = 0.9) +
+        fontface = "bold", hjust = 0.9
+      ) +
       geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
@@ -288,7 +292,8 @@ g_butterfly <- function(category,
       geom_text(data = total_text_ann_r, aes_string(y = "label_ypos", label = "n"), fontface = "bold", hjust = -1) +
       geom_text(
         data = total_text_ann_l, aes_string(y = "-label_ypos - 0.4", label = "n"),
-        fontface = "bold", hjust = 0.9) +
+        fontface = "bold", hjust = 0.9
+      ) +
       coord_flip() +
       scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
       labs(x = y_label, y = block_count, fill = legend_label)

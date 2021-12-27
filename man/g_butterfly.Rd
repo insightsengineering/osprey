@@ -74,7 +74,9 @@ there is no equivalent STREAM output
 \examples{
 library(dplyr)
 
-ADSL <- rADSL \%>\% select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\% dplyr::filter(SEX \%in\% c("F", "M"))
+ADSL <- rADSL \%>\%
+  select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\%
+  dplyr::filter(SEX \%in\% c("F", "M"))
 AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
@@ -119,7 +121,6 @@ g_butterfly(
   sort_by = "count",
   show_legend = TRUE
 )
-
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}
