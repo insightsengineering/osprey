@@ -273,7 +273,7 @@ g_swimlane <- function(bar_id,
       scale_y_continuous(
         limits = c(min_res, max_res),
         breaks = ytick_at,
-        expand = c(0, 0)
+        expand = c(`if`(min_res == yref_line_min, .01, 0), `if`(max_res == yref_line_max, .01, 0))
       )
   } else {
     if (!is.null(limits_y)) {
