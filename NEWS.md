@@ -1,6 +1,7 @@
 # osprey 0.1.11.9007
 
 * Updated R version requirement to >= 3.6.
+* Modified `g_swimlane` plot to expand its y-axis range based on vertical line inputs.
 
 # osprey 0.1.11
 
