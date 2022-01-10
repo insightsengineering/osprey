@@ -148,6 +148,9 @@ g_swimlane <- function(bar_id,
   if (!is.null(marker_id) & !is.null(marker_color)) {
     check_same_N(marker_id = marker_id, marker_color = marker_color)
   }
+  if (!is.null(yref_line) && (!is.numeric(yref_line) || length(yref_line) == 0)) {
+    stop("yref_line must be a non-empty numeric vector or NULL")
+  }
 
   # data for plot
   bar_data <- data.frame(
@@ -210,6 +213,7 @@ g_swimlane <- function(bar_id,
       )
   }
 
+  limits_y <- NULL
 
   # plot marker
   if (!is.null(marker_pos)) {
@@ -217,8 +221,8 @@ g_swimlane <- function(bar_id,
       data = marker_data,
       aes(x = marker_id, y = marker_pos, shape = marker_shape, color = marker_color),
       size = 2.5, na.rm = TRUE
-    ) +
-      scale_y_continuous(limits = c(0, max(bar_length, marker_pos) + 5), breaks = ytick_at, expand = c(0, 0))
+    )
+    limits_y <- c(0, max(bar_length, marker_pos) + 5)
 
     if (!is.null(marker_shape)) {
       p <- p + guides(shape = guide_legend("Marker Shape", order = 2))
@@ -259,7 +263,22 @@ g_swimlane <- function(bar_id,
 
   # plot reference lines
   if (!is.null(yref_line)) {
-    p <- p + geom_hline(yintercept = yref_line, linetype = "dashed", color = "red")
+    x_axis_min <- pmax(ggplot_build(p)$layout$panel_params[[1]]$x.range[1], 0)
+    x_axis_max <- pmax(ggplot_build(p)$layout$panel_params[[1]]$x.range[2], 0)
+    yref_line_min <- min(yref_line)
+    yref_line_max <- max(yref_line)
+    min_res <- min(c(limits_y[1], x_axis_min, yref_line_min))
+    max_res <- max(c(limits_y[2], x_axis_max, yref_line_max))
+    p <- p + geom_hline(yintercept = yref_line, linetype = "dashed", color = "red") +
+      scale_y_continuous(
+        limits = c(min_res, max_res),
+        breaks = ytick_at,
+        expand = c(`if`(min_res == yref_line_min, .01, 0), `if`(max_res == yref_line_max, .01, 0))
+      )
+  } else {
+    if (!is.null(limits_y)) {
+      p <- p + scale_y_continuous(limits = limits_y, breaks = ytick_at, expand = c(0, 0))
+    }
   }
 
   # plot title and labels
