@@ -13,7 +13,7 @@
 #' @examples
 #'
 #' duplicate_with_var(iris, Species = "Total")
-duplicate_with_var <- function(x, ...) { # nolint # nousage
+duplicate_with_var <- function(x, ...) { # nolint
   dots <- list(...)
   nms <- names(dots)
   if (length(nms) > 1 && (is.null(nms) || !all(nms %in% names(x)))) {
