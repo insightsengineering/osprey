@@ -20,6 +20,7 @@ Depends:
     R (>= 3.6)
 Imports:
     assertthat,
+    checkmate,
     cowplot,
     DescTools,
     grid,
@@ -32,8 +33,7 @@ Imports:
     stringr,
     tern (>= 0.7.5),
     tibble,
-    tidyr (>= 1.0.0),
-    utils.nest (>= 0.2.11)
+    tidyr (>= 1.0.0)
 Suggests:
     knitr,
     scda.2021(>= 0.1.1),
