@@ -160,7 +160,7 @@ g_events_term_id <- function(term,
   stopifnot("arm needs to be a factor with at least 2 levels" = is.factor(arm) & nlevels(arm) >= 2)
   stopifnot(
     "invalid arguments: check that the length of id, term and arm are identical" =
-      length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1
+      length(id) == length(term) && length(term) == length(arm)
   )
   stopifnot("invalid arguments: trt and ref need to be from arm" = all(c(trt, ref) %in% unique(arm)))
   checkmate::assert_numeric(rate_range, len = 2)
