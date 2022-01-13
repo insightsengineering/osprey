@@ -108,52 +108,51 @@ g_butterfly <- function(category,
                         legend_label = "AETOXGR",
                         sort_by = "alphabetical",
                         show_legend = TRUE) {
-  stop_if_not(
-    list(!is_empty(category), "missing argument: category must be specified"),
-    list(!is_empty(right_flag), "missing argument: right_flag must be specified"),
-    list(!is_empty(left_flag), "missing argument: left_flag must be specified"),
-    list(
-      length(unique(vapply(list(category, right_flag, left_flag), length, integer(1)))) == 1,
-      "invalid arguments: check that the length of input arguments are identical"
-    ),
-    list(
-      all(union(right_flag, left_flag) %in% c(1, 0)),
-      "invalid arguments: right_flag or left_flag contains values other than 1/TRUE or 0/FALSE"
-    ),
-    list(
-      any(union(right_flag, left_flag) == 1),
-      "invalid arguments: right_flag and left_flag contain only 0/FALSE values"
-    ),
-    list(
-      is.null(block_color) || length(block_color) == length(category),
-      "invalid arguments: check that the length of block_color is equal as other inputs"
-    ),
-    list(
-      block_count %in% c("# of patients", "# of AEs"),
-      'invalid arguments: sort_by should be "# of patients" or "# of AEs"'
-    ),
-    list(
-      !(block_count == "# of patients" && is.null(id)),
-      "invalid arguments: for '# of patients' id have to be specified"
-    ),
-    list(
-      is.null(id) || length(id) == length(category),
-      "invalid arguments: check that the length of block_color is equal as other inputs"
-    ),
-    list(
-      is.null(facet_rows) ||
-        (length(facet_rows) == length(category)) ||
-        (is.data.frame(facet_rows) && nrow(facet_rows) == length(category)),
-      "invalid arguments: check that the length of block_color is equal as other inputs"
-    ),
-    list(is_character_single(x_label), "invalid arguments: check that x_label is of type character"),
-    list(is_character_single(y_label), "invalid arguments: check that y_label is of type character"),
-    list(is_character_single(legend_label), "invalid arguments: check that legend_label is of type character"),
-    list(is_character_single(sort_by), "invalid arguments: check that sort_by is of type character"),
-    list(
-      sort_by %in% c("count", "alphabetical", "right", "left"),
-      'invalid arguments: sort_by should be "count" or "alphabetical"'
-    )
+  stopifnot("missing argument: category must be specified" = !missing(category))
+  stopifnot("missing argument: right_flag must be specified" = !missing(right_flag))
+  stopifnot("missing argument: left_flag must be specified" = !missing(left_flag))
+  stopifnot(
+    "invalid arguments: check that the length of input arguments are identical" =
+      length(unique(vapply(list(category, right_flag, left_flag), length, integer(1)))) == 1
+  )
+  stopifnot(
+    "invalid arguments: right_flag or left_flag contains values other than 1/TRUE or 0/FALSE" =
+      all(union(right_flag, left_flag) %in% c(1, 0))
+  )
+  stopifnot(
+    "invalid arguments: right_flag and left_flag contain only 0/FALSE values" =
+      any(union(right_flag, left_flag) == 1)
+  )
+  stopifnot(
+    "invalid arguments: check that the length of block_color is equal as other inputs" =
+      is.null(block_color) || length(block_color) == length(category)
+  )
+  stopifnot(
+    'invalid arguments: sort_by should be "# of patients" or "# of AEs"' =
+    block_count %in% c("# of patients", "# of AEs")
+  )
+  stopifnot(
+    "invalid arguments: for '# of patients' id have to be specified" =
+      !(block_count == "# of patients" && is.null(id))
+  )
+  stopifnot(
+    "invalid arguments: check that the length of block_color is equal as other inputs" =
+    is.null(id) || length(id) == length(category)
+  )
+  stopifnot(
+    "invalid arguments: check that the length of block_color is equal as other inputs" =
+    is.null(facet_rows) ||
+      (length(facet_rows) == length(category)) ||
+      (is.data.frame(facet_rows) && nrow(facet_rows) == length(category))
+  )
+  checkmate::assert_string(x_label)
+  checkmate::assert_string(y_label)
+  checkmate::assert_string(legend_label)
+  checkmate::assert_string(sort_by)
+
+  stopifnot(
+    'invalid arguments: sort_by should be "count" or "alphabetical"' =
+      sort_by %in% c("count", "alphabetical", "right", "left")
   )
 
   # set up data-------

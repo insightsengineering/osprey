@@ -141,66 +141,62 @@ g_heat_bygrade <- function(id_var,
                            xlab = "Visit",
                            title = NULL) {
   # check if all PARCAT1 in exp_data is "individual"
-  stop_if_not(
-    list(is_character_single(id_var), "id_var must be a single character value"),
-    list(is.data.frame(exp_data)),
-    list(!is.na(exp_data[[visit_var]]), "invalid argument: please only include 'INDIVIDUAL' record in exp_data"),
-    list(is_character_single(visit_var), "visit_var must be a single character value"),
-    list(is_character_single(ongo_var), "ongo_var must be a single character value"),
-    list(
-      ongo_var %in% names(exp_data) && is_logical_vector(exp_data[[ongo_var]]),
-      "ongo_var must be a logical column in exp_data"
-    ),
-    list(is.data.frame(anno_data)),
-    list(
-      length(anno_var) <= 2,
-      "invalid argument: anno_data can only contain 3 or less columns including subject ID"
-    ),
-    list(is.data.frame(heat_data)),
-    list(
-      is_character_single(heat_color_var) && heat_color_var %in% names(heat_data),
-      "invalid argument: heat_color_var should be a varaible name in heat_data"
-    ),
-    list(
-      is.null(conmed_var) || is_character_single(conmed_var),
-      "invalid argument: conmed_var needs to be a single character string"
-    ),
-    list(
-      conmed_var %in% names(conmed_data),
-      "invalid argument: conmed_var must be one of the columns from conmed_data"
-    ),
-    list(
-      any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var)),
-      "invalid argument: need to provide conmed_data and conmed_var"
-    ),
-    list(
-      is.null(conmed_var) || length(levels(conmed_data[[conmed_var]])) <= 3,
-      "invalid argument: please only include no more than three conmeds for plotting"
-    ),
-    list(
-      is.null(conmed_data) || is.null(conmed_color_opt) ||
-        length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]])),
-      "invalid argument: please specify conmed_color_opt for all unique conmed_var"
-    ),
-    list(
-      (is.null(conmed_data) && table(c(names(exp_data), names(anno_data), names(heat_data)))[id_var] == 3) ||
-        table(c(names(exp_data), names(anno_data), names(heat_data), names(conmed_data)))[id_var] == 4,
+  checkmate::assert_string(id_var)
+  checkmate::assert_data_frame(exp_data)
+  stopifnot(
+    "invalid argument: please only include 'INDIVIDUAL' record in exp_data" = !is.na(exp_data[[visit_var]])
+  )
+  checkmate::assert_string(visit_var)
+  checkmate::assert_string(ongo_var)
+  checkmate::assert(
+    checkmate::check_subset(ongo_var, names(exp_data)),
+    checkmate::check_logical(exp_data[[ongo_var]])
+  )
+  checkmate::assert_data_frame(anno_data)
+  stopifnot(
+    "invalid argument: anno_data can only contain 3 or less columns including subject ID" = length(anno_var) <= 2
+  )
+  checkmate::assert_data_frame(heat_data)
+  checkmate::assert(
+    checkmate::test_string(heat_color_var),
+    checkmate::test_subset(heat_color_var, names(heat_data))
+  )
+  checkmate::assert_string(conmed_var, null.ok = TRUE)
+  checkmate::assert_subset(conmed_var, names(conmed_data))
+  stopifnot(
+    "invalid argument: need to provide conmed_data and conmed_var" =
+    any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var))
+  )
+  stopifnot(
+    "invalid argument: please only include no more than three conmeds for plotting" =
+      is.null(conmed_var) || length(levels(conmed_data[[conmed_var]])) <= 3
+  )
+  stopifnot(
+    "invalid argument: please specify conmed_color_opt for all unique conmed_var" =
+    is.null(conmed_data) || is.null(conmed_color_opt) ||
+      length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]]))
+  )
+  if (!((is.null(conmed_data) && table(c(names(exp_data), names(anno_data), names(heat_data)))[id_var] == 3) ||
+      table(c(names(exp_data), names(anno_data), names(heat_data), names(conmed_data)))[id_var] == 4)) {
+    stop(
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
         id_var,
         sep = " "
       )
-    ),
-    list(
-      (is.null(conmed_data) && table(c(names(exp_data), names(heat_data)))[visit_var] == 2) ||
-        table(c(names(exp_data), names(heat_data), names(conmed_data)))[visit_var] == 3,
+    )
+  }
+
+  if (!((is.null(conmed_data) && table(c(names(exp_data), names(heat_data)))[visit_var] == 2) ||
+      table(c(names(exp_data), names(heat_data), names(conmed_data)))[visit_var] == 3)) {
+    stop(
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
         visit_var,
         sep = " "
       )
     )
-  )
+  }
 
   anl_data <- exp_data %>%
     select(!!id_var, !!sym(visit_var)) %>%

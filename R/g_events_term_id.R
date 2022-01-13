@@ -39,7 +39,6 @@
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom grid textGrob unit unit.c grobHeight grobWidth
 #' @importFrom DescTools BinomDiffCI
-#' @importFrom utils.nest stop_if_not
 #' @importFrom stats setNames
 #' @export
 #'
@@ -153,57 +152,24 @@ g_events_term_id <- function(term,
   diff_ci_method <- match.arg(diff_ci_method)
   axis_side <- match.arg(axis_side)
 
-  stop_if_not(
-    list(!is_empty(term), "missing argument: term must be specified"),
-    list(!is_empty(id), "missing argument: id must be specified"),
-    list(!is_empty(arm), "missing argument: arm must be specified"),
-    list(
-      is.factor(arm) & nlevels(arm) >= 2,
-      "arm needs to be a factor with at least 2 levels"
-    ),
-    list(
-      !is_empty(arm_N),
-      "missing argument: arm_N must be specified"
-    ),
-    list(
-      length(unique(vapply(
-        list(id, term, arm), length, integer(1)
-      ))) == 1,
-      "invalid arguments: check that the length of id, term and arm are identical"
-    ),
-    list(
-      all(c(trt, ref) %in% unique(arm)),
-      "invalid arguments: trt and ref need to be from arm"
-    ),
-    list(
-      is_numeric_vector(rate_range, min_length = 2, max_length = 2),
-      "invalid argument: rate_range should be a numeric vector of length 2"
-    ),
-    list(
-      is_numeric_vector(diff_range, min_length = 2, max_length = 2),
-      "invalid argument: diff_range should be a numeric vector of length 2"
-    ),
-    list(
-      is_logical_single(reversed),
-      "invalid argument: reversed should be a TRUE or FALSE"
-    ),
-    list(
-      is_numeric_single(conf_level) & between(conf_level, 0.5, 1),
-      "invalid argument: conf_level should be a number between 0.5 and 1"
-    ),
-    list(
-      is_character_vector(color, min_length = 2, max_length = 2),
-      "invalid argument: check that color is a character vector of length 2"
-    ),
-    list(
-      is_numeric_vector(shape, min_length = 2, max_length = 2),
-      "invalid argument: check that shape is a numeric vector of length 2"
-    ),
-    list(
-      is_numeric_single(fontsize) & between(fontsize, 0, Inf),
-      "invalid argument: check that fontsize is a number greater than 0"
-    )
+  stopifnot("missing argument: term must be specified" = !missing(term))
+  stopifnot("missing argument: id must be specified" = !missing(id))
+  stopifnot("missing argument: arm must be specified" = !missing(arm))
+  stopifnot("missing argument: arm_N must be specified" = !missing(arm_N))
+
+  stopifnot("arm needs to be a factor with at least 2 levels" = is.factor(arm) & nlevels(arm) >= 2)
+  stopifnot(
+    "invalid arguments: check that the length of id, term and arm are identical" =
+      length(unique(vapply(list(id, term, arm), length, integer(1)))) == 1
   )
+  stopifnot("invalid arguments: trt and ref need to be from arm" = all(c(trt, ref) %in% unique(arm)))
+  checkmate::assert_numeric(rate_range, len = 2)
+  checkmate::assert_numeric(rate_range, len = 2)
+  checkmate::assert_flag(reversed)
+  checkmate::assert_number(conf_level, lower = 0.5, upper = 1)
+  checkmate::assert_character(color, len = 2, any.missing = FALSE)
+  checkmate::assert_numeric(shape, len = 2, any.missing = FALSE)
+  checkmate::assert_numeric(fontsize, lower = 0, any.missing = FALSE)
 
   # construct calculations
   arms <- c(ref, trt)
