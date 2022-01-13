@@ -108,12 +108,12 @@ g_butterfly <- function(category,
                         legend_label = "AETOXGR",
                         sort_by = "alphabetical",
                         show_legend = TRUE) {
-  stopifnot("missing argument: category must be specified" = !missing(category))
-  stopifnot("missing argument: right_flag must be specified" = !missing(right_flag))
-  stopifnot("missing argument: left_flag must be specified" = !missing(left_flag))
+  stopifnot(!missing(category))
+  stopifnot(!missing(right_flag))
+  stopifnot(!missing(left_flag))
   stopifnot(
     "invalid arguments: check that the length of input arguments are identical" =
-      length(unique(vapply(list(category, right_flag, left_flag), length, integer(1)))) == 1
+      length(category) == length(right_flag) && length(right_flag) == length(left_flag)
   )
   stopifnot(
     "invalid arguments: right_flag or left_flag contains values other than 1/TRUE or 0/FALSE" =

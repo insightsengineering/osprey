@@ -155,10 +155,10 @@ g_ae_sub <- function(id,
                      arm_n = FALSE,
                      draw = TRUE) {
   diff_ci_method <- match.arg(diff_ci_method)
-  stopifnot("missing argument: id must be specified" = !missing(id))
-  stopifnot("missing argument: arm must be specified" = !missing(arm))
-  stopifnot("missing argument: arm_sl must be specified" = !missing(arm_sl))
-  stopifnot("missing argument: subgroups must be specified" = !missing(subgroups))
+  stopifnot(!missing(id))
+  stopifnot(!missing(arm))
+  stopifnot(!missing(arm_sl))
+  stopifnot(!missing(subgroups))
 
   if (!is.null(subgroups_levels)) {
     labels <- unlist(subgroups_levels)
@@ -176,10 +176,7 @@ g_ae_sub <- function(id,
         label = paste0(.data$indents, .data$label)
       )
   }
-  stopifnot(
-    "invalid arguments: check that the length of id and arm are identical" =
-      length(unique(vapply(list(id, arm), length, integer(1)))) == 1
-  )
+  stopifnot("invalid arguments: check that the length of id and arm are identical" = length(id) == length(arm))
   checkmate::assert_character(arm_sl, min.len = 2)
   stopifnot("invalid arguments: trt and ref need to be from arm" = all(c(trt, ref) %in% unique(arm)))
   checkmate::assert_number(conf_level, lower = 0.5, upper = 1)

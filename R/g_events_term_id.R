@@ -152,10 +152,10 @@ g_events_term_id <- function(term,
   diff_ci_method <- match.arg(diff_ci_method)
   axis_side <- match.arg(axis_side)
 
-  stopifnot("missing argument: term must be specified" = !missing(term))
-  stopifnot("missing argument: id must be specified" = !missing(id))
-  stopifnot("missing argument: arm must be specified" = !missing(arm))
-  stopifnot("missing argument: arm_N must be specified" = !missing(arm_N))
+  stopifnot(!missing(term))
+  stopifnot(!missing(id))
+  stopifnot(!missing(arm))
+  stopifnot(!missing(arm_N))
 
   stopifnot("arm needs to be a factor with at least 2 levels" = is.factor(arm) & nlevels(arm) >= 2)
   stopifnot(
