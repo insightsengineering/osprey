@@ -164,7 +164,7 @@ g_events_term_id <- function(term,
   )
   stopifnot("invalid arguments: trt and ref need to be from arm" = all(c(trt, ref) %in% unique(arm)))
   checkmate::assert_numeric(rate_range, len = 2)
-  checkmate::assert_numeric(rate_range, len = 2)
+  checkmate::assert_numeric(diff_range, len = 2)
   checkmate::assert_flag(reversed)
   checkmate::assert_number(conf_level, lower = 0.5, upper = 1)
   checkmate::assert_character(color, len = 2, any.missing = FALSE)
