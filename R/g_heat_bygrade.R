@@ -173,8 +173,11 @@ g_heat_bygrade <- function(id_var,
     is.null(conmed_data) || is.null(conmed_color_opt) ||
       length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]]))
   )
-  if (!((is.null(conmed_data) && table(c(names(exp_data), names(anno_data), names(heat_data)))[id_var] == 3) ||
-      table(c(names(exp_data), names(anno_data), names(heat_data), names(conmed_data)))[id_var] == 4)) {
+
+  if (!((is.null(conmed_data) || id_var %in% names(conmed_data)) &&
+    id_var %in% names(exp_data) &&
+      id_var %in% names(anno_data) &&
+      id_var %in% names(heat_data))) {
     stop(
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
@@ -183,9 +186,9 @@ g_heat_bygrade <- function(id_var,
       )
     )
   }
-
-  if (!((is.null(conmed_data) && table(c(names(exp_data), names(heat_data)))[visit_var] == 2) ||
-      table(c(names(exp_data), names(heat_data), names(conmed_data)))[visit_var] == 3)) {
+  if (!((is.null(conmed_data) || visit_var %in% names(conmed_data)) &&
+    visit_var %in% names(exp_data) &&
+    visit_var %in% names(heat_data))) {
     stop(
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
