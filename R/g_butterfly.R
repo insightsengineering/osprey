@@ -131,10 +131,7 @@ g_butterfly <- function(category,
     'invalid arguments: sort_by should be "# of patients" or "# of AEs"' =
     block_count %in% c("# of patients", "# of AEs")
   )
-  stopifnot(
-    "invalid arguments: for '# of patients' id have to be specified" =
-      !(block_count == "# of patients" && is.null(id))
-  )
+  assert_character(id, null.ok = isFALSE(block_count == "# of patients"))
   stopifnot(
     "invalid arguments: check that the length of block_color is equal as other inputs" =
     is.null(id) || length(id) == length(category)
@@ -151,7 +148,7 @@ g_butterfly <- function(category,
   checkmate::assert_string(sort_by)
 
   stopifnot(
-    'invalid arguments: sort_by should be "count" or "alphabetical"' =
+    'invalid arguments: sort_by should be "count", "alphabetical"', "right", or "left" =
       sort_by %in% c("count", "alphabetical", "right", "left")
   )
 
