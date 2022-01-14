@@ -125,7 +125,7 @@ g_butterfly <- function(category,
       is.null(block_color) || length(block_color) == length(category)
   )
   block_count <- match.arg(block_count)
-  assert_character(id, null.ok = isFALSE(block_count == "# of patients"))
+  checkmate::assert_character(id, null.ok = isFALSE(block_count == "# of patients"))
 
   stopifnot(
     "invalid arguments: check that the length of block_color is equal as other inputs" =
