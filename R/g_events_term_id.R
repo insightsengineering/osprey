@@ -152,11 +152,6 @@ g_events_term_id <- function(term,
   diff_ci_method <- match.arg(diff_ci_method)
   axis_side <- match.arg(axis_side)
 
-  stopifnot(!missing(term))
-  stopifnot(!missing(id))
-  stopifnot(!missing(arm))
-  stopifnot(!missing(arm_N))
-
   stopifnot("arm needs to be a factor with at least 2 levels" = is.factor(arm) & nlevels(arm) >= 2)
   stopifnot(
     "invalid arguments: check that the length of id, term and arm are identical" =

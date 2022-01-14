@@ -155,10 +155,6 @@ g_ae_sub <- function(id,
                      arm_n = FALSE,
                      draw = TRUE) {
   diff_ci_method <- match.arg(diff_ci_method)
-  stopifnot(!missing(id))
-  stopifnot(!missing(arm))
-  stopifnot(!missing(arm_sl))
-  stopifnot(!missing(subgroups))
 
   if (!is.null(subgroups_levels)) {
     labels <- unlist(subgroups_levels)
