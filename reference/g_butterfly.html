@@ -27,7 +27,7 @@ maximum count."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.11.9007</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.11.9009</span>
       </span>
     </div>
 
@@ -38,15 +38,6 @@ maximum count."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/osprey" class="external-link">
     <span class="fa fa-github"></span>
@@ -82,13 +73,13 @@ maximum count.</p>
   <span class="va">left_flag</span>,
   id <span class="op">=</span> <span class="cn">NULL</span>,
   group_names <span class="op">=</span> <span class="cn">NULL</span>,
-  block_count <span class="op">=</span> <span class="st">"# of patients"</span>,
+  block_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# of patients"</span>, <span class="st">"# of AEs"</span><span class="op">)</span>,
   block_color <span class="op">=</span> <span class="cn">NULL</span>,
   facet_rows <span class="op">=</span> <span class="cn">NULL</span>,
   x_label <span class="op">=</span> <span class="va">block_count</span>,
   y_label <span class="op">=</span> <span class="st">"AE Derived Terms"</span>,
   legend_label <span class="op">=</span> <span class="st">"AETOXGR"</span>,
-  sort_by <span class="op">=</span> <span class="st">"alphabetical"</span>,
+  sort_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"alphabetical"</span>, <span class="st">"right"</span>, <span class="st">"left"</span><span class="op">)</span>,
   show_legend <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
     </div>
