@@ -191,7 +191,7 @@ g_heat_bygrade <- function(id_var,
     visit_var %in% names(heat_data))) {
     stop(
       paste(
-        "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
+        "exp_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
         visit_var,
         sep = " "
       )
