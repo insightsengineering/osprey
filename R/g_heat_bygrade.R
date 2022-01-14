@@ -149,7 +149,8 @@ g_heat_bygrade <- function(id_var,
   checkmate::assert_string(visit_var)
   checkmate::assert_string(ongo_var)
   checkmate::assert(
-    checkmate::check_subset(ongo_var, names(exp_data)),
+    combine = "and",
+    checkmate::check_choice(ongo_var, names(exp_data)),
     checkmate::check_logical(exp_data[[ongo_var]])
   )
   checkmate::assert_data_frame(anno_data)
@@ -157,12 +158,8 @@ g_heat_bygrade <- function(id_var,
     "invalid argument: anno_data can only contain 3 or less columns including subject ID" = length(anno_var) <= 2
   )
   checkmate::assert_data_frame(heat_data)
-  checkmate::assert(
-    checkmate::test_string(heat_color_var),
-    checkmate::test_subset(heat_color_var, names(heat_data))
-  )
-  checkmate::assert_string(conmed_var, null.ok = TRUE)
-  checkmate::assert_subset(conmed_var, names(conmed_data))
+  checkmate::assert_choice(heat_color_var, names(heat_data))
+  checkmate::assert_choice(conmed_var, names(conmed_data), null.ok = TRUE)
   stopifnot(
     "invalid argument: need to provide conmed_data and conmed_var" =
     any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var))
