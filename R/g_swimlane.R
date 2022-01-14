@@ -222,7 +222,7 @@ g_swimlane <- function(bar_id,
       aes(x = marker_id, y = marker_pos, shape = marker_shape, color = marker_color),
       size = 2.5, na.rm = TRUE
     )
-    limits_y <- c(0, max(bar_length, marker_pos) + 5)
+    limits_y <- c(0, max(bar_length, marker_pos, na.rm = TRUE) + 5)
 
     if (!is.null(marker_shape)) {
       p <- p + guides(shape = guide_legend("Marker Shape", order = 2))
