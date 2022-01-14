@@ -177,13 +177,15 @@ g_ae_sub <- function(id,
   stopifnot("invalid arguments: trt and ref need to be from arm" = all(c(trt, ref) %in% unique(arm)))
   checkmate::assert_number(conf_level, lower = 0.5, upper = 1)
   checkmate::assert_number(fontsize, lower = 0)
+  checkmate::assert_data_frame(subgroups)
   stopifnot(
     "invalid argument: subgroups needs to be a data.frame with nrow = length(arm)" =
-      is(subgroups, "data.frame") && nrow(subgroups) == length(arm)
+      nrow(subgroups) == length(arm)
   )
+  checkmate::assert_data_frame(subgroups_sl)
   stopifnot(
     "invalid argument: subgroups_sl need to be a data.frame with nrow = length(arm_sl)" =
-      is(subgroups_sl, "data.frame") && nrow(subgroups_sl) == length(arm_sl)
+      nrow(subgroups_sl) == length(arm_sl)
   )
   checkmate::assert_number(indent, lower = 0, finite = TRUE)
   checkmate::assert_number(xmax)
