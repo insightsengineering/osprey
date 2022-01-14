@@ -368,9 +368,7 @@ grob_part <- function(gplot_grob, part) {
 #' @importFrom methods is
 #'
 grob_parts <- function(gplot, parts) {
-  stop_if_not(
-    list(is(gplot, "ggplot") || is(gplot, "grob"), "gplot must inherit from class 'ggplot' or 'grob'")
-  )
+  stopifnot("gplot must inherit from class 'ggplot' or 'grob'" = inherits(gplot, c("ggplot", "grob")))
 
   if ("ggplot" %in% class(gplot)) {
     gplot_grob <- ggplotGrob(gplot)

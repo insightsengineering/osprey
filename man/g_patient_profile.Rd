@@ -77,7 +77,6 @@ The plot output will not include domains with data unspecified
 }
 \examples{
 library(scda)
-library(utils.nest)
 library(tern)
 library(dplyr)
 

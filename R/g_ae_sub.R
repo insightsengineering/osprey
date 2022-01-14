@@ -155,12 +155,7 @@ g_ae_sub <- function(id,
                      arm_n = FALSE,
                      draw = TRUE) {
   diff_ci_method <- match.arg(diff_ci_method)
-  stop_if_not(
-    list(!is_empty(id), "missing argument: id must be specified"),
-    list(!is_empty(arm), "missing argument: arm must be specified"),
-    list(!is_empty(arm_sl), "missing argument: arm_sl must be specified"),
-    list(!is_empty(subgroups), "missing argument: subgroups must be specified")
-  )
+
   if (!is.null(subgroups_levels)) {
     labels <- unlist(subgroups_levels)
     label_df <-
@@ -177,58 +172,36 @@ g_ae_sub <- function(id,
         label = paste0(.data$indents, .data$label)
       )
   }
-  stop_if_not(
-    list(
-      length(unique(vapply(list(id, arm), length, integer(1)))) == 1,
-      "invalid arguments: check that the length of id and arm are identical"
-    ),
-    list(
-      is_character_vector(arm_sl, min_length = 2),
-      "invalid argument: check that arm_sl is a character vector with length >= 2"
-    ),
-    list(
-      all(c(trt, ref) %in% unique(arm)),
-      "invalid arguments: trt and ref need to be from arm"
-    ),
-    list(
-      is_numeric_single(conf_level) && between(conf_level, 0.5, 1),
-      "invalid argument: conf_level should be a number between 0.5 and 1"
-    ),
-    list(
-      is_numeric_single(fontsize) && between(fontsize, 0, Inf),
-      "invalid argument: check that fontsize is a number greater than 0"
-    ),
-    list(
-      is(subgroups, "data.frame") && nrow(subgroups) == length(arm),
-      "invalid argument: subgroups needs to be a data.frame with nrow = length(arm)"
-    ),
-    list(
-      is(subgroups_sl, "data.frame") && nrow(subgroups_sl) == length(arm_sl),
-      "invalid argument: subgroups_sl need to be a data.frame with nrow = length(arm_sl)"
-    ),
-    list(
-      is_numeric_single(indent) && indent >= 0 && is.finite(indent),
-      "invalid argument: indent must be a finite number >= 0"
-    ),
-    list(
-      is_numeric_single(xmax),
-      "invalid argument: xmax must be a number"
-    ),
-    list(
-      all(names(subgroups_levels) %in% names(lapply(subgroups, levels))),
-      "invalid argument: please only use the subgroups column names as the lists names in subgroups_levels"
-    ),
-    list(
+  stopifnot("invalid arguments: check that the length of id and arm are identical" = length(id) == length(arm))
+  checkmate::assert_character(arm_sl, min.len = 2)
+  stopifnot("invalid arguments: trt and ref need to be from arm" = all(c(trt, ref) %in% unique(arm)))
+  checkmate::assert_number(conf_level, lower = 0.5, upper = 1)
+  checkmate::assert_number(fontsize, lower = 0)
+  checkmate::assert_data_frame(subgroups)
+  stopifnot(
+    "invalid argument: subgroups needs to be a data.frame with nrow = length(arm)" =
+      nrow(subgroups) == length(arm)
+  )
+  checkmate::assert_data_frame(subgroups_sl)
+  stopifnot(
+    "invalid argument: subgroups_sl need to be a data.frame with nrow = length(arm_sl)" =
+      nrow(subgroups_sl) == length(arm_sl)
+  )
+  checkmate::assert_number(indent, lower = 0, finite = TRUE)
+  checkmate::assert_number(xmax)
+  stopifnot(
+    "invalid argument: please only use the subgroups column names as the lists names in subgroups_levels" =
+      all(names(subgroups_levels) %in% names(lapply(subgroups, levels)))
+  )
+  stopifnot(
+    "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels" =
       all(unlist(map2(
         subgroups_levels,
         apply(subgroups[names(subgroups_levels)], 2, levels),
         ~ all(names(.x) %in% c("Total", .y))
-      ))),
-      "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels"
-    ),
-    list(is_logical_single(arm_n), "invalid argument: arm_n must be a logical value")
+      )))
   )
-
+  checkmate::assert_flag(arm_n)
 
   subgroups <- subgroups %>%
     mutate_all(as.character) %>%

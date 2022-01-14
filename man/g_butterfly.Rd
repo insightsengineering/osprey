@@ -10,13 +10,13 @@ g_butterfly(
   left_flag,
   id = NULL,
   group_names = NULL,
-  block_count = "# of patients",
+  block_count = c("# of patients", "# of AEs"),
   block_color = NULL,
   facet_rows = NULL,
   x_label = block_count,
   y_label = "AE Derived Terms",
   legend_label = "AETOXGR",
-  sort_by = "alphabetical",
+  sort_by = c("count", "alphabetical", "right", "left"),
   show_legend = TRUE
 )
 }

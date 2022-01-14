@@ -102,7 +102,6 @@ adverse events (\code{ADAE}), response (\code{ADRS}), concomitant medications
 }
 \examples{
 library(scda)
-library(utils.nest)
 library(tern)
 library(dplyr)
 

@@ -70,7 +70,6 @@
 #'
 #' @examples
 #' library(scda)
-#' library(utils.nest)
 #' library(tern)
 #' library(dplyr)
 #'
@@ -316,32 +315,27 @@ patient_domain_profile <- function(domain = NULL,
   marker_shape_legend <- marker_shape_list[["marker_shape_legend"]]
 
   # check user input
-  stop_if_not(
-    list(
-      length(unique(nrow(data.frame(var_names)), nrow(data.frame(marker_pos)), nrow(data.frame(arrow_end)))) == 1,
-      "invalid arguments: check that the length of input arguments are identical"
-    ),
-    list(
-      ncol(data.frame(marker_pos)) <= 2,
-      "invalid argument: check that marker_pos is either a vector or a data frame with two columns"
-    ),
-    list(
-      is.null(line_col) || length(line_col) == length(var_names),
-      "invalid arguments: check that the length of line_col is equal as other inputs"
-    ),
-    list(
-      is.null(marker_col) || length(marker_col) == length(var_names),
-      "invalid arguments: check that the length of marker_col is equal as other inputs"
-    ),
-    list(
-      is.null(marker_shape) || length(marker_shape) == length(var_names),
-      "invalid arguments: check that the length of marker_shape is equal as other inputs"
-    ),
-    list(
-      is_numeric_vector(xlim, min_length = 2, max_length = 2),
-      "invalid arguments: check that xlim is of type numeric vector"
-    )
+  stopifnot(
+    "invalid arguments: check that the length of input arguments are identical" =
+      length(unique(nrow(data.frame(var_names)), nrow(data.frame(marker_pos)), nrow(data.frame(arrow_end)))) == 1
   )
+  stopifnot(
+    "invalid argument: check that marker_pos is either a vector or a data frame with two columns" =
+      ncol(data.frame(marker_pos)) <= 2
+  )
+  stopifnot(
+    "invalid arguments: check that the length of line_col is equal as other inputs" =
+      is.null(line_col) || length(line_col) == length(var_names)
+  )
+  stopifnot(
+    "invalid arguments: check that the length of marker_col is equal as other inputs" =
+      is.null(marker_col) || length(marker_col) == length(var_names)
+  )
+  stopifnot(
+    "invalid arguments: check that the length of marker_shape is equal as other inputs" =
+      is.null(marker_shape) || length(marker_shape) == length(var_names)
+  )
+  checkmate::assert_numeric(xlim, len = 2)
 
   marker_data <- data.frame(
     var_names,
@@ -611,7 +605,6 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #' @examples
 #' library(scda)
-#' library(utils.nest)
 #' library(tern)
 #' library(dplyr)
 #'
