@@ -100,13 +100,13 @@ g_butterfly <- function(category,
                         left_flag,
                         id = NULL,
                         group_names = NULL,
-                        block_count = "# of patients",
+                        block_count = c("# of patients", "# of AEs"),
                         block_color = NULL,
                         facet_rows = NULL,
                         x_label = block_count,
                         y_label = "AE Derived Terms",
                         legend_label = "AETOXGR",
-                        sort_by = "alphabetical",
+                        sort_by = c("count", "alphabetical", "right", "left"),
                         show_legend = TRUE) {
   stopifnot(
     "invalid arguments: check that the length of input arguments are identical" =
@@ -124,11 +124,9 @@ g_butterfly <- function(category,
     "invalid arguments: check that the length of block_color is equal as other inputs" =
       is.null(block_color) || length(block_color) == length(category)
   )
-  stopifnot(
-    'invalid arguments: sort_by should be "# of patients" or "# of AEs"' =
-    block_count %in% c("# of patients", "# of AEs")
-  )
+  block_count <- match.arg(block_count)
   assert_character(id, null.ok = isFALSE(block_count == "# of patients"))
+
   stopifnot(
     "invalid arguments: check that the length of block_color is equal as other inputs" =
     is.null(id) || length(id) == length(category)
@@ -142,12 +140,7 @@ g_butterfly <- function(category,
   checkmate::assert_string(x_label)
   checkmate::assert_string(y_label)
   checkmate::assert_string(legend_label)
-  checkmate::assert_string(sort_by)
-
-  stopifnot(
-    'invalid arguments: sort_by should be "count", "alphabetical"', "right", or "left" =
-      sort_by %in% c("count", "alphabetical", "right", "left")
-  )
+  sort_by <- match.arg(sort_by)
 
   # set up data-------
   dat <- data.frame(y = str_wrap(category, width = 30), r_flag = right_flag, l_flag = left_flag)
