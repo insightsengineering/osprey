@@ -1,8 +1,12 @@
 # osprey 0.1.11.9012
 
-* Updated R version requirement to >= 3.6.
+### Enhancements
 * Modified `g_swimlane` plot to expand its y-axis range based on vertical line inputs.
-* Removed `utils.nest` dependency.
+
+### Miscellaneous
+* Updated R version requirement to `R >= 3.6`.
+* Removed dependency on `test.nest` package.
+* Removed dependency on `utils.nest` package and replaced its functions with equivalents from the `checkmate` package.
 
 # osprey 0.1.11
 
