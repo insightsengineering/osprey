@@ -15,9 +15,9 @@
 #' @param marker_color vector to specify color for markers
 #' @param marker_color_opt aesthetic values to map shape values (named vector to map shape values to each name)
 #' @param anno_txt dataframe of subject-level variables to be displayed as annotation on the left
-#' @param yref_line numeric vector to plot reference lines
-#' @param ytick_at optional break interval of bar length axis
-#' @param ylab label for bar length
+#' @param xref_line numeric vector to plot reference lines
+#' @param xtick_at optional break interval of bar length axis
+#' @param xlab label for bar length
 #' @param title string to be displayed as plot title
 #'
 #' @template author_qit3
@@ -53,9 +53,9 @@
 #'   marker_color = NULL,
 #'   marker_color_opt = NULL,
 #'   anno_txt = anno_txt,
-#'   yref_line = c(50, 100),
-#'   ytick_at = waiver(),
-#'   ylab = "Time from First Treatment (Day)",
+#'   xref_line = c(50, 100),
+#'   xtick_at = waiver(),
+#'   xlab = "Time from First Treatment (Day)",
 #'   title = "Swimlane Plot"
 #' )
 #'
@@ -106,9 +106,9 @@
 #'     "Withdrawal by Subject" = "darkred"
 #'   ),
 #'   anno_txt = anno_txt,
-#'   yref_line = c(50, 100),
-#'   ytick_at = waiver(),
-#'   ylab = "Time from First Treatment (Day)",
+#'   xref_line = c(50, 100),
+#'   xtick_at = waiver(),
+#'   xlab = "Time from First Treatment (Day)",
 #'   title = "Swimlane Plot"
 #' )
 g_swimlane <- function(bar_id,
@@ -122,9 +122,9 @@ g_swimlane <- function(bar_id,
                        marker_color = NULL,
                        marker_color_opt = NULL,
                        anno_txt = NULL,
-                       yref_line = NULL,
-                       ytick_at = waiver(),
-                       ylab,
+                       xref_line = NULL,
+                       xtick_at = waiver(),
+                       xlab,
                        title) {
 
   # check data
@@ -148,8 +148,8 @@ g_swimlane <- function(bar_id,
   if (!is.null(marker_id) & !is.null(marker_color)) {
     check_same_N(marker_id = marker_id, marker_color = marker_color)
   }
-  if (!is.null(yref_line) && (!is.numeric(yref_line) || length(yref_line) == 0)) {
-    stop("yref_line must be a non-empty numeric vector or NULL")
+  if (!is.null(xref_line) && (!is.numeric(xref_line) || length(xref_line) == 0)) {
+    stop("xref_line must be a non-empty numeric vector or NULL")
   }
 
   # data for plot
@@ -181,8 +181,8 @@ g_swimlane <- function(bar_id,
   }
 
   # labeling
-  ylabel <- deparse(substitute(bar_length))
-  ylab <- if (is.null(ylab)) ylabel else ylab
+  xlabel <- deparse(substitute(bar_length))
+  xlab <- if (is.null(xlab)) xlabel else xlab
 
   # plot bar plot first
   p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_length)) +
@@ -196,7 +196,8 @@ g_swimlane <- function(bar_id,
       axis.text.y = element_blank(),
       axis.title.y = element_blank()
     ) +
-    ylab(ylab)
+    # Note ylab as we have coord_flip above
+    ylab(xlab)
 
   if (is.null(col_by)) {
     p <- p + guides(fill = "none")
@@ -262,22 +263,22 @@ g_swimlane <- function(bar_id,
   }
 
   # plot reference lines
-  if (!is.null(yref_line)) {
+  if (!is.null(xref_line)) {
     x_axis_min <- pmax(ggplot_build(p)$layout$panel_params[[1]]$x.range[1], 0)
     x_axis_max <- pmax(ggplot_build(p)$layout$panel_params[[1]]$x.range[2], 0)
-    yref_line_min <- min(yref_line)
-    yref_line_max <- max(yref_line)
-    min_res <- min(c(limits_y[1], x_axis_min, yref_line_min))
-    max_res <- max(c(limits_y[2], x_axis_max, yref_line_max))
-    p <- p + geom_hline(yintercept = yref_line, linetype = "dashed", color = "red") +
+    xref_line_min <- min(xref_line)
+    xref_line_max <- max(xref_line)
+    min_res <- min(c(limits_y[1], x_axis_min, xref_line_min))
+    max_res <- max(c(limits_y[2], x_axis_max, xref_line_max))
+    p <- p + geom_hline(yintercept = xref_line, linetype = "dashed", color = "red") +
       scale_y_continuous(
         limits = c(min_res, max_res),
-        breaks = ytick_at,
-        expand = c(`if`(min_res == yref_line_min, .01, 0), `if`(max_res == yref_line_max, .01, 0))
+        breaks = xtick_at,
+        expand = c(`if`(min_res == xref_line_min, .01, 0), `if`(max_res == xref_line_max, .01, 0))
       )
   } else {
     if (!is.null(limits_y)) {
-      p <- p + scale_y_continuous(limits = limits_y, breaks = ytick_at, expand = c(0, 0))
+      p <- p + scale_y_continuous(limits = limits_y, breaks = xtick_at, expand = c(0, 0))
     }
   }
 
