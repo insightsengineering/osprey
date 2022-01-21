@@ -214,7 +214,7 @@ g_swimlane <- function(bar_id,
       )
   }
 
-  limits_y <- NULL
+  limits_x <- NULL
 
   # plot marker
   if (!is.null(marker_pos)) {
@@ -223,7 +223,7 @@ g_swimlane <- function(bar_id,
       aes(x = marker_id, y = marker_pos, shape = marker_shape, color = marker_color),
       size = 2.5, na.rm = TRUE
     )
-    limits_y <- c(0, max(bar_length, marker_pos, na.rm = TRUE) + 5)
+    limits_x <- c(0, max(bar_length, marker_pos, na.rm = TRUE) + 5)
 
     if (!is.null(marker_shape)) {
       p <- p + guides(shape = guide_legend("Marker Shape", order = 2))
@@ -268,8 +268,8 @@ g_swimlane <- function(bar_id,
     x_axis_max <- pmax(ggplot_build(p)$layout$panel_params[[1]]$x.range[2], 0)
     xref_line_min <- min(xref_line)
     xref_line_max <- max(xref_line)
-    min_res <- min(c(limits_y[1], x_axis_min, xref_line_min))
-    max_res <- max(c(limits_y[2], x_axis_max, xref_line_max))
+    min_res <- min(c(limits_x[1], x_axis_min, xref_line_min))
+    max_res <- max(c(limits_x[2], x_axis_max, xref_line_max))
     p <- p + geom_hline(yintercept = xref_line, linetype = "dashed", color = "red") +
       scale_y_continuous(
         limits = c(min_res, max_res),
@@ -277,8 +277,8 @@ g_swimlane <- function(bar_id,
         expand = c(`if`(min_res == xref_line_min, .01, 0), `if`(max_res == xref_line_max, .01, 0))
       )
   } else {
-    if (!is.null(limits_y)) {
-      p <- p + scale_y_continuous(limits = limits_y, breaks = xtick_at, expand = c(0, 0))
+    if (!is.null(limits_x)) {
+      p <- p + scale_y_continuous(limits = limits_x, breaks = xtick_at, expand = c(0, 0))
     }
   }
 
