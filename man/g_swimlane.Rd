@@ -16,9 +16,9 @@ g_swimlane(
   marker_color = NULL,
   marker_color_opt = NULL,
   anno_txt = NULL,
-  yref_line = NULL,
-  ytick_at = waiver(),
-  ylab,
+  xref_line = NULL,
+  xtick_at = waiver(),
+  xlab,
   title
 )
 }
@@ -45,11 +45,11 @@ g_swimlane(
 
 \item{anno_txt}{dataframe of subject-level variables to be displayed as annotation on the left}
 
-\item{yref_line}{numeric vector to plot reference lines}
+\item{xref_line}{numeric vector to plot reference lines}
 
-\item{ytick_at}{optional break interval of bar length axis}
+\item{xtick_at}{optional break interval of bar length axis}
 
-\item{ylab}{label for bar length}
+\item{xlab}{label for bar length}
 
 \item{title}{string to be displayed as plot title}
 }
@@ -84,9 +84,9 @@ g_swimlane(
   marker_color = NULL,
   marker_color_opt = NULL,
   anno_txt = anno_txt,
-  yref_line = c(50, 100),
-  ytick_at = waiver(),
-  ylab = "Time from First Treatment (Day)",
+  xref_line = c(50, 100),
+  xtick_at = waiver(),
+  xlab = "Time from First Treatment (Day)",
   title = "Swimlane Plot"
 )
 
@@ -137,9 +137,9 @@ g_swimlane(
     "Withdrawal by Subject" = "darkred"
   ),
   anno_txt = anno_txt,
-  yref_line = c(50, 100),
-  ytick_at = waiver(),
-  ylab = "Time from First Treatment (Day)",
+  xref_line = c(50, 100),
+  xtick_at = waiver(),
+  xlab = "Time from First Treatment (Day)",
   title = "Swimlane Plot"
 )
 }
