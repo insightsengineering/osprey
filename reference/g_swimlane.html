@@ -24,7 +24,7 @@ patient bar plot with markers of events and patient level annotation"><!-- mathj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.11.9009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12</span>
       </span>
     </div>
 
@@ -35,15 +35,6 @@ patient bar plot with markers of events and patient level annotation"><!-- mathj
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/osprey" class="external-link">
     <span class="fa fa-github"></span>
@@ -82,9 +73,9 @@ patient bar plot with markers of events and patient level annotation</p>
   marker_color <span class="op">=</span> <span class="cn">NULL</span>,
   marker_color_opt <span class="op">=</span> <span class="cn">NULL</span>,
   anno_txt <span class="op">=</span> <span class="cn">NULL</span>,
-  yref_line <span class="op">=</span> <span class="cn">NULL</span>,
-  ytick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">ylab</span>,
+  xref_line <span class="op">=</span> <span class="cn">NULL</span>,
+  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
+  <span class="va">xlab</span>,
   <span class="va">title</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -113,11 +104,11 @@ patient bar plot with markers of events and patient level annotation</p>
 <dd><p>aesthetic values to map shape values (named vector to map shape values to each name)</p></dd>
 <dt>anno_txt</dt>
 <dd><p>dataframe of subject-level variables to be displayed as annotation on the left</p></dd>
-<dt>yref_line</dt>
+<dt>xref_line</dt>
 <dd><p>numeric vector to plot reference lines</p></dd>
-<dt>ytick_at</dt>
+<dt>xtick_at</dt>
 <dd><p>optional break interval of bar length axis</p></dd>
-<dt>ylab</dt>
+<dt>xlab</dt>
 <dd><p>label for bar length</p></dd>
 <dt>title</dt>
 <dd><p>string to be displayed as plot title</p></dd>
@@ -156,9 +147,9 @@ patient bar plot with markers of events and patient level annotation</p>
 <span class="r-in">  marker_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span class="r-in">  marker_color_opt <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span class="r-in">  anno_txt <span class="op">=</span> <span class="va">anno_txt</span>,</span>
-<span class="r-in">  yref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span>
-<span class="r-in">  ytick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  ylab <span class="op">=</span> <span class="st">"Time from First Treatment (Day)"</span>,</span>
+<span class="r-in">  xref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span>
+<span class="r-in">  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Time from First Treatment (Day)"</span>,</span>
 <span class="r-in">  title <span class="op">=</span> <span class="st">"Swimlane Plot"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-plt img"><img src="g_swimlane-1.png" alt="" width="700" height="433"></span>
@@ -210,9 +201,9 @@ patient bar plot with markers of events and patient level annotation</p>
 <span class="r-in">    <span class="st">"Withdrawal by Subject"</span> <span class="op">=</span> <span class="st">"darkred"</span></span>
 <span class="r-in">  <span class="op">)</span>,</span>
 <span class="r-in">  anno_txt <span class="op">=</span> <span class="va">anno_txt</span>,</span>
-<span class="r-in">  yref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span>
-<span class="r-in">  ytick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  ylab <span class="op">=</span> <span class="st">"Time from First Treatment (Day)"</span>,</span>
+<span class="r-in">  xref_line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">100</span><span class="op">)</span>,</span>
+<span class="r-in">  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Time from First Treatment (Day)"</span>,</span>
 <span class="r-in">  title <span class="op">=</span> <span class="st">"Swimlane Plot"</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-plt img"><img src="g_swimlane-2.png" alt="" width="700" height="433"></span>
@@ -230,7 +221,7 @@ patient bar plot with markers of events and patient level annotation</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer></div>
