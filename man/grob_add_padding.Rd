@@ -16,3 +16,4 @@ grob_add_padding(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 \description{
 Add padding to grob
 }
+\keyword{internal}

@@ -927,6 +927,7 @@ g_patient_profile <- function(ex = NULL,
 #' a helper function for g_patient_profile to check whether the domain has data available
 #' @param domain domain input from g_patient_profile
 #' @param name domain names
+#' @keywords internal
 domain_check <- function(domain, name) {
   if (is.null(domain)) {
     select <- FALSE

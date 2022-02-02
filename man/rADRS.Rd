@@ -17,3 +17,4 @@ data(rADRS)
 Random response
 }
 \keyword{datasets}
+\keyword{internal}

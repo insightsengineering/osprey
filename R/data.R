@@ -9,6 +9,8 @@
 #'
 #' @source internal
 #' @name meddra
+#' @keywords internal
+#'
 "meddra"
 
 #' Random adverse events
@@ -18,7 +20,7 @@
 #'
 #' @usage data(rADAE)
 #'
-#' @keywords datasets
+#' @keywords datasets internal
 #'
 #' @source internal
 #' @name rADAE
@@ -31,7 +33,7 @@
 #'
 #' @usage data(rADRS)
 #'
-#' @keywords datasets
+#' @keywords datasets internal
 #'
 #' @source internal
 #' @name rADRS
@@ -42,7 +44,7 @@
 #' @description Random patient listing
 #' @docType data
 #'
-#' @keywords datasets
+#' @keywords datasets internal
 #'
 #' @usage data(rADSL)
 #'
@@ -55,7 +57,7 @@
 #' @description Random data rADTR
 #' @docType data
 #'
-#' @keywords datasets
+#' @keywords datasets internal
 #'
 #' @usage data(rADTR)
 #'
@@ -68,7 +70,7 @@
 #' @description Random Time to Event Analysis Dataset
 #' @docType data
 #'
-#' @keywords datasets
+#' @keywords datasets internal
 #'
 #' @usage data(rADTTE)
 #'

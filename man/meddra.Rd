@@ -17,3 +17,4 @@ data(meddra)
 Meddra data
 }
 \keyword{datasets}
+\keyword{internal}

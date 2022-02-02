@@ -14,3 +14,4 @@ grob_parts(gplot, parts)
 \description{
 Extract specific parts of a ggplot or grob
 }
+\keyword{internal}
