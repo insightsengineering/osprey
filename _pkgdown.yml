@@ -11,9 +11,6 @@ navbar:
       href: https://github.com/insightsengineering/osprey
 
 reference:
-  - title: Package
-    contents:
-      - osprey
   - title: Graphs
     desc: Graphs
     contents:
@@ -28,25 +25,9 @@ reference:
       - as_pdf
       - create_flag_vars
       - grobs2pdf
-      - grob_parts
       - stream_filter
       - stream_filter_convwhere
       - stream_filter_index
   - title: Elementary Functions
     contents:
       - patient_domain_profile
-  - title: Data
-    contents:
-      - rADAE
-      - rADRS
-      - rADSL
-      - rADTR
-      - rADTTE
-  - title: Unexported functions
-    contents:
-      - argument_convention
-      - domain_check
-      - grob_add_padding
-      - grob_part
-      - meddra
-      - theme_osprey
