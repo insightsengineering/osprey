@@ -129,13 +129,13 @@ g_butterfly <- function(category,
 
   stopifnot(
     "invalid arguments: check that the length of block_color is equal as other inputs" =
-    is.null(id) || length(id) == length(category)
+      is.null(id) || length(id) == length(category)
   )
   stopifnot(
     "invalid arguments: check that the length of block_color is equal as other inputs" =
-    is.null(facet_rows) ||
-      (length(facet_rows) == length(category)) ||
-      (is.data.frame(facet_rows) && nrow(facet_rows) == length(category))
+      is.null(facet_rows) ||
+        (length(facet_rows) == length(category)) ||
+        (is.data.frame(facet_rows) && nrow(facet_rows) == length(category))
   )
   checkmate::assert_string(x_label)
   checkmate::assert_string(y_label)
