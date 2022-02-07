@@ -162,7 +162,7 @@ g_heat_bygrade <- function(id_var,
   checkmate::assert_choice(conmed_var, names(conmed_data), null.ok = TRUE)
   stopifnot(
     "invalid argument: need to provide conmed_data and conmed_var" =
-    any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var))
+      any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var))
   )
   stopifnot(
     "invalid argument: please only include no more than three conmeds for plotting" =
@@ -170,14 +170,14 @@ g_heat_bygrade <- function(id_var,
   )
   stopifnot(
     "invalid argument: please specify conmed_color_opt for all unique conmed_var" =
-    is.null(conmed_data) || is.null(conmed_color_opt) ||
-      length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]]))
+      is.null(conmed_data) || is.null(conmed_color_opt) ||
+        length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]]))
   )
 
   if (!((is.null(conmed_data) || id_var %in% names(conmed_data)) &&
     id_var %in% names(exp_data) &&
-      id_var %in% names(anno_data) &&
-      id_var %in% names(heat_data))) {
+    id_var %in% names(anno_data) &&
+    id_var %in% names(heat_data))) {
     stop(
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
