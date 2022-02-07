@@ -10,4 +10,5 @@
 #' @rawNamespace import(gridExtra, except = combine)
 #' @docType package
 #' @name osprey
+#' @keywords internal
 NULL

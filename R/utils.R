@@ -263,6 +263,7 @@ grob_part <- function(gplot_grob, part) {
 #' @param pad_h padding to add horizontally
 #' @importFrom gtable gtable_add_grob gtable
 #' @importFrom grid rectGrob
+#' @keywords internal
 #'
 grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
   ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v), widths = unit.c(pad_h, unit(1, "null"), pad_h))
@@ -277,6 +278,7 @@ grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt"))
 #' @importFrom  ggplot2 theme .pt
 #' @param axis_side axis position
 #' @param fontsize font size in 'mm'
+#' @keywords internal
 #'
 theme_osprey <- function(axis_side = "left", fontsize = 4) {
   theme(
@@ -344,6 +346,7 @@ to_n <- function(x, n) {
 #' @param gplot_grob ggplot or grob object
 #' @param part name of the part to be extracted. NA will return zeroGrob()
 #' @importFrom ggplot2 zeroGrob
+#' @keywords internal
 #'
 grob_part <- function(gplot_grob, part) {
   if (is.na(part)) {
@@ -366,6 +369,7 @@ grob_part <- function(gplot_grob, part) {
 #' @param gplot ggplot or grob object
 #' @param parts names vector of the parts to be extracted.
 #' @importFrom methods is
+#' @keywords internal
 #'
 grob_parts <- function(gplot, parts) {
   stopifnot("gplot must inherit from class 'ggplot' or 'grob'" = inherits(gplot, c("ggplot", "grob")))

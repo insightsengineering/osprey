@@ -14,3 +14,4 @@ domain_check(domain, name)
 \description{
 a helper function for g_patient_profile to check whether the domain has data available
 }
+\keyword{internal}

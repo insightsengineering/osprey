@@ -29,3 +29,4 @@ commonly and consistently used in the framework. For the developer it adds a
 single reference point to import the `roxygen` argument description with:
 `@inheritParams argument_convention`
 }
+\keyword{internal}

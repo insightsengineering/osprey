@@ -20,5 +20,5 @@
 #' @param draw (`logical`)\cr whether to draw the plot.
 #'
 #' @name argument_convention
-#'
+#' @keywords internal
 NULL

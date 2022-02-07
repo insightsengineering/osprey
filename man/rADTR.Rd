@@ -17,3 +17,4 @@ data(rADTR)
 Random data rADTR
 }
 \keyword{datasets}
+\keyword{internal}

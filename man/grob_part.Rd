@@ -18,3 +18,4 @@ Extract specific part of a ggplot or grob
 
 Extract specific part of a ggplot or grob
 }
+\keyword{internal}
