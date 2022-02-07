@@ -1,4 +1,4 @@
-# osprey 0.1.12.9001
+# osprey 0.1.12.9002
 
 ### Enhancements
 * Modified `g_swimlane` plot to expand its y-axis range based on vertical line inputs.
