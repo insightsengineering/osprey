@@ -88,13 +88,13 @@
 #'   "4" = "maroon",
 #'   "5" = "brown4"
 #' )
-#' ADCM_lab <- rtables::var_labels(ADCM)
+#' ADCM_lab <- get_labels(ADCM, fill = FALSE)
 #' ADCM <- ADCM %>%
 #'   filter(
 #'     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
 #'   ) %>%
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
-#' rtables::var_labels(ADCM) <- ADCM_lab
+#' variable_labels(ADCM) <- ADCM_lab
 #' conmed_data <- ADCM %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
@@ -299,11 +299,11 @@ g_heat_bygrade <- function(id_var,
         size = 2
       ) +
       scale_colour_manual(
-        name = rtables::var_labels(conmed_data)[conmed_var],
+        name = attr(conmed_data[[conmed_var]], "label"),
         values = if (!is.null(conmed_color_opt)) conmed_color_opt else rep("black", 5)
       ) +
       scale_shape_manual(
-        name = rtables::var_labels(conmed_data)[conmed_var],
+        name = attr(conmed_data[[conmed_var]], "label"),
         values = c(15:17)
       )
   }

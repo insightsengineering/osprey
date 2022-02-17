@@ -20,12 +20,12 @@ duplicate_with_var <- function(x, ...) { # nolint
     stop("not all names in ... are existent or in X")
   }
   x_copy <- x
-  vl <- rtables::var_labels(x)
+  vl <- get_labels(x, fill = FALSE)
   for (var in nms) {
     x_copy[[var]] <- dots[[var]]
   }
   y <- rbind(x, x_copy)
-  rtables::var_labels(y) <- vl
+  variable_labels(y) <- vl
   y
 }
 
@@ -406,4 +406,63 @@ theme_osprey <- function(axis_side = "left", fontsize = 4, blank = FALSE) {
     legend.text = element_text(size = fontsize * .pt),
     plot.title = element_text(hjust = 0.5)
   )
+}
+
+#' Extracts dataset and variable labels from a dataset.
+#'
+#' @param data (`data.frame`) table to extract the labels from
+#' @param fill (`logical(1)`) if `TRUE`, the function will return variable names for columns with non-existent labels;
+#'   otherwise will return `NA` for them
+#'
+#' @export
+#'
+#' @return column labels
+#' @keywords internal
+#'
+get_labels <- function(data, fill = TRUE) {
+  stopifnot(is.data.frame(data))
+  checkmate::assert_flag(fill)
+
+  column_labels <- Map(function(col, colname) {
+    label <- attr(col, "label")
+    if (is.null(label)) {
+      if (fill) {
+        colname
+      } else {
+        NA_character_
+      }
+    } else {
+      if (!checkmate::test_string(label, na.ok = TRUE)) {
+        stop("label for variable ", colname, " is not a character string")
+      }
+      as.vector(label)
+    }
+  }, data, colnames(data))
+  column_labels <- unlist(column_labels, recursive = FALSE, use.names = TRUE)
+
+  column_labels
+}
+
+
+#' Sets column labels of a `data.frame`.
+#'
+#' @param x (`data.frame`) object with columns
+#' @param value (`charater`) labels
+#' @return `x`
+#'
+#' @export
+#'
+#' @examples
+#' variable_labels(iris) <- colnames(iris)
+#' @keywords internal
+#'
+`variable_labels<-` <- function(x, value) {
+  checkmate::assert_data_frame(x)
+  checkmate::assert_character(value, len = ncol(x))
+
+  for (i in seq_along(x)) {
+    attr(x[[i]], "label") <- value[i]
+  }
+
+  x
 }
