@@ -20,12 +20,12 @@ duplicate_with_var <- function(x, ...) { # nolint
     stop("not all names in ... are existent or in X")
   }
   x_copy <- x
-  vl <- get_labels(x, fill = FALSE)
+  vl <- var_labels(x, fill = FALSE)
   for (var in nms) {
     x_copy[[var]] <- dots[[var]]
   }
   y <- rbind(x, x_copy)
-  variable_labels(y) <- vl
+  var_labels(y) <- vl
   y
 }
 
@@ -419,7 +419,7 @@ theme_osprey <- function(axis_side = "left", fontsize = 4, blank = FALSE) {
 #' @return column labels
 #' @keywords internal
 #'
-get_labels <- function(data, fill = TRUE) {
+var_labels <- function(data, fill = TRUE) {
   stopifnot(is.data.frame(data))
   checkmate::assert_flag(fill)
 
@@ -453,10 +453,10 @@ get_labels <- function(data, fill = TRUE) {
 #' @export
 #'
 #' @examples
-#' variable_labels(iris) <- colnames(iris)
+#' var_labels(iris) <- colnames(iris)
 #' @keywords internal
 #'
-`variable_labels<-` <- function(x, value) { # nolint
+`var_labels<-` <- function(x, value) { # nolint
   checkmate::assert_data_frame(x)
   checkmate::assert_character(value, len = ncol(x))
 

@@ -88,13 +88,13 @@
 #'   "4" = "maroon",
 #'   "5" = "brown4"
 #' )
-#' ADCM_lab <- get_labels(ADCM, fill = FALSE)
+#' ADCM_lab <- var_labels(ADCM, fill = FALSE)
 #' ADCM <- ADCM %>%
 #'   filter(
 #'     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
 #'   ) %>%
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
-#' variable_labels(ADCM) <- ADCM_lab
+#' var_labels(ADCM) <- ADCM_lab
 #' conmed_data <- ADCM %>%
 #'   group_by(USUBJID) %>%
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
