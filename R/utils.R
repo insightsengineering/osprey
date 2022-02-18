@@ -447,7 +447,7 @@ get_labels <- function(data, fill = TRUE) {
 #' Sets column labels of a `data.frame`.
 #'
 #' @param x (`data.frame`) object with columns
-#' @param value (`charater`) labels
+#' @param value (`character`) labels
 #' @return `x`
 #'
 #' @export
@@ -456,7 +456,7 @@ get_labels <- function(data, fill = TRUE) {
 #' variable_labels(iris) <- colnames(iris)
 #' @keywords internal
 #'
-`variable_labels<-` <- function(x, value) {
+`variable_labels<-` <- function(x, value) { # nolint
   checkmate::assert_data_frame(x)
   checkmate::assert_character(value, len = ncol(x))
 
