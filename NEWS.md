@@ -1,7 +1,8 @@
 # osprey 0.1.12.9002
 
 ### Miscellaneous
-* Replaced calls to the deprecated `rtables::var_labels`.
+* Removed `rtables` dependency.
+
 # osprey 0.1.12
 
 ### Enhancements
