@@ -100,7 +100,6 @@ anno_data <- ADSL \%>\%
   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
   ungroup() \%>\%
   select(-USUBJID)
-
 heat_data <- ADAE \%>\%
   select(USUBJID, AVISIT, AETOXGR) \%>\%
   group_by(USUBJID) \%>\%
@@ -115,13 +114,13 @@ heat_color_opt <- c(
   "4" = "maroon",
   "5" = "brown4"
 )
-ADCM_lab <- var_labels(ADCM, fill = FALSE)
+cmdecod_label <- attr(ADCM[["CMDECOD"]], "label")
 ADCM <- ADCM \%>\%
   filter(
     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
   ) \%>\%
   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
-var_labels(ADCM) <- ADCM_lab
+attr(ADCM[["CMDECOD"]], "label") <- cmdecod_label
 conmed_data <- ADCM \%>\%
   group_by(USUBJID) \%>\%
   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
@@ -140,7 +139,6 @@ g_heat_bygrade(
   conmed_var = "CMDECOD",
   conmed_color_opt = c("green", "green3", "green4")
 )
-
 # example not plotting conmed
 g_heat_bygrade(
   id_var = "SUBJ",
@@ -153,6 +151,7 @@ g_heat_bygrade(
   heat_color_var = "AETOXGR",
   heat_color_opt
 )
+
 }
 \author{
 Nina Qi (qit3) \email{qit3@gene.com}

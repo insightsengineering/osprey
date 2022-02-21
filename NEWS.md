@@ -1,5 +1,9 @@
 # osprey 0.1.12.9002
 
+### Miscellaneous
+* Replaced calls to the deprecated `rtables::var_labels`.
+# osprey 0.1.12
+
 ### Enhancements
 * Modified `g_swimlane` plot to expand its y-axis range based on vertical line inputs.
 
