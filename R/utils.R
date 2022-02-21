@@ -1,34 +1,3 @@
-
-#' stack a modified version of a data frame
-#'
-#' essenially rbind(X,modified(X)). this is useful for example when a total
-#' column is needed.
-#'
-#' @param X a data.frame
-#' @param ... key=value pairs, where the key refers to a variable in X and value
-#'   is the valueof the variable in modified(X)
-#'
-#' @noRd
-#'
-#' @examples
-#'
-#' duplicate_with_var(iris, Species = "Total")
-duplicate_with_var <- function(x, ...) { # nolint
-  dots <- list(...)
-  nms <- names(dots)
-  if (length(nms) > 1 && (is.null(nms) || !all(nms %in% names(x)))) {
-    stop("not all names in ... are existent or in X")
-  }
-  x_copy <- x
-  vl <- rtables::var_labels(x)
-  for (var in nms) {
-    x_copy[[var]] <- dots[[var]]
-  }
-  y <- rbind(x, x_copy)
-  rtables::var_labels(y) <- vl
-  y
-}
-
 #' Output decorated grob (gTree) objects as PDF
 #'
 #' This is an utility function to output a decorated grob (gTree) object

@@ -57,7 +57,6 @@ in this function, all flags are expressions calls, for simpler usage.
 }
 \examples{
 library(scda)
-library(rtables)
 library(dplyr)
 
 ADAE <- synthetic_cdisc_data("latest")$adae
@@ -65,11 +64,9 @@ ADAE <- synthetic_cdisc_data("latest")$adae
 # add additional dummy causality flags
 ADAE <- ADAE \%>\%
   mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) \%>\%
-  mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo")) \%>\%
-  rtables::var_relabel(
-    AEREL1 = "AE related to A: Drug X",
-    AEREL2 = "AE related to B: Placebo"
-  )
+  mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo"))
+attr(ADAE[["AEREL1"]], "label") <- "AE related to A: Drug X"
+attr(ADAE[["AEREL2"]], "label") <- "AE related to B: Placebo"
 
 create_flag_vars(ADAE)
 # create other flags
