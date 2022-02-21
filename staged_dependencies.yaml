@@ -5,9 +5,6 @@ upstream_repos:
   insightsengineering/tern:
     repo: insightsengineering/tern
     host: https://github.com
-  Roche/rtables:
-    repo: Roche/rtables
-    host: https://github.com
   insightsengineering/scda:
     repo: insightsengineering/scda
     host: https://github.com

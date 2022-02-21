@@ -10,7 +10,6 @@
 #' @param usubjid The unique subject identifier variable in quotes (e.g. "USUBJID")
 #' @param filters The name of the filters dataset (typically __filters.sas7bdat on BCE)
 #'
-#' @importFrom rtables rtablel
 #' @return \code{dataframe} object
 #' @author Iain Bennett
 #' @export
