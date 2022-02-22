@@ -20,7 +20,7 @@ This repository requires a personal access token to install see here [creating a
 
 ```r
 Sys.setenv(GITHUB_PAT = "your_access_token_here")
-if (!require("devtools")) install.packages("osprey")
+if (!require("devtools")) install.packages("devtools")
 devtools::install_github("insightsengineering/osprey@*release", dependencies = FALSE)
 ```
 
