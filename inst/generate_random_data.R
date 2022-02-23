@@ -350,92 +350,91 @@ match_label <- function(target, source) {
 
 
 #Attach labels to variables
-rADSL <- ADSL %>% # nolint
-  var_relabel(
-    STUDYID = "Study Identifier",
-    SUBJID  = "Subject Identifier for the Study",
-    USUBJID = "Unique Subject Identifier",
-    SITEID  = "Study Site Identifier",
-    AGE     = "Age",
-    AGEGR1  = "Age Group 1",
-    SEX     = "Sex",
-    RACE    = "Race",
-    ARMCD   = "Planned Arm Code",
-    ARM     = "Description of Planned Arm",
-    ACTARMCD = "Actual Arm Code",
-    ACTARM  = "Description of Actual Arm",
-    COUNTRY = "Country",
-    BMK1    = "Cont. Biomarker 1",
-    BMK2    = "Cat. Biomarker 2",
-    STRATA1 = "Stratification Factor 1",
-    STRATA2 = "Stratification Factor 2",
-    SAFFL   = "Safety Evaluable Population Flag",
-    TRTDURD = "Total Treatment Duration (Days)",
-    EOSSTT  = "End of Study Status",
-    EOSDY   = "End of Study Relative Day",
-    DCSREAS = "Reason for Discontinuation from Study",
-    DCSREAS_GRP = "Grouped Reason for Disc. from Study",
-    DTHFL   = "Subject Death Flag",
-    DTHCAUS = "Cause of Death",
-    AEWITHFL = "AE Leading to Drug Withdrawal Flag"
-  )
+rADSL <- ADSL # nolint
+column_labels <- list(
+  STUDYID = "Study Identifier",
+  SUBJID = "Subject Identifier for the Study",
+  USUBJID = "Unique Subject Identifier",
+  SITEID = "Study Site Identifier",
+  AGE = "Age",
+  AGEGR1 = "Age Group 1",
+  SEX = "Sex",
+  RACE = "Race",
+  ARMCD = "Planned Arm Code",
+  ARM = "Description of Planned Arm",
+  ACTARMCD = "Actual Arm Code",
+  ACTARM = "Description of Actual Arm",
+  COUNTRY = "Country",
+  BMK1 = "Cont. Biomarker 1",
+  BMK2 = "Cat. Biomarker 2",
+  STRATA1 = "Stratification Factor 1",
+  STRATA2 = "Stratification Factor 2",
+  SAFFL = "Safety Evaluable Population Flag",
+  TRTDURD = "Total Treatment Duration (Days)",
+  EOSSTT = "End of Study Status",
+  EOSDY = "End of Study Relative Day",
+  DCSREAS = "Reason for Discontinuation from Study",
+  DCSREAS_GRP = "Grouped Reason for Disc. from Study",
+  DTHFL = "Subject Death Flag",
+  DTHCAUS = "Cause of Death",
+  AEWITHFL = "AE Leading to Drug Withdrawal Flag"
+)
+tern::var_labels(rADSL)[names(column_labels)] <- as.character(column_labels)
 
-
-rADAE <- ADAE %>% # nolint
-  match_label(rADSL) %>%
-  var_relabel(
-    AEDECOD  = "Dictionary Derived Term",
-    AEPTCD   = "Dictionary Derived Term Code",
-    AESOC    = "Primary System Organ Class",
-    AESOCCD  = "Primary System Organ Class Code",
-    AEHLGT   = "High Level Group Term",
-    AEHLGTCD = "High Level Group Term Code",
-    AEHLT    = "High Level Term",
-    AEHLTCD  = "High Level Term Code",
-    AEBODSYS = "Body System or Organ Class",
-    AEBDSYCD = "Body System or Organ Class Code",
-    AETERM   = "Reported Term for the Adverse Event",
-    AESEQ    = "Sequence Number",
-    AEREL    = "Causality",
-    AESER    = "Serious Event",
-    AEACN    = "Action Taken with Study Treatment",
-    AEOUT    = "Outcome of AE",
-    AETOXGR  = "Standard Toxicity Grade",
-    AESDTH   = "Results in Death",
-    TRTEMFL  = "Treatment Emergent Analysis Flag",
-    AREL     = "Analysis Causality",
-    ATOXGR   = "Analysis Toxicity Grade"
-  )
+rADAE <- ADAE # nolint
+  match_label(rADSL)
+column_labels <- list(
+  AEDECOD  = "Dictionary Derived Term",
+  AEPTCD   = "Dictionary Derived Term Code",
+  AESOC    = "Primary System Organ Class",
+  AESOCCD  = "Primary System Organ Class Code",
+  AEHLGT   = "High Level Group Term",
+  AEHLGTCD = "High Level Group Term Code",
+  AEHLT    = "High Level Term",
+  AEHLTCD  = "High Level Term Code",
+  AEBODSYS = "Body System or Organ Class",
+  AEBDSYCD = "Body System or Organ Class Code",
+  AETERM   = "Reported Term for the Adverse Event",
+  AESEQ    = "Sequence Number",
+  AEREL    = "Causality",
+  AESER    = "Serious Event",
+  AEACN    = "Action Taken with Study Treatment",
+  AEOUT    = "Outcome of AE",
+  AETOXGR  = "Standard Toxicity Grade",
+  AESDTH   = "Results in Death",
+  TRTEMFL  = "Treatment Emergent Analysis Flag",
+  AREL     = "Analysis Causality",
+  ATOXGR   = "Analysis Toxicity Grade"
+)
+tern::var_labels(rADAE)[names(column_labels)] <- as.character(column_labels)
 
 rADTR <- ADTR %>% # nolint
-  match_label(rADSL) %>%
-  var_relabel(
-    PARAM   = "Parameter Description",
-    PARAMCD = "Parameter Code",
-    AVAL    = "Analysis Value",
-    AVALC   = "Analysis Value (C)",
-    AVALU   = "Analysis Value Unit",
-    AVISIT  = "Analysis Visit",
-    AVISITN = "Analysis Visit (N)",
-    ADY     = "Analysis Relative Day",
-    BASE    = "Baseline Value",
-    CHG     = "Change from Baseline",
-    PCHG    = "Percent Change from Baseline",
-    ABLFL   = "Baseline Record Flag",
-    ONTRTFL = "On Treatment Flag",
-    ANL01FL = "Analysis Flag 01 Baseline Post-Baseline",
-    ANL02FL = "Analysis Flag 02 Last Obs Within BType",
-    ANL03FL = "Analysis Flag 03 Min Obs Within BType",
-    DTYPE   = "Derivation Type"
-  )
-
+  match_label(rADSL)
+column_labels <- list(
+  PARAM   = "Parameter Description",
+  PARAMCD = "Parameter Code",
+  AVAL    = "Analysis Value",
+  AVALC   = "Analysis Value (C)",
+  AVALU   = "Analysis Value Unit",
+  AVISIT  = "Analysis Visit",
+  AVISITN = "Analysis Visit (N)",
+  ADY     = "Analysis Relative Day",
+  BASE    = "Baseline Value",
+  CHG     = "Change from Baseline",
+  PCHG    = "Percent Change from Baseline",
+  ABLFL   = "Baseline Record Flag",
+  ONTRTFL = "On Treatment Flag",
+  ANL01FL = "Analysis Flag 01 Baseline Post-Baseline",
+  ANL02FL = "Analysis Flag 02 Last Obs Within BType",
+  ANL03FL = "Analysis Flag 03 Min Obs Within BType",
+  DTYPE   = "Derivation Type"
+)
+tern::var_labels(rADTR)[names(column_labels)] <- as.character(column_labels)
 
 rADTTE <- ADTTE %>% # nolint
-  match_label(rADTR) %>%
-  var_relabel(
-    EVNTDESC = "Event Description",
-    CNSR     = "Censoring Status Value(1=cens, 0=evt)"
-  )
+  match_label(rADTR)
+column_labels <- list(EVNTDESC = "Event Description", CNSR = "Censoring Status Value(1=cens, 0=evt)")
+tern::var_labels(rADTTE)[names(column_labels)] <- as.character(column_labels)
 
 rADRS <- ADRS %>% # nolint
   match_label(rADTR)
