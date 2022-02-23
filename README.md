@@ -7,13 +7,14 @@ These functions be used stand alone but are also called by the
 [teal.osprey](https://github.com/insightsengineering/teal.osprey) package which provides `teal` modules to be used
 inside `teal` applications.
 
-The package provides
-- waterfall plots (`g_waterfall`)
-- swim lane plots (`g_swimlane`)
-- spider plots (`g_spiderplot`)
-- butterfly plots (`g_butterfly`)
-- and many more
-
+The package provides:
+<!-- markdownlint-disable MD007 MD030 -->
+-   waterfall plots (`g_waterfall`)
+-   swim lane plots (`g_swimlane`)
+-   spider plots (`g_spiderplot`)
+-   butterfly plots (`g_butterfly`)
+-   and many more
+<!-- markdownlint-enable MD007 MD030 -->
 ## Installation
 
 This repository requires a personal access token to install see here [creating and using PAT](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token). Once this is set up, to install the latest released version of the package run:
