@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12.9003</span>
       </span>
     </div>
 
@@ -51,15 +51,6 @@
 <li>
   <a href="news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="index.html">latest</a></li>
-   <li><a href="/index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
@@ -83,77 +74,32 @@ Other releases
 <div class="section level1">
 <div class="page-header"><h1 id="osprey">osprey<a class="anchor" aria-label="anchor" href="#osprey"></a>
 </h1></div>
-<p><code>osprey</code> is an R package for crowd sourcing development of analysis functions to create TLGs. We also provide teal modules for outputs in <code>osprey</code> in the <code>teal.osprey</code> package.</p>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<div class="section level3">
-<h3 id="clone-and-install-manually">Clone and install manually<a class="anchor" aria-label="anchor" href="#clone-and-install-manually"></a>
-</h3>
-<ol style="list-style-type: decimal">
-<li>
-<p>Clone the repository</p>
-<p>The repository can be downloaded directly from the <code>github.com</code> site as an archive (see <a href="https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository-from-github/cloning-a-repository" class="external-link">Github tutorial on cloning to learn more</a>). Alternatively, Git command line tools offer the same functionality, without the need for manual downloading and unpacking the archive, but require to authenticate to Github. You can authenticate using a key pair or a Personal Access Token (PAT). Please refer to excellent Github tutorials on <a href="https://docs.github.com/en/github/authenticating-to-github" class="external-link">connecting to Github using SSH</a> or <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating and using PAT</a>.</p>
-<ol style="list-style-type: decimal">
-<li>
-<p>Using PAT. Input in the Git Bash console, PowerShell or any Linux shell:</p>
-<pre class="shell"><code>$ git clone https://github.com/insightsengineering/osprey.git
-Username: your_username_goes_here
-Password: your_token_goes_here</code></pre>
-</li>
-<li>
-<p>Using SSH. If set up properly, the repository is ready to be cloned executing:</p>
-<pre class="shell"><code>git clone https://github.com/insightsengineering/osprey.git</code></pre>
-<p>This creates a sub-directory <code>osprey</code> containing the cloned repository.</p>
-</li>
-</ol>
-</li>
-<li>
-<p>Build and install</p>
-<p>The native R tools provide a quick way to install a package. Run in PowerShell or any Linux shell:</p>
-<pre class="shell"><code>R CMD build osprey</code></pre>
-<p>This command builds the package and creates an archive. The name of the archive is output by the command at then of building. Then input in the shell:</p>
-<pre class="shell"><code>Rscript -e 'install.packages("name_of_the_archive")</code></pre>
-<p>Here is an example of a real command (with name_of_the_archive substituted by the output of the build command):</p>
-<pre class="shell"><code>Rscript -e 'install.packages("osprey_0.1.10.9000.tar.gz")'</code></pre>
-</li>
-</ol>
-</div>
-</div>
-<div class="section level2">
-<h2 id="development">Development<a class="anchor" aria-label="anchor" href="#development"></a>
-</h2>
-<p>Everyone is welcome to share their R functions in <code>osprey</code>.</p>
-<div class="section level3">
-<h3 id="requirements">Requirements<a class="anchor" aria-label="anchor" href="#requirements"></a>
-</h3>
-<p>To qualify to <code>osprey</code> package, TLG code has to:</p>
-<ol style="list-style-type: decimal">
-<li>Be a function that produces an output</li>
-<li>Have a working example</li>
-<li>Use <a href="http://r-pkgs.had.co.nz/man.html" class="external-link">roxygen documentation</a> for creation of Help</li>
-<li>Have a help page</li>
-<li>Be compatible with pkgdown (should be when points 1-4 are OK)</li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="instructions">Instructions<a class="anchor" aria-label="anchor" href="#instructions"></a>
-</h3>
-<p>For this to work you need to have access to libraries <code>pkgdown</code> and <code>scda</code>.</p>
-<p>That is, follow the following steps:</p>
-<ol style="list-style-type: decimal">
-<li>Clone the osprey repository</li>
-<li>Create a branch</li>
-<li>Develop a function</li>
-<li>Create roxygen comments (ctrl+shift+alt+R or copy from earlier)</li>
-<li>Document (ctrl+shift+D)</li>
-<li>Install and Restart</li>
-<li>Test your function with working example</li>
-<li>Create webpage (in console: <code><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">pkgdown::build_site()</a></code>)</li>
-<li>When everything works, make pull request.</li>
-</ol>
-</div>
-</div>
+<p><code>osprey</code> is an R package for community contributed
+analysis functions to create TLGs (tables, listing and graphs) for
+analysis of clinical trial data. These functions be used stand alone to
+generate static analysis, but are also called by the <a href="https://github.com/insightsengineering/teal.osprey" class="external-link">teal.osprey</a>
+package which provides <code>teal</code> modules to be used inside
+<code>teal</code> applications.</p>
+<p>The package provides: <!-- markdownlint-disable MD007 MD030 --> -
+waterfall plots (<code>g_waterfall</code>) - swim lane plots
+(<code>g_swimlane</code>) - spider plots (<code>g_spiderplot</code>) -
+butterfly plots (<code>g_butterfly</code>) - and many more
+<!-- markdownlint-enable MD007 MD030 --> ## Installation</p>
+<p>This repository requires a personal access token to install see here
+<a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating
+and using PAT</a>. Once this is set up, to install the latest released
+version of the package run:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>GITHUB_PAT <span class="op">=</span> <span class="st">"your_access_token_here"</span><span class="op">)</span>
+<span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://devtools.r-lib.org/" class="external-link">"devtools"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"insightsengineering/osprey@*release"</span>, dependencies <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<p>You might need to manually install all of the package dependencies
+before installing this package as without the
+<code>dependencies = FALSE</code> argument to
+<code>install_github</code> it may produce an error.</p>
+<p>In order to run many of the examples you will also need to install
+the <a href="https://github.com/insightsengineering/scda" class="external-link"><code>scda</code></a>
+package.</p>
 </div>
   </div>
 
@@ -201,12 +147,14 @@ Password: your_token_goes_here</code></pre>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Nina Qi, Chendi Liao, Mahdi About, Fei Wang, Mika Maekinen.</p>
+<p>Developed by Nina Qi, Chendi Liao, Mahdi About, Fei Wang, Mika
+Maekinen.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.</p>
 </div>
 
       </footer>
