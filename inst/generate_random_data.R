@@ -30,7 +30,19 @@ ifgen_char <- function(t, tx, tp = NULL, fx, fp = NULL) {
            sample(fx, length(t), replace = TRUE, prob = fp))
 }
 
+#' Sets column labels of a `data.frame`.
+`var_labels<-` <- function(x, value) { # nolint
+  checkmate::assert_data_frame(x)
+  checkmate::assert_character(value, len = ncol(x))
 
+  for (i in seq_along(x)) {
+    if (!is.na(value[i])) {
+      attr(x[[i]], "label") <- value[i]
+    }
+  }
+
+  x
+}
 
 #####------ ADSL - Subject Level Analysis Dataset -------#####
 # Assuming study design: 3 arms, 12 cycles Q1W, EoT 4 weeks after last cycle
@@ -406,7 +418,7 @@ column_labels <- list(
   AREL     = "Analysis Causality",
   ATOXGR   = "Analysis Toxicity Grade"
 )
-tern::var_labels(rADAE)[names(column_labels)] <- as.character(column_labels)
+var_labels(rADAE)[names(column_labels)] <- as.character(column_labels)
 
 rADTR <- ADTR %>% # nolint
   match_label(rADSL)
@@ -429,12 +441,12 @@ column_labels <- list(
   ANL03FL = "Analysis Flag 03 Min Obs Within BType",
   DTYPE   = "Derivation Type"
 )
-tern::var_labels(rADTR)[names(column_labels)] <- as.character(column_labels)
+var_labels(rADTR)[names(column_labels)] <- as.character(column_labels)
 
 rADTTE <- ADTTE %>% # nolint
   match_label(rADTR)
 column_labels <- list(EVNTDESC = "Event Description", CNSR = "Censoring Status Value(1=cens, 0=evt)")
-tern::var_labels(rADTTE)[names(column_labels)] <- as.character(column_labels)
+var_labels(rADTTE)[names(column_labels)] <- as.character(column_labels)
 
 rADRS <- ADRS %>% # nolint
   match_label(rADTR)
