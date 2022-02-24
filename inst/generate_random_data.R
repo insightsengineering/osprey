@@ -391,9 +391,9 @@ column_labels <- list(
   DTHCAUS = "Cause of Death",
   AEWITHFL = "AE Leading to Drug Withdrawal Flag"
 )
-tern::var_labels(rADSL)[names(column_labels)] <- as.character(column_labels)
+var_labels(rADSL)[names(column_labels)] <- as.character(column_labels)
 
-rADAE <- ADAE # nolint
+rADAE <- ADAE %>% # nolint
   match_label(rADSL)
 column_labels <- list(
   AEDECOD  = "Dictionary Derived Term",
@@ -451,9 +451,7 @@ var_labels(rADTTE)[names(column_labels)] <- as.character(column_labels)
 rADRS <- ADRS %>% # nolint
   match_label(rADTR)
 
-
 rm(ADSL, ADAE, ADRS, ADTTE, ADTR)
-
 
 #Exporting dummy data
 devtools::use_data(meddra)
