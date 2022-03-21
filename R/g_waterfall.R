@@ -426,7 +426,9 @@ g_waterfall <- function(bar_id,
         t_anno_name,
         rows = NULL,
         cols = NULL,
-        theme = gridExtra::ttheme_minimal(core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)))
+        theme = gridExtra::ttheme_minimal(
+          core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8))
+        )
       )
 
       # grab plot and table as one plot
