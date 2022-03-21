@@ -63,8 +63,6 @@
 #' @template author_qit3
 #'
 #' @return plot object
-#' @importFrom rlang .data
-#' @importFrom grDevices hcl.colors
 #'
 #' @export
 #'
@@ -383,11 +381,11 @@ patient_domain_profile <- function(domain = NULL,
         ),
         lineend = "round", linejoin = "round",
         size = line_width, show.legend = FALSE,
-        arrow = arrow(length = unit(arrow_size, "inches")),
+        arrow = arrow(length = grid::unit(arrow_size, "inches")),
         na.rm = TRUE
       )
 
-    if (is.null(line_col_opt)) line_col_opt <- hcl.colors(length(levels(line_data$line_col)))
+    if (is.null(line_col_opt)) line_col_opt <- grDevices::hcl.colors(length(levels(line_data$line_col)))
 
     p <- p +
       scale_color_manual(
@@ -419,7 +417,7 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
       )
 
-    if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(levels(marker_data$marker_col)))
+    if (is.null(marker_col_opt)) marker_col_opt <- grDevices::hcl.colors(length(levels(marker_data$marker_col)))
     p <- p +
       scale_fill_manual(
         breaks = marker_data$marker_col,
@@ -486,7 +484,7 @@ patient_domain_profile <- function(domain = NULL,
       }
     }
 
-    if (is.null(marker_col_opt)) marker_col_opt <- hcl.colors(length(levels(marker_data$marker_col)))
+    if (is.null(marker_col_opt)) marker_col_opt <- grDevices::hcl.colors(length(levels(marker_data$marker_col)))
     p <- p +
       scale_fill_manual(
         name = marker_col_legend,
@@ -520,9 +518,9 @@ patient_domain_profile <- function(domain = NULL,
         axis.title.x = element_blank(),
         axis.title.y = element_text(size = rel(0.8)),
         legend.title = element_text(size = 10),
-        legend.spacing.y = unit(0, "cm"),
-        legend.key.height = unit(1, "line"),
-        legend.margin = margin(t = 0, b = 0, r = 0.5, l = 0, unit = "cm"),
+        legend.spacing.y = grid::unit(0, "cm"),
+        legend.key.height = grid::unit(1, "line"),
+        legend.margin = margin(t = 0, b = 0, r = 0.5, l = 0,unit = "cm"),
         plot.margin = margin(t = 0, b = 0, r = 0.5, l = 0.5, unit = "cm")
       )
   } else {
@@ -532,8 +530,8 @@ patient_domain_profile <- function(domain = NULL,
         panel.grid = element_blank(),
         axis.line = element_line(colour = "black"),
         legend.title = element_text(size = 10),
-        legend.spacing.y = unit(0, "cm"),
-        legend.key.height = unit(1, "line"),
+        legend.spacing.y = grid::unit(0, "cm"),
+        legend.key.height = grid::unit(1, "line"),
         legend.margin = margin(t = 0, b = 0, r = 0.5, l = 0, unit = "cm"),
         plot.margin = margin(t = 0, b = 0, l = 0.5, r = 0.5, unit = "cm")
       )

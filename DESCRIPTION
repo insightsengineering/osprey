@@ -25,6 +25,7 @@ Imports:
     DescTools,
     grid,
     gridExtra,
+    grDevices,
     gtable,
     methods,
     purrr,

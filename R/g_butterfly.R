@@ -35,9 +35,6 @@
 #'
 #' @return ggplot object
 #'
-#' @importFrom rlang .data
-#' @importFrom grid grid.draw gpar grid.text
-#'
 #' @export
 #'
 #' @template author_zhanc107
@@ -299,7 +296,7 @@ g_butterfly <- function(category,
       legend.text = element_text(size = 9),
       legend.title = element_text(size = 9),
       panel.grid.major.y = element_line(colour = "gray", linetype = "dotted"),
-      plot.margin = unit(c(1.5, 1, 1, 1), "cm"),
+      plot.margin = grid::unit(c(1.5, 1, 1, 1), "cm"),
       legend.position = if (show_legend) "right" else "none"
     ) +
     scale_x_discrete(limits = levels(counts_r$y))
@@ -309,14 +306,18 @@ g_butterfly <- function(category,
 
   g_1 <- gtable::gtable_add_grob(
     g_0,
-    grid.text(stringr::str_wrap(g_r, width = 30), x = 1, just = "center", hjust = 1, gp = gpar(fontsize = 11)),
+    grid::grid.text(
+      stringr::str_wrap(g_r, width = 30), x = 1, just = "center", hjust = 1, gp = grid::gpar(fontsize = 11)
+    ),
     t = 1.5, l = g_0$layout[grep("axis-r", g_0$layout$name)[1], 2], b = 3, name = "right-title", clip = "off"
   )
   g_2 <- gtable::gtable_add_grob(
     g_1,
-    grid.text(stringr::str_wrap(g_l, width = 30), x = 1, just = "center", hjust = 0, gp = gpar(fontsize = 11)),
+    grid::grid.text(
+      stringr::str_wrap(g_l, width = 30), x = 1, just = "center", hjust = 0, gp = grid::gpar(fontsize = 11)
+    ),
     t = 1.5, l = g_0$layout[grep("axis-l", g_0$layout$name)[1], 2], b = 3, name = "left-title", clip = "off"
   )
-  grid.draw(g_2)
+  grid::grid.draw(g_2)
   invisible(g_2)
 }

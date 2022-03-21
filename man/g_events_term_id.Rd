@@ -116,8 +116,8 @@ p1 <- g_events_term_id(
   arm,
   arm_N
 )
-grid.newpage()
-grid.draw(p1)
+grid::grid.newpage()
+grid::grid.draw(p1)
 
 # Example 2
 p2 <- g_events_term_id(
@@ -131,8 +131,8 @@ p2 <- g_events_term_id(
   diff_ci_method = "ac",
   conf_level = 0.9
 )
-grid.newpage()
-grid.draw(p2)
+grid::grid.newpage()
+grid::grid.draw(p2)
 
 # Example 3
 p3 <- g_events_term_id(
@@ -144,8 +144,8 @@ p3 <- g_events_term_id(
   axis_side = "right",
   fontsize = 5
 )
-grid.newpage()
-grid.draw(p3)
+grid::grid.newpage()
+grid::grid.draw(p3)
 
 # Example 4
 term <- create_flag_vars(ADAE)

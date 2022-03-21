@@ -21,9 +21,6 @@
 #' @param title string to be displayed as plot title
 #'
 #' @template author_qit3
-#'
-#' @importFrom grid grid.draw grid.newpage
-#'
 #' @return plot object
 #'
 #' @export
@@ -207,9 +204,9 @@ g_swimlane <- function(bar_id,
         legend.title = element_text(size = 8),
         legend.text = element_text(size = 8),
         legend.key = element_rect(fill = NA),
-        legend.key.size = unit(1, "line"),
-        legend.spacing.y = unit(0, "cm"),
-        legend.key.height = unit(1, "line")
+        legend.key.size = grid::unit(1, "line"),
+        legend.spacing.y = grid::unit(0, "cm"),
+        legend.key.height = grid::unit(1, "line")
       )
   }
 
@@ -322,14 +319,14 @@ g_swimlane <- function(bar_id,
     )
   )
   tb <- tableGrob(t, rows = NULL, theme = my_theme)
-  tb$heights <- unit(rep(1 / nrow(tb), nrow(tb)), "null")
+  tb$heights <- grid::unit(rep(1 / nrow(tb), nrow(tb)), "null")
 
   # grab plot and table as one plot
   g0 <- ggplotGrob(p)
   g1 <- gtable::gtable_add_cols(g0, sum(tb$widths), 0)
   g <- gtable::gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
 
-  grid.newpage()
-  grid.draw(g)
+  grid::grid.newpage()
+  grid::grid.draw(g)
   invisible(g)
 }

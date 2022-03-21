@@ -34,8 +34,6 @@
 #'
 #' @return grob object
 #'
-#' @importFrom gridExtra arrangeGrob
-#' @importFrom grid textGrob unit unit.c grobHeight grobWidth
 #' @export
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
@@ -69,8 +67,8 @@
 #'   arm,
 #'   arm_N
 #' )
-#' grid.newpage()
-#' grid.draw(p1)
+#' grid::grid.newpage()
+#' grid::grid.draw(p1)
 #'
 #' # Example 2
 #' p2 <- g_events_term_id(
@@ -84,8 +82,8 @@
 #'   diff_ci_method = "ac",
 #'   conf_level = 0.9
 #' )
-#' grid.newpage()
-#' grid.draw(p2)
+#' grid::grid.newpage()
+#' grid::grid.draw(p2)
 #'
 #' # Example 3
 #' p3 <- g_events_term_id(
@@ -97,8 +95,8 @@
 #'   axis_side = "right",
 #'   fontsize = 5
 #' )
-#' grid.newpage()
-#' grid.draw(p3)
+#' grid::grid.newpage()
+#' grid::grid.draw(p3)
 #'
 #' # Example 4
 #' term <- create_flag_vars(ADAE)
@@ -236,9 +234,9 @@ g_events_term_id <- function(term,
     as.character()
 
   if (length(terms_needed) == 0) {
-    ret <- textGrob("All Observations are filtered out")
+    ret <- grid::textGrob("All Observations are filtered out")
     if (draw) {
-      grid.draw(ret)
+      grid::grid.draw(ret)
     }
     return(invisible(ret))
   }
@@ -314,20 +312,20 @@ g_events_term_id <- function(term,
   mylegend <- grob_part(grob_part(p1_parts, "guide-box"), "guides")
   axis <- grob_part(p1_parts, axis_name)
 
-  less_risk <- textGrob(
+  less_risk <- grid::textGrob(
     "Favor\nTreatment",
     just = "left",
-    x = unit(fontsize * .pt, "pt"),
-    gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+    x = grid::unit(fontsize * .pt, "pt"),
+    gp = grid::gpar(fontsize = fontsize * .pt, fontface = "bold")
   )
-  more_risk <- textGrob(
+  more_risk <- grid::textGrob(
     "Favor\nControl",
     just = "right",
-    x = unit(1, "npc") - unit(fontsize * .pt, "pt"),
-    gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+    x = grid::unit(1, "npc") - grid::unit(fontsize * .pt, "pt"),
+    gp = grid::gpar(fontsize = fontsize * .pt, fontface = "bold")
   )
 
-  risk_label <- arrangeGrob(less_risk, more_risk, nrow = 1)
+  risk_label <- gridExtra::arrangeGrob(less_risk, more_risk, nrow = 1)
   title1 <- grob_part(p1_parts, "title")
   title2 <- grob_part(p2_parts, "title")
   panel1 <- grob_part(p1_parts, "panel")
@@ -354,7 +352,7 @@ g_events_term_id <- function(term,
       c(NA, 6, NA, 7),
       c(8, 8, NA, 9)
     )
-    widths <- unit.c(grobWidth(axis), unit(c(1, 2 * fontsize, 1), c("null", "pt", "null")))
+    widths <- grid::unit.c(grid::grobWidth(axis), grid::unit(c(1, 2 * fontsize, 1), c("null", "pt", "null")))
   } else {
     layout_matrix <- rbind(
       c(1, NA, 2, NA),
@@ -362,17 +360,17 @@ g_events_term_id <- function(term,
       c(6, NA, 7, NA),
       c(8, NA, 9, NA)
     )
-    widths <- unit.c(unit(c(1, 10, 1), c("null", "pt", "null")), grobWidth(axis))
+    widths <- grid::unit.c(grid::unit(c(1, 10, 1), c("null", "pt", "null")), grid::grobWidth(axis))
   }
 
-  heights <- unit.c(
-    grobHeight(title1),
-    unit(1, "null"),
-    grobHeight(axis_b1),
-    max(grobHeight(mylegend), grobHeight(more_risk))
+  heights <- grid::unit.c(
+    grid::grobHeight(title1),
+    grid::unit(1, "null"),
+    grid::grobHeight(axis_b1),
+    max(grid::grobHeight(mylegend), grid::grobHeight(more_risk))
   )
 
-  ret <- arrangeGrob(
+  ret <- gridExtra::arrangeGrob(
     grobs = grobs,
     nrow = 4,
     ncol = 4,
@@ -384,7 +382,7 @@ g_events_term_id <- function(term,
   ret <- grob_add_padding(ret)
 
   if (draw) {
-    grid.draw(ret)
+    grid::grid.draw(ret)
   }
   invisible(ret)
 }

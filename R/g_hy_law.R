@@ -50,9 +50,6 @@
 #'
 #' @return plot object
 #'
-#' @importFrom rlang .data
-#' @importFrom grid grid.draw gpar grid.text
-#'
 #' @export
 #'
 #' @template author_withycok
@@ -212,7 +209,7 @@ g_hy_law <- function(id,
     scale_shape_manual(values = c(1:n_distinct(arm)))
 
   g <- ggplotGrob(p)
-  grid.newpage()
-  grid.draw(g)
+  grid::grid.newpage()
+  grid::grid.draw(g)
   invisible(g)
 }

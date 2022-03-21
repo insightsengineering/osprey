@@ -42,9 +42,6 @@
 #'
 #' @export
 #'
-#' @importFrom rlang .data
-#' @importFrom grid grid.draw
-#'
 #' @template author_zhanc107
 #'
 #' @examples
@@ -222,7 +219,7 @@ g_spiderplot <- function(marker_x,
         geom_segment(
           data = dat_arrow,
           mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
-          arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+          arrow = arrow(length = grid::unit(0.15, "inches"), ends = "first", type = "closed"),
           size = 0.4,
           color = "black",
           show.legend = FALSE
@@ -248,7 +245,7 @@ g_spiderplot <- function(marker_x,
         geom_segment(
           data = dat_arrow,
           mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
-          arrow = arrow(length = unit(0.15, "inches"), ends = "first", type = "closed"),
+          arrow = arrow(length = grid::unit(0.15, "inches"), ends = "first", type = "closed"),
           size = 0.4,
           color = "black",
           show.legend = FALSE
@@ -288,7 +285,7 @@ g_spiderplot <- function(marker_x,
 
   # simple function to call a vector of color values
   call_color <- function(len) {
-    dat_col <- data.frame(color_opt = colors())
+    dat_col <- data.frame(color_opt = grDevices::colors())
     dat_col <- dat_col %>%
       dplyr::filter(!grepl("white", .data$color_opt)) %>%
       droplevels()
@@ -346,6 +343,6 @@ g_spiderplot <- function(marker_x,
       theme(axis.text.x = element_text(angle = 90))
   }
 
-  grid.draw(pl)
+  grid::grid.draw(pl)
   invisible(pl)
 }

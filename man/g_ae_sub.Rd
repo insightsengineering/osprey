@@ -119,7 +119,7 @@ p1 <- g_ae_sub(id,
   subgroups_levels = subgroups_levels,
   arm_n = FALSE
 )
-grid.newpage()
+grid::grid.newpage()
 
 # Example 2: display number of patients in each arm
 p2 <- g_ae_sub(id,
@@ -132,7 +132,7 @@ p2 <- g_ae_sub(id,
   subgroups_levels = subgroups_levels,
   arm_n = TRUE
 )
-grid.newpage()
+grid::grid.newpage()
 
 # Example 3: preprocess data to only include treatment and control arm patients
 trt <- "ARM A"

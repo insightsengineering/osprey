@@ -11,8 +11,6 @@
 #'
 #' @return a pdf file
 #'
-#' @importFrom grid grid.newpage grid.draw
-#'
 #' @export
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
@@ -43,14 +41,14 @@ as_pdf <- function(grobs,
   paper_height <- paper_sizes[2]
 
   # Output to PDF
-  pdf(outpath, width = paper_width, height = paper_height)
+  grDevices::pdf(outpath, width = paper_width, height = paper_height)
 
   lapply(grobs, function(x) {
-    grid.newpage()
-    grid.draw(x)
+    grid::grid.newpage()
+    grid::grid.draw(x)
   })
 
-  dev.off()
+  grDevices::dev.off()
 }
 
 paper_size <- function(pagesize) {
@@ -97,8 +95,6 @@ paper_size <- function(pagesize) {
 #' @return a pdf file
 #'
 #' @export
-#'
-#' @importFrom grid viewport
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
 #'
@@ -180,17 +176,17 @@ grobs2pdf <- function(grobs,
     grobs = grobs,
     titles = titles,
     footnotes = paste(footnotes, logtext, sep = "\n\n"),
-    # outer_margins = unit(c(bottom.margin, left.margin, top.margin, right.margin), "inches"),
-    outer_margins = unit(c(0, 0, 0, 0), "lines"),
-    padding = unit(0.5, "lines"),
-    gp_titles = gpar(fontsize = fontsize + 1, fontface = 2, lineheight = 1),
-    gp_footnotes = gpar(fontsize = fontsize - 1, fontface = 1, lineheight = 1),
-    gp = gpar(fontsize = fontsize),
-    vp = viewport(
-      x = unit(left_margin, "inches"),
-      y = unit(bottom_margin, "inches"),
-      width = unit(paper_width - left_margin - right_margin, "inches"),
-      height = unit(paper_height - top_margin - bottom_margin, "inches"),
+    # outer_margins = grid::unit(c(bottom.margin, left.margin, top.margin, right.margin), "inches"),
+    outer_margins = grid::unit(c(0, 0, 0, 0), "lines"),
+    padding = grid::unit(0.5, "lines"),
+    gp_titles = grid::gpar(fontsize = fontsize + 1, fontface = 2, lineheight = 1),
+    gp_footnotes = grid::gpar(fontsize = fontsize - 1, fontface = 1, lineheight = 1),
+    gp = grid::gpar(fontsize = fontsize),
+    vp = grid::viewport(
+      x = grid::unit(left_margin, "inches"),
+      y = grid::unit(bottom_margin, "inches"),
+      width = grid::unit(paper_width - left_margin - right_margin, "inches"),
+      height = grid::unit(paper_height - top_margin - bottom_margin, "inches"),
       just = c("left", "bottom"),
       name = "OuterMargin"
     )
@@ -229,15 +225,17 @@ grob_part <- function(gplot_grob, part) {
 #' @param grob grob object
 #' @param pad_v padding to add vertically
 #' @param pad_h padding to add horizontally
-#' @importFrom grid rectGrob
 #' @keywords internal
 #'
-grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
-  ret <- gtable::gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v), widths = unit.c(pad_h, unit(1, "null"), pad_h))
+grob_add_padding <- function(grob, pad_v = grid::unit(5, "pt"), pad_h = grid::unit(5, "pt")) {
+  ret <- gtable::gtable(
+    heights = grid::unit.c(pad_v, grid::unit(1, "null"), pad_v),
+    widths = grid::unit.c(pad_h, grid::unit(1, "null"), pad_h)
+  )
   # t, b, l, r, z arguments do not need modification
   # same effect can be achieved by modifying pad_v and pad_h
   ret <- gtable::gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
-  ret <- gtable::gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
+  ret <- gtable::gtable_add_grob(ret, grid::rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
   return(ret)
 }
 

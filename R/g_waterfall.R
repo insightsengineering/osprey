@@ -31,8 +31,6 @@
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
 #' @template author_qit3
 #'
-#' @importFrom grid rectGrob
-#'
 #' @return plot object
 #'
 #' @export
@@ -406,7 +404,7 @@ g_waterfall <- function(bar_id,
       my_theme <- ttheme_default(
         core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
         rowhead = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
-        padding = unit(c(0, 4), "mm")
+        padding = grid::unit(c(0, 4), "mm")
       )
 
       tb <- tableGrob(
@@ -416,10 +414,10 @@ g_waterfall <- function(bar_id,
         theme = my_theme
       )
 
-      tb$widths <- unit(rep(1 / (ncol(tb)), ncol(tb)), "null")
+      tb$widths <- grid::unit(rep(1 / (ncol(tb)), ncol(tb)), "null")
       tb <- gtable::gtable_add_grob(
         tb,
-        grobs = rectGrob(gp = gpar(fill = NA, lwd = 2)),
+        grobs = grid::rectGrob(gp = grid::gpar(fill = NA, lwd = 2)),
         t = 1, b = nrow(tb), l = 1, r = ncol(tb)
       )
 
@@ -495,7 +493,7 @@ g_waterfall <- function(bar_id,
     gt <- grid.arrange(grobs = g_list, ncol = 1, nrow = length(levels(facet_by)))
   }
 
-  grid.newpage()
-  grid.draw(gt)
+  grid::grid.newpage()
+  grid::grid.draw(gt)
   invisible(gt)
 }

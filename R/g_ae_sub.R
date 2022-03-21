@@ -28,9 +28,6 @@
 #'
 #' @return grob object
 #'
-#' @importFrom gridExtra arrangeGrob
-#' @importFrom grid unit.c unit
-#' @importFrom rlang ":="
 #' @export
 #'
 #' @examples
@@ -76,7 +73,7 @@
 #'   subgroups_levels = subgroups_levels,
 #'   arm_n = FALSE
 #' )
-#' grid.newpage()
+#' grid::grid.newpage()
 #'
 #' # Example 2: display number of patients in each arm
 #' p2 <- g_ae_sub(id,
@@ -89,7 +86,7 @@
 #'   subgroups_levels = subgroups_levels,
 #'   arm_n = TRUE
 #' )
-#' grid.newpage()
+#' grid::grid.newpage()
 #'
 #' # Example 3: preprocess data to only include treatment and control arm patients
 #' trt <- "ARM A"
@@ -450,42 +447,42 @@ g_ae_sub <- function(id,
   }
   grobs <- append(grobs, grob_parts(p1_grob, c("panel", "axis-b")))
   grobs <- append(grobs, grob_parts(p3_grob, c("axis-t", "panel")))
-  less_risk <- textGrob(
+  less_risk <- grid::textGrob(
     "Favor\nTreatment",
     just = "centre",
-    x = unit(fontsize * .pt, "pt"),
-    gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+    x = grid::unit(fontsize * .pt, "pt"),
+    gp = grid::gpar(fontsize = fontsize * .pt, fontface = "bold")
   )
-  more_risk <- textGrob(
+  more_risk <- grid::textGrob(
     "Favor\nControl",
     just = "centre",
-    x = unit(1, "npc") - unit(fontsize * .pt, "pt"),
-    gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+    x = grid::unit(1, "npc") - grid::unit(fontsize * .pt, "pt"),
+    gp = grid::gpar(fontsize = fontsize * .pt, fontface = "bold")
   )
-  risk_label <- arrangeGrob(less_risk, more_risk, nrow = 1)
+  risk_label <- gridExtra::arrangeGrob(less_risk, more_risk, nrow = 1)
   grobs <- append(grobs, list(
-    textGrob(
+    grid::textGrob(
       "Risk Difference (CI)",
       just = "centre",
-      x = unit(0.5, "npc"),
-      y = unit(0.5, "npc"),
-      gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+      x = grid::unit(0.5, "npc"),
+      y = grid::unit(0.5, "npc"),
+      gp = grid::gpar(fontsize = fontsize * .pt, fontface = "bold")
     ),
     risk_label
   ))
 
   widths <- if (arm_n) {
-    unit.c(
-      grobWidth(grobs[[1]]),
-      unit(
+    grid::unit.c(
+      grid::grobWidth(grobs[[1]]),
+      grid::unit(
         c(14 * fontsize, rep(10 * fontsize, 2), 1, 50 * fontsize),
         c(rep("pt", 3), "null", "pt")
       )
     )
   } else {
-    unit.c(
-      grobWidth(grobs[[1]]),
-      unit(
+    grid::unit.c(
+      grid::grobWidth(grobs[[1]]),
+      grid::unit(
         c(14 * fontsize, 1, 50 * fontsize),
         c("pt", "null", "pt")
       )
@@ -493,22 +490,22 @@ g_ae_sub <- function(id,
   }
 
   heights <- if (arm_n) {
-    unit.c(
-      grobHeight(grobs[[10]]),
-      unit(1, "null"),
-      rep(grobHeight(grobs[[9]]), 3),
-      unit(fontsize * .pt, "pt")
+    grid::unit.c(
+      grid::grobHeight(grobs[[10]]),
+      grid::unit(1, "null"),
+      rep(grid::grobHeight(grobs[[9]]), 3),
+      grid::unit(fontsize * .pt, "pt")
     )
   } else {
-    unit.c(
-      grobHeight(grobs[[6]]),
-      unit(1, "null"),
-      grobHeight(grobs[[5]]),
-      unit(fontsize * .pt * 3, "pt")
+    grid::unit.c(
+      grid::grobHeight(grobs[[6]]),
+      grid::unit(1, "null"),
+      grid::grobHeight(grobs[[5]]),
+      grid::unit(fontsize * .pt * 3, "pt")
     )
   }
 
-  boldfont <- gpar(
+  boldfont <- grid::gpar(
     fontsize = fontsize * 4,
     fontface = "bold",
     lineheight = 1
@@ -529,7 +526,7 @@ g_ae_sub <- function(id,
     )
   }
 
-  ret <- arrangeGrob(
+  ret <- gridExtra::arrangeGrob(
     grobs = grobs,
     layout_matrix = layout_matrix,
     heights = heights,
@@ -537,7 +534,7 @@ g_ae_sub <- function(id,
     clip = "on"
   )
   if (draw) {
-    grid.draw(ret)
+    grid::grid.draw(ret)
   }
   invisible(ret)
 }
