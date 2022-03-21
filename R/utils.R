@@ -20,6 +20,7 @@
 #' @examples
 #' \dontrun{
 #' library(ggplot2)
+#' library(tern)
 #' g <- with(iris, {
 #'   list(
 #'     ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
@@ -97,7 +98,6 @@ paper_size <- function(pagesize) {
 #'
 #' @export
 #'
-#' @importFrom tern decorate_grob_set
 #' @importFrom grid viewport
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
@@ -176,7 +176,7 @@ grobs2pdf <- function(grobs,
   }
 
   ## Decorate grobs
-  dg <- decorate_grob_set(
+  dg <- tern::decorate_grob_set(
     grobs = grobs,
     titles = titles,
     footnotes = paste(footnotes, logtext, sep = "\n\n"),
@@ -208,7 +208,6 @@ grobs2pdf <- function(grobs,
 #'
 #' @param gplot_grob ggplot or grob object
 #' @param part name of the part to be extracted. NA will return zeroGrob()
-#' @importFrom ggplot2 zeroGrob
 #'
 grob_part <- function(gplot_grob, part) {
   if (is.na(part)) {
@@ -230,21 +229,19 @@ grob_part <- function(gplot_grob, part) {
 #' @param grob grob object
 #' @param pad_v padding to add vertically
 #' @param pad_h padding to add horizontally
-#' @importFrom gtable gtable_add_grob gtable
 #' @importFrom grid rectGrob
 #' @keywords internal
 #'
 grob_add_padding <- function(grob, pad_v = unit(5, "pt"), pad_h = unit(5, "pt")) {
-  ret <- gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v), widths = unit.c(pad_h, unit(1, "null"), pad_h))
+  ret <- gtable::gtable(heights = unit.c(pad_v, unit(1, "null"), pad_v), widths = unit.c(pad_h, unit(1, "null"), pad_h))
   # t, b, l, r, z arguments do not need modification
   # same effect can be achieved by modifying pad_v and pad_h
-  ret <- gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
-  ret <- gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
+  ret <- gtable::gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
+  ret <- gtable::gtable_add_grob(ret, rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
   return(ret)
 }
 
 #' this theme is used across many figures. can be safely removed if update the theme in each function
-#' @importFrom  ggplot2 theme .pt
 #' @param axis_side axis position
 #' @param fontsize font size in 'mm'
 #' @keywords internal
@@ -288,7 +285,7 @@ check_same_N <- function(..., omit_null = TRUE) { # nolint
     dots, names(dots)
   )
 
-  n <- na.omit(unlist(n_list))
+  n <- stats::na.omit(unlist(n_list))
 
   if (length(unique(n)) > 1) {
     sel <- which(n != n[1])
@@ -314,7 +311,6 @@ to_n <- function(x, n) {
 #'
 #' @param gplot_grob ggplot or grob object
 #' @param part name of the part to be extracted. NA will return zeroGrob()
-#' @importFrom ggplot2 zeroGrob
 #' @keywords internal
 #'
 grob_part <- function(gplot_grob, part) {
@@ -337,7 +333,6 @@ grob_part <- function(gplot_grob, part) {
 #'
 #' @param gplot ggplot or grob object
 #' @param parts names vector of the parts to be extracted.
-#' @importFrom methods is
 #' @keywords internal
 #'
 grob_parts <- function(gplot, parts) {
@@ -355,7 +350,6 @@ grob_parts <- function(gplot, parts) {
 
 
 #' this theme is used across many figures. can be safely removed if update the theme in each function
-#' @importFrom  ggplot2 theme .pt
 #' @param axis_side axis position
 #' @param fontsize font size in 'mm'
 #' @param blank whether to have blank or background with grids and borders

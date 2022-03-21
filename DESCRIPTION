@@ -29,6 +29,7 @@ Imports:
     methods,
     purrr,
     rlang,
+    stats,
     stringr,
     tern (>= 0.7.6),
     tibble,

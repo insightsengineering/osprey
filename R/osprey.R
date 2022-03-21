@@ -4,7 +4,6 @@
 #'
 #'
 #' @importFrom grDevices colors dev.off pdf
-#' @importFrom stats na.omit
 #' @import dplyr ggplot2 assertthat
 #' @rawNamespace import(gridExtra, except = combine)
 #' @docType package

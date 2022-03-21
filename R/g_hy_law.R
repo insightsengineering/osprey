@@ -50,9 +50,7 @@
 #'
 #' @return plot object
 #'
-#' @importFrom stringr str_wrap
 #' @importFrom rlang .data
-#' @importFrom gtable gtable_add_grob
 #' @importFrom grid grid.draw gpar grid.text
 #'
 #' @export

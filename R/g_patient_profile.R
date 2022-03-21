@@ -594,9 +594,6 @@ patient_domain_profile <- function(domain = NULL,
 #' @author Molly He (hey59) \email{hey59@gene.com}
 #' @template author_qit3
 #'
-#' @importFrom cowplot plot_grid
-#' @importFrom purrr map2_lgl
-#'
 #' @return plot object
 #'
 #' @export
@@ -734,7 +731,7 @@ g_patient_profile <- function(ex = NULL,
                               xlab = "Study Day",
                               title = "Patient Profile") {
   domains <- list(ex = ex, ae = ae, rs = rs, cm = cm, lb = lb)
-  select <- map2_lgl(domains, names(domains), domain_check)
+  select <- purrr::map2_lgl(domains, names(domains), domain_check)
   names(select) <- names(domains)
 
   show_days_label <- c(FALSE, FALSE, FALSE, FALSE, FALSE)

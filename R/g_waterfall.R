@@ -31,7 +31,6 @@
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
 #' @template author_qit3
 #'
-#' @importFrom gtable gtable_add_rows
 #' @importFrom grid rectGrob
 #'
 #' @return plot object
@@ -418,7 +417,7 @@ g_waterfall <- function(bar_id,
       )
 
       tb$widths <- unit(rep(1 / (ncol(tb)), ncol(tb)), "null")
-      tb <- gtable_add_grob(
+      tb <- gtable::gtable_add_grob(
         tb,
         grobs = rectGrob(gp = gpar(fill = NA, lwd = 2)),
         t = 1, b = nrow(tb), l = 1, r = ncol(tb)
@@ -434,16 +433,16 @@ g_waterfall <- function(bar_id,
 
       # grab plot and table as one plot
       g0 <- ggplotGrob(p)
-      g1 <- gtable_add_rows(g0, sum(tb$heights), pos = -1)
-      g2 <- gtable_add_grob(
+      g1 <- gtable::gtable_add_rows(g0, sum(tb$heights), pos = -1)
+      g2 <- gtable::gtable_add_grob(
         g1,
         tb,
         t = -1,
         l = g1$layout[g1$layout$name == "panel", 2],
         r = g1$layout[g1$layout$name == "panel", 4]
       )
-      g3 <- gtable_add_cols(g2, tb_rowname$widths, pos = 0)
-      g <- gtable_add_grob(g3, tb_rowname, t = -1, l = 2)
+      g3 <- gtable::gtable_add_cols(g2, tb_rowname$widths, pos = 0)
+      g <- gtable::gtable_add_grob(g3, tb_rowname, t = -1, l = 2)
     } else {
       p <- p +
         theme(axis.title.x = element_text()) +

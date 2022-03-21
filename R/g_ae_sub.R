@@ -30,11 +30,7 @@
 #'
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom grid unit.c unit
-#' @importFrom tidyr pivot_longer pivot_wider replace_na unite separate_rows
-#' @importFrom stringr str_dup str_replace_all str_c str_detect
-#' @importFrom DescTools BinomDiffCI
 #' @importFrom rlang ":="
-#' @importFrom purrr map2
 #' @export
 #'
 #' @examples
@@ -160,13 +156,13 @@ g_ae_sub <- function(id,
     labels <- unlist(subgroups_levels)
     label_df <-
       tibble(
-        level = str_replace_all(names(labels), "\\.", "__"),
+        level = stringr::str_replace_all(names(labels), "\\.", "__"),
         label = labels
       ) %>%
       bind_rows(c(level = "TOTAL__Total", label = "Overall")) %>%
       mutate(
         indents = str_dup(" ", if_else(
-          str_detect(.data$level, "__Total"), 0, indent
+          stringr::str_detect(.data$level, "__Total"), 0, indent
         )),
         # create label with indents if not total
         label = paste0(.data$indents, .data$label)
@@ -195,7 +191,7 @@ g_ae_sub <- function(id,
   )
   stopifnot(
     "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels" =
-      all(unlist(map2(
+      all(unlist(purrr::map2(
         subgroups_levels,
         apply(subgroups[names(subgroups_levels)], 2, levels),
         ~ all(names(.x) %in% c("Total", .y))
@@ -225,7 +221,7 @@ g_ae_sub <- function(id,
   df <- cbind(id = id, arm = arm, subgroups) %>%
     filter(arm %in% c(ref, trt)) %>%
     unique() %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       names_to = "strata",
       cols = colnames(subgroups),
       values_to = "value"
@@ -235,7 +231,7 @@ g_ae_sub <- function(id,
     full_join(df_ref, by = "arm") %>%
     tidyr::replace_na(list(n = 0)) %>%
     ungroup() %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       id_cols = c("strata", "value"),
       names_from = "arm",
       values_from = "n",
@@ -247,7 +243,7 @@ g_ae_sub <- function(id,
   df_sl <- cbind(arm = arm_sl, subgroups_sl) %>%
     filter(arm %in% c(ref, trt)) %>%
     mutate(TOTAL = "Total") %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       names_to = "strata",
       cols = c(colnames(subgroups_sl), "TOTAL"),
       values_to = "value"
@@ -255,7 +251,7 @@ g_ae_sub <- function(id,
     group_by(arm, .data$strata, .data$value) %>%
     summarise(n = n()) %>%
     ungroup() %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       id_cols = c("strata", "value"),
       names_from = "arm",
       values_from = "n",
@@ -270,25 +266,25 @@ g_ae_sub <- function(id,
     mutate(
       !!r1 := !!x1 / !!n1,
       !!r2 := !!x2 / !!n2,
-      lower = BinomDiffCI(
+      lower = DescTools::BinomDiffCI(
         !!x1, !!n1, !!x2, !!n2,
         conf_level,
         method = diff_ci_method
       )[2],
-      upper = BinomDiffCI(
+      upper = DescTools::BinomDiffCI(
         !!x1, !!n1, !!x2, !!n2,
         conf_level,
         method = diff_ci_method
       )[3],
       riskdiff = !!r1 - !!r2
     ) %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       matches("__"),
       names_to = c(".value", "arm"),
       names_sep = "__"
     ) %>%
     ungroup() %>%
-    unite("level", .data$strata, .data$value, remove = FALSE, sep = "__")
+    tidyr::unite("level", .data$strata, .data$value, remove = FALSE, sep = "__")
 
   # create label for plotting
   level_format_df <- df %>%
@@ -296,9 +292,9 @@ g_ae_sub <- function(id,
     unique() %>%
     group_by(.data$strata) %>%
     summarise(value = paste(c("Total", .data$value), collapse = ",")) %>%
-    separate_rows(.data$value, sep = ",") %>%
+    tidyr::separate_rows(.data$value, sep = ",") %>%
     unique() %>%
-    unite("level", .data$strata, .data$value, sep = "__", remove = FALSE) %>%
+    tidyr::unite("level", .data$strata, .data$value, sep = "__", remove = FALSE) %>%
     mutate(order = if_else(.data$strata == "TOTAL", integer(1), -row_number())) %>%
     arrange(order)
 
@@ -307,7 +303,7 @@ g_ae_sub <- function(id,
       mutate(label = if_else(
         .data$strata == "TOTAL",
         "Overall",
-        if_else(.data$value == "Total", .data$strata, paste0(str_c(
+        if_else(.data$value == "Total", .data$strata, paste0(stringr::str_c(
           rep(" ", indent),
           collapse = ""
         ), .data$value))
@@ -369,7 +365,7 @@ g_ae_sub <- function(id,
     df_byarm <- df %>%
       group_by(.data$level, .data$arm) %>%
       summarise(n = sum(.data$total)) %>%
-      pivot_wider(names_from = arm, values_from = n) %>%
+      tidyr::pivot_wider(names_from = arm, values_from = n) %>%
       rename("n_trt" = trt, "n_ref" = ref)
 
     df_total <- df_total %>%
@@ -420,12 +416,12 @@ g_ae_sub <- function(id,
   }
 
   df_ci <- df %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       names_from = "arm",
       values_from = "risk",
       id_cols = c("level", "lower", "upper", "riskdiff")
     ) %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       names_to = "x",
       values_to = "v",
       cols = c("lower", "upper", "riskdiff", trt, ref)

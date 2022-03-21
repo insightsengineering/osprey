@@ -24,9 +24,6 @@
 #' @param xlab optional, (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}
 #' @param title (`character`)\cr string to be shown as title of the plot.
 #' default is \code{NULL} (no plot title is displayed)
-#' @import ggplot2
-#' @importFrom tidyr replace_na
-#' @importFrom stats median
 #' @importFrom grDevices terrain.colors
 #'
 #' @export
@@ -236,7 +233,7 @@ g_heat_bygrade <- function(id_var,
       ungroup() %>%
       mutate(
         conmed_num = as.numeric(.data[[conmed_var]]),
-        conmed_num_m = median(unique(.data$conmed_num), na.rm = TRUE)
+        conmed_num_m = stats::median(unique(.data$conmed_num), na.rm = TRUE)
       ) %>%
       mutate(
         distance = (ifelse(
@@ -345,8 +342,8 @@ g_heat_bygrade <- function(id_var,
 
   # grab plot and table as one plot
   g0 <- ggplotGrob(p)
-  g1 <- gtable_add_cols(g0, sum(tb$widths), 0)
-  g <- gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
+  g1 <- gtable::gtable_add_cols(g0, sum(tb$widths), 0)
+  g <- gtable::gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
 
   grid.newpage()
   grid.draw(g)

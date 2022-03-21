@@ -22,7 +22,6 @@
 #'
 #' @template author_qit3
 #'
-#' @importFrom gtable gtable_add_cols gtable_add_grob
 #' @importFrom grid grid.draw grid.newpage
 #'
 #' @return plot object
@@ -327,8 +326,8 @@ g_swimlane <- function(bar_id,
 
   # grab plot and table as one plot
   g0 <- ggplotGrob(p)
-  g1 <- gtable_add_cols(g0, sum(tb$widths), 0)
-  g <- gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
+  g1 <- gtable::gtable_add_cols(g0, sum(tb$widths), 0)
+  g <- gtable::gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
 
   grid.newpage()
   grid.draw(g)

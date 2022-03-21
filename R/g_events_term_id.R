@@ -34,12 +34,8 @@
 #'
 #' @return grob object
 #'
-#' @import ggplot2
-#' @importFrom tidyr pivot_wider unnest
 #' @importFrom gridExtra arrangeGrob
 #' @importFrom grid textGrob unit unit.c grobHeight grobWidth
-#' @importFrom DescTools BinomDiffCI
-#' @importFrom stats setNames
 #' @export
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
@@ -198,7 +194,7 @@ g_events_term_id <- function(term,
     do(
       data.frame(
         t(c(
-          BinomDiffCI(
+          DescTools::BinomDiffCI(
             .data$trt_count,
             trt_total,
             .data$ref_count,
@@ -277,7 +273,7 @@ g_events_term_id <- function(term,
 
   mytheme <- theme_osprey(axis_side = axis_side, fontsize = fontsize)
 
-  labels <- setNames(sprintf("%s\n(N = %i)", df_n$arm, df_n$total), df_n$arm)
+  labels <- stats::setNames(sprintf("%s\n(N = %i)", df_n$arm, df_n$total), df_n$arm)
 
   y_axis <- scale_y_discrete(
     limits = terms_needed,
