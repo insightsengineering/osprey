@@ -158,7 +158,7 @@ g_ae_sub <- function(id,
       ) %>%
       bind_rows(c(level = "TOTAL__Total", label = "Overall")) %>%
       mutate(
-        indents = str_dup(" ", if_else(
+        indents = stringr::str_dup(" ", if_else(
           stringr::str_detect(.data$level, "__Total"), 0, indent
         )),
         # create label with indents if not total

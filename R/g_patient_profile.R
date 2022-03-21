@@ -520,7 +520,7 @@ patient_domain_profile <- function(domain = NULL,
         legend.title = element_text(size = 10),
         legend.spacing.y = grid::unit(0, "cm"),
         legend.key.height = grid::unit(1, "line"),
-        legend.margin = margin(t = 0, b = 0, r = 0.5, l = 0,unit = "cm"),
+        legend.margin = margin(t = 0, b = 0, r = 0.5, l = 0, unit = "cm"),
         plot.margin = margin(t = 0, b = 0, r = 0.5, l = 0.5, unit = "cm")
       )
   } else {

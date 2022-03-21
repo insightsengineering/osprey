@@ -307,14 +307,16 @@ g_butterfly <- function(category,
   g_1 <- gtable::gtable_add_grob(
     g_0,
     grid::grid.text(
-      stringr::str_wrap(g_r, width = 30), x = 1, just = "center", hjust = 1, gp = grid::gpar(fontsize = 11)
+      stringr::str_wrap(g_r, width = 30),
+      x = 1, just = "center", hjust = 1, gp = grid::gpar(fontsize = 11)
     ),
     t = 1.5, l = g_0$layout[grep("axis-r", g_0$layout$name)[1], 2], b = 3, name = "right-title", clip = "off"
   )
   g_2 <- gtable::gtable_add_grob(
     g_1,
     grid::grid.text(
-      stringr::str_wrap(g_l, width = 30), x = 1, just = "center", hjust = 0, gp = grid::gpar(fontsize = 11)
+      stringr::str_wrap(g_l, width = 30),
+      x = 1, just = "center", hjust = 0, gp = grid::gpar(fontsize = 11)
     ),
     t = 1.5, l = g_0$layout[grep("axis-l", g_0$layout$name)[1], 2], b = 3, name = "left-title", clip = "off"
   )

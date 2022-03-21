@@ -308,7 +308,7 @@ g_swimlane <- function(bar_id,
   t <- as.data.frame(t)
   colnames(t)[1] <- " "
 
-  my_theme <- ttheme_default(
+  my_theme <- gridExtra::ttheme_default(
     core = list(
       bg_params = list(fill = NA, col = NA),
       fg_params = list(cex = 0.8)
@@ -318,7 +318,7 @@ g_swimlane <- function(bar_id,
       fg_params = list(cex = 0.8)
     )
   )
-  tb <- tableGrob(t, rows = NULL, theme = my_theme)
+  tb <- gridExtra::tableGrob(t, rows = NULL, theme = my_theme)
   tb$heights <- grid::unit(rep(1 / nrow(tb), nrow(tb)), "null")
 
   # grab plot and table as one plot

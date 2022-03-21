@@ -401,13 +401,13 @@ g_waterfall <- function(bar_id,
 
       t_anno <- t(t_anno)
 
-      my_theme <- ttheme_default(
+      my_theme <- gridExtra::ttheme_default(
         core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
         rowhead = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
         padding = grid::unit(c(0, 4), "mm")
       )
 
-      tb <- tableGrob(
+      tb <- gridExtra::tableGrob(
         t_anno,
         rows = NULL,
         cols = NULL,
@@ -422,11 +422,11 @@ g_waterfall <- function(bar_id,
       )
 
       t_anno_name <- names(anno_txt)
-      tb_rowname <- tableGrob(
+      tb_rowname <- gridExtra::tableGrob(
         t_anno_name,
         rows = NULL,
         cols = NULL,
-        theme = ttheme_minimal(core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)))
+        theme = gridExtra::ttheme_minimal(core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)))
       )
 
       # grab plot and table as one plot
@@ -490,7 +490,7 @@ g_waterfall <- function(bar_id,
       )
     }
 
-    gt <- grid.arrange(grobs = g_list, ncol = 1, nrow = length(levels(facet_by)))
+    gt <- gridExtra::grid.arrange(grobs = g_list, ncol = 1, nrow = length(levels(facet_by)))
   }
 
   grid::grid.newpage()
