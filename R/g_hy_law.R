@@ -118,25 +118,13 @@ g_hy_law <- function(id,
                      title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
                      xlab = "Maximum Alanine Aminotransferase (/ULN)",
                      ylab = "Maximum Total Bilirubin (/ULN)") {
-  assert_that(
-    is.character(term_selected) && length(term_selected) == 2,
-    msg = "invalid argument: term_selected must be a character array of length 2"
-  )
-  assert_that(
-    is.numeric(folds) && length(folds) == 2,
-    msg = "invalid argument: folds must be a numeric array of length 2"
-  )
-  assert_that(
-    is.character(text) && length(text) == 4,
-    msg = "invalid argument: text must be a character array of length 4"
-  )
 
-  character_vars <- c("title", "caption", "xlab", "ylab")
+  checkmate::check_character(term_selected, len = 2, any.missing = FALSE)
+  checkmate::check_numeric(folds, len = 2, any.missing = FALSE)
+  checkmate::check_character(text, len = 4, any.missing = FALSE)
 
-  for (parameter in character_vars) {
-    assert_that(is.character(parameter) && length(parameter) == 1,
-      msg = paste("invalid argument:", parameter, "must be a string")
-    )
+  for (parameter in c("title", "caption", "xlab", "ylab")) {
+    checkmate::check_string(parameter)
   }
 
   anl <- data.frame(id, term, aval, arm, anrhi)

@@ -19,7 +19,6 @@ Depends:
     ggplot2 (>= 2.0.0),
     R (>= 3.6)
 Imports:
-    assertthat,
     checkmate,
     cowplot,
     DescTools,
@@ -27,7 +26,6 @@ Imports:
     gridExtra,
     grDevices,
     gtable,
-    methods,
     purrr,
     rlang,
     stats,
@@ -37,8 +35,8 @@ Imports:
     tidyr (>= 1.0.0)
 Suggests:
     knitr,
-    scda.2021(>= 0.1.2),
-    scda(>= 0.1.2),
+    scda.2021 (>= 0.1.2),
+    scda (>= 0.1.2),
     testthat (>= 2.0)
 VignetteBuilder:
     knitr

@@ -2,7 +2,7 @@
 #'
 #' @description osprey: Additional general TLGs to tern
 #'
-#' @import dplyr ggplot2 assertthat
+#' @import dplyr ggplot2
 #' @importFrom rlang .data :=
 #' @docType package
 #' @name osprey
