@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">osprey</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.12.9005</span>
       </span>
     </div>
 
@@ -34,15 +34,6 @@
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/insightsengineering/osprey" class="external-link">
     <span class="fa fa-github"></span>
@@ -96,6 +87,7 @@ the decoration should be shown.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/tern" class="external-link">tern</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">iris</span>, <span class="op">{</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplotGrob.html" class="external-link">ggplotGrob</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/qplot.html" class="external-link">qplot</a></span><span class="op">(</span><span class="va">Sepal.Length</span>, <span class="va">Sepal.Width</span>, col <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -106,7 +98,7 @@ the decoration should be shown.</p></dd>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># output to pdf</span></span>
 <span class="r-in"><span class="va">g</span> <span class="op">%&gt;%</span> <span class="fu">as_pdf</span><span class="op">(</span><span class="st">"~/example_aspdf1.pdf"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">decorate_grob_set</span><span class="op">(</span>grobs <span class="op">=</span> <span class="va">g</span>, titles <span class="op">=</span> <span class="st">"Hello\nOne\ntwo"</span>, footnotes <span class="op">=</span> <span class="st">"This is a footnote"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/pkg/tern/man/decorate_grob_set.html" class="external-link">decorate_grob_set</a></span><span class="op">(</span>grobs <span class="op">=</span> <span class="va">g</span>, titles <span class="op">=</span> <span class="st">"Hello\nOne\ntwo"</span>, footnotes <span class="op">=</span> <span class="st">"This is a footnote"</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span class="r-in">  <span class="fu">as_pdf</span><span class="op">(</span><span class="st">"~/example_aspdf2.pdf"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-in"></span>
