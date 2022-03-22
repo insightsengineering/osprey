@@ -121,10 +121,10 @@ g_hy_law <- function(id,
   checkmate::check_character(term_selected, len = 2, any.missing = FALSE)
   checkmate::check_numeric(folds, len = 2, any.missing = FALSE)
   checkmate::check_character(text, len = 4, any.missing = FALSE)
-
-  for (parameter in c("title", "caption", "xlab", "ylab")) {
-    checkmate::check_string(parameter)
-  }
+  checkmate::check_string(title)
+  checkmate::check_string(caption)
+  checkmate::check_string(xlab)
+  checkmate::check_string(ylab)
 
   anl <- data.frame(id, term, aval, arm, anrhi)
 
