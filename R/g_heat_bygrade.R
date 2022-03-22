@@ -24,10 +24,6 @@
 #' @param xlab optional, (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}
 #' @param title (`character`)\cr string to be shown as title of the plot.
 #' default is \code{NULL} (no plot title is displayed)
-#' @import ggplot2
-#' @importFrom tidyr replace_na
-#' @importFrom stats median
-#' @importFrom grDevices terrain.colors
 #'
 #' @export
 #'
@@ -236,7 +232,7 @@ g_heat_bygrade <- function(id_var,
       ungroup() %>%
       mutate(
         conmed_num = as.numeric(.data[[conmed_var]]),
-        conmed_num_m = median(unique(.data$conmed_num), na.rm = TRUE)
+        conmed_num_m = stats::median(unique(.data$conmed_num), na.rm = TRUE)
       ) %>%
       mutate(
         distance = (ifelse(
@@ -257,7 +253,7 @@ g_heat_bygrade <- function(id_var,
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
       name = "Highest grade of\nindividual events",
-      values = if (!is.null(heat_color_opt)) heat_color_opt else rev(terrain.colors(6))
+      values = if (!is.null(heat_color_opt)) heat_color_opt else rev(grDevices::terrain.colors(6))
     ) +
     # plot dose reduction
     geom_segment(
@@ -268,7 +264,7 @@ g_heat_bygrade <- function(id_var,
         yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))) - 0.3,
         xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels))
       ),
-      arrow = arrow(length = unit(0.1, "cm")),
+      arrow = arrow(length = grid::unit(0.1, "cm")),
       size = .5,
       color = "black"
     ) +
@@ -281,7 +277,7 @@ g_heat_bygrade <- function(id_var,
         y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))),
         yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels)))
       ),
-      arrow = arrow(length = unit(0.1, "cm")),
+      arrow = arrow(length = grid::unit(0.1, "cm")),
       size = .5,
       color = "black"
     )
@@ -330,7 +326,7 @@ g_heat_bygrade <- function(id_var,
     as.data.frame() %>%
     select((!!anno_var), (!!id_var)) %>%
     distinct()
-  my_theme <- ttheme_default(
+  my_theme <- gridExtra::ttheme_default(
     core = list(
       bg_params = list(fill = NA, col = NA),
       fg_params = list(cex = 0.8)
@@ -340,15 +336,15 @@ g_heat_bygrade <- function(id_var,
       fg_params = list(cex = 0.8)
     )
   )
-  tb <- tableGrob(t, rows = NULL, theme = my_theme)
-  tb$heights <- unit(rep(1 / nrow(tb), nrow(tb)), "null")
+  tb <- gridExtra::tableGrob(t, rows = NULL, theme = my_theme)
+  tb$heights <- grid::unit(rep(1 / nrow(tb), nrow(tb)), "null")
 
   # grab plot and table as one plot
   g0 <- ggplotGrob(p)
-  g1 <- gtable_add_cols(g0, sum(tb$widths), 0)
-  g <- gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
+  g1 <- gtable::gtable_add_cols(g0, sum(tb$widths), 0)
+  g <- gtable::gtable_add_grob(g1, tb, t = g1$layout[g1$layout$name == "panel", 1], l = 1)
 
-  grid.newpage()
-  grid.draw(g)
+  grid::grid.newpage()
+  grid::grid.draw(g)
   invisible(g)
 }

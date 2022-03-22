@@ -31,9 +31,6 @@
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
 #' @template author_qit3
 #'
-#' @importFrom gtable gtable_add_rows
-#' @importFrom grid rectGrob
-#'
 #' @return plot object
 #'
 #' @export
@@ -404,46 +401,48 @@ g_waterfall <- function(bar_id,
 
       t_anno <- t(t_anno)
 
-      my_theme <- ttheme_default(
+      my_theme <- gridExtra::ttheme_default(
         core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
         rowhead = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)),
-        padding = unit(c(0, 4), "mm")
+        padding = grid::unit(c(0, 4), "mm")
       )
 
-      tb <- tableGrob(
+      tb <- gridExtra::tableGrob(
         t_anno,
         rows = NULL,
         cols = NULL,
         theme = my_theme
       )
 
-      tb$widths <- unit(rep(1 / (ncol(tb)), ncol(tb)), "null")
-      tb <- gtable_add_grob(
+      tb$widths <- grid::unit(rep(1 / (ncol(tb)), ncol(tb)), "null")
+      tb <- gtable::gtable_add_grob(
         tb,
-        grobs = rectGrob(gp = gpar(fill = NA, lwd = 2)),
+        grobs = grid::rectGrob(gp = grid::gpar(fill = NA, lwd = 2)),
         t = 1, b = nrow(tb), l = 1, r = ncol(tb)
       )
 
       t_anno_name <- names(anno_txt)
-      tb_rowname <- tableGrob(
+      tb_rowname <- gridExtra::tableGrob(
         t_anno_name,
         rows = NULL,
         cols = NULL,
-        theme = ttheme_minimal(core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8)))
+        theme = gridExtra::ttheme_minimal(
+          core = list(bg_params = list(fill = NA, col = NA), fg_params = list(cex = 0.8))
+        )
       )
 
       # grab plot and table as one plot
       g0 <- ggplotGrob(p)
-      g1 <- gtable_add_rows(g0, sum(tb$heights), pos = -1)
-      g2 <- gtable_add_grob(
+      g1 <- gtable::gtable_add_rows(g0, sum(tb$heights), pos = -1)
+      g2 <- gtable::gtable_add_grob(
         g1,
         tb,
         t = -1,
         l = g1$layout[g1$layout$name == "panel", 2],
         r = g1$layout[g1$layout$name == "panel", 4]
       )
-      g3 <- gtable_add_cols(g2, tb_rowname$widths, pos = 0)
-      g <- gtable_add_grob(g3, tb_rowname, t = -1, l = 2)
+      g3 <- gtable::gtable_add_cols(g2, tb_rowname$widths, pos = 0)
+      g <- gtable::gtable_add_grob(g3, tb_rowname, t = -1, l = 2)
     } else {
       p <- p +
         theme(axis.title.x = element_text()) +
@@ -493,10 +492,10 @@ g_waterfall <- function(bar_id,
       )
     }
 
-    gt <- grid.arrange(grobs = g_list, ncol = 1, nrow = length(levels(facet_by)))
+    gt <- gridExtra::grid.arrange(grobs = g_list, ncol = 1, nrow = length(levels(facet_by)))
   }
 
-  grid.newpage()
-  grid.draw(gt)
+  grid::grid.newpage()
+  grid::grid.draw(gt)
   invisible(gt)
 }

@@ -37,3 +37,4 @@
 ^\.gitlab-ci\.yml$
 ^LICENSE\.md$
 coverage.*
+^\.pre-commit-config\.yaml$

@@ -12,7 +12,6 @@
 #'
 #' @return ggplot object
 #'
-#' @importFrom rlang .data
 #' @export
 #'
 #' @author Mika Maekinen

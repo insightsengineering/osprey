@@ -28,13 +28,6 @@
 #'
 #' @return grob object
 #'
-#' @importFrom gridExtra arrangeGrob
-#' @importFrom grid unit.c unit
-#' @importFrom tidyr pivot_longer pivot_wider replace_na unite separate_rows
-#' @importFrom stringr str_dup str_replace_all str_c str_detect
-#' @importFrom DescTools BinomDiffCI
-#' @importFrom rlang ":="
-#' @importFrom purrr map2
 #' @export
 #'
 #' @examples
@@ -80,7 +73,7 @@
 #'   subgroups_levels = subgroups_levels,
 #'   arm_n = FALSE
 #' )
-#' grid.newpage()
+#' grid::grid.newpage()
 #'
 #' # Example 2: display number of patients in each arm
 #' p2 <- g_ae_sub(id,
@@ -93,7 +86,7 @@
 #'   subgroups_levels = subgroups_levels,
 #'   arm_n = TRUE
 #' )
-#' grid.newpage()
+#' grid::grid.newpage()
 #'
 #' # Example 3: preprocess data to only include treatment and control arm patients
 #' trt <- "ARM A"
@@ -160,13 +153,13 @@ g_ae_sub <- function(id,
     labels <- unlist(subgroups_levels)
     label_df <-
       tibble(
-        level = str_replace_all(names(labels), "\\.", "__"),
+        level = stringr::str_replace_all(names(labels), "\\.", "__"),
         label = labels
       ) %>%
       bind_rows(c(level = "TOTAL__Total", label = "Overall")) %>%
       mutate(
-        indents = str_dup(" ", if_else(
-          str_detect(.data$level, "__Total"), 0, indent
+        indents = stringr::str_dup(" ", if_else(
+          stringr::str_detect(.data$level, "__Total"), 0, indent
         )),
         # create label with indents if not total
         label = paste0(.data$indents, .data$label)
@@ -195,7 +188,7 @@ g_ae_sub <- function(id,
   )
   stopifnot(
     "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels" =
-      all(unlist(map2(
+      all(unlist(purrr::map2(
         subgroups_levels,
         apply(subgroups[names(subgroups_levels)], 2, levels),
         ~ all(names(.x) %in% c("Total", .y))
@@ -225,7 +218,7 @@ g_ae_sub <- function(id,
   df <- cbind(id = id, arm = arm, subgroups) %>%
     filter(arm %in% c(ref, trt)) %>%
     unique() %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       names_to = "strata",
       cols = colnames(subgroups),
       values_to = "value"
@@ -235,7 +228,7 @@ g_ae_sub <- function(id,
     full_join(df_ref, by = "arm") %>%
     tidyr::replace_na(list(n = 0)) %>%
     ungroup() %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       id_cols = c("strata", "value"),
       names_from = "arm",
       values_from = "n",
@@ -247,7 +240,7 @@ g_ae_sub <- function(id,
   df_sl <- cbind(arm = arm_sl, subgroups_sl) %>%
     filter(arm %in% c(ref, trt)) %>%
     mutate(TOTAL = "Total") %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       names_to = "strata",
       cols = c(colnames(subgroups_sl), "TOTAL"),
       values_to = "value"
@@ -255,7 +248,7 @@ g_ae_sub <- function(id,
     group_by(arm, .data$strata, .data$value) %>%
     summarise(n = n()) %>%
     ungroup() %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       id_cols = c("strata", "value"),
       names_from = "arm",
       values_from = "n",
@@ -270,25 +263,25 @@ g_ae_sub <- function(id,
     mutate(
       !!r1 := !!x1 / !!n1,
       !!r2 := !!x2 / !!n2,
-      lower = BinomDiffCI(
+      lower = DescTools::BinomDiffCI(
         !!x1, !!n1, !!x2, !!n2,
         conf_level,
         method = diff_ci_method
       )[2],
-      upper = BinomDiffCI(
+      upper = DescTools::BinomDiffCI(
         !!x1, !!n1, !!x2, !!n2,
         conf_level,
         method = diff_ci_method
       )[3],
       riskdiff = !!r1 - !!r2
     ) %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       matches("__"),
       names_to = c(".value", "arm"),
       names_sep = "__"
     ) %>%
     ungroup() %>%
-    unite("level", .data$strata, .data$value, remove = FALSE, sep = "__")
+    tidyr::unite("level", .data$strata, .data$value, remove = FALSE, sep = "__")
 
   # create label for plotting
   level_format_df <- df %>%
@@ -296,9 +289,9 @@ g_ae_sub <- function(id,
     unique() %>%
     group_by(.data$strata) %>%
     summarise(value = paste(c("Total", .data$value), collapse = ",")) %>%
-    separate_rows(.data$value, sep = ",") %>%
+    tidyr::separate_rows(.data$value, sep = ",") %>%
     unique() %>%
-    unite("level", .data$strata, .data$value, sep = "__", remove = FALSE) %>%
+    tidyr::unite("level", .data$strata, .data$value, sep = "__", remove = FALSE) %>%
     mutate(order = if_else(.data$strata == "TOTAL", integer(1), -row_number())) %>%
     arrange(order)
 
@@ -307,7 +300,7 @@ g_ae_sub <- function(id,
       mutate(label = if_else(
         .data$strata == "TOTAL",
         "Overall",
-        if_else(.data$value == "Total", .data$strata, paste0(str_c(
+        if_else(.data$value == "Total", .data$strata, paste0(stringr::str_c(
           rep(" ", indent),
           collapse = ""
         ), .data$value))
@@ -369,7 +362,7 @@ g_ae_sub <- function(id,
     df_byarm <- df %>%
       group_by(.data$level, .data$arm) %>%
       summarise(n = sum(.data$total)) %>%
-      pivot_wider(names_from = arm, values_from = n) %>%
+      tidyr::pivot_wider(names_from = arm, values_from = n) %>%
       rename("n_trt" = trt, "n_ref" = ref)
 
     df_total <- df_total %>%
@@ -420,12 +413,12 @@ g_ae_sub <- function(id,
   }
 
   df_ci <- df %>%
-    pivot_wider(
+    tidyr::pivot_wider(
       names_from = "arm",
       values_from = "risk",
       id_cols = c("level", "lower", "upper", "riskdiff")
     ) %>%
-    pivot_longer(
+    tidyr::pivot_longer(
       names_to = "x",
       values_to = "v",
       cols = c("lower", "upper", "riskdiff", trt, ref)
@@ -454,42 +447,42 @@ g_ae_sub <- function(id,
   }
   grobs <- append(grobs, grob_parts(p1_grob, c("panel", "axis-b")))
   grobs <- append(grobs, grob_parts(p3_grob, c("axis-t", "panel")))
-  less_risk <- textGrob(
+  less_risk <- grid::textGrob(
     "Favor\nTreatment",
     just = "centre",
-    x = unit(fontsize * .pt, "pt"),
-    gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+    x = grid::unit(fontsize * .pt, "pt"),
+    gp = grid::gpar(fontsize = fontsize * .pt, fontface = "bold")
   )
-  more_risk <- textGrob(
+  more_risk <- grid::textGrob(
     "Favor\nControl",
     just = "centre",
-    x = unit(1, "npc") - unit(fontsize * .pt, "pt"),
-    gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+    x = grid::unit(1, "npc") - grid::unit(fontsize * .pt, "pt"),
+    gp = grid::gpar(fontsize = fontsize * .pt, fontface = "bold")
   )
-  risk_label <- arrangeGrob(less_risk, more_risk, nrow = 1)
+  risk_label <- gridExtra::arrangeGrob(less_risk, more_risk, nrow = 1)
   grobs <- append(grobs, list(
-    textGrob(
+    grid::textGrob(
       "Risk Difference (CI)",
       just = "centre",
-      x = unit(0.5, "npc"),
-      y = unit(0.5, "npc"),
-      gp = gpar(fontsize = fontsize * .pt, fontface = "bold")
+      x = grid::unit(0.5, "npc"),
+      y = grid::unit(0.5, "npc"),
+      gp = grid::gpar(fontsize = fontsize * .pt, fontface = "bold")
     ),
     risk_label
   ))
 
   widths <- if (arm_n) {
-    unit.c(
-      grobWidth(grobs[[1]]),
-      unit(
+    grid::unit.c(
+      grid::grobWidth(grobs[[1]]),
+      grid::unit(
         c(14 * fontsize, rep(10 * fontsize, 2), 1, 50 * fontsize),
         c(rep("pt", 3), "null", "pt")
       )
     )
   } else {
-    unit.c(
-      grobWidth(grobs[[1]]),
-      unit(
+    grid::unit.c(
+      grid::grobWidth(grobs[[1]]),
+      grid::unit(
         c(14 * fontsize, 1, 50 * fontsize),
         c("pt", "null", "pt")
       )
@@ -497,22 +490,22 @@ g_ae_sub <- function(id,
   }
 
   heights <- if (arm_n) {
-    unit.c(
-      grobHeight(grobs[[10]]),
-      unit(1, "null"),
-      rep(grobHeight(grobs[[9]]), 3),
-      unit(fontsize * .pt, "pt")
+    grid::unit.c(
+      grid::grobHeight(grobs[[10]]),
+      grid::unit(1, "null"),
+      rep(grid::grobHeight(grobs[[9]]), 3),
+      grid::unit(fontsize * .pt, "pt")
     )
   } else {
-    unit.c(
-      grobHeight(grobs[[6]]),
-      unit(1, "null"),
-      grobHeight(grobs[[5]]),
-      unit(fontsize * .pt * 3, "pt")
+    grid::unit.c(
+      grid::grobHeight(grobs[[6]]),
+      grid::unit(1, "null"),
+      grid::grobHeight(grobs[[5]]),
+      grid::unit(fontsize * .pt * 3, "pt")
     )
   }
 
-  boldfont <- gpar(
+  boldfont <- grid::gpar(
     fontsize = fontsize * 4,
     fontface = "bold",
     lineheight = 1
@@ -533,7 +526,7 @@ g_ae_sub <- function(id,
     )
   }
 
-  ret <- arrangeGrob(
+  ret <- gridExtra::arrangeGrob(
     grobs = grobs,
     layout_matrix = layout_matrix,
     heights = heights,
@@ -541,7 +534,7 @@ g_ae_sub <- function(id,
     clip = "on"
   )
   if (draw) {
-    grid.draw(ret)
+    grid::grid.draw(ret)
   }
   invisible(ret)
 }

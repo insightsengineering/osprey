@@ -25,6 +25,7 @@ This is an utility function to output a decorated grob (gTree) object
 \examples{
 \dontrun{
 library(ggplot2)
+library(tern)
 g <- with(iris, {
   list(
     ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),

@@ -2,6 +2,7 @@
 
 ### Miscellaneous
 * Removed `rtables` dependency.
+* Functions from imported packages are now fully specified.
 
 # osprey 0.1.12
 
