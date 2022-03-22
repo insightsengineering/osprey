@@ -1,4 +1,4 @@
-# osprey 0.1.12.9005
+# osprey 0.1.12.9006
 
 ### Miscellaneous
 * Removed `rtables` dependency.

@@ -1,7 +1,7 @@
 Type: Package
 Package: osprey
 Title: R package to create TLGs
-Version: 0.1.12.9005
+Version: 0.1.12.9006
 Date: 2022-01-27
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
@@ -22,9 +22,9 @@ Imports:
     checkmate,
     cowplot,
     DescTools,
+    grDevices,
     grid,
     gridExtra,
-    grDevices,
     gtable,
     purrr,
     rlang,
@@ -35,8 +35,8 @@ Imports:
     tidyr (>= 1.0.0)
 Suggests:
     knitr,
-    scda.2021 (>= 0.1.2),
     scda (>= 0.1.2),
+    scda.2021 (>= 0.1.2),
     testthat (>= 2.0)
 VignetteBuilder:
     knitr
