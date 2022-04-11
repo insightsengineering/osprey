@@ -1,8 +1,8 @@
 url: https://insightsengineering.github.io/osprey
 
 template:
+  package: nesttemplate
   params:
-    bootswatch: cerulean
     ganalytics: "UA-125641273-1"
 
 navbar:
@@ -16,10 +16,6 @@ reference:
     contents:
       - starts_with("g_")
       - spiderplot_simple
-  - title: Tables
-    desc: some useful tables
-    contents:
-      - starts_with("t_")
   - title: Utility
     contents:
       - as_pdf

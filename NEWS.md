@@ -1,3 +1,7 @@
+# osprey 0.1.13.9000
+### Miscellaneous
+* Added a template to the `pkgdown` site.
+
 # osprey 0.1.13
 
 ### Miscellaneous
