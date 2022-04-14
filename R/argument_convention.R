@@ -3,7 +3,7 @@
 #' The documentation to this function lists all the arguments in `osprey`
 #' that are used repeatedly to express an analysis.
 #'
-#' @details Although this function just returns `NULL` it has two uses, for
+#' @details Although this function just returns `NULL` it has two uses. For
 #' the `osprey` users it provides a documentation of arguments that are
 #' commonly and consistently used in the framework. For the developer it adds a
 #' single reference point to import the `roxygen` argument description with:
