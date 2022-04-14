@@ -189,7 +189,7 @@ g_ae_sub <- function(id,
 
   stopifnot(
     "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels" =
-      all(unlist(lapply(names(subgroup_levels), function(level_name) {
+      all(unlist(lapply(names(subgroups_levels), function(level_name) {
         all(names(subgroups_levels[[level_name]]) %in% c("Total", levels(subgroups[, level_name] %>% dplyr::pull())))
       })))
   )
