@@ -68,7 +68,6 @@
 #'
 #' @examples
 #' library(scda)
-#' library(tern)
 #' library(dplyr)
 #'
 #' # ADSL
@@ -600,7 +599,6 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #' @examples
 #' library(scda)
-#' library(tern)
 #' library(dplyr)
 #'
 #' # ADSL

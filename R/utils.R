@@ -10,7 +10,7 @@
 #'   \code{"letter.landscape"} (default)
 #'
 #' @return a pdf file
-#'
+#' @seealso [grobs2pdf()]
 #' @export
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
@@ -18,7 +18,6 @@
 #' @examples
 #' \dontrun{
 #' library(ggplot2)
-#' library(tern)
 #' g <- with(iris, {
 #'   list(
 #'     ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
@@ -29,10 +28,7 @@
 #'
 #' # output to pdf
 #' g %>% as_pdf("~/example_aspdf1.pdf")
-#' decorate_grob_set(grobs = g, titles = "Hello\nOne\ntwo", footnotes = "This is a footnote") %>%
-#'   as_pdf("~/example_aspdf2.pdf")
 #' }
-#'
 as_pdf <- function(grobs,
                    outpath,
                    pagesize = "letter.landscape") {
@@ -101,6 +97,7 @@ paper_size <- function(pagesize) {
 #' @examples
 #' \dontrun{
 #' library(ggplot2)
+#' library(tern)
 #'
 #' g <- with(iris, {
 #'   list(
@@ -126,6 +123,10 @@ grobs2pdf <- function(grobs,
                       outpath,
                       fontsize = 9,
                       pagesize = "letter.landscape") {
+
+  if (!requireNamespace("tern", quietly = TRUE)) {
+    stop("This function requires the R package tern to be available - please install the package.")
+  }
 
   # Loads rapid.base.settings list and a few other
 

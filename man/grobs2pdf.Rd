@@ -47,6 +47,7 @@ full path to program and the output for easy tracking and archiving.
 \examples{
 \dontrun{
 library(ggplot2)
+library(tern)
 
 g <- with(iris, {
   list(

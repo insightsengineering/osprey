@@ -77,7 +77,6 @@ The plot output will not include domains with data unspecified
 }
 \examples{
 library(scda)
-library(tern)
 library(dplyr)
 
 # ADSL

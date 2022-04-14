@@ -18,10 +18,7 @@ This repository requires a personal access token to install see here [creating a
 ```r
 Sys.setenv(GITHUB_PAT = "your_access_token_here")
 if (!require("devtools")) install.packages("devtools")
-devtools::install_github("insightsengineering/osprey@*release", dependencies = FALSE)
+devtools::install_github("insightsengineering/osprey@*release")
 ```
-
-You might need to manually install all of the package dependencies before installing this package as without
-the `dependencies = FALSE` argument to `install_github` it may produce an error.
 
 In order to run many of the examples you will also need to install the [`scda`](https://github.com/insightsengineering/scda) package.

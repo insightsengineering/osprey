@@ -19,12 +19,12 @@ default unit "mm", if you want "points" you will need to divide the point number
 \item{draw}{(`logical`)\cr whether to draw the plot.}
 }
 \description{
-The documentation to this function lists all the arguments in `tern`
+The documentation to this function lists all the arguments in `osprey`
 that are used repeatedly to express an analysis.
 }
 \details{
 Although this function just returns `NULL` it has two uses, for
-the `tern` users it provides a documentation of arguments that are
+the `osprey` users it provides a documentation of arguments that are
 commonly and consistently used in the framework. For the developer it adds a
 single reference point to import the `roxygen` argument description with:
 `@inheritParams argument_convention`
