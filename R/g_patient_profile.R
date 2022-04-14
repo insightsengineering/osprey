@@ -727,7 +727,7 @@ g_patient_profile <- function(ex = NULL,
                               xlab = "Study Day",
                               title = "Patient Profile") {
   domains <- list(ex = ex, ae = ae, rs = rs, cm = cm, lb = lb)
-  select <- purrr::map2_lgl(domains, names(domains), domain_check)
+  select <- mapply(domain_check, domains, names(domains))
   names(select) <- names(domains)
 
   show_days_label <- c(FALSE, FALSE, FALSE, FALSE, FALSE)
