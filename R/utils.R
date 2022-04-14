@@ -123,7 +123,6 @@ grobs2pdf <- function(grobs,
                       outpath,
                       fontsize = 9,
                       pagesize = "letter.landscape") {
-
   if (!requireNamespace("tern", quietly = TRUE)) {
     stop("This function requires the R package tern to be available - please install the package.")
   }
