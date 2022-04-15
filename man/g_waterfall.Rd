@@ -56,7 +56,7 @@ others, default is \code{NULL}}
 
 \item{ytick_at}{(\code{numeric})\cr optional bar height axis interval, default is 20}
 
-\item{y_label}{(\code{string})\cr label for bar height axis, default is "Best \\% Change from Baseline"}
+\item{y_label}{(\code{string})\cr label for bar height axis, default is "Best \% Change from Baseline"}
 
 \item{title}{(\code{string})\cr displayed as plot title, default is "Waterfall Plot"}
 }

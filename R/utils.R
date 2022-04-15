@@ -2,7 +2,7 @@
 #'
 #' This is an utility function to output a decorated grob (gTree) object
 #'
-#' @param grobs a grid grob (gTree) object, optionally \code{NULL} if only a grob with
+#' @param grobs a grid grob (gTree) object, optionally `NULL` if only a grob with
 #'   the decoration should be shown.
 #' @param outpath specify full path to output pdf to BCE or BEE
 #' @param pagesize name of pagesize (print size) and orientation, accepted values include
@@ -73,7 +73,7 @@ paper_size <- function(pagesize) {
 #' footnotes in accordance with IDM specification and export as PDF file with
 #' full path to program and the output for easy tracking and archiving.
 #'
-#' @param grobs A grid grob (gTree) object, optionally \code{NULL} if only a
+#' @param grobs A grid grob (gTree) object, optionally `NULL` if only a
 #'   grob with the decoration should be shown
 #' @param titles Vector of character strings. Vector elements are separated by a
 #'   newline and strings are wrapped according to the page with
