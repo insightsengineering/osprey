@@ -38,7 +38,7 @@ g \%>\% as_pdf("~/example_aspdf1.pdf")
 }
 }
 \seealso{
-[grobs2pdf()]
+\code{\link[=grobs2pdf]{grobs2pdf()}}
 }
 \author{
 Chendi Liao (liaoc10) \email{chendi.liao@roche.com}

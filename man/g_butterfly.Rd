@@ -35,7 +35,7 @@ to maintain backward compatibility, a vector of 1s and 0s would also work.}
 
 \item{group_names}{string vector of length 2 with desired names of dichotomization variables
 required format : first name corresponds to the name of the right side
-                  second name corresponds to name of the left side
+second name corresponds to name of the left side
 default: will extract column names from group}
 
 \item{block_count}{string - what to count by (ex: # of AEs or # of patients)}

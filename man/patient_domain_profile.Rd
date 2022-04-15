@@ -45,10 +45,10 @@ for domains \code{ADAE} and \code{ADCM}
 \item \code{line_col}: factor vector to specify color for segments , default is \code{NULL}
 (no line color is specified)\cr
 \item \code{line_col_opt} aesthetic values to map color values (named vector to map color values to each name).
-     If not \code{NULL}, please make sure this contains all possible values for \code{line_col} values,
-     otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
+If not \code{NULL}, please make sure this contains all possible values for \code{line_col} values,
+otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 \item \code{line_col_legend}: a string to be displayed as line color legend title when \code{line_col} is specified,
- default is \code{NULL} (no legend title is displayed)
+default is \code{NULL} (no legend title is displayed)
 }}
 
 \item{line_width}{numeric value for segment width, default is \code{line_width = 1}}
@@ -63,8 +63,8 @@ or \code{ADCM} domain. Default is \code{no_enddate_extention = 0}.}
 \item \code{marker_col} a factor vector to specify color for markers,
 default is \code{NULL} (no color markers is specified)
 \item \code{marker_col_opt} aesthetic values to map color values (named vector to map color values to each name)
-     If not \code{NULL}, please make sure this contains all possible values for \code{marker_col} values,
-     otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
+If not \code{NULL}, please make sure this contains all possible values for \code{marker_col} values,
+otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 \item \code{marker_col_legend} a string to be displayed as marker color legend title, default is \code{NULL}
 (no legend title is displayed)
 }}
@@ -74,8 +74,8 @@ default is \code{NULL} (no color markers is specified)
 \item \code{marker_shape} factor vector to specify shape for markers,
 default is \code{NULL} (no shape marker is specified)
 \item  \code{marker_shape_opt} aesthetic values to map shape values (named vector to map shape values to each name).
-     If not \code{NULL}, please make sure this contains all possible values for \code{marker_shape} values,
-     otherwise shape will be assigned by \code{ggplot} default
+If not \code{NULL}, please make sure this contains all possible values for \code{marker_shape} values,
+otherwise shape will be assigned by \code{ggplot} default
 \item \code{marker_shape_legend} string to be displayed as marker shape legend title, default is \code{NULL}
 (no legend title is displayed)
 }}

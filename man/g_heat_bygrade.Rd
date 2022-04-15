@@ -22,40 +22,40 @@ g_heat_bygrade(
 )
 }
 \arguments{
-\item{id_var}{(`character`)\cr name of the column that contains the unique subject identifier shared by all data
+\item{id_var}{(\code{character})\cr name of the column that contains the unique subject identifier shared by all data
 Usually it is \code{"USUBJID"}.}
 
-\item{exp_data}{(`data.frame`)\cr exposure data. Usually it is \code{ADEX}.}
+\item{exp_data}{(\code{data.frame})\cr exposure data. Usually it is \code{ADEX}.}
 
-\item{visit_var}{(`character`)\cr name of the column that contains the analysis visit. Usually it is \code{"AVISIT"}}
+\item{visit_var}{(\code{character})\cr name of the column that contains the analysis visit. Usually it is \code{"AVISIT"}}
 
-\item{ongo_var}{(`character`)\cr name of the column in \code{exp_data} that contains the logical variable
+\item{ongo_var}{(\code{character})\cr name of the column in \code{exp_data} that contains the logical variable
 indicating whether the treatment is still ongoing.
 Usually it can be derived from \code{EOSSTT}}
 
-\item{anno_data}{(`data.frame`)\cr annotation data that contains subject level characteristics.
+\item{anno_data}{(\code{data.frame})\cr annotation data that contains subject level characteristics.
 Usually it is \code{ADSL}}
 
-\item{anno_var}{(`character`) a vector of columns name(s) to include for the annotation}
+\item{anno_var}{(\code{character}) a vector of columns name(s) to include for the annotation}
 
-\item{heat_data}{(`data.frame`)\cr data frame that contains the information needed for the text over heatmap
+\item{heat_data}{(\code{data.frame})\cr data frame that contains the information needed for the text over heatmap
 Usually it is \code{ADCM}.}
 
-\item{heat_color_var}{(`character`)\cr name of the column that contains the heat grade}
+\item{heat_color_var}{(\code{character})\cr name of the column that contains the heat grade}
 
-\item{heat_color_opt}{optional, (`character`)\cr a named vector that maps the names to heat colors}
+\item{heat_color_opt}{optional, (\code{character})\cr a named vector that maps the names to heat colors}
 
-\item{conmed_data}{optional, (`data.frame`)\cr concomitant medicine data. Usually it is \code{ADCM}
+\item{conmed_data}{optional, (\code{data.frame})\cr concomitant medicine data. Usually it is \code{ADCM}
 default is \code{NULL} (no conmed plotted)}
 
-\item{conmed_var}{optional, (`character`)\cr concomitant medicine variable name. Must be a column name in conmed_data
+\item{conmed_var}{optional, (\code{character})\cr concomitant medicine variable name. Must be a column name in conmed_data
 when conmed_data is provided. default is \code{NULL} (no conmed plotted)}
 
-\item{conmed_color_opt}{optional, (`character`)\cr vector of color name(s) to conmed_data}
+\item{conmed_color_opt}{optional, (\code{character})\cr vector of color name(s) to conmed_data}
 
-\item{xlab}{optional, (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}}
+\item{xlab}{optional, (\code{character})\cr string to be shown as x-axis label, default is \code{"Visit"}}
 
-\item{title}{(`character`)\cr string to be shown as title of the plot.
+\item{title}{(\code{character})\cr string to be shown as title of the plot.
 default is \code{NULL} (no plot title is displayed)}
 }
 \description{
