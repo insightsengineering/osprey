@@ -186,14 +186,14 @@ g_ae_sub <- function(id,
     "invalid argument: please only use the subgroups column names as the lists names in subgroups_levels" =
       all(names(subgroups_levels) %in% names(lapply(subgroups, levels)))
   )
+
   stopifnot(
     "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels" =
-      all(unlist(purrr::map2(
-        subgroups_levels,
-        apply(subgroups[names(subgroups_levels)], 2, levels),
-        ~ all(names(.x) %in% c("Total", .y))
-      )))
+      all(unlist(lapply(names(subgroups_levels), function(level_name) {
+        all(names(subgroups_levels[[level_name]]) %in% c("Total", levels(subgroups[, level_name] %>% dplyr::pull())))
+      })))
   )
+
   checkmate::assert_flag(arm_n)
 
   subgroups <- subgroups %>%

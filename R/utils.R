@@ -2,7 +2,7 @@
 #'
 #' This is an utility function to output a decorated grob (gTree) object
 #'
-#' @param grobs a grid grob (gTree) object, optionally \code{NULL} if only a grob with
+#' @param grobs a grid grob (gTree) object, optionally `NULL` if only a grob with
 #'   the decoration should be shown.
 #' @param outpath specify full path to output pdf to BCE or BEE
 #' @param pagesize name of pagesize (print size) and orientation, accepted values include
@@ -10,7 +10,7 @@
 #'   \code{"letter.landscape"} (default)
 #'
 #' @return a pdf file
-#'
+#' @seealso [grobs2pdf()]
 #' @export
 #'
 #' @author Chendi Liao (liaoc10) \email{chendi.liao@roche.com}
@@ -18,7 +18,6 @@
 #' @examples
 #' \dontrun{
 #' library(ggplot2)
-#' library(tern)
 #' g <- with(iris, {
 #'   list(
 #'     ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
@@ -29,10 +28,7 @@
 #'
 #' # output to pdf
 #' g %>% as_pdf("~/example_aspdf1.pdf")
-#' decorate_grob_set(grobs = g, titles = "Hello\nOne\ntwo", footnotes = "This is a footnote") %>%
-#'   as_pdf("~/example_aspdf2.pdf")
 #' }
-#'
 as_pdf <- function(grobs,
                    outpath,
                    pagesize = "letter.landscape") {
@@ -77,7 +73,7 @@ paper_size <- function(pagesize) {
 #' footnotes in accordance with IDM specification and export as PDF file with
 #' full path to program and the output for easy tracking and archiving.
 #'
-#' @param grobs A grid grob (gTree) object, optionally \code{NULL} if only a
+#' @param grobs A grid grob (gTree) object, optionally `NULL` if only a
 #'   grob with the decoration should be shown
 #' @param titles Vector of character strings. Vector elements are separated by a
 #'   newline and strings are wrapped according to the page with
@@ -101,6 +97,7 @@ paper_size <- function(pagesize) {
 #' @examples
 #' \dontrun{
 #' library(ggplot2)
+#' library(tern)
 #'
 #' g <- with(iris, {
 #'   list(
@@ -126,6 +123,9 @@ grobs2pdf <- function(grobs,
                       outpath,
                       fontsize = 9,
                       pagesize = "letter.landscape") {
+  if (!requireNamespace("tern", quietly = TRUE)) {
+    stop("This function requires the R package tern to be available - please install the package.")
+  }
 
   # Loads rapid.base.settings list and a few other
 

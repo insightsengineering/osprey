@@ -3,8 +3,8 @@
 \docType{package}
 \name{osprey}
 \alias{osprey}
-\title{osprey: Additional general TLGs to tern}
+\title{osprey: R package to create TLGs}
 \description{
-osprey: Additional general TLGs to tern
+R package to create TLGs
 }
 \keyword{internal}

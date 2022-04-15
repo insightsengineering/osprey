@@ -24,48 +24,48 @@ g_ae_sub(
 )
 }
 \arguments{
-\item{id}{(`vector`)\cr contains subject identifier. Usually it is \code{ADAE$USUBJID}.}
+\item{id}{(\code{vector})\cr contains subject identifier. Usually it is \code{ADAE$USUBJID}.}
 
-\item{arm}{(`factor`)\cr vector that contains arm information in analysis data.
-For example, `ADAE$ACTARMCD`.}
+\item{arm}{(\code{factor})\cr vector that contains arm information in analysis data.
+For example, \code{ADAE$ACTARMCD}.}
 
-\item{arm_sl}{(`vector`)\cr contains the subject level treatment variable.
+\item{arm_sl}{(\code{vector})\cr contains the subject level treatment variable.
 For example, \code{ADSL$ACTARM}.}
 
-\item{subgroups}{(`data.frame`)\cr Variables to conduct analysis.}
+\item{subgroups}{(\code{data.frame})\cr Variables to conduct analysis.}
 
-\item{subgroups_sl}{(`data.frame`)\cr Subject level variables to conduct analysis.
+\item{subgroups_sl}{(\code{data.frame})\cr Subject level variables to conduct analysis.
 Usually from ADSL.}
 
-\item{trt}{(`character`)\cr indicates the name of the treatment arm. Default is the second
+\item{trt}{(\code{character})\cr indicates the name of the treatment arm. Default is the second
 level of \code{arm}.}
 
-\item{ref}{(`character`)\cr indicates the name of the reference arm. Default is the first
+\item{ref}{(\code{character})\cr indicates the name of the reference arm. Default is the first
 level of \code{arm}.}
 
-\item{indent}{(`numeric`)\cr non-negative integer where 0 means that the subgroup levels should not be indented}
+\item{indent}{(\code{numeric})\cr non-negative integer where 0 means that the subgroup levels should not be indented}
 
-\item{subgroups_levels}{(`list`)\cr A nested named list of variables to conduct analysis.
+\item{subgroups_levels}{(\code{list})\cr A nested named list of variables to conduct analysis.
 The names of the nested lists are used to show as the label.
 The children lists should start with "Total" = variable label,
 followed by labels for each level of said variable. See example for reference.}
 
-\item{xmax}{(`numeric`)\cr maximum range for the x-axis.
+\item{xmax}{(\code{numeric})\cr maximum range for the x-axis.
 x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
 xmax is 0 by default}
 
-\item{conf_level}{(`numeric`)\cr the confidence interval level, default is 0.95.}
+\item{conf_level}{(\code{numeric})\cr the confidence interval level, default is 0.95.}
 
-\item{diff_ci_method}{(`character`)\cr the method used to calculate confidence interval.
+\item{diff_ci_method}{(\code{character})\cr the method used to calculate confidence interval.
 Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
-\item{fontsize}{(`numeric`)\cr font size for the plot. It is the size used in ggplot2 with
+\item{fontsize}{(\code{numeric})\cr font size for the plot. It is the size used in ggplot2 with
 default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 
-\item{arm_n}{(`logical`)\cr whether to display the N in each arm.}
+\item{arm_n}{(\code{logical})\cr whether to display the N in each arm.}
 
-\item{draw}{(`logical`)\cr whether to draw the plot.}
+\item{draw}{(\code{logical})\cr whether to draw the plot.}
 }
 \value{
 grob object

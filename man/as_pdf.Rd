@@ -25,7 +25,6 @@ This is an utility function to output a decorated grob (gTree) object
 \examples{
 \dontrun{
 library(ggplot2)
-library(tern)
 g <- with(iris, {
   list(
     ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
@@ -36,10 +35,10 @@ g <- with(iris, {
 
 # output to pdf
 g \%>\% as_pdf("~/example_aspdf1.pdf")
-decorate_grob_set(grobs = g, titles = "Hello\nOne\ntwo", footnotes = "This is a footnote") \%>\%
-  as_pdf("~/example_aspdf2.pdf")
 }
-
+}
+\seealso{
+\code{\link[=grobs2pdf]{grobs2pdf()}}
 }
 \author{
 Chendi Liao (liaoc10) \email{chendi.liao@roche.com}

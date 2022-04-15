@@ -5,7 +5,7 @@
 #' adverse events (\code{ADAE}), response (\code{ADRS}), concomitant medications
 #' (\code{ADCM}), exposure (\code{ADEX}), and laboratory (\code{ADLB}).
 #'
-#' @param domain string of domain name to be shown as y-axis label, default is \code{NULL}
+#' @param domain string of domain name to be shown as y-axis label, default is `NULL`
 #' (no y-axis label shown)
 #' @param var_names character vector to identify each lane
 #' @param marker_pos Depending on the domain, this can be
@@ -18,13 +18,13 @@
 #' @param xtick_at numeric vector with the locations of the x-axis tick marks
 #' @param line_col_list a list may contain \cr
 #' \itemize{
-#' \item \code{line_col}: factor vector to specify color for segments , default is \code{NULL}
+#' \item \code{line_col}: factor vector to specify color for segments , default is `NULL`
 #' (no line color is specified)\cr
 #' \item \code{line_col_opt} aesthetic values to map color values (named vector to map color values to each name).
-#'      If not \code{NULL}, please make sure this contains all possible values for \code{line_col} values,
+#'      If not `NULL`, please make sure this contains all possible values for \code{line_col} values,
 #'      otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
 #' \item \code{line_col_legend}: a string to be displayed as line color legend title when \code{line_col} is specified,
-#'  default is \code{NULL} (no legend title is displayed)
+#'  default is `NULL` (no legend title is displayed)
 #' }
 #' @param line_width numeric value for segment width, default is \code{line_width = 1}
 #' @param arrow_size numeric value for arrow size, default is \code{arrow_size = 0.1}
@@ -33,21 +33,21 @@
 #' @param marker_col_list a list may contain \cr
 #' \itemize{
 #' \item \code{marker_col} a factor vector to specify color for markers,
-#' default is \code{NULL} (no color markers is specified)
+#' default is `NULL` (no color markers is specified)
 #' \item \code{marker_col_opt} aesthetic values to map color values (named vector to map color values to each name)
-#'      If not \code{NULL}, please make sure this contains all possible values for \code{marker_col} values,
+#'      If not `NULL`, please make sure this contains all possible values for \code{marker_col} values,
 #'      otherwise color will be assigned by \code{\link[grDevices]{hcl.colors}}
-#' \item \code{marker_col_legend} a string to be displayed as marker color legend title, default is \code{NULL}
+#' \item \code{marker_col_legend} a string to be displayed as marker color legend title, default is `NULL`
 #' (no legend title is displayed)
 #' }
 #' @param marker_shape_list a list may contain \cr
 #' \itemize{
 #' \item \code{marker_shape} factor vector to specify shape for markers,
-#' default is \code{NULL} (no shape marker is specified)
+#' default is `NULL` (no shape marker is specified)
 #' \item  \code{marker_shape_opt} aesthetic values to map shape values (named vector to map shape values to each name).
-#'      If not \code{NULL}, please make sure this contains all possible values for \code{marker_shape} values,
+#'      If not `NULL`, please make sure this contains all possible values for \code{marker_shape} values,
 #'      otherwise shape will be assigned by \code{ggplot} default
-#' \item \code{marker_shape_legend} string to be displayed as marker shape legend title, default is \code{NULL}
+#' \item \code{marker_shape_legend} string to be displayed as marker shape legend title, default is `NULL`
 #' (no legend title is displayed)
 #' }
 #' @param show_days_label boolean value for showing y-axis label, default is \code{TRUE}
@@ -55,7 +55,7 @@
 #'     \code{xlim = c(-28, max(marker_pos) + 5)}
 #' @param xlab string to be shown as x-axis label, default is \code{"Study Day"}
 #' @param show_title boolean value for showing title of the plot, default is \code{TRUE}
-#' @param title string to be shown as title of the plot, default is \code{NULL} (no plot title is displayed)
+#' @param title string to be shown as title of the plot, default is `NULL` (no plot title is displayed)
 #'
 #' @author Xuefeng Hou (houx14) \email{houx14@gene.com}
 #' @author Tina Cho (chot) \email{tina.cho@roche.com}
@@ -68,7 +68,6 @@
 #'
 #' @examples
 #' library(scda)
-#' library(tern)
 #' library(dplyr)
 #'
 #' # ADSL
@@ -563,8 +562,8 @@ patient_domain_profile <- function(domain = NULL,
 #' \item \code{line_col_legend} string to be displayed as line color legend title of \code{ADAE} plot
 #' \item \code{line_col_opt} aesthetic values to map line color values of \code{ADAE} plot
 #'      (named vector to map color values to each name).
-#'      If not \code{NULL}, please make sure this contains all possible values for \code{line_col} values,
-#'      otherwise color will be assigned by \code{ggplot} default, please note that \code{NULL} needs to be
+#'      If not `NULL`, please make sure this contains all possible values for \code{line_col} values,
+#'      otherwise color will be assigned by \code{ggplot} default, please note that `NULL` needs to be
 #'      specified
 #' }
 #' @param rs list may contain
@@ -600,7 +599,6 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #' @examples
 #' library(scda)
-#' library(tern)
 #' library(dplyr)
 #'
 #' # ADSL
@@ -729,7 +727,7 @@ g_patient_profile <- function(ex = NULL,
                               xlab = "Study Day",
                               title = "Patient Profile") {
   domains <- list(ex = ex, ae = ae, rs = rs, cm = cm, lb = lb)
-  select <- purrr::map2_lgl(domains, names(domains), domain_check)
+  select <- mapply(domain_check, domains, names(domains))
   names(select) <- names(domains)
 
   show_days_label <- c(FALSE, FALSE, FALSE, FALSE, FALSE)

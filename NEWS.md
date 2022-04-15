@@ -3,6 +3,8 @@
 ### Miscellaneous
 
 * Added a template to the `pkgdown` site.
+* Moved `tern` from `imports` into `suggests`; it is now only required for the function `grobs2pdf`.
+* Removed the dependency on `purrr`.
 
 # osprey 0.1.13
 

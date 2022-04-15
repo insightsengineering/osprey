@@ -72,11 +72,12 @@ limit or normal or below the upper limit of normal respectively. For
 instance, a value of 3 would be read as '3 times the upper limit of normal'.
 Reference lines are included to determine various states, based upon clinical
 interpretation of the values and includes the following:
-
-* Hyperbilirubinemia TBL at least 2 xULN and ALT less than 3 xULN
-* Normal Range TBL <= 1 xULN and ALT <= 1xULN
-* Temple’s Corollary TBL <= 1 xULN and ALT at least 3 xULN
-* Possible Hy's Law TBL at least 2 xULN and ALT at least 3 xULN
+\itemize{
+\item Hyperbilirubinemia TBL at least 2 xULN and ALT less than 3 xULN
+\item Normal Range TBL <= 1 xULN and ALT <= 1xULN
+\item Temple’s Corollary TBL <= 1 xULN and ALT at least 3 xULN
+\item Possible Hy's Law TBL at least 2 xULN and ALT at least 3 xULN
+}
 
 This plot can easily be adjusted for other lab parameters and reference
 ranges as needed. Consultation with a clinical expert to determine which

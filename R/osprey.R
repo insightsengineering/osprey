@@ -1,6 +1,6 @@
-#' osprey: Additional general TLGs to tern
+#' osprey: R package to create TLGs
 #'
-#' @description osprey: Additional general TLGs to tern
+#' @description R package to create TLGs
 #'
 #' @import dplyr ggplot2
 #' @importFrom rlang .data :=

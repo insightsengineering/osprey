@@ -27,7 +27,7 @@ g_spiderplot(
 \item{marker_x}{vector of x values (must be in sorted order)}
 
 \item{marker_id}{vector to group the points together (default
-should be USUBJID)}
+should be \code{USUBJID})}
 
 \item{marker_y}{vector of y values}
 
@@ -43,32 +43,32 @@ default here is \code{NULL}}
 
 \item{marker_size}{size of markers in plot, default here is \code{NULL}}
 
-\item{datalabel_txt}{list defines text (at last time point) and
-flag for an arrow annotation
-(per defined variable) - elements must be labeled \code{txt_ann}/\code{mrkr_all}/\code{mrkr_ann}.
-\code{txt_ann} - text annotation next to final data point (for text annotation)
-\code{mrkr_all} - vector of ID's (for annotation marker)
-\code{mrkr_ann} - vector of ID's (subset of \code{mrkr_all}) where arrow is desired to
-indicate any study interim points. Default here is \code{NULL}}
+\item{datalabel_txt}{list defines text (at last time point) and flag for an arrow annotation:
+\itemize{
+\item (per defined variable) elements must be labeled \code{txt_ann}/\code{mrkr_all}/\code{mrkr_ann}.
+\item \code{txt_ann} text annotation next to final data point (for text annotation)
+\item \code{mrkr_all} vector of ID's (for annotation marker)
+\item \code{mrkr_ann} vector of ID's (subset of \code{mrkr_all}) where arrow is desired to
+indicate any study interim points. Default here is \code{NULL}.
+}}
 
 \item{facet_rows}{dataframe defines what variable is used to split the
-plot into rows, default here is \code{NULL}}
+plot into rows, default here is \code{NULL}.}
 
 \item{facet_columns}{dataframe defines what variable is used to split the
-plot into columns, default here is \code{NULL}}
+plot into columns, default here is \code{NULL}.}
 
 \item{vref_line}{value defines vertical line overlay
-(can be a vector), default here is \code{NULL}}
+(can be a vector), default here is \code{NULL}.}
 
 \item{href_line}{value defines horizontal line overlay
-(can be a vector), default here is NULL}
+(can be a vector), default here is \code{NULL}.}
 
-\item{x_label}{string of text for x axis label, default is time}
+\item{x_label}{string of text for x axis label, default is time.}
 
-\item{y_label}{string of text for y axis label, default is \% change}
+\item{y_label}{string of text for y axis label, default is \% change.}
 
-\item{show_legend}{boolean of whether marker legend is included,
-default here is \code{FALSE}}
+\item{show_legend}{boolean of whether marker legend is included, default here is \code{FALSE}.}
 }
 \value{
 ggplot object

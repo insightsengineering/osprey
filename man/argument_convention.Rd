@@ -4,29 +4,29 @@
 \alias{argument_convention}
 \title{Standard Arguments}
 \arguments{
-\item{arm}{(`factor`)\cr vector that contains arm information in analysis data.
-For example, `ADAE$ACTARMCD`.}
+\item{arm}{(\code{factor})\cr vector that contains arm information in analysis data.
+For example, \code{ADAE$ACTARMCD}.}
 
-\item{conf_level}{(`numeric`)\cr the confidence interval level, default is 0.95.}
+\item{conf_level}{(\code{numeric})\cr the confidence interval level, default is 0.95.}
 
-\item{diff_ci_method}{(`character`)\cr the method used to calculate confidence interval.
+\item{diff_ci_method}{(\code{character})\cr the method used to calculate confidence interval.
 Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
-\item{fontsize}{(`numeric`)\cr font size for the plot. It is the size used in ggplot2 with
+\item{fontsize}{(\code{numeric})\cr font size for the plot. It is the size used in ggplot2 with
 default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 
-\item{draw}{(`logical`)\cr whether to draw the plot.}
+\item{draw}{(\code{logical})\cr whether to draw the plot.}
 }
 \description{
-The documentation to this function lists all the arguments in `tern`
+The documentation to this function lists all the arguments in \code{osprey}
 that are used repeatedly to express an analysis.
 }
 \details{
-Although this function just returns `NULL` it has two uses, for
-the `tern` users it provides a documentation of arguments that are
+Although this function just returns \code{NULL} it has two uses. For
+the \code{osprey} users it provides a documentation of arguments that are
 commonly and consistently used in the framework. For the developer it adds a
-single reference point to import the `roxygen` argument description with:
-`@inheritParams argument_convention`
+single reference point to import the \code{roxygen} argument description with:
+\verb{@inheritParams argument_convention}
 }
 \keyword{internal}
