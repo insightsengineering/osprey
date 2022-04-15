@@ -22,7 +22,7 @@ adverse events (ADAE), response (ADRS), concomitant medications
     
     <a class="navbar-brand me-2" href="../index.html">osprey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.13.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.13.9001</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,15 +36,6 @@ adverse events (ADAE), response (ADRS), concomitant medications
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -115,10 +106,10 @@ for domains <code>ADAE</code> and <code>ADCM</code></p></li>
 <dd><p>a list may contain <br></p><ul><li><p><code>line_col</code>: factor vector to specify color for segments , default is <code>NULL</code>
 (no line color is specified)<br></p></li>
 <li><p><code>line_col_opt</code> aesthetic values to map color values (named vector to map color values to each name).
-     If not <code>NULL</code>, please make sure this contains all possible values for <code>line_col</code> values,
-     otherwise color will be assigned by <code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></code></p></li>
+If not <code>NULL</code>, please make sure this contains all possible values for <code>line_col</code> values,
+otherwise color will be assigned by <code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></code></p></li>
 <li><p><code>line_col_legend</code>: a string to be displayed as line color legend title when <code>line_col</code> is specified,
- default is <code>NULL</code> (no legend title is displayed)</p></li>
+default is <code>NULL</code> (no legend title is displayed)</p></li>
 </ul></dd>
 <dt>line_width</dt>
 <dd><p>numeric value for segment width, default is <code>line_width = 1</code></p></dd>
@@ -131,8 +122,8 @@ or <code>ADCM</code> domain. Default is <code>no_enddate_extention = 0</code>.</
 <dd><p>a list may contain <br></p><ul><li><p><code>marker_col</code> a factor vector to specify color for markers,
 default is <code>NULL</code> (no color markers is specified)</p></li>
 <li><p><code>marker_col_opt</code> aesthetic values to map color values (named vector to map color values to each name)
-     If not <code>NULL</code>, please make sure this contains all possible values for <code>marker_col</code> values,
-     otherwise color will be assigned by <code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></code></p></li>
+If not <code>NULL</code>, please make sure this contains all possible values for <code>marker_col</code> values,
+otherwise color will be assigned by <code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">hcl.colors</a></code></p></li>
 <li><p><code>marker_col_legend</code> a string to be displayed as marker color legend title, default is <code>NULL</code>
 (no legend title is displayed)</p></li>
 </ul></dd>
@@ -140,8 +131,8 @@ default is <code>NULL</code> (no color markers is specified)</p></li>
 <dd><p>a list may contain <br></p><ul><li><p><code>marker_shape</code> factor vector to specify shape for markers,
 default is <code>NULL</code> (no shape marker is specified)</p></li>
 <li><p><code>marker_shape_opt</code> aesthetic values to map shape values (named vector to map shape values to each name).
-     If not <code>NULL</code>, please make sure this contains all possible values for <code>marker_shape</code> values,
-     otherwise shape will be assigned by <code>ggplot</code> default</p></li>
+If not <code>NULL</code>, please make sure this contains all possible values for <code>marker_shape</code> values,
+otherwise shape will be assigned by <code>ggplot</code> default</p></li>
 <li><p><code>marker_shape_legend</code> string to be displayed as marker shape legend title, default is <code>NULL</code>
 (no legend title is displayed)</p></li>
 </ul></dd>
@@ -172,7 +163,6 @@ default is <code>NULL</code> (no shape marker is specified)</p></li>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/tern" class="external-link">tern</a></span><span class="op">)</span></span>
 <span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># ADSL</span></span>

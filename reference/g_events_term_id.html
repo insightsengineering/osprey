@@ -20,7 +20,7 @@ and reference arms, and can be used for events data such as Adverse Events."><!-
     
     <a class="navbar-brand me-2" href="../index.html">osprey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.13.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.13.9001</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,15 +34,6 @@ and reference arms, and can be used for events data such as Adverse Events."><!-
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -101,11 +92,11 @@ and reference arms, and can be used for events data such as Adverse Events.</p>
 Represents events information. <code>term</code> can be a <code>data.frame</code> produced
 by <code>create_flag_vars</code>, with each column being a <code>logical</code> event indicator</p></dd>
 <dt>id</dt>
-<dd><p>(`vector`)<br> contains subject identifier. Length of <code>id</code> must be the
+<dd><p>(<code>vector</code>)<br> contains subject identifier. Length of <code>id</code> must be the
 same as the length or number of rows of <code>terms</code>. Usually it is <code>ADAE$USUBJID</code>.</p></dd>
 <dt>arm</dt>
-<dd><p>(`factor`)<br> vector that contains arm information in analysis data.
-For example, `ADAE$ACTARMCD`.</p></dd>
+<dd><p>(<code>factor</code>)<br> vector that contains arm information in analysis data.
+For example, <code>ADAE$ACTARMCD</code>.</p></dd>
 <dt>arm_N</dt>
 <dd><p>(<code>numeric</code> vector)<br>
 Contains information of the number of patients in the levels of <code>arm</code>. This is useful
@@ -128,9 +119,9 @@ for mean risk. Default is "term".</p></dd>
 <dd><p><code>logical</code> whether to reverse the sorting by <code>sort_by</code>.
 Default is FALSE.</p></dd>
 <dt>conf_level</dt>
-<dd><p>(`numeric`)<br> the confidence interval level, default is 0.95.</p></dd>
+<dd><p>(<code>numeric</code>)<br> the confidence interval level, default is 0.95.</p></dd>
 <dt>diff_ci_method</dt>
-<dd><p>(`character`)<br> the method used to calculate confidence interval.
+<dd><p>(<code>character</code>)<br> the method used to calculate confidence interval.
 Default is "wald". Possible choices are methods supported in <code><a href="https://andrisignorell.github.io/DescTools/reference/BinomDiffCI.html" class="external-link">BinomDiffCI</a></code>.</p></dd>
 <dt>axis_side</dt>
 <dd><p><code>character</code> the side of the axis label, "left" or "right". Default is "left".</p></dd>
@@ -142,11 +133,11 @@ treatment arms respectively. Default set to <code>c("blue", "red")</code>.</p></
 treatment arms respectively. Default set to <code>c(16, 17)</code> per
 <code><a href="https://ggplot2.tidyverse.org/reference/scale_shape.html" class="external-link">scale_shape</a></code>.</p></dd>
 <dt>fontsize</dt>
-<dd><p>(`numeric`)<br> font size for the plot. It is the size used in ggplot2 with
+<dd><p>(<code>numeric</code>)<br> font size for the plot. It is the size used in ggplot2 with
 default unit "mm", if you want "points" you will need to divide the point number by
 <code>ggplot2:::.pt</code>.</p></dd>
 <dt>draw</dt>
-<dd><p>(`logical`)<br> whether to draw the plot.</p></dd>
+<dd><p>(<code>logical</code>)<br> whether to draw the plot.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

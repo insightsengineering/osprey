@@ -16,7 +16,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">osprey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.13.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.13.9001</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,15 +30,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start_releases -->
-<li class="dropdown">
-	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-Other releases
-<span class="caret"></span></a><ul class="dropdown-menu" role="menu">
-   <li><a href="../index.html">latest</a></li>
-   <li><a href="..//index.html"></a></li>
-</ul></li>
-<!-- end_releases -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -89,48 +80,48 @@ Other releases
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>id</dt>
-<dd><p>(`vector`)<br> contains subject identifier. Usually it is <code>ADAE$USUBJID</code>.</p></dd>
+<dd><p>(<code>vector</code>)<br> contains subject identifier. Usually it is <code>ADAE$USUBJID</code>.</p></dd>
 <dt>arm</dt>
-<dd><p>(`factor`)<br> vector that contains arm information in analysis data.
-For example, `ADAE$ACTARMCD`.</p></dd>
+<dd><p>(<code>factor</code>)<br> vector that contains arm information in analysis data.
+For example, <code>ADAE$ACTARMCD</code>.</p></dd>
 <dt>arm_sl</dt>
-<dd><p>(`vector`)<br> contains the subject level treatment variable.
+<dd><p>(<code>vector</code>)<br> contains the subject level treatment variable.
 For example, <code>ADSL$ACTARM</code>.</p></dd>
 <dt>subgroups</dt>
-<dd><p>(`data.frame`)<br> Variables to conduct analysis.</p></dd>
+<dd><p>(<code>data.frame</code>)<br> Variables to conduct analysis.</p></dd>
 <dt>subgroups_sl</dt>
-<dd><p>(`data.frame`)<br> Subject level variables to conduct analysis.
+<dd><p>(<code>data.frame</code>)<br> Subject level variables to conduct analysis.
 Usually from ADSL.</p></dd>
 <dt>trt</dt>
-<dd><p>(`character`)<br> indicates the name of the treatment arm. Default is the second
+<dd><p>(<code>character</code>)<br> indicates the name of the treatment arm. Default is the second
 level of <code>arm</code>.</p></dd>
 <dt>ref</dt>
-<dd><p>(`character`)<br> indicates the name of the reference arm. Default is the first
+<dd><p>(<code>character</code>)<br> indicates the name of the reference arm. Default is the first
 level of <code>arm</code>.</p></dd>
 <dt>indent</dt>
-<dd><p>(`numeric`)<br> non-negative integer where 0 means that the subgroup levels should not be indented</p></dd>
+<dd><p>(<code>numeric</code>)<br> non-negative integer where 0 means that the subgroup levels should not be indented</p></dd>
 <dt>subgroups_levels</dt>
-<dd><p>(`list`)<br> A nested named list of variables to conduct analysis.
+<dd><p>(<code>list</code>)<br> A nested named list of variables to conduct analysis.
 The names of the nested lists are used to show as the label.
 The children lists should start with "Total" = variable label,
 followed by labels for each level of said variable. See example for reference.</p></dd>
 <dt>xmax</dt>
-<dd><p>(`numeric`)<br> maximum range for the x-axis.
+<dd><p>(<code>numeric</code>)<br> maximum range for the x-axis.
 x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
 xmax is 0 by default</p></dd>
 <dt>conf_level</dt>
-<dd><p>(`numeric`)<br> the confidence interval level, default is 0.95.</p></dd>
+<dd><p>(<code>numeric</code>)<br> the confidence interval level, default is 0.95.</p></dd>
 <dt>diff_ci_method</dt>
-<dd><p>(`character`)<br> the method used to calculate confidence interval.
+<dd><p>(<code>character</code>)<br> the method used to calculate confidence interval.
 Default is "wald". Possible choices are methods supported in <code><a href="https://andrisignorell.github.io/DescTools/reference/BinomDiffCI.html" class="external-link">BinomDiffCI</a></code>.</p></dd>
 <dt>fontsize</dt>
-<dd><p>(`numeric`)<br> font size for the plot. It is the size used in ggplot2 with
+<dd><p>(<code>numeric</code>)<br> font size for the plot. It is the size used in ggplot2 with
 default unit "mm", if you want "points" you will need to divide the point number by
 <code>ggplot2:::.pt</code>.</p></dd>
 <dt>arm_n</dt>
-<dd><p>(`logical`)<br> whether to display the N in each arm.</p></dd>
+<dd><p>(<code>logical</code>)<br> whether to display the N in each arm.</p></dd>
 <dt>draw</dt>
-<dd><p>(`logical`)<br> whether to draw the plot.</p></dd>
+<dd><p>(<code>logical</code>)<br> whether to draw the plot.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
