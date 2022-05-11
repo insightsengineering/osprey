@@ -5,10 +5,12 @@ Version: 0.1.13.9002
 Date: 2022-04-07
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
+    person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = "aut"),
     person("Chendi", "Liao", , "chendi.liao@roche.com", role = "aut"),
-    person("Mahdi", "About", , "mahdi.about@roche.com", role = "aut"),
-    person("Fei", "Wang", , "fei.wang.fw6@roche.com", role = "aut"),
-    person("Mika", "Maekinen", , "mika.maekinen@roche.com", role = "aut")
+    person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
+    person("Molly", "He", , "", role = "ctb"),
+    person("Carolyn", "Zhang", , "", role = "ctb"),
+    person("Tina", "Cho", , "", role = "ctb")
   )
 Description: Community effort to collect TLG code and create a catalogue.
 License: Apache License 2.0 | file LICENSE
