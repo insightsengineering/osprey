@@ -7,6 +7,7 @@ Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = "aut"),
     person("Chendi", "Liao", , "chendi.liao@roche.com", role = "aut"),
+    person("Liming", "Li", , "liming.li@roche.com", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
     person("Molly", "He", , "", role = "ctb"),
     person("Carolyn", "Zhang", , "", role = "ctb"),
