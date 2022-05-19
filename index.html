@@ -32,7 +32,7 @@
     
     <a class="navbar-brand me-2" href="index.html">osprey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.13.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.13.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 30px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,28 +69,14 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="osprey">osprey<a class="anchor" aria-label="anchor" href="#osprey"></a>
 </h1></div>
-<p><code>osprey</code> is an R package for community contributed
-analysis functions to create TLGs (tables, listing and graphs) for
-analysis of clinical trial data. These functions be used stand alone to
-generate static analysis, but are also called by the <a href="https://github.com/insightsengineering/teal.osprey" class="external-link">teal.osprey</a>
-package which provides <code>teal</code> modules to be used inside
-<code>teal</code> applications.</p>
-<p>The package provides: <!-- markdownlint-disable MD007 MD030 --> -
-waterfall plots (<code>g_waterfall</code>) - swim lane plots
-(<code>g_swimlane</code>) - spider plots (<code>g_spiderplot</code>) -
-butterfly plots (<code>g_butterfly</code>) - and many more
-<!-- markdownlint-enable MD007 MD030 --> ## Installation</p>
-<p>This repository requires a personal access token to install see here
-<a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating
-and using PAT</a>. Once this is set up, to install the latest released
-version of the package run:</p>
+<p><code>osprey</code> is an R package for community contributed analysis functions to create TLGs (tables, listing and graphs) for analysis of clinical trial data. These functions be used stand alone to generate static analysis, but are also called by the <a href="https://github.com/insightsengineering/teal.osprey" class="external-link">teal.osprey</a> package which provides <code>teal</code> modules to be used inside <code>teal</code> applications.</p>
+<p>The package provides: <!-- markdownlint-disable MD007 MD030 --> - waterfall plots (<code>g_waterfall</code>) - swim lane plots (<code>g_swimlane</code>) - spider plots (<code>g_spiderplot</code>) - butterfly plots (<code>g_butterfly</code>) - and many more <!-- markdownlint-enable MD007 MD030 --> ## Installation</p>
+<p>This repository requires a personal access token to install see here <a href="https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token" class="external-link">creating and using PAT</a>. Once this is set up, to install the latest released version of the package run:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>GITHUB_PAT <span class="op">=</span> <span class="st">"your_access_token_here"</span><span class="op">)</span>
 <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://devtools.r-lib.org/" class="external-link">"devtools"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"insightsengineering/osprey@*release"</span><span class="op">)</span></code></pre></div>
-<p>In order to run many of the examples you will also need to install
-the <a href="https://github.com/insightsengineering/scda" class="external-link"><code>scda</code></a>
-package.</p>
+<p>In order to run many of the examples you will also need to install the <a href="https://github.com/insightsengineering/scda" class="external-link"><code>scda</code></a> package.</p>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
@@ -120,10 +106,11 @@ package.</p>
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Nina Qi <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Dawid Kaledkowski <br><small class="roles"> Author </small>  </li>
 <li>Chendi Liao <br><small class="roles"> Author </small>  </li>
-<li>Mahdi About <br><small class="roles"> Author </small>  </li>
-<li>Fei Wang <br><small class="roles"> Author </small>  </li>
-<li>Mika Maekinen <br><small class="roles"> Author </small>  </li>
+<li>Liming Li <br><small class="roles"> Author </small>  </li>
+<li>F. Hoffmann-La Roche AG <br><small class="roles"> Copyright holder, funder </small>  </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
