@@ -1,7 +1,7 @@
 Type: Package
 Package: osprey
 Title: R package to create TLGs
-Version: 0.1.13.9002
+Version: 0.1.13.9003
 Date: 2022-04-07
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
@@ -9,9 +9,9 @@ Authors@R: c(
     person("Chendi", "Liao", , "chendi.liao@roche.com", role = "aut"),
     person("Liming", "Li", , "liming.li@roche.com", role = "aut"),
     person("F. Hoffmann-La Roche AG", role = c("cph", "fnd")),
-    person("Molly", "He", , "", role = "ctb"),
-    person("Carolyn", "Zhang", , "", role = "ctb"),
-    person("Tina", "Cho", , "", role = "ctb")
+    person("Molly", "He", role = "ctb"),
+    person("Carolyn", "Zhang", role = "ctb"),
+    person("Tina", "Cho", role = "ctb")
   )
 Description: Community effort to collect TLG code and create a catalogue.
 License: Apache License 2.0 | file LICENSE
