@@ -1,6 +1,6 @@
 # osprey 0.1.14.9000
 
-# goshawk 0.1.14
+# osprey 0.1.14
 
 ### Miscellaneous
 
