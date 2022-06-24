@@ -23,4 +23,4 @@ if (!require("devtools")) install.packages("devtools")
 devtools::install_github("insightsengineering/osprey@*release")
 ```
 
-In order to run many of the examples you will also need to install the [`scda`](https://github.com/insightsengineering/scda) package.
+In order to run many of the examples you will also need to install the [`scda`](https://insightsengineering.github.io/scda) package.
