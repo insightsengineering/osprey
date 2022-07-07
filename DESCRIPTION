@@ -1,7 +1,7 @@
 Type: Package
 Package: osprey
 Title: R package to create TLGs
-Version: 0.1.14.9003
+Version: 0.1.14.9004
 Date: 2022-06-09
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
