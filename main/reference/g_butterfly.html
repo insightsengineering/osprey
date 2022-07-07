@@ -18,7 +18,7 @@ maximum count."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
     
     <a class="navbar-brand me-2" href="../index.html">osprey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.14.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.14.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,12 +32,6 @@ maximum count."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/l
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://insightsengineering.github.io/osprey/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -69,21 +63,21 @@ maximum count.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">g_butterfly</span><span class="op">(</span>
-  <span class="va">category</span>,
-  <span class="va">right_flag</span>,
-  <span class="va">left_flag</span>,
-  id <span class="op">=</span> <span class="cn">NULL</span>,
-  group_names <span class="op">=</span> <span class="cn">NULL</span>,
-  block_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# of patients"</span>, <span class="st">"# of AEs"</span><span class="op">)</span>,
-  block_color <span class="op">=</span> <span class="cn">NULL</span>,
-  facet_rows <span class="op">=</span> <span class="cn">NULL</span>,
-  x_label <span class="op">=</span> <span class="va">block_count</span>,
-  y_label <span class="op">=</span> <span class="st">"AE Derived Terms"</span>,
-  legend_label <span class="op">=</span> <span class="st">"AETOXGR"</span>,
-  sort_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"alphabetical"</span>, <span class="st">"right"</span>, <span class="st">"left"</span><span class="op">)</span>,
-  show_legend <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">g_butterfly</span><span class="op">(</span></span>
+<span>  <span class="va">category</span>,</span>
+<span>  <span class="va">right_flag</span>,</span>
+<span>  <span class="va">left_flag</span>,</span>
+<span>  id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  group_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  block_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"# of patients"</span>, <span class="st">"# of AEs"</span><span class="op">)</span>,</span>
+<span>  block_color <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  facet_rows <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  x_label <span class="op">=</span> <span class="va">block_count</span>,</span>
+<span>  y_label <span class="op">=</span> <span class="st">"AE Derived Terms"</span>,</span>
+<span>  legend_label <span class="op">=</span> <span class="st">"AETOXGR"</span>,</span>
+<span>  sort_by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"count"</span>, <span class="st">"alphabetical"</span>, <span class="st">"right"</span>, <span class="st">"left"</span><span class="op">)</span>,</span>
+<span>  show_legend <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -169,55 +163,55 @@ default here is FALSE</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">rADSL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">SEX</span>, <span class="va">ARM</span>, <span class="va">RACE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">AAE</span> <span class="op">&lt;-</span> <span class="va">rADAE</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">AEBODSYS</span>, <span class="va">AETOXGR</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">ANL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">AAE</span>, <span class="va">ADSL</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ANL</span> <span class="op">&lt;-</span> <span class="va">ANL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>flag1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">RACE</span> <span class="op">==</span> <span class="st">"ASIAN"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>flag2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ANL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">ANL</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ANL</span> <span class="op">&lt;-</span> <span class="va">ANL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">AEBODSYS</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="st">"Investigations"</span>, <span class="st">"Vascular disorders"</span>,</span>
-<span class="r-in">  <span class="st">"Musculoskeletal and connective tissue disorders"</span></span>
-<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 1, # of AEs</span></span>
-<span class="r-in"><span class="fu">g_butterfly</span><span class="op">(</span></span>
-<span class="r-in">  category <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">AEBODSYS</span>,</span>
-<span class="r-in">  right_flag <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">flag1</span>,</span>
-<span class="r-in">  left_flag <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">flag2</span>,</span>
-<span class="r-in">  group_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flag1 Asian"</span>, <span class="st">"flag2 M"</span><span class="op">)</span>,</span>
-<span class="r-in">  block_count <span class="op">=</span> <span class="st">"# of AEs"</span>,</span>
-<span class="r-in">  block_color <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">AETOXGR</span>,</span>
-<span class="r-in">  id <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">USUBJID</span>,</span>
-<span class="r-in">  x_label <span class="op">=</span> <span class="st">"# of AEs"</span>,</span>
-<span class="r-in">  y_label <span class="op">=</span> <span class="st">"AE Body System"</span>,</span>
-<span class="r-in">  legend_label <span class="op">=</span> <span class="st">"AETOXGR"</span>,</span>
-<span class="r-in">  sort_by <span class="op">=</span> <span class="st">"count"</span>,</span>
-<span class="r-in">  show_legend <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2, # of patients with facet</span></span>
-<span class="r-in"><span class="fu">g_butterfly</span><span class="op">(</span></span>
-<span class="r-in">  category <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">AEBODSYS</span>,</span>
-<span class="r-in">  right_flag <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">flag1</span>,</span>
-<span class="r-in">  left_flag <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">flag2</span>,</span>
-<span class="r-in">  group_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flag1 Asian"</span>, <span class="st">"flag2 M"</span><span class="op">)</span>,</span>
-<span class="r-in">  block_count <span class="op">=</span> <span class="st">"# of patients"</span>,</span>
-<span class="r-in">  block_color <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">AETOXGR</span>,</span>
-<span class="r-in">  facet_rows <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">ARM</span>,</span>
-<span class="r-in">  id <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">USUBJID</span>,</span>
-<span class="r-in">  x_label <span class="op">=</span> <span class="st">"# of patients"</span>,</span>
-<span class="r-in">  y_label <span class="op">=</span> <span class="st">"AE Derived Terms"</span>,</span>
-<span class="r-in">  legend_label <span class="op">=</span> <span class="st">"AETOXGR"</span>,</span>
-<span class="r-in">  sort_by <span class="op">=</span> <span class="st">"count"</span>,</span>
-<span class="r-in">  show_legend <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span class="r-in"><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">rADSL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">SEX</span>, <span class="va">ARM</span>, <span class="va">RACE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F"</span>, <span class="st">"M"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">AAE</span> <span class="op">&lt;-</span> <span class="va">rADAE</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">AEBODSYS</span>, <span class="va">AETOXGR</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ANL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">AAE</span>, <span class="va">ADSL</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"STUDYID"</span>, <span class="st">"USUBJID"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ANL</span> <span class="op">&lt;-</span> <span class="va">ANL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>flag1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">RACE</span> <span class="op">==</span> <span class="st">"ASIAN"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>flag2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">SEX</span> <span class="op">==</span> <span class="st">"M"</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ANL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/na.fail.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">ANL</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ANL</span> <span class="op">&lt;-</span> <span class="va">ANL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">AEBODSYS</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="st">"Investigations"</span>, <span class="st">"Vascular disorders"</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"Musculoskeletal and connective tissue disorders"</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 1, # of AEs</span></span></span>
+<span class="r-in"><span><span class="fu">g_butterfly</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  category <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">AEBODSYS</span>,</span></span>
+<span class="r-in"><span>  right_flag <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">flag1</span>,</span></span>
+<span class="r-in"><span>  left_flag <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">flag2</span>,</span></span>
+<span class="r-in"><span>  group_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flag1 Asian"</span>, <span class="st">"flag2 M"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  block_count <span class="op">=</span> <span class="st">"# of AEs"</span>,</span></span>
+<span class="r-in"><span>  block_color <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">AETOXGR</span>,</span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">USUBJID</span>,</span></span>
+<span class="r-in"><span>  x_label <span class="op">=</span> <span class="st">"# of AEs"</span>,</span></span>
+<span class="r-in"><span>  y_label <span class="op">=</span> <span class="st">"AE Body System"</span>,</span></span>
+<span class="r-in"><span>  legend_label <span class="op">=</span> <span class="st">"AETOXGR"</span>,</span></span>
+<span class="r-in"><span>  sort_by <span class="op">=</span> <span class="st">"count"</span>,</span></span>
+<span class="r-in"><span>  show_legend <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2, # of patients with facet</span></span></span>
+<span class="r-in"><span><span class="fu">g_butterfly</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  category <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">AEBODSYS</span>,</span></span>
+<span class="r-in"><span>  right_flag <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">flag1</span>,</span></span>
+<span class="r-in"><span>  left_flag <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">flag2</span>,</span></span>
+<span class="r-in"><span>  group_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"flag1 Asian"</span>, <span class="st">"flag2 M"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  block_count <span class="op">=</span> <span class="st">"# of patients"</span>,</span></span>
+<span class="r-in"><span>  block_color <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">AETOXGR</span>,</span></span>
+<span class="r-in"><span>  facet_rows <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">ARM</span>,</span></span>
+<span class="r-in"><span>  id <span class="op">=</span> <span class="va">ANL</span><span class="op">$</span><span class="va">USUBJID</span>,</span></span>
+<span class="r-in"><span>  x_label <span class="op">=</span> <span class="st">"# of patients"</span>,</span></span>
+<span class="r-in"><span>  y_label <span class="op">=</span> <span class="st">"AE Derived Terms"</span>,</span></span>
+<span class="r-in"><span>  legend_label <span class="op">=</span> <span class="st">"AETOXGR"</span>,</span></span>
+<span class="r-in"><span>  sort_by <span class="op">=</span> <span class="st">"count"</span>,</span></span>
+<span class="r-in"><span>  show_legend <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="g_butterfly-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

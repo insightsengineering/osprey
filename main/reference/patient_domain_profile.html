@@ -16,7 +16,7 @@ adverse events (ADAE), response (ADRS), concomitant medications
     
     <a class="navbar-brand me-2" href="../index.html">osprey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.14.9001</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.14.9002</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,12 +30,6 @@ adverse events (ADAE), response (ADRS), concomitant medications
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" href="https://insightsengineering.github.io/osprey/main">main</a> </div></li>
-<!-- end dropdown for versions -->
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -66,24 +60,24 @@ adverse events (<code>ADAE</code>), response (<code>ADRS</code>), concomitant me
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">patient_domain_profile</span><span class="op">(</span>
-  domain <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">var_names</span>,
-  <span class="va">marker_pos</span>,
-  <span class="va">arrow_end</span>,
-  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,
-  line_col_list <span class="op">=</span> <span class="cn">NULL</span>,
-  line_width <span class="op">=</span> <span class="fl">1</span>,
-  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,
-  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,
-  marker_col_list <span class="op">=</span> <span class="cn">NULL</span>,
-  marker_shape_list <span class="op">=</span> <span class="cn">NULL</span>,
-  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,
-  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">marker_pos</span><span class="op">)</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span>,
-  xlab <span class="op">=</span> <span class="cn">NULL</span>,
-  show_title <span class="op">=</span> <span class="cn">TRUE</span>,
-  title <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">patient_domain_profile</span><span class="op">(</span></span>
+<span>  domain <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">var_names</span>,</span>
+<span>  <span class="va">marker_pos</span>,</span>
+<span>  <span class="va">arrow_end</span>,</span>
+<span>  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  line_col_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  line_width <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  marker_col_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  marker_shape_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">marker_pos</span><span class="op">)</span> <span class="op">+</span> <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show_title <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  title <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -195,20 +189,20 @@ otherwise shape will be assigned by <code>ggplot</code> default</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span>
-<span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ADSL</span></span>
-<span class="r-in"><span class="va">rADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span></span>
-<span class="r-in"><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">rADSL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">    TRTSDT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">TRTSDTM</span><span class="op">)</span>,</span>
-<span class="r-in">    max_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">LSTALVDT</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">DTHDT</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span class="r-in">    max_day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">max_date</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">TRTSDT</span>, <span class="va">max_day</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">USUBJID</span> <span class="op">==</span> <span class="va">rADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ADSL</span></span></span>
+<span class="r-in"><span><span class="va">rADSL</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adsl</span></span></span>
+<span class="r-in"><span><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">rADSL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    TRTSDT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">TRTSDTM</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    max_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">LSTALVDT</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">DTHDT</span><span class="op">)</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    max_day <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">max_date</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">TRTSDT</span>, <span class="va">max_day</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">USUBJID</span> <span class="op">==</span> <span class="va">rADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
@@ -279,216 +273,216 @@ otherwise shape will be assigned by <code>ggplot</code> default</p></li>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 1 Exposure "ADEX"</span></span>
-<span class="r-in"><span class="va">rADEX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adex</span></span>
-<span class="r-in"><span class="va">ADEX</span> <span class="op">&lt;-</span> <span class="va">rADEX</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">ASTDTM</span>, <span class="va">PARCAT2</span>, <span class="va">AVAL</span>, <span class="va">AVALU</span>, <span class="va">PARAMCD</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ADEX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADEX</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ADEX</span> <span class="op">&lt;-</span> <span class="va">ADEX</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"DOSE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">PARCAT2</span>, <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>diff <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">AVAL</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">    Modification <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="va">diff</span> <span class="op">&lt;</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"Decrease"</span>,</span>
-<span class="r-in">      <span class="va">diff</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"Increase"</span>,</span>
-<span class="r-in">      <span class="va">diff</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"None"</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span class="r-in">    ASTDT_dur <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span></span>
-<span class="r-in">        <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">ASTDTM</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span>
-<span class="r-in">      <span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span>
-<span class="r-in">  domain <span class="op">=</span> <span class="st">"Exposure (ADEX)"</span>,</span>
-<span class="r-in">  var_names <span class="op">=</span> <span class="va">ADEX</span><span class="op">$</span><span class="va">PARCAT2</span>,</span>
-<span class="r-in">  marker_pos <span class="op">=</span> <span class="va">ADEX</span><span class="op">$</span><span class="va">ASTDT_dur</span>,</span>
-<span class="r-in">  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span>
-<span class="r-in">  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  line_col_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span class="r-in">  line_width <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span class="r-in">  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADEX</span><span class="op">$</span><span class="va">Modification</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Increase"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"Decrease"</span> <span class="op">=</span> <span class="st">"green"</span>, <span class="st">"None"</span> <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_col_legend <span class="op">=</span> <span class="cn">NULL</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  marker_shape_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADEX</span><span class="op">$</span><span class="va">Modification</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_shape_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Increase"</span> <span class="op">=</span> <span class="fl">24</span>, <span class="st">"Decrease"</span> <span class="op">=</span> <span class="fl">25</span>, <span class="st">"None"</span> <span class="op">=</span> <span class="fl">23</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_shape_legend <span class="op">=</span> <span class="st">"Dose Modification"</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span>
-<span class="r-in">  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">p1</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 1 Exposure "ADEX"</span></span></span>
+<span class="r-in"><span><span class="va">rADEX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adex</span></span></span>
+<span class="r-in"><span><span class="va">ADEX</span> <span class="op">&lt;-</span> <span class="va">rADEX</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">ASTDTM</span>, <span class="va">PARCAT2</span>, <span class="va">AVAL</span>, <span class="va">AVALU</span>, <span class="va">PARAMCD</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ADEX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADEX</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ADEX</span> <span class="op">&lt;-</span> <span class="va">ADEX</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">PARAMCD</span> <span class="op">==</span> <span class="st">"DOSE"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">PARCAT2</span>, <span class="va">PARAMCD</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>diff <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">AVAL</span>, lag <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    Modification <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="va">diff</span> <span class="op">&lt;</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"Decrease"</span>,</span></span>
+<span class="r-in"><span>      <span class="va">diff</span> <span class="op">&gt;</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"Increase"</span>,</span></span>
+<span class="r-in"><span>      <span class="va">diff</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">~</span> <span class="st">"None"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    ASTDT_dur <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://rdrr.io/r/base/substr.html" class="external-link">substr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">ASTDTM</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span>      <span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">TRTSDT</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  domain <span class="op">=</span> <span class="st">"Exposure (ADEX)"</span>,</span></span>
+<span class="r-in"><span>  var_names <span class="op">=</span> <span class="va">ADEX</span><span class="op">$</span><span class="va">PARCAT2</span>,</span></span>
+<span class="r-in"><span>  marker_pos <span class="op">=</span> <span class="va">ADEX</span><span class="op">$</span><span class="va">ASTDT_dur</span>,</span></span>
+<span class="r-in"><span>  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span></span>
+<span class="r-in"><span>  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  line_col_list <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  line_width <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADEX</span><span class="op">$</span><span class="va">Modification</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Increase"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"Decrease"</span> <span class="op">=</span> <span class="st">"green"</span>, <span class="st">"None"</span> <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_col_legend <span class="op">=</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  marker_shape_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADEX</span><span class="op">$</span><span class="va">Modification</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_shape_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Increase"</span> <span class="op">=</span> <span class="fl">24</span>, <span class="st">"Decrease"</span> <span class="op">=</span> <span class="fl">25</span>, <span class="st">"None"</span> <span class="op">=</span> <span class="fl">23</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_shape_legend <span class="op">=</span> <span class="st">"Dose Modification"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p1</span></span></span>
 <span class="r-plt img"><img src="patient_domain_profile-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 2 Adverse Event "ADAE"</span></span>
-<span class="r-in"><span class="co"># Note that ASTDY is represented by a circle and AENDY is represented by a square.</span></span>
-<span class="r-in"><span class="co"># If AENDY and ASTDY occur on the same day only AENDY will be shown.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Adverse Event ADAE</span></span>
-<span class="r-in"><span class="va">rADAE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adae</span></span>
-<span class="r-in"><span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="va">rADAE</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">AESOC</span>, <span class="va">AEDECOD</span>, <span class="va">AESER</span>, <span class="va">AETOXGR</span>, <span class="va">AEREL</span>, <span class="va">ASTDY</span>, <span class="va">AENDY</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADAE</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span>
-<span class="r-in">  domain <span class="op">=</span> <span class="st">"Adverse Event (ADAE)"</span>,</span>
-<span class="r-in">  var_names <span class="op">=</span> <span class="va">ADAE</span><span class="op">$</span><span class="va">AEDECOD</span>,</span>
-<span class="r-in">  marker_pos <span class="op">=</span> <span class="va">ADAE</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ASTDY"</span>, <span class="st">"AENDY"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span>
-<span class="r-in">  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  line_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    line_col <span class="op">=</span> <span class="va">ADAE</span><span class="op">$</span><span class="va">AESER</span>,</span>
-<span class="r-in">    line_col_legend <span class="op">=</span> <span class="st">"Serious"</span>,</span>
-<span class="r-in">    line_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  line_width <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span class="r-in">  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADAE</span><span class="op">$</span><span class="va">AETOXGR</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"3"</span> <span class="op">=</span> <span class="st">"yellow"</span>, <span class="st">"4"</span> <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_col_legend <span class="op">=</span> <span class="cn">NULL</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  marker_shape_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_shape <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span class="r-in">    marker_shape_opt <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span class="r-in">    marker_shape_legend <span class="op">=</span> <span class="st">"Grade"</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span>
-<span class="r-in">  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 2 Adverse Event "ADAE"</span></span></span>
+<span class="r-in"><span><span class="co"># Note that ASTDY is represented by a circle and AENDY is represented by a square.</span></span></span>
+<span class="r-in"><span><span class="co"># If AENDY and ASTDY occur on the same day only AENDY will be shown.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Adverse Event ADAE</span></span></span>
+<span class="r-in"><span><span class="va">rADAE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adae</span></span></span>
+<span class="r-in"><span><span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="va">rADAE</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">AESOC</span>, <span class="va">AEDECOD</span>, <span class="va">AESER</span>, <span class="va">AETOXGR</span>, <span class="va">AEREL</span>, <span class="va">ASTDY</span>, <span class="va">AENDY</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADAE</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  domain <span class="op">=</span> <span class="st">"Adverse Event (ADAE)"</span>,</span></span>
+<span class="r-in"><span>  var_names <span class="op">=</span> <span class="va">ADAE</span><span class="op">$</span><span class="va">AEDECOD</span>,</span></span>
+<span class="r-in"><span>  marker_pos <span class="op">=</span> <span class="va">ADAE</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ASTDY"</span>, <span class="st">"AENDY"</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span></span>
+<span class="r-in"><span>  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  line_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    line_col <span class="op">=</span> <span class="va">ADAE</span><span class="op">$</span><span class="va">AESER</span>,</span></span>
+<span class="r-in"><span>    line_col_legend <span class="op">=</span> <span class="st">"Serious"</span>,</span></span>
+<span class="r-in"><span>    line_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>, <span class="st">"green"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  line_width <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADAE</span><span class="op">$</span><span class="va">AETOXGR</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"3"</span> <span class="op">=</span> <span class="st">"yellow"</span>, <span class="st">"4"</span> <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_col_legend <span class="op">=</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  marker_shape_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_shape <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>    marker_shape_opt <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>    marker_shape_legend <span class="op">=</span> <span class="st">"Grade"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
-<span class="r-in"><span class="va">p2</span></span>
+<span class="r-in"><span><span class="va">p2</span></span></span>
 <span class="r-plt img"><img src="patient_domain_profile-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 3 Tumor Response "ADRS"</span></span>
-<span class="r-in"><span class="va">rADRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adrs</span></span>
-<span class="r-in"><span class="va">ADRS</span> <span class="op">&lt;-</span> <span class="va">rADRS</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">PARAMCD</span>, <span class="va">PARAM</span>, <span class="va">AVALC</span>, <span class="va">AVAL</span>, <span class="va">ADY</span>, <span class="va">ADTM</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ADRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADRS</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span>
-<span class="r-in">  domain <span class="op">=</span> <span class="st">"Tumor Response (ADRS)"</span>,</span>
-<span class="r-in">  var_names <span class="op">=</span> <span class="va">ADRS</span><span class="op">$</span><span class="va">PARAMCD</span>,</span>
-<span class="r-in">  marker_pos <span class="op">=</span> <span class="va">ADRS</span><span class="op">$</span><span class="va">ADY</span>,</span>
-<span class="r-in">  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span>
-<span class="r-in">  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  line_col_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span class="r-in">  line_width <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span class="r-in">  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADRS</span><span class="op">$</span><span class="va">AVALC</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">"CR"</span> <span class="op">=</span> <span class="st">"green"</span>, <span class="st">"PR"</span> <span class="op">=</span> <span class="st">"blue"</span>,</span>
-<span class="r-in">      <span class="st">"SD"</span> <span class="op">=</span> <span class="st">"yellow"</span>, <span class="st">"PD"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"NE"</span> <span class="op">=</span> <span class="st">"pink"</span>,</span>
-<span class="r-in">      <span class="st">"Y"</span> <span class="op">=</span> <span class="st">"lightblue"</span>, <span class="st">"N"</span> <span class="op">=</span> <span class="st">"darkred"</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    marker_col_legend <span class="op">=</span> <span class="cn">NULL</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  marker_shape_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADRS</span><span class="op">$</span><span class="va">AVALC</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_shape_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">"CR"</span> <span class="op">=</span> <span class="fl">21</span>, <span class="st">"PR"</span> <span class="op">=</span> <span class="fl">24</span>,</span>
-<span class="r-in">      <span class="st">"SD"</span> <span class="op">=</span> <span class="fl">23</span>, <span class="st">"PD"</span> <span class="op">=</span> <span class="fl">22</span>, <span class="st">"NE"</span> <span class="op">=</span> <span class="fl">14</span>,</span>
-<span class="r-in">      <span class="st">"Y"</span> <span class="op">=</span> <span class="fl">11</span>, <span class="st">"N"</span> <span class="op">=</span> <span class="fl">8</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    marker_shape_legend <span class="op">=</span> <span class="st">"Response"</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span>
-<span class="r-in">  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">p3</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 3 Tumor Response "ADRS"</span></span></span>
+<span class="r-in"><span><span class="va">rADRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adrs</span></span></span>
+<span class="r-in"><span><span class="va">ADRS</span> <span class="op">&lt;-</span> <span class="va">rADRS</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">PARAMCD</span>, <span class="va">PARAM</span>, <span class="va">AVALC</span>, <span class="va">AVAL</span>, <span class="va">ADY</span>, <span class="va">ADTM</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ADRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADRS</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  domain <span class="op">=</span> <span class="st">"Tumor Response (ADRS)"</span>,</span></span>
+<span class="r-in"><span>  var_names <span class="op">=</span> <span class="va">ADRS</span><span class="op">$</span><span class="va">PARAMCD</span>,</span></span>
+<span class="r-in"><span>  marker_pos <span class="op">=</span> <span class="va">ADRS</span><span class="op">$</span><span class="va">ADY</span>,</span></span>
+<span class="r-in"><span>  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span></span>
+<span class="r-in"><span>  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  line_col_list <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  line_width <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADRS</span><span class="op">$</span><span class="va">AVALC</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"CR"</span> <span class="op">=</span> <span class="st">"green"</span>, <span class="st">"PR"</span> <span class="op">=</span> <span class="st">"blue"</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"SD"</span> <span class="op">=</span> <span class="st">"yellow"</span>, <span class="st">"PD"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"NE"</span> <span class="op">=</span> <span class="st">"pink"</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"Y"</span> <span class="op">=</span> <span class="st">"lightblue"</span>, <span class="st">"N"</span> <span class="op">=</span> <span class="st">"darkred"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_col_legend <span class="op">=</span> <span class="cn">NULL</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  marker_shape_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADRS</span><span class="op">$</span><span class="va">AVALC</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_shape_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"CR"</span> <span class="op">=</span> <span class="fl">21</span>, <span class="st">"PR"</span> <span class="op">=</span> <span class="fl">24</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"SD"</span> <span class="op">=</span> <span class="fl">23</span>, <span class="st">"PD"</span> <span class="op">=</span> <span class="fl">22</span>, <span class="st">"NE"</span> <span class="op">=</span> <span class="fl">14</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"Y"</span> <span class="op">=</span> <span class="fl">11</span>, <span class="st">"N"</span> <span class="op">=</span> <span class="fl">8</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_shape_legend <span class="op">=</span> <span class="st">"Response"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p3</span></span></span>
 <span class="r-plt img"><img src="patient_domain_profile-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 4 Concomitant Med "ADCM"</span></span>
-<span class="r-in"><span class="va">rADCM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adcm</span></span>
-<span class="r-in"><span class="va">ADCM</span> <span class="op">&lt;-</span> <span class="va">rADCM</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">ASTDTM</span>, <span class="va">AENDTM</span>, <span class="va">CMDECOD</span>, <span class="va">ASTDY</span>, <span class="va">AENDY</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">ADCM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADCM</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span>
-<span class="r-in">  domain <span class="op">=</span> <span class="st">"Concomitant Med (ADCM)"</span>,</span>
-<span class="r-in">  var_names <span class="op">=</span> <span class="va">ADCM</span><span class="op">$</span><span class="va">CMDECOD</span>,</span>
-<span class="r-in">  marker_pos <span class="op">=</span> <span class="va">ADCM</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ASTDY"</span>, <span class="st">"AENDY"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span class="r-in">  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span>
-<span class="r-in">  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  line_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line_col_opt <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span>,</span>
-<span class="r-in">  line_width <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span class="r-in">  no_enddate_extention <span class="op">=</span> <span class="fl">50</span>,</span>
-<span class="r-in">  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>marker_col_opt <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span>,</span>
-<span class="r-in">  marker_shape_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span class="r-in">  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span>
-<span class="r-in">  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 4 Concomitant Med "ADCM"</span></span></span>
+<span class="r-in"><span><span class="va">rADCM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adcm</span></span></span>
+<span class="r-in"><span><span class="va">ADCM</span> <span class="op">&lt;-</span> <span class="va">rADCM</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">ASTDTM</span>, <span class="va">AENDTM</span>, <span class="va">CMDECOD</span>, <span class="va">ASTDY</span>, <span class="va">AENDY</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ADCM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADCM</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  domain <span class="op">=</span> <span class="st">"Concomitant Med (ADCM)"</span>,</span></span>
+<span class="r-in"><span>  var_names <span class="op">=</span> <span class="va">ADCM</span><span class="op">$</span><span class="va">CMDECOD</span>,</span></span>
+<span class="r-in"><span>  marker_pos <span class="op">=</span> <span class="va">ADCM</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ASTDY"</span>, <span class="st">"AENDY"</span><span class="op">)</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span></span>
+<span class="r-in"><span>  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  line_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>line_col_opt <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  line_width <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  no_enddate_extention <span class="op">=</span> <span class="fl">50</span>,</span></span>
+<span class="r-in"><span>  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>marker_col_opt <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  marker_shape_list <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">28</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span>
-<span class="r-in"><span class="va">p4</span></span>
+<span class="r-in"><span><span class="va">p4</span></span></span>
 <span class="r-plt img"><img src="patient_domain_profile-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Example 5 Laboratory "ADLB"</span></span>
-<span class="r-in"><span class="va">rADLB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adlb</span></span>
-<span class="r-in"><span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="va">rADLB</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">LBSEQ</span>, <span class="va">PARAMCD</span>, <span class="va">BASETYPE</span>,</span>
-<span class="r-in">    <span class="va">ADTM</span>, <span class="va">ADY</span>, <span class="va">ATPTN</span>, <span class="va">AVISITN</span>, <span class="va">LBTESTCD</span>, <span class="va">ANRIND</span></span>
-<span class="r-in">  <span class="op">)</span></span>
-<span class="r-in"><span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADLB</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="va">ADLB</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span class="r-in">  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ANRIND <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ANRIND</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LOW"</span>, <span class="st">"NORMAL"</span>, <span class="st">"HIGH"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span>
-<span class="r-in">  domain <span class="op">=</span> <span class="st">"Laboratory (ADLB)"</span>,</span>
-<span class="r-in">  var_names <span class="op">=</span> <span class="va">ADLB</span><span class="op">$</span><span class="va">LBTESTCD</span>,</span>
-<span class="r-in">  marker_pos <span class="op">=</span> <span class="va">ADLB</span><span class="op">$</span><span class="va">ADY</span>,</span>
-<span class="r-in">  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span>
-<span class="r-in">  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span class="r-in">  line_col_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span class="r-in">  line_width <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span class="r-in">  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span>
-<span class="r-in">  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADLB</span><span class="op">$</span><span class="va">ANRIND</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">"HIGH"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"LOW"</span> <span class="op">=</span> <span class="st">"blue"</span>,</span>
-<span class="r-in">      <span class="st">"NORMAL"</span> <span class="op">=</span> <span class="st">"green"</span>, <span class="st">"NA"</span> <span class="op">=</span> <span class="st">"green"</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  marker_shape_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span class="r-in">    marker_shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADLB</span><span class="op">$</span><span class="va">ANRIND</span><span class="op">)</span>,</span>
-<span class="r-in">    marker_shape_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">      <span class="st">"HIGH"</span> <span class="op">=</span> <span class="fl">24</span>, <span class="st">"LOW"</span> <span class="op">=</span> <span class="fl">25</span>,</span>
-<span class="r-in">      <span class="st">"NORMAL"</span> <span class="op">=</span> <span class="fl">23</span>, <span class="st">"NA"</span> <span class="op">=</span> <span class="fl">23</span></span>
-<span class="r-in">    <span class="op">)</span>,</span>
-<span class="r-in">    marker_shape_legend <span class="op">=</span> <span class="st">"Labs Abnormality"</span></span>
-<span class="r-in">  <span class="op">)</span>,</span>
-<span class="r-in">  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span>
-<span class="r-in">  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span>
-<span class="r-in">  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">p5</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Example 5 Laboratory "ADLB"</span></span></span>
+<span class="r-in"><span><span class="va">rADLB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span><span class="op">$</span><span class="va">adlb</span></span></span>
+<span class="r-in"><span><span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="va">rADLB</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">LBSEQ</span>, <span class="va">PARAMCD</span>, <span class="va">BASETYPE</span>,</span></span>
+<span class="r-in"><span>    <span class="va">ADTM</span>, <span class="va">ADY</span>, <span class="va">ATPTN</span>, <span class="va">AVISITN</span>, <span class="va">LBTESTCD</span>, <span class="va">ANRIND</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADLB</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="va">ADLB</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">USUBJID</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>ANRIND <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ANRIND</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"LOW"</span>, <span class="st">"NORMAL"</span>, <span class="st">"HIGH"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="fu">patient_domain_profile</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  domain <span class="op">=</span> <span class="st">"Laboratory (ADLB)"</span>,</span></span>
+<span class="r-in"><span>  var_names <span class="op">=</span> <span class="va">ADLB</span><span class="op">$</span><span class="va">LBTESTCD</span>,</span></span>
+<span class="r-in"><span>  marker_pos <span class="op">=</span> <span class="va">ADLB</span><span class="op">$</span><span class="va">ADY</span>,</span></span>
+<span class="r-in"><span>  arrow_end <span class="op">=</span> <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span>,</span></span>
+<span class="r-in"><span>  xtick_at <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/waiver.html" class="external-link">waiver</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  line_col_list <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
+<span class="r-in"><span>  line_width <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  arrow_size <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
+<span class="r-in"><span>  no_enddate_extention <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  marker_col_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADLB</span><span class="op">$</span><span class="va">ANRIND</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_col_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"HIGH"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"LOW"</span> <span class="op">=</span> <span class="st">"blue"</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"NORMAL"</span> <span class="op">=</span> <span class="st">"green"</span>, <span class="st">"NA"</span> <span class="op">=</span> <span class="st">"green"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  marker_shape_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    marker_shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">ADLB</span><span class="op">$</span><span class="va">ANRIND</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_shape_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      <span class="st">"HIGH"</span> <span class="op">=</span> <span class="fl">24</span>, <span class="st">"LOW"</span> <span class="op">=</span> <span class="fl">25</span>,</span></span>
+<span class="r-in"><span>      <span class="st">"NORMAL"</span> <span class="op">=</span> <span class="fl">23</span>, <span class="st">"NA"</span> <span class="op">=</span> <span class="fl">23</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span>,</span></span>
+<span class="r-in"><span>    marker_shape_legend <span class="op">=</span> <span class="st">"Labs Abnormality"</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>,</span></span>
+<span class="r-in"><span>  show_days_label <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>  xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">30</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">max_day</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  xlab <span class="op">=</span> <span class="st">"Study Day"</span>,</span></span>
+<span class="r-in"><span>  title <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Patient Profile: "</span>, <span class="va">ADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p5</span></span></span>
 <span class="r-plt img"><img src="patient_domain_profile-5.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
