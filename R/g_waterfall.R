@@ -354,7 +354,7 @@ g_waterfall <- function(bar_id,
         )
     }
 
-    if (is.null(bar_color_opt) && !is.null(getOption("ggplot2.discrete.colour"))){
+    if (is.null(bar_color_opt) && !is.null(getOption("ggplot2.discrete.colour"))) {
       bar_color_opt <- getOption("ggplot2.discrete.colour")
     }
     if (!is.null(bar_color_opt)) {
