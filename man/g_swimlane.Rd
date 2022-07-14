@@ -63,6 +63,7 @@ patient bar plot with markers of events and patient level annotation
 \examples{
 # Example 1
 library(dplyr)
+library(nestcolor)
 
 ASL <- rADSL[1:20, ]
 ARS <- ASL \%>\%
@@ -92,6 +93,7 @@ g_swimlane(
 
 # Example 2
 library(dplyr)
+library(nestcolor)
 
 ASL <- rADSL[1:20, ]
 ARS <- rADRS

@@ -43,6 +43,7 @@
 #' library(scda)
 #' library(dplyr)
 #' library(grid)
+#' library(nestcolor)
 #'
 #' ADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADAE <- synthetic_cdisc_data("latest")$adae
@@ -121,7 +122,7 @@ g_events_term_id <- function(term,
                              diff_ci_method =
                                c("wald", "waldcc", "ac", "score", "scorecc", "mn", "mee", "blj", "ha", "beal"),
                              axis_side = c("left", "right"),
-                             color = c("blue", "red"),
+                             color = NULL,
                              shape = c(16, 17),
                              fontsize = 4,
                              draw = TRUE) {
@@ -136,6 +137,14 @@ g_events_term_id <- function(term,
   } else {
     term_levels <- `if`(is.factor(term), levels(term), unique(term))
     df <- tibble::tibble(id, arm, term)
+  }
+
+  if (is.null(color)) {
+    if (!is.null(getOption("ggplot2.discrete.colour"))) {
+      color <- getOption("ggplot2.discrete.colour")[1:2]
+    } else {
+      color <- c("blue", "red")
+    }
   }
 
   # argument validation

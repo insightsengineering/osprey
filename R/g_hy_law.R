@@ -59,6 +59,7 @@
 #' @examples
 #' library(scda)
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' # Note: CRP is being used in place of Bilirubin here because this is the only available data
 #' # available in SCDA

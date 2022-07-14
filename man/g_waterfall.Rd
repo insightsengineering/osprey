@@ -70,6 +70,7 @@ response to a particular drug based on a parameter.
 \examples{
 library(tidyr)
 library(dplyr)
+library(nestcolor)
 
 g_waterfall(
   bar_id = letters[1:3], bar_height = c(3, 5, -1),
