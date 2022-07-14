@@ -248,7 +248,7 @@ g_swimlane <- function(bar_id,
 
     if (is.null(marker_color_opt)) {
       if (!is.null(getOption("ggplot2.discrete.colour"))) {
-        marker_color_opt <- getOption("ggplot2.discrete.colour")[-c(1:length(unique(col_by)))]
+        marker_color_opt <- getOption("ggplot2.discrete.colour")[-seq_len(length(unique(col_by)))]
       } else {
         marker_color_opt <- c("x" = "black")
       }
