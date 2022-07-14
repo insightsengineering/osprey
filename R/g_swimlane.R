@@ -28,6 +28,7 @@
 #' @examples
 #' # Example 1
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' ASL <- rADSL[1:20, ]
 #' ARS <- ASL %>%
@@ -57,6 +58,7 @@
 #'
 #' # Example 2
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' ASL <- rADSL[1:20, ]
 #' ARS <- rADRS
@@ -195,6 +197,10 @@ g_swimlane <- function(bar_id,
     # Note ylab as we have coord_flip above
     ylab(xlab)
 
+  if (!is.null(getOption("ggplot2.discrete.colour"))) {
+    p <- p + scale_fill_manual(values = getOption("ggplot2.discrete.colour"))
+  }
+
   if (is.null(col_by)) {
     p <- p + guides(fill = "none")
   } else {
@@ -240,22 +246,19 @@ g_swimlane <- function(bar_id,
         values = if (!is.null(marker_shape_opt)) marker_shape_opt else c(15:25, 0:14)
       )
 
-    if (!is.null(marker_color_opt) || all(marker_data$marker_color == "x")) {
-      p <- p + scale_color_manual(
-        name = "Marker Color",
-        breaks = levels(factor(marker_data$marker_color)),
-        values = if (!is.null(marker_color_opt)) {
-          marker_color_opt
-        } else {
-          c("x" = "black")
-        }
-      )
-    } else {
-      p <- p + scale_color_discrete(
-        name = "Marker Color",
-        breaks = levels(factor(marker_data$marker_color))
-      )
+    if (is.null(marker_color_opt)) {
+      if (!is.null(getOption("ggplot2.discrete.colour"))) {
+        marker_color_opt <- getOption("ggplot2.discrete.colour")[-c(1:length(unique(col_by)))]
+      } else {
+        marker_color_opt <- c("x" = "black")
+      }
     }
+
+    p <- p + scale_color_manual(
+      name = "Marker Color",
+      breaks = levels(factor(marker_data$marker_color)),
+      values = marker_color_opt
+    )
   }
 
   # plot reference lines

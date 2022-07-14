@@ -38,6 +38,7 @@
 #' @examples
 #' library(tidyr)
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' g_waterfall(
 #'   bar_id = letters[1:3], bar_height = c(3, 5, -1),
@@ -351,9 +352,13 @@ g_waterfall <- function(bar_id,
           legend.text = element_text(size = 9),
           legend.key = element_rect(fill = NA)
         )
-      if (!is.null(bar_color_opt)) {
-        p <- p + scale_fill_manual(values = bar_color_opt)
-      }
+    }
+
+    if (is.null(bar_color_opt) && !is.null(getOption("ggplot2.discrete.colour"))){
+      bar_color_opt <- getOption("ggplot2.discrete.colour")
+    }
+    if (!is.null(bar_color_opt)) {
+      p <- p + scale_fill_manual(values = bar_color_opt)
     }
 
     # plot reference lines
