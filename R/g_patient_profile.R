@@ -809,8 +809,13 @@ g_patient_profile <- function(ex = NULL,
       no_enddate_extention = 0.1,
       marker_col_list = list(
         marker_col = factor(ae$data$AETOXGR),
-        marker_col_opt = if (!is.null(cols)) cols else c(
-          "1" = "green", "2" = "blue", "3" = "yellow", "4" = "orange", "5" = "red"),
+        marker_col_opt = if (!is.null(cols)) {
+          cols
+        } else {
+          c(
+            "1" = "green", "2" = "blue", "3" = "yellow", "4" = "orange", "5" = "red"
+          )
+        },
         marker_col_legend = "Grade"
       ),
       marker_shape_list = NULL,
