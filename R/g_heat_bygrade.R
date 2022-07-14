@@ -154,11 +154,11 @@ g_heat_bygrade <- function(id_var,
   )
   checkmate::assert_data_frame(heat_data)
   checkmate::assert_choice(heat_color_var, names(heat_data))
-  checkmate::assert_choice(conmed_var, names(conmed_data), null.ok = TRUE)
   stopifnot(
     "invalid argument: need to provide conmed_data and conmed_var" =
       any(is.null(conmed_data), is.null(conmed_data) == is.null(conmed_var))
   )
+  checkmate::assert_choice(conmed_var, names(conmed_data), null.ok = TRUE)
   stopifnot(
     "invalid argument: please only include no more than three conmeds for plotting" =
       is.null(conmed_var) || length(levels(conmed_data[[conmed_var]])) <= 3
@@ -253,7 +253,15 @@ g_heat_bygrade <- function(id_var,
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
       name = "Highest grade of\nindividual events",
-      values = if (!is.null(heat_color_opt)) heat_color_opt else rev(grDevices::terrain.colors(6))
+      values = if (!is.null(heat_color_opt)) {
+        heat_color_opt
+      } else {
+        if (!is.null(getOption("ggplot2.discrete.colour"))) {
+          rev(grDevices::hcl.colors(6, palette = "peach"))
+        } else {
+          rev(grDevices::terrain.colors(6))
+        }
+      }
     ) +
     # plot dose reduction
     geom_segment(
@@ -295,7 +303,15 @@ g_heat_bygrade <- function(id_var,
       ) +
       scale_colour_manual(
         name = attr(conmed_data[[conmed_var]], "label"),
-        values = if (!is.null(conmed_color_opt)) conmed_color_opt else rep("black", 5)
+        values = if (!is.null(conmed_color_opt)) {
+          conmed_color_opt
+        } else {
+          if (!is.null(getOption("ggplot2.discrete.colour"))) {
+            getOption("ggplot2.discrete.colour")[-2]
+          } else {
+            rep("black", 5)
+          }
+        }
       ) +
       scale_shape_manual(
         name = attr(conmed_data[[conmed_var]], "label"),

@@ -78,6 +78,7 @@ The plot output will not include domains with data unspecified
 \examples{
 library(scda)
 library(dplyr)
+library(nestcolor)
 
 # ADSL
 rADSL <- synthetic_cdisc_data("latest")$adsl

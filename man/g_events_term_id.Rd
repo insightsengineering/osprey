@@ -19,7 +19,7 @@ g_events_term_id(
   diff_ci_method = c("wald", "waldcc", "ac", "score", "scorecc", "mn", "mee", "blj",
     "ha", "beal"),
   axis_side = c("left", "right"),
-  color = c("blue", "red"),
+  color = NULL,
   shape = c(16, 17),
   fontsize = 4,
   draw = TRUE
@@ -92,6 +92,7 @@ there is no equivalent STREAM output
 library(scda)
 library(dplyr)
 library(grid)
+library(nestcolor)
 
 ADSL <- synthetic_cdisc_data("latest")$adsl
 ADAE <- synthetic_cdisc_data("latest")$adae

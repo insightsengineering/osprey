@@ -384,7 +384,13 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
       )
 
-    if (is.null(line_col_opt)) line_col_opt <- grDevices::hcl.colors(length(levels(line_data$line_col)))
+    if (is.null(line_col_opt)) {
+      if (!is.null(getOption("ggplot2.discrete.colour"))) {
+        line_col_opt <- getOption("ggplot2.discrete.colour")
+      } else {
+        line_col_opt <- grDevices::hcl.colors(length(levels(line_data$line_col)))
+      }
+    }
 
     p <- p +
       scale_color_manual(
@@ -416,7 +422,13 @@ patient_domain_profile <- function(domain = NULL,
         na.rm = TRUE
       )
 
-    if (is.null(marker_col_opt)) marker_col_opt <- grDevices::hcl.colors(length(levels(marker_data$marker_col)))
+    if (is.null(marker_col_opt)) {
+      if (!is.null(getOption("ggplot2.discrete.colour"))) {
+        marker_col_opt <- getOption("ggplot2.discrete.colour")
+      } else {
+        marker_col_opt <- grDevices::hcl.colors(length(levels(marker_data$marker_col)))
+      }
+    }
     p <- p +
       scale_fill_manual(
         breaks = marker_data$marker_col,
@@ -483,7 +495,13 @@ patient_domain_profile <- function(domain = NULL,
       }
     }
 
-    if (is.null(marker_col_opt)) marker_col_opt <- grDevices::hcl.colors(length(levels(marker_data$marker_col)))
+    if (is.null(marker_col_opt)) {
+      if (!is.null(getOption("ggplot2.discrete.colour"))) {
+        marker_col_opt <- getOption("ggplot2.discrete.colour")
+      } else {
+        marker_col_opt <- grDevices::hcl.colors(length(levels(marker_data$marker_col)))
+      }
+    }
     p <- p +
       scale_fill_manual(
         name = marker_col_legend,
@@ -600,6 +618,7 @@ patient_domain_profile <- function(domain = NULL,
 #' @examples
 #' library(scda)
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' # ADSL
 #' rADSL <- synthetic_cdisc_data("latest")$adsl
@@ -736,6 +755,12 @@ g_patient_profile <- function(ex = NULL,
   show_title <- c(FALSE, FALSE, FALSE, FALSE, FALSE)
   show_title[min(which(select == TRUE))] <- TRUE
 
+  if (!is.null(getOption("ggplot2.discrete.colour"))) {
+    cols <- getOption("ggplot2.discrete.colour")
+  } else {
+    cols <- NULL
+  }
+
   # Domain "ADEX"
   if (select["ex"]) {
     p1 <- patient_domain_profile(
@@ -750,7 +775,7 @@ g_patient_profile <- function(ex = NULL,
       no_enddate_extention = 0,
       marker_col_list = list(
         marker_col = factor(ex$data$Modification),
-        marker_col_opt = c("Increase" = "red", "Decrease" = "green", "None" = "blue")
+        marker_col_opt = if (!is.null(cols)) cols else c("Increase" = "red", "Decrease" = "green", "None" = "blue")
       ),
       marker_shape_list = list(
         marker_shape = factor(ex$data$Modification),
@@ -784,7 +809,8 @@ g_patient_profile <- function(ex = NULL,
       no_enddate_extention = 0.1,
       marker_col_list = list(
         marker_col = factor(ae$data$AETOXGR),
-        marker_col_opt = c("1" = "green", "2" = "blue", "3" = "yellow", "4" = "orange", "5" = "red"),
+        marker_col_opt = if (!is.null(cols)) cols else c(
+          "1" = "green", "2" = "blue", "3" = "yellow", "4" = "orange", "5" = "red"),
         marker_col_legend = "Grade"
       ),
       marker_shape_list = NULL,
@@ -813,11 +839,14 @@ g_patient_profile <- function(ex = NULL,
       no_enddate_extention = 0,
       marker_col_list = list(
         marker_col = factor(rs$data$AVALC),
-        marker_col_opt =
+        marker_col_opt = if (!is.null(cols)) {
+          cols
+        } else {
           c(
             "CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
             "NE" = "pink", "Y" = "lightblue", "N" = "darkred"
           )
+        }
       ),
       marker_shape_list = list(
         marker_shape = factor(rs$data$AVALC),
@@ -843,11 +872,11 @@ g_patient_profile <- function(ex = NULL,
       marker_pos = cm$data[, c("ASTDY", "AENDY")],
       arrow_end = arrow_end_day,
       xtick_at = waiver(),
-      line_col_list = list(line_col_opt = "orange"),
+      line_col_list = list(line_col_opt = if (!is.null(cols)) cols else "orange"),
       line_width = 1,
       arrow_size = 0.1,
       no_enddate_extention = 0.1,
-      marker_col_list = list(marker_col_opt = "orange"),
+      marker_col_list = list(marker_col_opt = if (!is.null(cols)) cols else "orange"),
       marker_shape_list = NULL,
       show_days_label = show_days_label[4],
       xlim = xlim,
@@ -873,7 +902,7 @@ g_patient_profile <- function(ex = NULL,
       no_enddate_extention = 0,
       marker_col_list = list(
         marker_col = factor(lb$data$ANRIND),
-        marker_col_opt = c("HIGH" = "red", "LOW" = "blue", "NORMAL" = "green")
+        marker_col_opt = if (!is.null(cols)) cols else c("HIGH" = "red", "LOW" = "blue", "NORMAL" = "green")
       ),
       marker_shape_list = list(
         marker_shape = factor(lb$data$ANRIND),
