@@ -253,10 +253,14 @@ g_heat_bygrade <- function(id_var,
     scale_y_discrete(drop = FALSE) +
     scale_fill_manual(
       name = "Highest grade of\nindividual events",
-      values = if (!is.null(heat_color_opt)) heat_color_opt else {
+      values = if (!is.null(heat_color_opt)) {
+        heat_color_opt
+      } else {
         if (!is.null(getOption("ggplot2.discrete.colour"))) {
           rev(grDevices::hcl.colors(6, palette = "peach"))
-        } else rev(grDevices::terrain.colors(6))
+        } else {
+          rev(grDevices::terrain.colors(6))
+        }
       }
     ) +
     # plot dose reduction
@@ -303,7 +307,7 @@ g_heat_bygrade <- function(id_var,
           conmed_color_opt
         } else {
           if (!is.null(getOption("ggplot2.discrete.colour"))) {
-              getOption("ggplot2.discrete.colour")[-2]
+            getOption("ggplot2.discrete.colour")[-2]
           } else {
             rep("black", 5)
           }
