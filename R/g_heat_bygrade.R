@@ -296,13 +296,14 @@ g_heat_bygrade <- function(id_var,
       scale_colour_manual(
         name = attr(conmed_data[[conmed_var]], "label"),
         values = if (!is.null(conmed_color_opt)) {
-          conmed_color_opt} else {
-            if (!is.null(getOption("ggplot2.discrete.colour"))) {
-              getOption("ggplot2.discrete.colour")
-            } else {
-              rep("black", 5)
-            }
+          conmed_color_opt
+        } else {
+          if (!is.null(getOption("ggplot2.discrete.colour"))) {
+            getOption("ggplot2.discrete.colour")
+          } else {
+            rep("black", 5)
           }
+        }
       ) +
       scale_shape_manual(
         name = attr(conmed_data[[conmed_var]], "label"),

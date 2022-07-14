@@ -838,11 +838,14 @@ g_patient_profile <- function(ex = NULL,
       no_enddate_extention = 0,
       marker_col_list = list(
         marker_col = factor(rs$data$AVALC),
-        marker_col_opt = if (!is.null(cols)) cols else
+        marker_col_opt = if (!is.null(cols)) {
+          cols
+        } else {
           c(
             "CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
             "NE" = "pink", "Y" = "lightblue", "N" = "darkred"
           )
+        }
       ),
       marker_shape_list = list(
         marker_shape = factor(rs$data$AVALC),
