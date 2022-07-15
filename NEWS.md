@@ -10,7 +10,7 @@
 
 ### Enhancements
 
-* Implemented `nestcolor` with slight refactoring to `g_butterfly`, `g_events_term_id`, `g_heat_bygrade`, `g_patient_profile`, 
+* Implemented `nestcolor` with slight refactoring to `g_events_term_id`, `g_heat_bygrade`, `g_patient_profile`, 
   `g_swimlane`, and `g_waterfall`. Added `nestcolor` in examples without custom color manuals.
 
 # osprey 0.1.13
