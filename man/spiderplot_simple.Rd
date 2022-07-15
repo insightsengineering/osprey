@@ -34,6 +34,7 @@ Description of this plot
 }
 \examples{
 library(dplyr)
+library(nestcolor)
 
 ADSL <- rADSL
 ADRS <- rADRS

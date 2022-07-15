@@ -1,3 +1,4 @@
+---
 current_repo:
   repo: insightsengineering/osprey
   host: https://github.com
@@ -10,6 +11,9 @@ upstream_repos:
     host: https://github.com
   insightsengineering/scda.2021:
     repo: insightsengineering/scda.2021
+    host: https://github.com
+  insightsengineering/nestcolor:
+    repo: insightsengineering/nestcolor
     host: https://github.com
 downstream_repos:
   insightsengineering/teal.osprey:

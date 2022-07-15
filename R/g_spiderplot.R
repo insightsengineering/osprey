@@ -45,6 +45,7 @@
 #' @examples
 #' # simple example
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
 #' ADSL <- rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)

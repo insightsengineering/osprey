@@ -18,6 +18,7 @@
 #'
 #' @examples
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' ADSL <- rADSL
 #' ADRS <- rADRS

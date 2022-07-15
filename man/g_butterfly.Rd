@@ -73,6 +73,7 @@ there is no equivalent STREAM output
 }
 \examples{
 library(dplyr)
+library(nestcolor)
 
 ADSL <- rADSL \%>\%
   select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\%
