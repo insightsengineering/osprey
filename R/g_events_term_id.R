@@ -61,6 +61,7 @@
 #' arm_N <- table(ADSL$ACTARMCD)
 #' ref <- "ARM A"
 #' trt <- "ARM C"
+#'
 #' # Example 1
 #' p1 <- g_events_term_id(
 #'   term,
@@ -137,14 +138,6 @@ g_events_term_id <- function(term,
   } else {
     term_levels <- `if`(is.factor(term), levels(term), unique(term))
     df <- tibble::tibble(id, arm, term)
-  }
-
-  if (is.null(color)) {
-    if (!is.null(getOption("ggplot2.discrete.colour"))) {
-      color <- getOption("ggplot2.discrete.colour")[1:2]
-    } else {
-      color <- c("blue", "red")
-    }
   }
 
   # argument validation

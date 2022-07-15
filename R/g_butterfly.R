@@ -281,10 +281,6 @@ g_butterfly <- function(category,
       labs(x = y_label, y = block_count, fill = legend_label)
   }
 
-  if (!is.null(getOption("ggplot2.discrete.colour"))) {
-    pl <- pl + scale_fill_manual(values = getOption("ggplot2.discrete.colour"))
-  }
-
   if (!is.null(facet_rows)) {
     pl <- pl + facet_wrap(~f_rows, ncol = 1)
   }

@@ -126,13 +126,13 @@ g_swimlane(
   marker_id = sub(".*-", "", ANL$USUBJID),
   marker_pos = ANL$ADY,
   marker_shape = ANL$AVALC,
-  marker_shape_opt <- c(
+  marker_shape_opt = c(
     "CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 0,
     "Adverse Event" = 7, "Death" = 8, "Physician Decision" = 9, "Progressive Disease" = 10,
     "Symptomatic Deterioation" = 11, "Withdrawal by Subject" = 12
   ),
   marker_color = ANL$AVALC,
-  marker_color_opt <- c(
+  marker_color_opt = c(
     "CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
     "NE" = "grey", "Adverse Event" = "orange", "Death" = "black", "Physician Decision" = "navy",
     "Progressive Disease" = "purple", "Symptomatic Deterioation" = "cyan",

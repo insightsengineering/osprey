@@ -251,7 +251,7 @@ g_heat_bygrade <- function(id_var,
   ) +
     geom_tile(aes(fill = .data$heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
-    scale_fill_manual(
+    scale_fill_discrete(
       name = "Highest grade of\nindividual events",
       values = if (!is.null(heat_color_opt)) {
         heat_color_opt
