@@ -424,7 +424,7 @@ patient_domain_profile <- function(domain = NULL,
 
     if (is.null(marker_col_opt)) {
       marker_col_opt <- if (!is.null(getOption("ggplot2.discrete.colour"))) {
-         getOption("ggplot2.discrete.colour")
+        getOption("ggplot2.discrete.colour")
       } else {
         grDevices::hcl.colors(length(levels(marker_data$marker_col)))
       }
