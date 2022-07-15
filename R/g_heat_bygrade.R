@@ -253,7 +253,7 @@ g_heat_bygrade <- function(id_var,
     scale_y_discrete(drop = FALSE) +
     scale_fill_discrete(
       name = "Highest grade of\nindividual events",
-      values = if (!is.null(heat_color_opt)) {
+      type = if (!is.null(heat_color_opt)) {
         heat_color_opt
       } else {
         if (!is.null(getOption("ggplot2.discrete.colour"))) {
