@@ -42,6 +42,7 @@
 #'
 #' @examples
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' ADSL <- rADSL %>%
 #'   select(USUBJID, STUDYID, SEX, ARM, RACE) %>%
@@ -283,7 +284,6 @@ g_butterfly <- function(category,
   if (!is.null(facet_rows)) {
     pl <- pl + facet_wrap(~f_rows, ncol = 1)
   }
-
 
   pl <- pl +
     theme_bw() +

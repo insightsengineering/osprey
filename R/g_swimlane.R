@@ -28,6 +28,7 @@
 #' @examples
 #' # Example 1
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' ASL <- rADSL[1:20, ]
 #' ARS <- ASL %>%
@@ -57,6 +58,7 @@
 #'
 #' # Example 2
 #' library(dplyr)
+#' library(nestcolor)
 #'
 #' ASL <- rADSL[1:20, ]
 #' ARS <- rADRS
@@ -89,13 +91,13 @@
 #'   marker_id = sub(".*-", "", ANL$USUBJID),
 #'   marker_pos = ANL$ADY,
 #'   marker_shape = ANL$AVALC,
-#'   marker_shape_opt <- c(
+#'   marker_shape_opt = c(
 #'     "CR" = 16, "PR" = 17, "SD" = 18, "PD" = 15, "NE" = 0,
 #'     "Adverse Event" = 7, "Death" = 8, "Physician Decision" = 9, "Progressive Disease" = 10,
 #'     "Symptomatic Deterioation" = 11, "Withdrawal by Subject" = 12
 #'   ),
 #'   marker_color = ANL$AVALC,
-#'   marker_color_opt <- c(
+#'   marker_color_opt = c(
 #'     "CR" = "green", "PR" = "blue", "SD" = "yellow", "PD" = "red",
 #'     "NE" = "grey", "Adverse Event" = "orange", "Death" = "black", "Physician Decision" = "navy",
 #'     "Progressive Disease" = "purple", "Symptomatic Deterioation" = "cyan",
@@ -240,22 +242,19 @@ g_swimlane <- function(bar_id,
         values = if (!is.null(marker_shape_opt)) marker_shape_opt else c(15:25, 0:14)
       )
 
-    if (!is.null(marker_color_opt) || all(marker_data$marker_color == "x")) {
-      p <- p + scale_color_manual(
-        name = "Marker Color",
-        breaks = levels(factor(marker_data$marker_color)),
-        values = if (!is.null(marker_color_opt)) {
-          marker_color_opt
-        } else {
-          c("x" = "black")
-        }
-      )
-    } else {
-      p <- p + scale_color_discrete(
-        name = "Marker Color",
-        breaks = levels(factor(marker_data$marker_color))
-      )
+    if (is.null(marker_color_opt)) {
+      if (!is.null(getOption("ggplot2.discrete.colour"))) {
+        marker_color_opt <- getOption("ggplot2.discrete.colour")[-seq_len(length(unique(col_by)))]
+      } else {
+        marker_color_opt <- c("x" = "black")
+      }
     }
+
+    p <- p + scale_color_manual(
+      name = "Marker Color",
+      breaks = levels(factor(marker_data$marker_color)),
+      values = marker_color_opt
+    )
   }
 
   # plot reference lines
