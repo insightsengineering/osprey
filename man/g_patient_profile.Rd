@@ -83,14 +83,14 @@ library(nestcolor)
 # ADSL
 rADSL <- synthetic_cdisc_data("latest")$adsl
 ADSL <- rADSL \%>\%
-  group_by(USUBJID) \%>\%
+  filter(USUBJID == rADSL$USUBJID[1]) \%>\%
   mutate(
     TRTSDT = as.Date(TRTSDTM),
     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
   ) \%>\%
-  select(USUBJID, STUDYID, TRTSDT, max_day) \%>\%
-  filter(USUBJID == rADSL$USUBJID[1])
+  select(USUBJID, STUDYID, TRTSDT, max_day)
+
 
 # ADEX
 rADEX <- synthetic_cdisc_data("latest")$adex
