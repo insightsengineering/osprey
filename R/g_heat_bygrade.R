@@ -228,7 +228,7 @@ g_heat_bygrade <- function(id_var,
     slice_tail() %>%
     select(!!sym(id_var), !!sym(visit_var))
   visit_levels <- unique(anl_data[[visit_var]])
-  if (!is.null(conmed_data) & !is.null(conmed_var)) {
+  if (!is.null(conmed_data) && !is.null(conmed_var)) {
     conmed_data <- conmed_data %>%
       left_join(anl_data, by = c(id_var, visit_var)) %>%
       ungroup() %>%
@@ -291,7 +291,7 @@ g_heat_bygrade <- function(id_var,
       size = .5,
       color = "black"
     )
-  if (!is.null(conmed_data) & !is.null(conmed_var)) {
+  if (!is.null(conmed_data) && !is.null(conmed_var)) {
     p <- p +
       geom_point(
         data = conmed_data,
