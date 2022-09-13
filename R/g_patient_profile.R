@@ -73,14 +73,14 @@
 #' # ADSL
 #' rADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADSL <- rADSL %>%
-#'   group_by(USUBJID) %>%
+#'   filter(USUBJID == rADSL$USUBJID[1]) %>%
 #'   mutate(
 #'     TRTSDT = as.Date(TRTSDTM),
 #'     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
 #'     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
 #'   ) %>%
-#'   select(USUBJID, STUDYID, TRTSDT, max_day) %>%
-#'   filter(USUBJID == rADSL$USUBJID[1])
+#'   select(USUBJID, STUDYID, TRTSDT, max_day)
+#'
 #'
 #'
 #' # Example 1 Exposure "ADEX"
@@ -346,8 +346,8 @@ patient_domain_profile <- function(domain = NULL,
     line_data <- data.frame(
       var_names,
       line_col = if (is.null(line_col)) to_n("x", length(var_names)) else line_col,
-      line_start = unname(marker_pos[, 1]),
-      line_end = unname(marker_pos[, 2]),
+      line_start = unname(dplyr::pull(marker_pos, 1)),
+      line_end = unname(dplyr::pull(marker_pos, 2)),
       line_min = rep(xlim[1], length(var_names)),
       line_max = rep(arrow_end + no_enddate_extention, length(var_names))
     )
@@ -623,14 +623,14 @@ patient_domain_profile <- function(domain = NULL,
 #' # ADSL
 #' rADSL <- synthetic_cdisc_data("latest")$adsl
 #' ADSL <- rADSL %>%
-#'   group_by(USUBJID) %>%
+#'   filter(USUBJID == rADSL$USUBJID[1]) %>%
 #'   mutate(
 #'     TRTSDT = as.Date(TRTSDTM),
 #'     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
 #'     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
 #'   ) %>%
-#'   select(USUBJID, STUDYID, TRTSDT, max_day) %>%
-#'   filter(USUBJID == rADSL$USUBJID[1])
+#'   select(USUBJID, STUDYID, TRTSDT, max_day)
+#'
 #'
 #' # ADEX
 #' rADEX <- synthetic_cdisc_data("latest")$adex
