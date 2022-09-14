@@ -80,8 +80,9 @@ there is no equivalent STREAM output
 library(scda)
 library(grid)
 
-ADAE <- synthetic_cdisc_data("latest")$adae
-ADSL <- synthetic_cdisc_data("latest")$adsl
+cached_data <- synthetic_cdisc_data("latest")
+ADAE <- cached_data$adae
+ADSL <- cached_data$adsl
 
 id <- ADAE$USUBJID
 arm <- ADAE$ACTARMCD

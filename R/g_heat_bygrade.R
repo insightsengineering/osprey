@@ -33,10 +33,12 @@
 #' @examples
 #' library(scda)
 #' library(dplyr)
-#' ADSL <- synthetic_cdisc_data("latest")$adsl %>% slice(1:30)
-#' ADEX <- synthetic_cdisc_data("latest")$adex %>% filter(USUBJID %in% ADSL$USUBJID)
-#' ADAE <- synthetic_cdisc_data("latest")$adae %>% filter(USUBJID %in% ADSL$USUBJID)
-#' ADCM <- synthetic_cdisc_data("latest")$adcm %>% filter(USUBJID %in% ADSL$USUBJID)
+#'
+#' cached_data <- synthetic_cdisc_data("latest")
+#' ADSL <- cached_data$adsl %>% slice(1:30)
+#' ADEX <- cached_data$adex %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADAE <- cached_data$adae %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADCM <- cached_data$adcm %>% filter(USUBJID %in% ADSL$USUBJID)
 #' # function to derive AVISIT from ADEX
 #' add_visit <- function(data_need_visit) {
 #'   visit_dates <- ADEX %>%
@@ -226,7 +228,7 @@ g_heat_bygrade <- function(id_var,
     slice_tail() %>%
     select(!!sym(id_var), !!sym(visit_var))
   visit_levels <- unique(anl_data[[visit_var]])
-  if (!is.null(conmed_data) & !is.null(conmed_var)) {
+  if (!is.null(conmed_data) && !is.null(conmed_var)) {
     conmed_data <- conmed_data %>%
       left_join(anl_data, by = c(id_var, visit_var)) %>%
       ungroup() %>%
@@ -289,7 +291,7 @@ g_heat_bygrade <- function(id_var,
       size = .5,
       color = "black"
     )
-  if (!is.null(conmed_data) & !is.null(conmed_var)) {
+  if (!is.null(conmed_data) && !is.null(conmed_var)) {
     p <- p +
       geom_point(
         data = conmed_data,
