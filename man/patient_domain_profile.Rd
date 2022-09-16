@@ -104,21 +104,23 @@ adverse events (\code{ADAE}), response (\code{ADRS}), concomitant medications
 library(scda)
 library(dplyr)
 
+cached_data <- synthetic_cdisc_data("latest")
+
 # ADSL
-rADSL <- synthetic_cdisc_data("latest")$adsl
+rADSL <- cached_data$adsl
 ADSL <- rADSL \%>\%
-  group_by(USUBJID) \%>\%
+  filter(USUBJID == rADSL$USUBJID[1]) \%>\%
   mutate(
     TRTSDT = as.Date(TRTSDTM),
     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
   ) \%>\%
-  select(USUBJID, STUDYID, TRTSDT, max_day) \%>\%
-  filter(USUBJID == rADSL$USUBJID[1])
+  select(USUBJID, STUDYID, TRTSDT, max_day)
+
 
 
 # Example 1 Exposure "ADEX"
-rADEX <- synthetic_cdisc_data("latest")$adex
+rADEX <- cached_data$adex
 ADEX <- rADEX \%>\%
   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
@@ -173,7 +175,7 @@ p1
 # If AENDY and ASTDY occur on the same day only AENDY will be shown.
 
 # Adverse Event ADAE
-rADAE <- synthetic_cdisc_data("latest")$adae
+rADAE <- cached_data$adae
 ADAE <- rADAE \%>\%
   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
@@ -210,7 +212,7 @@ p2 <- patient_domain_profile(
 p2
 
 # Example 3 Tumor Response "ADRS"
-rADRS <- synthetic_cdisc_data("latest")$adrs
+rADRS <- cached_data$adrs
 ADRS <- rADRS \%>\%
   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
@@ -250,7 +252,7 @@ p3 <- patient_domain_profile(
 p3
 
 # Example 4 Concomitant Med "ADCM"
-rADCM <- synthetic_cdisc_data("latest")$adcm
+rADCM <- cached_data$adcm
 ADCM <- rADCM \%>\%
   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
@@ -274,7 +276,7 @@ p4 <- patient_domain_profile(
 p4
 
 # Example 5 Laboratory "ADLB"
-rADLB <- synthetic_cdisc_data("latest")$adlb
+rADLB <- cached_data$adlb
 ADLB <- rADLB \%>\%
   select(
     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE,

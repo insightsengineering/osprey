@@ -1,8 +1,8 @@
 Type: Package
 Package: osprey
-Title: R package to create TLGs
-Version: 0.1.14.9005
-Date: 2022-06-09
+Title: R Package to Create TLGs
+Version: 0.1.14.9007
+Date: 2022-09-14
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = "aut"),
@@ -41,8 +41,6 @@ Suggests:
     scda.2021 (>= 0.1.3),
     tern (>= 0.7.8),
     testthat (>= 2.0)
-VignetteBuilder:
-    knitr
 Remotes:
     insightsengineering/scda.2021@*release,
     insightsengineering/scda@*release,
