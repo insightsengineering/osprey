@@ -40,4 +40,3 @@ In order to run many of the examples you will also need to install the [`scda`](
 ### Forkers
 
 [![Forkers repo roster for @insightsengineering/osprey](https://reporoster.com/forks/insightsengineering/osprey)](https://github.com/insightsengineering/osprey/network/members)
-
