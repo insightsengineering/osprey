@@ -80,20 +80,22 @@ library(scda)
 library(dplyr)
 library(nestcolor)
 
+cached_data <- synthetic_cdisc_data("latest")
+
 # ADSL
-rADSL <- synthetic_cdisc_data("latest")$adsl
+rADSL <- cached_data$adsl
 ADSL <- rADSL \%>\%
-  group_by(USUBJID) \%>\%
+  filter(USUBJID == rADSL$USUBJID[1]) \%>\%
   mutate(
     TRTSDT = as.Date(TRTSDTM),
     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
   ) \%>\%
-  select(USUBJID, STUDYID, TRTSDT, max_day) \%>\%
-  filter(USUBJID == rADSL$USUBJID[1])
+  select(USUBJID, STUDYID, TRTSDT, max_day)
+
 
 # ADEX
-rADEX <- synthetic_cdisc_data("latest")$adex
+rADEX <- cached_data$adex
 ADEX <- rADEX \%>\%
   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
@@ -113,25 +115,25 @@ ADEX <- ADEX \%>\%
   ))
 
 # ADAE
-rADAE <- synthetic_cdisc_data("latest")$adae
+rADAE <- cached_data$adae
 ADAE <- rADAE \%>\%
   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
 # ADRS
-rADRS <- synthetic_cdisc_data("latest")$adrs
+rADRS <- cached_data$adrs
 ADRS <- rADRS \%>\%
   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 
 # ADCM
-rADCM <- synthetic_cdisc_data("latest")$adcm
+rADCM <- cached_data$adcm
 ADCM <- rADCM \%>\%
   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 
 # ADLB
-rADLB <- synthetic_cdisc_data("latest")$adlb
+rADLB <- cached_data$adlb
 ADLB <- rADLB \%>\%
   select(
     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
