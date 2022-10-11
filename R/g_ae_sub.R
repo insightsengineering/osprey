@@ -286,7 +286,7 @@ g_ae_sub <- function(id,
 
   # create label for plotting
   level_format_df <- df %>%
-    select(.data$strata, .data$value) %>%
+    select("strata", "value") %>%
     unique() %>%
     group_by(.data$strata) %>%
     summarise(value = paste(c("Total", .data$value), collapse = ",")) %>%
@@ -324,7 +324,7 @@ g_ae_sub <- function(id,
     )
 
   df_risk <- df %>%
-    select(.data$level, .data$lower, .data$upper, .data$riskdiff) %>%
+    select("level", "lower", "upper", "riskdiff") %>%
     unique()
   if (xmax <= 0) {
     xmax <- max(abs(df_risk$upper), abs(df_risk$lower), na.rm = TRUE)
