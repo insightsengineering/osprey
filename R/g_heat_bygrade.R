@@ -203,7 +203,7 @@ g_heat_bygrade <- function(id_var,
     group_by(!!sym(id_var), !!sym(visit_var)) %>%
     arrange(!!sym(visit_var)) %>%
     mutate(heat_color_max = factor(max(.data$heat_color_num), levels = 0:5)) %>%
-    select(-(!!heat_color_var), -.data$heat_color_num) %>% # nolint
+    select(-(!!heat_color_var), "heat_color_num") %>% # nolint
     distinct() %>%
     left_join(anno_data, by = id_var)
 
@@ -217,7 +217,7 @@ g_heat_bygrade <- function(id_var,
       LASTDOSE = lag(.data$AVAL),
       DOSERED = ifelse(.data$RANK != 1 & .data$AVAL < .data$LASTDOSE, TRUE, FALSE)
     ) %>%
-    select(!!sym(id_var), !!sym(visit_var), .data$RANK, .data$AVAL, .data$LASTDOSE, .data$DOSERED) %>%
+    select(!!sym(id_var), !!sym(visit_var), "RANK", "AVAL", "LASTDOSE", "DOSERED") %>%
     filter(.data$DOSERED == TRUE)
   # does ongoing data
   exp_lst <- exp_data %>%
