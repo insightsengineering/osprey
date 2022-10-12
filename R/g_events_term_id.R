@@ -187,7 +187,7 @@ g_events_term_id <- function(term,
     group_by(arm, term) %>%
     summarise(N = sum(.data$N)) %>%
     mutate(arm = ifelse(arm == trt, "trt_count", "ref_count")) %>%
-    tidyr::pivot_wider(names_from = arm, values_from = .data$N, values_fill = list(N = 0))
+    tidyr::pivot_wider(names_from = arm, values_from = "N", values_fill = list(N = 0))
 
   df_ci <- df_reshaped %>%
     group_by(term) %>%
@@ -207,7 +207,7 @@ g_events_term_id <- function(term,
       )
     ) %>%
     ungroup() %>%
-    rename(riskdiff = .data$est, lower_ci = .data$lwr.ci, upper_ci = .data$upr.ci)
+    rename(riskdiff = "est", lower_ci = "lwr.ci", upper_ci = "upr.ci")
 
   df_risk <- df_reshaped %>%
     group_by(term) %>%
