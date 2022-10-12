@@ -282,7 +282,7 @@ g_ae_sub <- function(id,
       names_sep = "__"
     ) %>%
     ungroup() %>%
-    tidyr::unite("level", .data$strata, .data$value, remove = FALSE, sep = "__")
+    tidyr::unite("level", "strata", "value", remove = FALSE, sep = "__")
 
   # create label for plotting
   level_format_df <- df %>%
@@ -290,9 +290,9 @@ g_ae_sub <- function(id,
     unique() %>%
     group_by(.data$strata) %>%
     summarise(value = paste(c("Total", .data$value), collapse = ",")) %>%
-    tidyr::separate_rows(.data$value, sep = ",") %>%
+    tidyr::separate_rows("value", sep = ",") %>%
     unique() %>%
-    tidyr::unite("level", .data$strata, .data$value, sep = "__", remove = FALSE) %>%
+    tidyr::unite("level", "strata", "value", sep = "__", remove = FALSE) %>%
     mutate(order = if_else(.data$strata == "TOTAL", integer(1), -row_number())) %>%
     arrange(order)
 
@@ -422,7 +422,7 @@ g_ae_sub <- function(id,
     tidyr::pivot_longer(
       names_to = "x",
       values_to = "v",
-      cols = c("lower", "upper", "riskdiff", trt, ref)
+      cols = c("lower", "upper", "riskdiff", matches(trt), matches(ref))
     ) %>%
     mutate(vlabel = sprintf("%.2f", .data$v))
 
