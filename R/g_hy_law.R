@@ -135,7 +135,7 @@ g_hy_law <- function(id,
     dplyr::mutate(MAX = max(aval)) %>%
     dplyr::slice(1) %>%
     dplyr::mutate(ULN = .data$MAX / anrhi) %>%
-    tidyr::pivot_wider(id_cols = c(id, arm), names_from = term, values_from = .data$ULN)
+    tidyr::pivot_wider(id_cols = c(id, arm), names_from = term, values_from = "ULN")
 
   p <- ggplot(data = anl) +
     scale_x_continuous(
