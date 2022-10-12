@@ -166,11 +166,11 @@ g_events_term_id <- function(term,
   df_n <- df_n[df_n$arm %in% arms, ]
   ref_total <- df_n %>%
     filter(arm == ref) %>%
-    select(.data$total) %>%
+    select("total") %>%
     pull()
   trt_total <- df_n %>%
     filter(arm == trt) %>%
-    select(.data$total) %>%
+    select("total") %>%
     pull()
 
   # create full cartesian of (arms) X (term levels) with 0 count to have full list of all possible combination
