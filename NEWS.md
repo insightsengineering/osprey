@@ -7,6 +7,7 @@
 * Updated installation instructions in the README.
 
 ### Fixes
+
 * Fixed a failure in `g_patient_profile` example. 
 
 # osprey 0.1.14
