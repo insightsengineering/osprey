@@ -1,5 +1,15 @@
 # osprey 0.1.14.9010
 
+### Enhancements
+
+* Implemented `nestcolor` with slight refactoring to `g_events_term_id`, `g_heat_bygrade`, `g_patient_profile`, 
+  `g_swimlane`, and `g_waterfall`. Added `nestcolor` in examples without custom color manuals.
+* Updated installation instructions in the README.
+
+### Fixes
+
+* Fixed a failure in `g_patient_profile` example. 
+
 # osprey 0.1.14
 
 ### Miscellaneous
@@ -7,11 +17,6 @@
 * Added a template to the `pkgdown` site.
 * Moved `tern` from `imports` into `suggests`; it is now only required for the function `grobs2pdf`.
 * Removed the dependency on `purrr`.
-
-### Enhancements
-
-* Implemented `nestcolor` with slight refactoring to `g_events_term_id`, `g_heat_bygrade`, `g_patient_profile`, 
-  `g_swimlane`, and `g_waterfall`. Added `nestcolor` in examples without custom color manuals.
 
 # osprey 0.1.13
 
