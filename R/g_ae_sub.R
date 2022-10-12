@@ -364,7 +364,7 @@ g_ae_sub <- function(id,
       group_by(.data$level, .data$arm) %>%
       summarise(n = sum(.data$total)) %>%
       tidyr::pivot_wider(names_from = arm, values_from = n) %>%
-      rename("n_trt" = trt, "n_ref" = ref)
+      rename(n_trt = matches(trt), n_ref = matches(ref))
 
     df_total <- df_total %>%
       left_join(df_byarm, by = "level") %>%
