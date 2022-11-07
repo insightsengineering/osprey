@@ -1,6 +1,10 @@
 
 # osprey
 
+<!-- start badges -->
+[![Code Coverage](https://raw.githubusercontent.com/insightsengineering/osprey/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/osprey/_xml_coverage_reports/data/main/coverage.xml)
+<!-- end badges -->
+
 `osprey` is an R package for community contributed analysis functions to create TLGs (tables, listing and graphs) for the analysis of clinical trials data. These functions can be used stand alone to generate static analysis, but are also called by the [teal.osprey](https://insightsengineering.github.io/teal.osprey/) package which provides `teal` modules to be used inside `teal` applications.
 
 The package provides:
