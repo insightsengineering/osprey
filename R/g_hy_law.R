@@ -119,13 +119,13 @@ g_hy_law <- function(id,
                      title = "Max. Total Bilirubin vs. Max. Alanine Aminotransferase",
                      xlab = "Maximum Alanine Aminotransferase (/ULN)",
                      ylab = "Maximum Total Bilirubin (/ULN)") {
-  checkmate::check_character(term_selected, len = 2, any.missing = FALSE)
-  checkmate::check_numeric(folds, len = 2, any.missing = FALSE)
-  checkmate::check_character(text, len = 4, any.missing = FALSE)
-  checkmate::check_string(title)
-  checkmate::check_string(caption)
-  checkmate::check_string(xlab)
-  checkmate::check_string(ylab)
+  checkmate::assert_character(term_selected, len = 2, any.missing = FALSE)
+  checkmate::assert_numeric(folds, len = 2, any.missing = FALSE)
+  checkmate::assert_character(text, len = 4, any.missing = FALSE)
+  checkmate::assert_string(title)
+  checkmate::assert_string(caption)
+  checkmate::assert_string(xlab)
+  checkmate::assert_string(ylab)
 
   anl <- data.frame(id, term, aval, arm, anrhi)
 
