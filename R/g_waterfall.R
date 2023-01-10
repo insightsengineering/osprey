@@ -344,7 +344,7 @@ g_waterfall <- function(bar_id,
     }
 
     if (is.null(col_by)) {
-      p <- p + guides(fill = FALSE)
+      p <- p + guides(fill = "none")
     } else {
       p <- p + guides(fill = guide_legend("Bar Color", order = 1, ncol = 1)) +
         theme(
