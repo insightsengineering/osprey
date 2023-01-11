@@ -1,6 +1,7 @@
 # osprey 0.1.15.9004
 
 * Examples now use `scda.2022` instead of `scda.2021`.
+* Updated deprecated argument specification in calls to `guides`.
 
 # osprey 0.1.15
 

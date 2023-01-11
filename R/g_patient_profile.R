@@ -404,7 +404,7 @@ patient_domain_profile <- function(domain = NULL,
     if (!is.null(line_col)) {
       p <- p + guides(color = guide_legend(line_col_legend, order = 1))
     } else {
-      p <- p + guides(color = FALSE)
+      p <- p + guides(color = "none")
     }
 
     # plot markers
@@ -449,7 +449,7 @@ patient_domain_profile <- function(domain = NULL,
     if (!is.null(marker_col)) {
       p <- p + guides(fill = guide_legend(marker_col_legend, order = 2))
     } else {
-      p <- p + guides(fill = FALSE)
+      p <- p + guides(fill = "none")
     }
 
     p <- p + guides(shape = guide_legend("Shape", order = 3))
@@ -460,7 +460,7 @@ patient_domain_profile <- function(domain = NULL,
     if (!is.null(marker_shape)) {
       p <- p + guides(shape = guide_legend(marker_shape_legend, order = 3))
     } else {
-      p <- p + guides(shape = FALSE)
+      p <- p + guides(shape = "none")
     }
   } else {
     p <- ggplot() +
