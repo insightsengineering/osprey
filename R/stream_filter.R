@@ -96,7 +96,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
       silent = TRUE
     )
 
-    if ("try-error" %in% class(new_df)) {
+    if (is(new_df, "try-error")) {
       # failed - retain original dataset
       warning(paste("\nFilter ID=", this_filter, "was NOT applied.", msg1, "\n Error message:", new_df))
       cat(paste("\nFilter ID=", this_filter, "was NOT applied.", msg1, "\n Error message:", new_df))
