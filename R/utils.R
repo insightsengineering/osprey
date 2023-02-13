@@ -167,7 +167,7 @@ grobs2pdf <- function(grobs,
   logtext <- paste(mget(ls(pattern = "log")), collapse = "\n")
 
   ## Make the grobs
-  if (class(grobs) != "list") {
+  if (!is.list(grobs)) {
     grobs <- list(grobs)
   }
 
@@ -336,9 +336,9 @@ grob_part <- function(gplot_grob, part) {
 grob_parts <- function(gplot, parts) {
   stopifnot("gplot must inherit from class 'ggplot' or 'grob'" = inherits(gplot, c("ggplot", "grob")))
 
-  if ("ggplot" %in% class(gplot)) {
+  if (is(gplot, "ggplot")) {
     gplot_grob <- ggplotGrob(gplot)
-  } else if ("grob" %in% class(gplot)) {
+  } else if (is(gplot, "grob")) {
     gplot_grob <- gplot
   }
   ret <- lapply(parts, grob_part, gplot = gplot_grob)
