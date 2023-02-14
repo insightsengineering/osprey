@@ -34,7 +34,7 @@
 stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep = NULL, usubjid = "USUBJID") {
   actual_suffix <- NULL
 
-  if (is.null(anl) & is.null(slref)) {
+  if (is.null(anl) && is.null(slref)) {
     stop("At least one of anl= or slref= must be provided")
   }
 
