@@ -29,6 +29,7 @@ Imports:
     grid,
     gridExtra,
     gtable,
+    methods,
     rlang,
     stats,
     stringr,
