@@ -34,7 +34,7 @@
 stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep = NULL, usubjid = "USUBJID") {
   actual_suffix <- NULL
 
-  if (is.null(anl) & is.null(slref)) {
+  if (is.null(anl) && is.null(slref)) {
     stop("At least one of anl= or slref= must be provided")
   }
 
@@ -96,7 +96,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
       silent = TRUE
     )
 
-    if ("try-error" %in% class(new_df)) {
+    if (is(new_df, "try-error")) {
       # failed - retain original dataset
       warning(paste("\nFilter ID=", this_filter, "was NOT applied.", msg1, "\n Error message:", new_df))
       cat(paste("\nFilter ID=", this_filter, "was NOT applied.", msg1, "\n Error message:", new_df))
@@ -192,8 +192,6 @@ stream_filter_index <- function(string1, string2) {
 #' stream_filter_convwhere(x = "where X in (1 2 3 4) and Y gt 4 ")
 #' stream_filter_convwhere(x = "where X = \"fred\" and Y gt 4 ")
 stream_filter_convwhere <- function(x) {
-
-
   # convert double quotes to single quotes. May fail if quoted values exist.
   this_rclause <- gsub("\"", "'", x, fixed = TRUE)
 
@@ -205,7 +203,6 @@ stream_filter_convwhere <- function(x) {
   inquotes <- rep(c(0, 1), length.out = length(this_rclause_quotes))
 
   for (j in seq_along(inquotes)) {
-
     # try and convert logic outside quotes
     if (inquotes[j] == 0) {
       this_rclause_quotes[j] <- toupper(this_rclause_quotes[j])
@@ -231,7 +228,6 @@ stream_filter_convwhere <- function(x) {
 
   # if contains an in  statement need to ensure commas exist
   if (grepl(" %in% c", this_rclause, fixed = TRUE)) {
-
     # get the clause (assume only 1 per filter...)
     temp1_str <- strsplit(this_rclause, split = " %in% c(", fixed = TRUE) %>%
       unlist()

@@ -167,7 +167,7 @@ grobs2pdf <- function(grobs,
   logtext <- paste(mget(ls(pattern = "log")), collapse = "\n")
 
   ## Make the grobs
-  if (class(grobs) != "list") {
+  if (!is.list(grobs)) {
     grobs <- list(grobs)
   }
 
@@ -176,7 +176,6 @@ grobs2pdf <- function(grobs,
     grobs = grobs,
     titles = titles,
     footnotes = paste(footnotes, logtext, sep = "\n\n"),
-    # outer_margins = grid::unit(c(bottom.margin, left.margin, top.margin, right.margin), "inches"),
     outer_margins = grid::unit(c(0, 0, 0, 0), "lines"),
     padding = grid::unit(0.5, "lines"),
     gp_titles = grid::gpar(fontsize = fontsize + 1, fontface = 2, lineheight = 1),
@@ -336,9 +335,9 @@ grob_part <- function(gplot_grob, part) {
 grob_parts <- function(gplot, parts) {
   stopifnot("gplot must inherit from class 'ggplot' or 'grob'" = inherits(gplot, c("ggplot", "grob")))
 
-  if ("ggplot" %in% class(gplot)) {
+  if (is(gplot, "ggplot")) {
     gplot_grob <- ggplotGrob(gplot)
-  } else if ("grob" %in% class(gplot)) {
+  } else if (is(gplot, "grob")) {
     gplot_grob <- gplot
   }
   ret <- lapply(parts, grob_part, gplot = gplot_grob)
