@@ -1,9 +1,9 @@
 # osprey
 
 <!-- start badges -->
-[![Check 🛠](https://github.com/insightsengineering/osprey/actions/workflows/check.yaml/badge.svg)](https://github.com/insightsengineering/osprey/actions/workflows/check.yaml)
+[![Check 🛠](https://github.com/insightsengineering/osprey/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/osprey/main/unit-test-report/)
 [![Docs 📚](https://github.com/insightsengineering/osprey/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/osprey/)
-[![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/osprey/_xml_coverage_reports/data/main/badge.svg)](https://raw.githubusercontent.com/insightsengineering/osprey/_xml_coverage_reports/data/main/coverage.xml)
+[![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/osprey/_xml_coverage_reports/data/main/badge.svg)](https://insightsengineering.github.io/osprey/main/coverage-report/)
 
 ![GitHub forks](https://img.shields.io/github/forks/insightsengineering/osprey?style=social)
 ![GitHub Repo stars](https://img.shields.io/github/stars/insightsengineering/osprey?style=social)
