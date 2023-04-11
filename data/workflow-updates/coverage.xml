@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage line-rate="0" branch-rate="0" lines-covered="0" lines-valid="2378" branches-covered="0" branches-valid="0" complexity="0" version="3.6.1" timestamp="2023-04-06 13:14:08">
-  <sources/>
+<!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
+<coverage line-rate="0" branch-rate="0" lines-covered="0" lines-valid="2378" branches-covered="0" branches-valid="0" complexity="0" version="3.6.2" timestamp="2023-04-11 13:56:58">
+  <sources>
+    <source>/__w/osprey/osprey/osprey</source>
+  </sources>
   <packages>
     <package name="osprey" line-rate="0" branch-rate="0" complexity="0">
       <classes>
         <class name="g_ae_sub.R" filename="R/g_ae_sub.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="g_ae_sub" signature="" line-rate="0" branch-rate="0">
+            <method name="g_ae_sub" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="151" hits="0" branch="false"/>
                 <line number="153" hits="0" branch="false"/>
@@ -704,7 +707,7 @@
         </class>
         <class name="g_butterfly.R" filename="R/g_butterfly.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="g_butterfly" signature="" line-rate="0" branch-rate="0">
+            <method name="g_butterfly" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="107" hits="0" branch="false"/>
                 <line number="108" hits="0" branch="false"/>
@@ -1080,7 +1083,7 @@
         </class>
         <class name="g_events_term_id.R" filename="R/g_events_term_id.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="g_events_term_id" signature="" line-rate="0" branch-rate="0">
+            <method name="g_events_term_id" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="130" hits="0" branch="false"/>
                 <line number="131" hits="0" branch="false"/>
@@ -1299,7 +1302,7 @@
                 <line number="389" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="create_flag_vars" signature="" line-rate="0" branch-rate="0">
+            <method name="create_flag_vars" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="445" hits="0" branch="false"/>
                 <line number="446" hits="0" branch="false"/>
@@ -1618,7 +1621,7 @@
         </class>
         <class name="g_heat_bygrade.R" filename="R/g_heat_bygrade.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="g_heat_bygrade" signature="" line-rate="0" branch-rate="0">
+            <method name="g_heat_bygrade" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="141" hits="0" branch="false"/>
                 <line number="142" hits="0" branch="false"/>
@@ -2044,7 +2047,7 @@
         </class>
         <class name="g_hy_law.R" filename="R/g_hy_law.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="g_hy_law" signature="" line-rate="0" branch-rate="0">
+            <method name="g_hy_law" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="122" hits="0" branch="false"/>
                 <line number="123" hits="0" branch="false"/>
@@ -2208,7 +2211,7 @@
         </class>
         <class name="g_patient_profile.R" filename="R/g_patient_profile.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="patient_domain_profile" signature="" line-rate="0" branch-rate="0">
+            <method name="patient_domain_profile" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="304" hits="0" branch="false"/>
                 <line number="305" hits="0" branch="false"/>
@@ -2419,7 +2422,7 @@
                 <line number="559" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="g_patient_profile" signature="" line-rate="0" branch-rate="0">
+            <method name="g_patient_profile" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="752" hits="0" branch="false"/>
                 <line number="753" hits="0" branch="false"/>
@@ -2594,7 +2597,7 @@
                 <line number="955" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="domain_check" signature="" line-rate="0" branch-rate="0">
+            <method name="domain_check" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="963" hits="0" branch="false"/>
                 <line number="964" hits="0" branch="false"/>
@@ -2996,7 +2999,7 @@
         </class>
         <class name="g_spiderplot_simple.R" filename="R/g_spiderplot_simple.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="spiderplot_simple" signature="" line-rate="0" branch-rate="0">
+            <method name="spiderplot_simple" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="37" hits="0" branch="false"/>
                 <line number="38" hits="0" branch="false"/>
@@ -3046,7 +3049,7 @@
         </class>
         <class name="g_spiderplot.R" filename="R/g_spiderplot.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="g_spiderplot" signature="" line-rate="0" branch-rate="0">
+            <method name="g_spiderplot" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="110" hits="0" branch="false"/>
                 <line number="112" hits="0" branch="false"/>
@@ -3408,7 +3411,7 @@
         </class>
         <class name="g_swimlane.R" filename="R/g_swimlane.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="g_swimlane" signature="" line-rate="0" branch-rate="0">
+            <method name="g_swimlane" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="129" hits="0" branch="false"/>
                 <line number="130" hits="0" branch="false"/>
@@ -3696,7 +3699,7 @@
         </class>
         <class name="g_waterfall.R" filename="R/g_waterfall.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="g_waterfall" signature="" line-rate="0" branch-rate="0">
+            <method name="g_waterfall" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="145" hits="0" branch="false"/>
                 <line number="147" hits="0" branch="false"/>
@@ -4318,7 +4321,7 @@
         </class>
         <class name="stream_filter.R" filename="R/stream_filter.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="stream_filter" signature="" line-rate="0" branch-rate="0">
+            <method name="stream_filter" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="35" hits="0" branch="false"/>
                 <line number="37" hits="0" branch="false"/>
@@ -4388,14 +4391,14 @@
                 <line number="154" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="stream_filter_index" signature="" line-rate="0" branch-rate="0">
+            <method name="stream_filter_index" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="172" hits="0" branch="false"/>
                 <line number="173" hits="0" branch="false"/>
                 <line number="174" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="stream_filter_convwhere" signature="" line-rate="0" branch-rate="0">
+            <method name="stream_filter_convwhere" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="196" hits="0" branch="false"/>
                 <line number="200" hits="0" branch="false"/>
@@ -4588,7 +4591,7 @@
         </class>
         <class name="utils.R" filename="R/utils.R" line-rate="0" branch-rate="0" complexity="0">
           <methods>
-            <method name="as_pdf" signature="" line-rate="0" branch-rate="0">
+            <method name="as_pdf" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="35" hits="0" branch="false"/>
                 <line number="36" hits="0" branch="false"/>
@@ -4601,7 +4604,7 @@
                 <line number="47" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="paper_size" signature="" line-rate="0" branch-rate="0">
+            <method name="paper_size" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="51" hits="0" branch="false"/>
                 <line number="52" hits="0" branch="false"/>
@@ -4620,7 +4623,7 @@
                 <line number="67" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="grobs2pdf" signature="" line-rate="0" branch-rate="0">
+            <method name="grobs2pdf" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="126" hits="0" branch="false"/>
                 <line number="127" hits="0" branch="false"/>
@@ -4681,7 +4684,7 @@
                 <line number="199" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="grob_add_padding" signature="" line-rate="0" branch-rate="0">
+            <method name="grob_add_padding" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="230" hits="0" branch="false"/>
                 <line number="231" hits="0" branch="false"/>
@@ -4692,7 +4695,7 @@
                 <line number="238" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="check_same_N" signature="" line-rate="0" branch-rate="0">
+            <method name="check_same_N" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="264" hits="0" branch="false"/>
                 <line number="266" hits="0" branch="false"/>
@@ -4719,7 +4722,7 @@
                 <line number="292" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="to_n" signature="" line-rate="0" branch-rate="0">
+            <method name="to_n" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="296" hits="0" branch="false"/>
                 <line number="297" hits="0" branch="false"/>
@@ -4730,7 +4733,7 @@
                 <line number="303" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="grob_part" signature="" line-rate="0" branch-rate="0">
+            <method name="grob_part" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="314" hits="0" branch="false"/>
                 <line number="315" hits="0" branch="false"/>
@@ -4745,7 +4748,7 @@
                 <line number="326" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="grob_parts" signature="" line-rate="0" branch-rate="0">
+            <method name="grob_parts" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="336" hits="0" branch="false"/>
                 <line number="338" hits="0" branch="false"/>
@@ -4757,7 +4760,7 @@
                 <line number="345" hits="0" branch="false"/>
               </lines>
             </method>
-            <method name="theme_osprey" signature="" line-rate="0" branch-rate="0">
+            <method name="theme_osprey" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
                 <line number="354" hits="0" branch="false"/>
                 <line number="355" hits="0" branch="false"/>
