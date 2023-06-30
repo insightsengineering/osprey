@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_swimlane.R
 \name{g_swimlane}
 \alias{g_swimlane}
-\title{Swimlane Plot}
+\title{\code{Swimlane} Plot}
 \usage{
 g_swimlane(
   bar_id,
@@ -57,7 +57,7 @@ g_swimlane(
 plot object
 }
 \description{
-Swimlane plot is often used in Early Development (ED) and displays individual
+\code{Swimlane} plot is often used in Early Development (ED) and displays individual
 patient bar plot with markers of events and patient level annotation
 }
 \examples{

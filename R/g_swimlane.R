@@ -1,7 +1,6 @@
-
-#' Swimlane Plot
+#' `Swimlane` Plot
 #'
-#' Swimlane plot is often used in Early Development (ED) and displays individual
+#' `Swimlane` plot is often used in Early Development (ED) and displays individual
 #' patient bar plot with markers of events and patient level annotation
 #'
 #' @param bar_id vector of IDs to identify each bar
@@ -124,7 +123,6 @@ g_swimlane <- function(bar_id,
                        xtick_at = waiver(),
                        xlab,
                        title) {
-
   # check data
   if (!is.null(sort_by)) {
     check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)
@@ -133,17 +131,17 @@ g_swimlane <- function(bar_id,
     check_same_N(bar_id = bar_id, bar_length = bar_length, col_by = col_by)
   }
 
-  if (!is.null(marker_id) & length(which(!marker_id %in% bar_id)) > 0) {
+  if (!is.null(marker_id) && length(which(!marker_id %in% bar_id)) > 0) {
     stop("marker_id ", marker_id[which(!marker_id %in% bar_id)], " is not in bar_id")
   }
 
-  if (!is.null(marker_id) & !is.null(marker_pos)) {
+  if (!is.null(marker_id) && !is.null(marker_pos)) {
     check_same_N(marker_id = marker_id, marker_pos = marker_pos)
   }
-  if (!is.null(marker_id) & !is.null(marker_shape)) {
+  if (!is.null(marker_id) && !is.null(marker_shape)) {
     check_same_N(marker_id = marker_id, marker_shape = marker_shape)
   }
-  if (!is.null(marker_id) & !is.null(marker_color)) {
+  if (!is.null(marker_id) && !is.null(marker_color)) {
     check_same_N(marker_id = marker_id, marker_color = marker_color)
   }
   if (!is.null(xref_line) && (!is.numeric(xref_line) || length(xref_line) == 0)) {

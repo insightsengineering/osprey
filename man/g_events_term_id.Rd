@@ -47,7 +47,7 @@ level of \code{arm}.}
 level of \code{arm}.}
 
 \item{sort_by}{\code{character} indicates how each \code{term} is sorted in the plot.
-Choose from "term" for alphabetic terms, "riskdiff" for risk difference, and "meanrisk"
+Choose from \code{"term"} for alphabetic terms, \code{"riskdiff"} for risk difference, and \code{"meanrisk"}
 for mean risk. Default is "term".}
 
 \item{rate_range}{Numeric \code{vector} of length 2. Range for overall rate display}
@@ -60,7 +60,7 @@ Default is FALSE.}
 \item{conf_level}{(\code{numeric})\cr the confidence interval level, default is 0.95.}
 
 \item{diff_ci_method}{(\code{character})\cr the method used to calculate confidence interval.
-Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
+Default is \code{"wald"}. Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
 \item{axis_side}{\code{character} the side of the axis label, "left" or "right". Default is "left".}
 
@@ -71,7 +71,7 @@ treatment arms respectively. Default set to \code{c("blue", "red")}.}
 treatment arms respectively. Default set to \code{c(16, 17)} per
 \code{\link[ggplot2]{scale_shape}}.}
 
-\item{fontsize}{(\code{numeric})\cr font size for the plot. It is the size used in ggplot2 with
+\item{fontsize}{(\code{numeric})\cr font size for the plot. It is the size used in \code{ggplot2} with
 default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 

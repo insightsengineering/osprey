@@ -2,7 +2,7 @@
 % Please edit documentation in R/stream_filter.R
 \name{stream_filter_index}
 \alias{stream_filter_index}
-\title{Replicates the use of index function in sas for logic options}
+\title{Replicates the use of index function in \code{SAS} for logic options}
 \usage{
 stream_filter_index(string1, string2)
 }
@@ -16,7 +16,7 @@ stream_filter_index(string1, string2)
 }
 \description{
 Assumption is that use in filters is to only resolve true vs false
-Primarily for use with stream_filter and related stream_filter_convwhere functions
+Primarily for use with stream_filter and related \code{stream_filter_convwhere} functions
 }
 \examples{
 AEACN <- c("DRUG MODIFIED", "DRUG STOPPED", "DOSE/DRUG MODIFIED")

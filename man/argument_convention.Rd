@@ -10,9 +10,9 @@ For example, \code{ADAE$ACTARMCD}.}
 \item{conf_level}{(\code{numeric})\cr the confidence interval level, default is 0.95.}
 
 \item{diff_ci_method}{(\code{character})\cr the method used to calculate confidence interval.
-Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
+Default is \code{"wald"}. Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
-\item{fontsize}{(\code{numeric})\cr font size for the plot. It is the size used in ggplot2 with
+\item{fontsize}{(\code{numeric})\cr font size for the plot. It is the size used in \code{ggplot2} with
 default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 

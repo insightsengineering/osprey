@@ -14,24 +14,24 @@ stream_filter(
 )
 }
 \arguments{
-\item{slref}{The subject level data frame (typically ASL.sas7bdat on BCE)}
+\item{slref}{The subject level data frame (typically \code{ASL.sas7bdat} on \code{BCE})}
 
-\item{anl}{The analysis data frame (e.g. ATE.sas7bdat on BCE)}
+\item{anl}{The analysis data frame (e.g. \code{ATE.sas7bdat} on \code{BCE})}
 
-\item{filters}{The name of the filters dataset (typically __filters.sas7bdat on BCE)}
+\item{filters}{The name of the filters dataset (typically \verb{__filters.sas7bdat} on \code{BCE})}
 
-\item{suffix}{The suffix to apply in quotes (e.g. "ITT_PFSINV")}
+\item{suffix}{The suffix to apply in quotes (e.g. \code{"ITT_PFSINV"})}
 
-\item{slref_keep}{Variables to keep from slref (e.g. c("REGION", "SEX"))}
+\item{slref_keep}{Variables to keep from \code{slref} (e.g. \code{c("REGION", "SEX")})}
 
-\item{usubjid}{The unique subject identifier variable in quotes (e.g. "USUBJID")}
+\item{usubjid}{The unique subject identifier variable in quotes (e.g. \code{"USUBJID"})}
 }
 \value{
 \code{dataframe} object
 }
 \description{
-One of slref or anl need to be specified. The conversion from SAS code in filters dataset may not work in all cases.
-In case of failure a sensible error message should be returned.
+One of \code{slref} or \code{anl} need to be specified. The conversion from \code{SAS} code in filters dataset may not work in all
+cases. In case of failure a sensible error message should be returned.
 }
 \examples{
 library(scda)
