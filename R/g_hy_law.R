@@ -1,7 +1,7 @@
 #' Hy's Law Plot
 #'
-#' A scatter plot typically used to display maximum total bilirubin values (TBL)
-#' versus maximum alanine transaminase (ALT) values.
+#' A scatter plot typically used to display maximum total bilirubin values (`TBL`)
+#' versus maximum alanine transaminase (`ALT`) values.
 #'
 #' @param id unique subject identifier.
 #' @param term the term of the observation.
@@ -24,7 +24,7 @@
 #' @param ylab string of text for y axis label.
 #'
 #' @details
-#' This graphic is based upon the eDISH (evaluation of Drug Induced Serious
+#' This graphic is based upon the `eDISH` (evaluation of Drug Induced Serious
 #' Hepatotoxicity) plot of Watkins et. al. in a 2008 publication from Hepatology.
 #' Maximum values are defined as the maximum post-baseline value at any time
 #' during the entire length of the observation period. Both axes are in log
@@ -36,10 +36,10 @@
 #' Reference lines are included to determine various states, based upon clinical
 #' interpretation of the values and includes the following:
 #'
-#' * Hyperbilirubinemia TBL at least 2 xULN and ALT less than 3 xULN
-#' * Normal Range TBL <= 1 xULN and ALT <= 1xULN
-#' * Temple’s Corollary TBL <= 1 xULN and ALT at least 3 xULN
-#' * Possible Hy's Law TBL at least 2 xULN and ALT at least 3 xULN
+#' * Hyperbilirubinemia `TBL` at least 2 `xULN` and `ALT` less than 3 `xULN`
+#' * Normal Range `TBL` <= 1 `xULN` and `ALT` <= 1 `xULN`
+#' * Temple’s Corollary `TBL` <= 1 `xULN` and `ALT` at least 3 `xULN`
+#' * Possible Hy's Law `TBL` at least 2 `xULN` and `ALT` at least 3 `xULN`
 #'
 #' This plot can easily be adjusted for other lab parameters and reference
 #' ranges as needed. Consultation with a clinical expert to determine which

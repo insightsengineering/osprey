@@ -2,15 +2,15 @@
 #'
 #' Description of this plot
 #'
-#' @param anl The analysis data frame (e.g. ATE.sas7bdat on BCE)
+#' @param anl The analysis data frame (e.g. `ATE.sas7bdat` on `BCE`)
 #' @param byvar Analysis dataset
 #' @param days Variable with time in days
 #' @param mes_value Variable with measurement
 #' @param group_col Variable to color the individual lines and id in plot
-#' @param baseday Numeric Value, pts with only smaller values will be cut out
+#' @param baseday Numeric Value, points with only smaller values will be cut out
 #'
 #'
-#' @return ggplot object
+#' @return `ggplot` object
 #'
 #' @export
 #'

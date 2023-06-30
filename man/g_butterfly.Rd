@@ -38,7 +38,7 @@ required format : first name corresponds to the name of the right side
 second name corresponds to name of the left side
 default: will extract column names from group}
 
-\item{block_count}{string - what to count by (ex: # of AEs or # of patients)}
+\item{block_count}{string - what to count by (ex: # of \code{AE}s or # of patients)}
 
 \item{block_color}{vector - color coding of bar segments}
 
@@ -47,23 +47,23 @@ plot into rows, default here is NULL}
 
 \item{x_label}{string of text for x axis label, default is block_count}
 
-\item{y_label}{string of text for y axis label, default is AE Derived Terms}
+\item{y_label}{string of text for y axis label, default is \code{AE} Derived Terms}
 
-\item{legend_label}{\code{character} for legend label, default is AETOXGR}
+\item{legend_label}{\code{character} for legend label, default is \code{"AETOXGR"}}
 
 \item{sort_by}{character string that defines the ordering of the class and term
 variables in the output table,
-options: "alphabetical", "count", "left", "right", default here is set to "count"}
+options: \code{"alphabetical"}, \code{"count"}, \code{"left"}, \code{"right"}, default here is set to \code{"count"}}
 
-\item{show_legend}{boolean of whether color coding legend is included,
+\item{show_legend}{\code{logical(1)} of whether color coding legend is included,
 default here is FALSE}
 }
 \value{
-ggplot object
+\code{ggplot} object
 }
 \description{
 The butterfly plot is often used in Early Development (ED) and is an opposed
-barplot that shows instances of AEs or # of patients by category separated by
+barplot that shows instances of \code{AE}s or # of patients by category separated by
 a dichotomization variable. Each bar can be color coded according
 to a variable of choice and sorted according to either alphabetical order or the
 maximum count.

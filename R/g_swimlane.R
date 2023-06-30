@@ -1,7 +1,7 @@
 
-#' Swimlane Plot
+#' `Swimlane` Plot
 #'
-#' Swimlane plot is often used in Early Development (ED) and displays individual
+#' `Swimlane` plot is often used in Early Development (ED) and displays individual
 #' patient bar plot with markers of events and patient level annotation
 #'
 #' @param bar_id vector of IDs to identify each bar

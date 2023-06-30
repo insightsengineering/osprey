@@ -71,7 +71,7 @@ plot into columns, default here is \code{NULL}.}
 \item{show_legend}{boolean of whether marker legend is included, default here is \code{FALSE}.}
 }
 \value{
-ggplot object
+\code{ggplot} object
 }
 \description{
 Spider plot is often used in Early Development (ED) and displays individual

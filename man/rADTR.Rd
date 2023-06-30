@@ -3,7 +3,7 @@
 \docType{data}
 \name{rADTR}
 \alias{rADTR}
-\title{Random data rADTR}
+\title{Random data \code{rADTR}}
 \format{
 An object of class \code{data.frame} with 250 rows and 44 columns.
 }
@@ -14,7 +14,7 @@ internal
 data(rADTR)
 }
 \description{
-Random data rADTR
+Random data \code{rADTR}
 }
 \keyword{datasets}
 \keyword{internal}

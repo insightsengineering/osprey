@@ -7,7 +7,7 @@
 #' For example, \code{ADSL$ACTARM}.
 #' @param subgroups (`data.frame`)\cr Variables to conduct analysis.
 #' @param subgroups_sl (`data.frame`)\cr Subject level variables to conduct analysis.
-#' Usually from ADSL.
+#' Usually from `ADSL`.
 #' @param ref (`character`)\cr indicates the name of the reference arm. Default is the first
 #' level of \code{arm}.
 #' @param trt (`character`)\cr indicates the name of the treatment arm. Default is the second
@@ -18,8 +18,8 @@
 #' The children lists should start with "Total" = variable label,
 #' followed by labels for each level of said variable. See example for reference.
 #' @param xmax (`numeric`)\cr maximum range for the x-axis.
-#' x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
-#' xmax is 0 by default
+#' x-axis range will be automatically assigned based on risk output when `xmax` is less than or equal to 0.
+#' `xmax` is 0 by default
 #' @param arm_n (`logical`)\cr whether to display the N in each arm.
 #'
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
