@@ -48,8 +48,8 @@ Usually it is \code{ADCM}.}
 \item{conmed_data}{optional, (\code{data.frame})\cr concomitant medicine data. Usually it is \code{ADCM}
 default is \code{NULL} (no \code{conmed} plotted)}
 
-\item{conmed_var}{optional, (\code{character})\cr concomitant medicine variable name. Must be a column name in \code{conmed_data}
-when \code{conmed_data} is provided. default is \code{NULL} (no \code{conmed} plotted)}
+\item{conmed_var}{optional, (\code{character})\cr concomitant medicine variable name. Must be a column name in
+\code{conmed_data} when \code{conmed_data} is provided. default is \code{NULL} (no \code{conmed} plotted)}
 
 \item{conmed_color_opt}{optional, (\code{character})\cr vector of color name(s) to \code{conmed_data}}
 

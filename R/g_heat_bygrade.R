@@ -18,8 +18,8 @@
 #' @param heat_color_opt optional, (`character`)\cr a named vector that maps the names to heat colors
 #' @param conmed_data optional, (`data.frame`)\cr concomitant medicine data. Usually it is \code{ADCM}
 #' default is `NULL` (no `conmed` plotted)
-#' @param conmed_var optional, (`character`)\cr concomitant medicine variable name. Must be a column name in `conmed_data`
-#' when `conmed_data` is provided. default is `NULL` (no `conmed` plotted)
+#' @param conmed_var optional, (`character`)\cr concomitant medicine variable name. Must be a column name in
+#' `conmed_data` when `conmed_data` is provided. default is `NULL` (no `conmed` plotted)
 #' @param conmed_color_opt optional, (`character`)\cr vector of color name(s) to `conmed_data`
 #' @param xlab optional, (`character`)\cr string to be shown as x-axis label, default is \code{"Visit"}
 #' @param title (`character`)\cr string to be shown as title of the plot.

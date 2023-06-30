@@ -30,8 +30,8 @@ stream_filter(
 \code{dataframe} object
 }
 \description{
-One of \code{slref} or \code{anl} need to be specified. The conversion from \code{SAS} code in filters dataset may not work in all cases.
-In case of failure a sensible error message should be returned.
+One of \code{slref} or \code{anl} need to be specified. The conversion from \code{SAS} code in filters dataset may not work in all
+cases. In case of failure a sensible error message should be returned.
 }
 \examples{
 library(scda)

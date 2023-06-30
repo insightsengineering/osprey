@@ -1,7 +1,7 @@
 #' Applies STREAM style filtering to datasets
 #'
-#' One of `slref` or `anl` need to be specified. The conversion from `SAS` code in filters dataset may not work in all cases.
-#' In case of failure a sensible error message should be returned.
+#' One of `slref` or `anl` need to be specified. The conversion from `SAS` code in filters dataset may not work in all
+#' cases. In case of failure a sensible error message should be returned.
 #'
 #' @param slref The subject level data frame (typically `ASL.sas7bdat` on `BCE`)
 #' @param anl The analysis data frame (e.g. `ATE.sas7bdat` on `BCE`)
