@@ -87,15 +87,12 @@ associations is recommended.
 There is no equivalent STREAM output.
 }
 \examples{
-library(scda)
 library(dplyr)
 library(nestcolor)
 
 # Note: CRP is being used in place of Bilirubin here because this is the only available data
-# available in SCDA
-latest_dfs <- synthetic_cdisc_data("latest")
-adsl <- latest_dfs[["adsl"]]
-adlb <- latest_dfs[["adlb"]] \%>\% mutate(ANRHI = 50)
+adsl <- rADSL
+adlb <- rADLB \%>\% mutate(ANRHI = 50)
 
 # Example 1, - Hy's law template (3 and 2 X ULN)
 g_hy_law(

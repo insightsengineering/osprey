@@ -31,16 +31,13 @@
 #' library(nestcolor)
 #'
 #' ASL <- rADSL[1:20, ]
-#' ARS <- ASL %>%
-#'   select(USUBJID) %>%
-#'   left_join(rADRS, "USUBJID") %>%
-#'   dplyr::filter(PARAMCD == "OVRINV")
-#' ANL <- ASL %>% left_join(ARS, by = c("STUDYID", "USUBJID"))
+#' ARS <- filter(rADRS, PARAMCD == "OVRINV")
+#' ANL <- left_join(ASL, ARS, by = c("STUDYID", "USUBJID"), multiple = "all")
 #' anno_txt <- ASL[, c("ARMCD", "SEX")]
 #'
 #' g_swimlane(
 #'   bar_id = ASL$USUBJID,
-#'   bar_length = ASL$TRTDURD,
+#'   bar_length = as.integer(ASL$TRTEDTM - ASL$TRTSDTM),
 #'   sort_by = ASL$ARM,
 #'   col_by = ASL$ARM,
 #'   marker_id = ANL$USUBJID,
@@ -67,11 +64,7 @@
 #' anno_txt <- ASL[, anno_txt_vars]
 #'
 #' # markers from ARS
-#' ARS <- ASL %>%
-#'   select(USUBJID) %>%
-#'   left_join(ARS, "USUBJID") %>%
-#'   dplyr::filter(PARAMCD == "OVRINV") %>%
-#'   select(USUBJID, ADY, AVALC)
+#' ARS <- dplyr::filter(ARS, PARAMCD == "OVRINV") %>% select(USUBJID, ADY, AVALC)
 #'
 #' # markers from ASL - discontinuation
 #' ADS <- ASL %>%
@@ -80,12 +73,11 @@
 #'   dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
 #'
 #' # combine ARS with ADS records as one data for markers and join with ASL
-#' ANL <- ASL %>%
-#'   inner_join(rbind(ARS, ADS), "USUBJID")
+#' ANL <- inner_join(ASL, rbind(ARS, ADS), by = "USUBJID", multiple = "all")
 #'
 #' g_swimlane(
 #'   bar_id = sub(".*-", "", ASL$USUBJID),
-#'   bar_length = ASL$TRTDURD,
+#'   bar_length = as.integer(ASL$TRTEDTM - ASL$TRTSDTM),
 #'   sort_by = NULL,
 #'   col_by = ASL$ARMCD,
 #'   marker_id = sub(".*-", "", ANL$USUBJID),

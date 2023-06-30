@@ -14,9 +14,8 @@
 #' @author Iain Bennett
 #' @export
 #' @examples
-#' library(scda)
-#' ASL <- synthetic_cdisc_data("latest")$adsl
-#' ATE <- synthetic_cdisc_data("latest")$adaette
+#' ASL <- rADSL
+#' ATE <- rATE
 #' filters <- as.data.frame(rbind(
 #'   c(ID = "IT", FLTTARGET = "SLREF", FLTWHERE = "where 1 eq 1"),
 #'   c(ID = "BIO", FLTTARGET = "SLREF", FLTWHERE = "where BMRKR1 ge 4.3"),

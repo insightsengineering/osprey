@@ -5,7 +5,7 @@
 \alias{rADTTE}
 \title{Random Time to Event Analysis Dataset}
 \format{
-An object of class \code{data.frame} with 150 rows and 33 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 2000 rows and 67 columns.
 }
 \source{
 internal

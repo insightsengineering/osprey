@@ -26,6 +26,45 @@
 #' @name rADAE
 "rADAE"
 
+#' Random Concomitant Medications
+#'
+#' @description Random Concomitant Medications
+#' @docType data
+#'
+#' @usage data(rADCM)
+#'
+#' @keywords datasets internal
+#'
+#' @source internal
+#' @name rADCM
+"rADCM"
+
+#' Random response
+#'
+#' @description Random Exposure
+#' @docType data
+#'
+#' @usage data(rADEX)
+#'
+#' @keywords datasets internal
+#'
+#' @source internal
+#' @name rADEX
+"rADEX"
+
+#' Random lab analysis
+#'
+#' @description Random lab analysis
+#' @docType data
+#'
+#' @usage data(rADLB)
+#'
+#' @keywords datasets internal
+#'
+#' @source internal
+#' @name rADLB
+"rADLB"
+
 #' Random response
 #'
 #' @description Random response
@@ -77,3 +116,16 @@
 #' @source internal
 #' @name rADTTE
 "rADTTE"
+
+#' Random ATE
+#'
+#' @description Random ATE
+#' @docType data
+#'
+#' @keywords datasets internal
+#'
+#' @usage data(rATE)
+#'
+#' @source internal
+#' @name rATE
+"rATE"

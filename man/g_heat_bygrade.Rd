@@ -62,14 +62,12 @@ default is \code{NULL} (no plot title is displayed)}
 This function plots heatmap
 }
 \examples{
-library(scda)
 library(dplyr)
 
-cached_data <- synthetic_cdisc_data("latest")
-ADSL <- cached_data$adsl \%>\% slice(1:30)
-ADEX <- cached_data$adex \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
-ADAE <- cached_data$adae \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
-ADCM <- cached_data$adcm \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
+ADSL <- rADSL \%>\% slice(1:30)
+ADEX <- rADEX \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
+ADAE <- rADAE \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
+ADCM <- rADCM \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
 # function to derive AVISIT from ADEX
 add_visit <- function(data_need_visit) {
   visit_dates <- ADEX \%>\%
