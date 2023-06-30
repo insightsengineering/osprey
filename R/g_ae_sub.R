@@ -31,12 +31,9 @@
 #' @export
 #'
 #' @examples
-#' library(scda)
 #' library(grid)
-#'
-#' cached_data <- synthetic_cdisc_data("latest")
-#' ADAE <- cached_data$adae
-#' ADSL <- cached_data$adsl
+#' ADAE <- rADAE
+#' ADSL <- rADAE
 #'
 #' id <- ADAE$USUBJID
 #' arm <- ADAE$ACTARMCD
@@ -92,9 +89,8 @@
 #' # Example 3: preprocess data to only include treatment and control arm patients
 #' trt <- "ARM A"
 #' ref <- "ARM C"
-#' ADAE <- synthetic_cdisc_data("latest")$adae
-#' ADSL <- synthetic_cdisc_data("latest")$adsl %>%
-#'   filter(ACTARMCD %in% c(trt, ref))
+#' ADAE <- rADAE
+#' ADSL <- rADSL %>% filter(ACTARMCD %in% c(trt, ref))
 #' id <- ADAE$USUBJID
 #' arm <- ADAE$ACTARMCD
 #' arm_sl <- as.character(ADSL$ACTARMCD)

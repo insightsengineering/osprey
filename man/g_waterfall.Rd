@@ -87,18 +87,18 @@ ADTR <- rADTR \%>\%
   group_by(USUBJID) \%>\%
   slice(which.min(PCHG))
 
-TR_SL <- ADSL \%>\%
-  inner_join(ADTR, "USUBJID")
+TR_SL <- inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all")
 
 SUB_ADRS <- ADRS \%>\%
-  filter(PARAMCD == "BESRSPI" | PARAMCD == "OBJRSPI") \%>\%
+  filter(PARAMCD == "BESRSPI" | PARAMCD == "OVRINV") \%>\%
   select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) \%>\%
   spread(PARAMCD, AVALC)
 
 ANL <- TR_SL \%>\%
-  left_join(SUB_ADRS, "USUBJID")
+  left_join(SUB_ADRS, by = "USUBJID", multiple = "all") \%>\%
+  mutate(TRTDURD = as.integer(TRTEDTM - TRTSDTM))
 
-anno_txt_vars <- c("TRTDURD", "BESRSPI", "OBJRSPI", "SEX", "BMK2")
+anno_txt_vars <- c("TRTDURD", "BESRSPI", "OVRINV", "SEX", "BMRKR2")
 
 g_waterfall(
   bar_height = ANL$PCHG,
@@ -118,7 +118,7 @@ g_waterfall(
 )
 
 # Example 2 facetting
-anno_txt_vars <- c("BESRSPI", "OBJRSPI")
+anno_txt_vars <- c("BESRSPI", "OVRINV")
 
 g_waterfall(
   bar_id = sub(".*-", "", ANL$USUBJID),
@@ -159,6 +159,7 @@ g_waterfall(
   y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
+
 }
 \author{
 Xuefeng Hou (houx14) \email{houx14@gene.com}

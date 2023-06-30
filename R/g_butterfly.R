@@ -54,11 +54,6 @@
 #'   dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) %>%
 #'   dplyr::mutate(flag2 = ifelse(SEX == "M", 1, 0))
 #' ANL <- na.omit(ANL)
-#' ANL <- ANL %>% dplyr::filter(AEBODSYS %in% c(
-#'   "Investigations", "Vascular disorders",
-#'   "Musculoskeletal and connective tissue disorders"
-#' ))
-#'
 #' # Example 1, # of AEs
 #' g_butterfly(
 #'   category = ANL$AEBODSYS,

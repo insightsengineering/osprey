@@ -76,14 +76,9 @@ function assembles all requested domain plots into one patient profile.
 The plot output will not include domains with data unspecified
 }
 \examples{
-library(scda)
 library(dplyr)
 library(nestcolor)
-
-cached_data <- synthetic_cdisc_data("latest")
-
 # ADSL
-rADSL <- cached_data$adsl
 ADSL <- rADSL \%>\%
   filter(USUBJID == rADSL$USUBJID[1]) \%>\%
   mutate(
@@ -95,7 +90,6 @@ ADSL <- rADSL \%>\%
 
 
 # ADEX
-rADEX <- cached_data$adex
 ADEX <- rADEX \%>\%
   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
@@ -115,25 +109,21 @@ ADEX <- ADEX \%>\%
   ))
 
 # ADAE
-rADAE <- cached_data$adae
 ADAE <- rADAE \%>\%
   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
 # ADRS
-rADRS <- cached_data$adrs
 ADRS <- rADRS \%>\%
   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 
 # ADCM
-rADCM <- cached_data$adcm
 ADCM <- rADCM \%>\%
   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 
 # ADLB
-rADLB <- cached_data$adlb
 ADLB <- rADLB \%>\%
   select(
     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
