@@ -1,4 +1,3 @@
-
 #' Spider Plot
 #'
 #' Spider plot is often used in Early Development (ED) and displays individual
