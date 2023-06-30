@@ -34,7 +34,7 @@
 #' @param y_label string of text for y axis label, default is % change.
 #' @param show_legend boolean of whether marker legend is included, default here is `FALSE`.
 #'
-#' @return ggplot object
+#' @return `ggplot` object
 #'
 #' @details there is no equivalent STREAM output
 #'

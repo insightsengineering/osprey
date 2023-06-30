@@ -14,7 +14,7 @@ spiderplot_simple(
 )
 }
 \arguments{
-\item{anl}{The analysis data frame (e.g. ATE.sas7bdat on BCE)}
+\item{anl}{The analysis data frame (e.g. \code{ATE.sas7bdat} on \code{BCE})}
 
 \item{byvar}{Analysis dataset}
 
@@ -24,10 +24,10 @@ spiderplot_simple(
 
 \item{group_col}{Variable to color the individual lines and id in plot}
 
-\item{baseday}{Numeric Value, pts with only smaller values will be cut out}
+\item{baseday}{Numeric Value, \code{pts} with only smaller values will be cut out}
 }
 \value{
-ggplot object
+\code{ggplot} object
 }
 \description{
 Description of this plot

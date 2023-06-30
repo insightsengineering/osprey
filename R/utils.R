@@ -1,11 +1,11 @@
-#' Output decorated grob (gTree) objects as PDF
+#' Output decorated grob (`gTree`) objects as PDF
 #'
-#' This is an utility function to output a decorated grob (gTree) object
+#' This is an utility function to output a decorated grob (`gTree`) object
 #'
-#' @param grobs a grid grob (gTree) object, optionally `NULL` if only a grob with
+#' @param grobs a grid grob (`gTree`) object, optionally `NULL` if only a grob with
 #'   the decoration should be shown.
-#' @param outpath specify full path to output pdf to BCE or BEE
-#' @param pagesize name of pagesize (print size) and orientation, accepted values include
+#' @param outpath specify full path to output pdf to `BCE` or `BEE`
+#' @param pagesize name of `pagesize` (print size) and orientation, accepted values include
 #'   \code{"a4.landscape"}, \code{"a4.portrait"}, \code{"letter.portrait"} and
 #'   \code{"letter.landscape"} (default)
 #'
@@ -67,20 +67,20 @@ paper_size <- function(pagesize) {
   return(c(paper_width, paper_height))
 }
 
-#' Decorate grob (gTree) objects then outputs as IDM compatible PDF
+#' Decorate grob (`gTree`) objects then outputs as `IDM` compatible PDF
 #'
-#' This is an utility function to decorated grob (gTree) object with titles and
-#' footnotes in accordance with IDM specification and export as PDF file with
+#' This is an utility function to decorated grob (`gTree`) object with titles and
+#' footnotes in accordance with `IDM` specification and export as PDF file with
 #' full path to program and the output for easy tracking and archiving.
 #'
-#' @param grobs A grid grob (gTree) object, optionally `NULL` if only a
+#' @param grobs A grid grob (`gTree`) object, optionally `NULL` if only a
 #'   grob with the decoration should be shown
 #' @param titles Vector of character strings. Vector elements are separated by a
 #'   newline and strings are wrapped according to the page with
 #' @param footnotes Vector of character string. Same rules as for \code{titles}
 #' @param progpath Specify the full path to the R program that generate the
 #'   grobs and the PDF
-#' @param outpath Specify full path to output pdf to BCE or BEE
+#' @param outpath Specify full path to output pdf to `BCE` or `BEE`
 #' @param fontsize Base font size used in pdf, default set to 9. Font size for
 #'   title is set to \code{fontsize} + 1 (default = 10) and for footnotes set to
 #'   \code{fontsize} - 1 (default = 8)
@@ -199,10 +199,10 @@ grobs2pdf <- function(grobs,
   )
 }
 
-#' Extract specific part of a ggplot or grob
+#' Extract specific part of a `ggplot` or grob
 #'
-#' @param gplot_grob ggplot or grob object
-#' @param part name of the part to be extracted. NA will return zeroGrob()
+#' @param gplot_grob `ggplot` or grob object
+#' @param part name of the part to be extracted. `NA` will return `zeroGrob()`
 #'
 grob_part <- function(gplot_grob, part) {
   if (is.na(part)) {
@@ -304,10 +304,10 @@ to_n <- function(x, n) {
   }
 }
 
-#' Extract specific part of a ggplot or grob
+#' Extract specific part of a `ggplot` or grob
 #'
-#' @param gplot_grob ggplot or grob object
-#' @param part name of the part to be extracted. NA will return zeroGrob()
+#' @param gplot_grob `ggplot` or grob object
+#' @param part name of the part to be extracted. `NA` will return `zeroGrob()`
 #' @keywords internal
 #'
 grob_part <- function(gplot_grob, part) {
@@ -326,9 +326,9 @@ grob_part <- function(gplot_grob, part) {
   return(grob)
 }
 
-#' Extract specific parts of a ggplot or grob
+#' Extract specific parts of a `ggplot` or grob
 #'
-#' @param gplot ggplot or grob object
+#' @param gplot `ggplot` or grob object
 #' @param parts names vector of the parts to be extracted.
 #' @keywords internal
 #'

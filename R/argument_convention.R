@@ -13,8 +13,8 @@
 #' For example, `ADAE$ACTARMCD`.
 #' @param conf_level (`numeric`)\cr the confidence interval level, default is 0.95.
 #' @param diff_ci_method (`character`)\cr the method used to calculate confidence interval.
-#' Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.
-#' @param fontsize (`numeric`)\cr font size for the plot. It is the size used in ggplot2 with
+#' Default is `"wald"`. Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.
+#' @param fontsize (`numeric`)\cr font size for the plot. It is the size used in `ggplot2` with
 #' default unit "mm", if you want "points" you will need to divide the point number by
 #' \code{ggplot2:::.pt}.
 #' @param draw (`logical`)\cr whether to draw the plot.

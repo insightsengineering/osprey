@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{grobs2pdf}
 \alias{grobs2pdf}
-\title{Decorate grob (gTree) objects then outputs as IDM compatible PDF}
+\title{Decorate grob (\code{gTree}) objects then outputs as \code{IDM} compatible PDF}
 \usage{
 grobs2pdf(
   grobs,
@@ -15,7 +15,7 @@ grobs2pdf(
 )
 }
 \arguments{
-\item{grobs}{A grid grob (gTree) object, optionally \code{NULL} if only a
+\item{grobs}{A grid grob (\code{gTree}) object, optionally \code{NULL} if only a
 grob with the decoration should be shown}
 
 \item{titles}{Vector of character strings. Vector elements are separated by a
@@ -26,7 +26,7 @@ newline and strings are wrapped according to the page with}
 \item{progpath}{Specify the full path to the R program that generate the
 grobs and the PDF}
 
-\item{outpath}{Specify full path to output pdf to BCE or BEE}
+\item{outpath}{Specify full path to output pdf to \code{BCE} or \code{BEE}}
 
 \item{fontsize}{Base font size used in pdf, default set to 9. Font size for
 title is set to \code{fontsize} + 1 (default = 10) and for footnotes set to
@@ -40,8 +40,8 @@ title is set to \code{fontsize} + 1 (default = 10) and for footnotes set to
 a pdf file
 }
 \description{
-This is an utility function to decorated grob (gTree) object with titles and
-footnotes in accordance with IDM specification and export as PDF file with
+This is an utility function to decorated grob (\code{gTree}) object with titles and
+footnotes in accordance with \code{IDM} specification and export as PDF file with
 full path to program and the output for easy tracking and archiving.
 }
 \examples{
