@@ -24,7 +24,7 @@ spiderplot_simple(
 
 \item{group_col}{Variable to color the individual lines and id in plot}
 
-\item{baseday}{Numeric Value, \code{pts} with only smaller values will be cut out}
+\item{baseday}{Numeric Value, points with only smaller values will be cut out}
 }
 \value{
 \code{ggplot} object
