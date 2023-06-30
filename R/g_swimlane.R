@@ -1,4 +1,3 @@
-
 #' Swimlane Plot
 #'
 #' Swimlane plot is often used in Early Development (ED) and displays individual
@@ -116,7 +115,6 @@ g_swimlane <- function(bar_id,
                        xtick_at = waiver(),
                        xlab,
                        title) {
-
   # check data
   if (!is.null(sort_by)) {
     check_same_N(bar_id = bar_id, bar_length = bar_length, sort_by = sort_by)

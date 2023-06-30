@@ -282,14 +282,15 @@ g_events_term_id <- function(term,
   )
 
   p1 <- ggplot(df_risk) +
-    geom_point(aes(
-      y = term,
-      x = .data$risk,
-      group = arm,
-      color = arm,
-      shape = arm
-    ),
-    size = fontsize * 0.7
+    geom_point(
+      aes(
+        y = term,
+        x = .data$risk,
+        group = arm,
+        color = arm,
+        shape = arm
+      ),
+      size = fontsize * 0.7
     ) +
     mytheme +
     ggtitle("Proportion") +
