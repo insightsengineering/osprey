@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">osprey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.15.9008</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.15.9009</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,14 +24,6 @@
 <li class="nav-item">
   <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
-<!-- start dropdown for versions --> <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle"
-          data-bs-toggle="dropdown" role="button"
-          aria-expanded="false" aria-haspopup="true"
-          id="dropdown-versions">Versions</a> <div class="dropdown-menu" aria-labelledby="dropdown-versions"> <a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/osprey/main">main</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/osprey/latest-tag">latest-tag</a>
-<a class="dropdown-item" data-toggle="tooltip" title="" href="https://insightsengineering.github.io/osprey/v0.1.15">v0.1.15</a> </div></li>
-<!-- end dropdown for versions -->
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-reports">Reports</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-reports">
@@ -108,7 +100,7 @@ For example, <code>ADSL$ACTARM</code>.</p></dd>
 
 <dt>subgroups_sl</dt>
 <dd><p>(<code>data.frame</code>)<br> Subject level variables to conduct analysis.
-Usually from ADSL.</p></dd>
+Usually from <code>ADSL</code>.</p></dd>
 
 
 <dt>trt</dt>
@@ -134,8 +126,8 @@ followed by labels for each level of said variable. See example for reference.</
 
 <dt>xmax</dt>
 <dd><p>(<code>numeric</code>)<br> maximum range for the x-axis.
-x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
-xmax is 0 by default</p></dd>
+x-axis range will be automatically assigned based on risk output when <code>xmax</code> is less than or equal to 0.
+<code>xmax</code> is 0 by default</p></dd>
 
 
 <dt>conf_level</dt>
@@ -144,11 +136,11 @@ xmax is 0 by default</p></dd>
 
 <dt>diff_ci_method</dt>
 <dd><p>(<code>character</code>)<br> the method used to calculate confidence interval.
-Default is "wald". Possible choices are methods supported in <code><a href="https://andrisignorell.github.io/DescTools/reference/BinomDiffCI.html" class="external-link">BinomDiffCI</a></code>.</p></dd>
+Default is <code>"wald"</code>. Possible choices are methods supported in <code><a href="https://andrisignorell.github.io/DescTools/reference/BinomDiffCI.html" class="external-link">BinomDiffCI</a></code>.</p></dd>
 
 
 <dt>fontsize</dt>
-<dd><p>(<code>numeric</code>)<br> font size for the plot. It is the size used in ggplot2 with
+<dd><p>(<code>numeric</code>)<br> font size for the plot. It is the size used in <code>ggplot2</code> with
 default unit "mm", if you want "points" you will need to divide the point number by
 <code>ggplot2:::.pt</code>.</p></dd>
 
