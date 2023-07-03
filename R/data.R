@@ -91,9 +91,9 @@
 #' @name rADSL
 "rADSL"
 
-#' Random data rADTR
+#' Random data `rADTR`
 #'
-#' @description Random data rADTR
+#' @description Random data `rADTR`
 #' @docType data
 #'
 #' @keywords datasets internal

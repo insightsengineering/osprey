@@ -1,4 +1,4 @@
-# osprey 0.1.15.9009
+# osprey 0.1.15.9010
 
 * Removed `scda` package dependency from examples.
 * Updated deprecated argument specification in calls to `guides`.
@@ -9,7 +9,7 @@
 
 * Implemented `nestcolor` with slight refactoring to `g_events_term_id`, `g_heat_bygrade`, `g_patient_profile`, 
   `g_swimlane`, and `g_waterfall`. Added `nestcolor` in examples without custom color manuals.
-* Updated installation instructions in the README.
+* Updated installation instructions in the `README`.
 
 ### Fixes
 
@@ -72,9 +72,9 @@
 ### Miscellaneous
 * The `right_flag` and `left_flag` arguments of `g_butterfly` should now be `logical` vectors instead of integers (1/0).
 * Retired four table functions due to duplicated functionalities in `tern`:
-  - `t_ae_oview`: AE overview summary table.
-  - `t_ae`: AE summary table by preferred terms.
-  - `t_ae_ctc`: AE summary table by highest NCI-CTCAE grade.
+  - `t_ae_oview`: `AE` overview summary table.
+  - `t_ae`: `AE` summary table by preferred terms.
+  - `t_ae_ctc`: `AE` summary table by highest `NCI-CTCAE` grade.
   - `t_ds`: Disposition table.
 
 # osprey 0.1.6
@@ -84,7 +84,7 @@
 # osprey 0.1.5
 
 * Added new plot functions:
-  - Events by term plot `g_events_term_id`, which can be used to plot events (AE) by terms or AE overview.
+  - Events by term plot `g_events_term_id`, which can be used to plot events (`AE`) by terms or `AE` overview.
   - Patient profile plot `g_patient_profile`.
 
 # osprey 0.1.4
@@ -102,21 +102,21 @@
 * Refactoring package according to the NEST standards:
   - Including test.nest tests.
   - Cleaning dependencies.
-  - Fix tm_g_butterfly faceting error.
+  - Fix `tm_g_butterfly` faceting error.
   - Add sorting by right or left wing.
-  - Adding g_waterfall.
+  - Adding `g_waterfall`.
 
 # osprey 0.1.0
 
 * First versioned release of osprey package, which include the following seven new TLG analysis functions:
-  - AE overview summary table.
-  - AE summary table by preferred terms.
-  - AE summary table by highest NCI-CTCAE grade.
-  - AE butterfly plot.
+  - `AE` overview summary table.
+  - `AE` summary table by preferred terms.
+  - `AE` summary table by highest `NCI-CTCAE` grade.
+  - `AE` butterfly plot.
   - Disposition table.
-  - Swimlane plot.
-  - Spiderplot.
-* Few utility functions for working in BCE:
-  - Function to quickly load snapshot data from BCE.
+  - `Swimlane` plot.
+  - `Spiderplot`.
+* Few utility functions for working in `BCE`:
+  - Function to quickly load snapshot data from `BCE`.
   - Function to output graphic objects in PDF.
-  - Formatting graphic objects and outputting PDF that is IDM-compatible.
+  - Formatting graphic objects and outputting PDF that is `IDM`-compatible.

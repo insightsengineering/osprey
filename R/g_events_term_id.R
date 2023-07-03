@@ -18,7 +18,7 @@
 #' @param trt \code{character} indicates the name of the treatment arm. Default is the second
 #' level of \code{arm}.
 #' @param sort_by \code{character} indicates how each \code{term} is sorted in the plot.
-#' Choose from "term" for alphabetic terms, "riskdiff" for risk difference, and "meanrisk"
+#' Choose from `"term"` for alphabetic terms, `"riskdiff"` for risk difference, and `"meanrisk"`
 #' for mean risk. Default is "term".
 #' @param rate_range Numeric \code{vector} of length 2. Range for overall rate display
 #' @param diff_range Numeric \code{vector} of length 2. Range for rate difference display
@@ -390,19 +390,19 @@ g_events_term_id <- function(term,
 }
 
 
-#' create AE overview flags
-#' @param df data frame of AE
-#' @param fatal AE with fatal outcome derivation
-#' @param serious Serious AE derivation.
-#' @param serious_withdrawl Serious AE leading to withdrawal derivation
-#' @param serious_modified Serious AE leading to dose modification derivation
-#' @param serious_related Related Serious AE derivation
-#' @param withdrawl AE leading to withdrawal derivation
-#' @param modified AE leading to dose modification derivation
-#' @param related Related AE derivation
-#' @param related_withdrawl Related AE leading to withdrawal derivation
-#' @param related_modified Related AE leading to dose modification derivation
-#' @param ctc35 Grade 3-5 AE derivation
+#' create `AE` overview flags
+#' @param df data frame of `AE`
+#' @param fatal `AE` with fatal outcome derivation
+#' @param serious Serious `AE` derivation.
+#' @param serious_withdrawl Serious `AE` leading to withdrawal derivation
+#' @param serious_modified Serious `AE` leading to dose modification derivation
+#' @param serious_related Related Serious `AE` derivation
+#' @param withdrawl `AE` leading to withdrawal derivation
+#' @param modified `AE` leading to dose modification derivation
+#' @param related Related `AE` derivation
+#' @param related_withdrawl Related `AE` leading to withdrawal derivation
+#' @param related_modified Related `AE` leading to dose modification derivation
+#' @param ctc35 Grade 3-5 `AE` derivation
 #' @param ... named expressions used to generate categories
 #' @details in this function, all flags are expressions calls, for simpler usage.
 #' @export

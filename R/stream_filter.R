@@ -1,14 +1,14 @@
 #' Applies STREAM style filtering to datasets
 #'
-#' One of slref or anl need to be specified. The conversion from SAS code in filters dataset may not work in all cases.
-#' In case of failure a sensible error message should be returned.
+#' One of `slref` or `anl` need to be specified. The conversion from `SAS` code in filters dataset may not work in all
+#' cases. In case of failure a sensible error message should be returned.
 #'
-#' @param slref The subject level data frame (typically ASL.sas7bdat on BCE)
-#' @param anl The analysis data frame (e.g. ATE.sas7bdat on BCE)
-#' @param suffix The suffix to apply in quotes (e.g. "ITT_PFSINV")
-#' @param slref_keep Variables to keep from slref (e.g. c("REGION", "SEX"))
-#' @param usubjid The unique subject identifier variable in quotes (e.g. "USUBJID")
-#' @param filters The name of the filters dataset (typically __filters.sas7bdat on BCE)
+#' @param slref The subject level data frame (typically `ASL.sas7bdat` on `BCE`)
+#' @param anl The analysis data frame (e.g. `ATE.sas7bdat` on `BCE`)
+#' @param suffix The suffix to apply in quotes (e.g. `"ITT_PFSINV"`)
+#' @param slref_keep Variables to keep from `slref` (e.g. `c("REGION", "SEX")`)
+#' @param usubjid The unique subject identifier variable in quotes (e.g. `"USUBJID"`)
+#' @param filters The name of the filters dataset (typically `__filters.sas7bdat` on `BCE`)
 #'
 #' @return \code{dataframe} object
 #' @author Iain Bennett
@@ -153,10 +153,10 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
   return(rc)
 }
 
-#' Replicates the use of index function in sas for logic options
+#' Replicates the use of index function in `SAS` for logic options
 #'
 #' Assumption is that use in filters is to only resolve true vs false
-#' Primarily for use with stream_filter and related stream_filter_convwhere functions
+#' Primarily for use with stream_filter and related `stream_filter_convwhere` functions
 #' @param string1 The string to search within - can be a vector
 #' @param string2 The string to search for - must have length 1
 #'
@@ -174,13 +174,13 @@ stream_filter_index <- function(string1, string2) {
 }
 
 
-#' Convert SAS code to R code
+#' Convert `SAS` code to R code
 #'
-#' Will convert following sas operators: eq, =, le, lt, ge, gt, index
+#' Will convert following `SAS` operators: `eq, =, le, lt, ge, gt, index`
 #' Will convert following logic: and, or, ()
 #' Will convert all unquoted values to upper case (assumed to be variable names)
 #' All quoted values will be returned with single quotes - may fail if have quotes within quotes
-#' @param x a character string of SAS code
+#' @param x a character string of `SAS` code
 #'
 #' @return a character string of R code
 #' @author Iain Bennett

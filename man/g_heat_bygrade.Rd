@@ -46,12 +46,12 @@ Usually it is \code{ADCM}.}
 \item{heat_color_opt}{optional, (\code{character})\cr a named vector that maps the names to heat colors}
 
 \item{conmed_data}{optional, (\code{data.frame})\cr concomitant medicine data. Usually it is \code{ADCM}
-default is \code{NULL} (no conmed plotted)}
+default is \code{NULL} (no \code{conmed} plotted)}
 
-\item{conmed_var}{optional, (\code{character})\cr concomitant medicine variable name. Must be a column name in conmed_data
-when conmed_data is provided. default is \code{NULL} (no conmed plotted)}
+\item{conmed_var}{optional, (\code{character})\cr concomitant medicine variable name. Must be a column name in
+\code{conmed_data} when \code{conmed_data} is provided. default is \code{NULL} (no \code{conmed} plotted)}
 
-\item{conmed_color_opt}{optional, (\code{character})\cr vector of color name(s) to conmed_data}
+\item{conmed_color_opt}{optional, (\code{character})\cr vector of color name(s) to \code{conmed_data}}
 
 \item{xlab}{optional, (\code{character})\cr string to be shown as x-axis label, default is \code{"Visit"}}
 

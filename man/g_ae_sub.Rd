@@ -35,7 +35,7 @@ For example, \code{ADSL$ACTARM}.}
 \item{subgroups}{(\code{data.frame})\cr Variables to conduct analysis.}
 
 \item{subgroups_sl}{(\code{data.frame})\cr Subject level variables to conduct analysis.
-Usually from ADSL.}
+Usually from \code{ADSL}.}
 
 \item{trt}{(\code{character})\cr indicates the name of the treatment arm. Default is the second
 level of \code{arm}.}
@@ -51,15 +51,15 @@ The children lists should start with "Total" = variable label,
 followed by labels for each level of said variable. See example for reference.}
 
 \item{xmax}{(\code{numeric})\cr maximum range for the x-axis.
-x-axis range will be automatically assigned based on risk output when xmax is less than or equal to 0.
-xmax is 0 by default}
+x-axis range will be automatically assigned based on risk output when \code{xmax} is less than or equal to 0.
+\code{xmax} is 0 by default}
 
 \item{conf_level}{(\code{numeric})\cr the confidence interval level, default is 0.95.}
 
 \item{diff_ci_method}{(\code{character})\cr the method used to calculate confidence interval.
-Default is "wald". Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
+Default is \code{"wald"}. Possible choices are methods supported in \code{\link[DescTools]{BinomDiffCI}}.}
 
-\item{fontsize}{(\code{numeric})\cr font size for the plot. It is the size used in ggplot2 with
+\item{fontsize}{(\code{numeric})\cr font size for the plot. It is the size used in \code{ggplot2} with
 default unit "mm", if you want "points" you will need to divide the point number by
 \code{ggplot2:::.pt}.}
 

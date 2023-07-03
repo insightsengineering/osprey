@@ -1,7 +1,7 @@
 #' Butterfly Plot
 #'
 #' The butterfly plot is often used in Early Development (ED) and is an opposed
-#' barplot that shows instances of AEs or # of patients by category separated by
+#' barplot that shows instances of `AE`s or # of patients by category separated by
 #' a dichotomization variable. Each bar can be color coded according
 #' to a variable of choice and sorted according to either alphabetical order or the
 #' maximum count.
@@ -17,23 +17,23 @@
 #' required format : first name corresponds to the name of the right side
 #'                   second name corresponds to name of the left side
 #' default: will extract column names from group
-#' @param block_count string - what to count by (ex: # of AEs or # of patients)
+#' @param block_count string - what to count by (ex: # of `AE`s or # of patients)
 #' @param block_color vector - color coding of bar segments
 #' @param id unique subject identifier variable.
 #' @param facet_rows vector defines what variable is used to split the
 #' plot into rows, default here is NULL
 #' @param x_label string of text for x axis label, default is block_count
-#' @param y_label string of text for y axis label, default is AE Derived Terms
-#' @param legend_label \code{character} for legend label, default is AETOXGR
+#' @param y_label string of text for y axis label, default is `AE` Derived Terms
+#' @param legend_label \code{character} for legend label, default is `"AETOXGR"`
 #' @param sort_by character string that defines the ordering of the class and term
 #' variables in the output table,
-#' options: "alphabetical", "count", "left", "right", default here is set to "count"
-#' @param show_legend boolean of whether color coding legend is included,
+#' options: `"alphabetical"`, `"count"`, `"left"`, `"right"`, default here is set to `"count"`
+#' @param show_legend `logical(1)` of whether color coding legend is included,
 #' default here is FALSE
 #'
 #' @details there is no equivalent STREAM output
 #'
-#' @return ggplot object
+#' @return `ggplot` object
 #'
 #' @export
 #'

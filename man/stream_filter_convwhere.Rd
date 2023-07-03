@@ -2,18 +2,18 @@
 % Please edit documentation in R/stream_filter.R
 \name{stream_filter_convwhere}
 \alias{stream_filter_convwhere}
-\title{Convert SAS code to R code}
+\title{Convert \code{SAS} code to R code}
 \usage{
 stream_filter_convwhere(x)
 }
 \arguments{
-\item{x}{a character string of SAS code}
+\item{x}{a character string of \code{SAS} code}
 }
 \value{
 a character string of R code
 }
 \description{
-Will convert following sas operators: eq, =, le, lt, ge, gt, index
+Will convert following \code{SAS} operators: \verb{eq, =, le, lt, ge, gt, index}
 Will convert following logic: and, or, ()
 Will convert all unquoted values to upper case (assumed to be variable names)
 All quoted values will be returned with single quotes - may fail if have quotes within quotes

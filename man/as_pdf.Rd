@@ -2,17 +2,17 @@
 % Please edit documentation in R/utils.R
 \name{as_pdf}
 \alias{as_pdf}
-\title{Output decorated grob (gTree) objects as PDF}
+\title{Output decorated grob (\code{gTree}) objects as PDF}
 \usage{
 as_pdf(grobs, outpath, pagesize = "letter.landscape")
 }
 \arguments{
-\item{grobs}{a grid grob (gTree) object, optionally \code{NULL} if only a grob with
+\item{grobs}{a grid grob (\code{gTree}) object, optionally \code{NULL} if only a grob with
 the decoration should be shown.}
 
-\item{outpath}{specify full path to output pdf to BCE or BEE}
+\item{outpath}{specify full path to output pdf to \code{BCE} or \code{BEE}}
 
-\item{pagesize}{name of pagesize (print size) and orientation, accepted values include
+\item{pagesize}{name of \code{pagesize} (print size) and orientation, accepted values include
 \code{"a4.landscape"}, \code{"a4.portrait"}, \code{"letter.portrait"} and
 \code{"letter.landscape"} (default)}
 }
@@ -20,7 +20,7 @@ the decoration should be shown.}
 a pdf file
 }
 \description{
-This is an utility function to output a decorated grob (gTree) object
+This is an utility function to output a decorated grob (\code{gTree}) object
 }
 \examples{
 \dontrun{

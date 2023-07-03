@@ -2,20 +2,20 @@
 % Please edit documentation in R/utils.R
 \name{grob_part}
 \alias{grob_part}
-\title{Extract specific part of a ggplot or grob}
+\title{Extract specific part of a \code{ggplot} or grob}
 \usage{
 grob_part(gplot_grob, part)
 
 grob_part(gplot_grob, part)
 }
 \arguments{
-\item{gplot_grob}{ggplot or grob object}
+\item{gplot_grob}{\code{ggplot} or grob object}
 
-\item{part}{name of the part to be extracted. NA will return zeroGrob()}
+\item{part}{name of the part to be extracted. \code{NA} will return \code{zeroGrob()}}
 }
 \description{
-Extract specific part of a ggplot or grob
+Extract specific part of a \code{ggplot} or grob
 
-Extract specific part of a ggplot or grob
+Extract specific part of a \code{ggplot} or grob
 }
 \keyword{internal}

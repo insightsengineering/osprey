@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_events_term_id.R
 \name{create_flag_vars}
 \alias{create_flag_vars}
-\title{create AE overview flags}
+\title{create \code{AE} overview flags}
 \usage{
 create_flag_vars(
   df,
@@ -21,34 +21,34 @@ create_flag_vars(
 )
 }
 \arguments{
-\item{df}{data frame of AE}
+\item{df}{data frame of \code{AE}}
 
-\item{fatal}{AE with fatal outcome derivation}
+\item{fatal}{\code{AE} with fatal outcome derivation}
 
-\item{serious}{Serious AE derivation.}
+\item{serious}{Serious \code{AE} derivation.}
 
-\item{serious_withdrawl}{Serious AE leading to withdrawal derivation}
+\item{serious_withdrawl}{Serious \code{AE} leading to withdrawal derivation}
 
-\item{serious_modified}{Serious AE leading to dose modification derivation}
+\item{serious_modified}{Serious \code{AE} leading to dose modification derivation}
 
-\item{serious_related}{Related Serious AE derivation}
+\item{serious_related}{Related Serious \code{AE} derivation}
 
-\item{withdrawl}{AE leading to withdrawal derivation}
+\item{withdrawl}{\code{AE} leading to withdrawal derivation}
 
-\item{modified}{AE leading to dose modification derivation}
+\item{modified}{\code{AE} leading to dose modification derivation}
 
-\item{related}{Related AE derivation}
+\item{related}{Related \code{AE} derivation}
 
-\item{related_withdrawl}{Related AE leading to withdrawal derivation}
+\item{related_withdrawl}{Related \code{AE} leading to withdrawal derivation}
 
-\item{related_modified}{Related AE leading to dose modification derivation}
+\item{related_modified}{Related \code{AE} leading to dose modification derivation}
 
-\item{ctc35}{Grade 3-5 AE derivation}
+\item{ctc35}{Grade 3-5 \code{AE} derivation}
 
 \item{...}{named expressions used to generate categories}
 }
 \description{
-create AE overview flags
+create \code{AE} overview flags
 }
 \details{
 in this function, all flags are expressions calls, for simpler usage.
