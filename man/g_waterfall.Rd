@@ -90,15 +90,15 @@ ADTR <- rADTR \%>\%
 TR_SL <- inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all")
 
 SUB_ADRS <- ADRS \%>\%
-  filter(PARAMCD == "BESRSPI" | PARAMCD == "OVRINV") \%>\%
+  filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") \%>\%
   select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) \%>\%
   spread(PARAMCD, AVALC)
 
 ANL <- TR_SL \%>\%
   left_join(SUB_ADRS, by = "USUBJID", multiple = "all") \%>\%
-  mutate(TRTDURD = as.integer(TRTEDTM - TRTSDTM))
+  mutate(TRTDURD = as.integer(TRTEDTM - TRTSDTM) + 1)
 
-anno_txt_vars <- c("TRTDURD", "BESRSPI", "OVRINV", "SEX", "BMRKR2")
+anno_txt_vars <- c("TRTDURD", "BESRSPI", "INVET", "SEX", "BMRKR2")
 
 g_waterfall(
   bar_height = ANL$PCHG,
@@ -118,7 +118,7 @@ g_waterfall(
 )
 
 # Example 2 facetting
-anno_txt_vars <- c("BESRSPI", "OVRINV")
+anno_txt_vars <- c("BESRSPI", "INVET")
 
 g_waterfall(
   bar_id = sub(".*-", "", ANL$USUBJID),

@@ -20,7 +20,7 @@
 #' library(dplyr)
 #' library(nestcolor)
 #'
-#' ADSL <- rADSL
+#' ADSL <- rADSL[1:15, ]
 #' ADRS <- rADRS
 #' ANL <- left_join(ADSL, ADRS)
 #'

@@ -15,7 +15,7 @@
 #' @export
 #' @examples
 #' ASL <- rADSL
-#' ATE <- rATE
+#' ATE <- rADTTE
 #' filters <- as.data.frame(rbind(
 #'   c(ID = "IT", FLTTARGET = "SLREF", FLTWHERE = "where 1 eq 1"),
 #'   c(ID = "BIO", FLTTARGET = "SLREF", FLTWHERE = "where BMRKR1 ge 4.3"),

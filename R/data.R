@@ -116,16 +116,3 @@
 #' @source internal
 #' @name rADTTE
 "rADTTE"
-
-#' Random ATE
-#'
-#' @description Random ATE
-#' @docType data
-#'
-#' @keywords datasets internal
-#'
-#' @usage data(rATE)
-#'
-#' @source internal
-#' @name rATE
-"rATE"
