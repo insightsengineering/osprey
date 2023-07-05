@@ -2,7 +2,7 @@
 #'
 #' Description of this plot
 #'
-#' @param anl The analysis data frame (e.g. `ATE.sas7bdat` on `BCE`)
+#' @param anl The analysis data frame (typically `ADTTE`)
 #' @param byvar Analysis dataset
 #' @param days Variable with time in days
 #' @param mes_value Variable with measurement

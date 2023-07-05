@@ -14,7 +14,7 @@ spiderplot_simple(
 )
 }
 \arguments{
-\item{anl}{The analysis data frame (e.g. \code{ATE.sas7bdat} on \code{BCE})}
+\item{anl}{The analysis data frame (typically \code{ADTTE})}
 
 \item{byvar}{Analysis dataset}
 

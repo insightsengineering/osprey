@@ -78,9 +78,9 @@ library(nestcolor)
 ADSL <- rADSL \%>\%
   select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\%
   dplyr::filter(SEX \%in\% c("F", "M"))
-AAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
+ADAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
-ANL <- left_join(AAE, ADSL, by = c("STUDYID", "USUBJID"))
+ANL <- left_join(ADAE, ADSL, by = c("STUDYID", "USUBJID"))
 ANL <- ANL \%>\%
   dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\%
   dplyr::mutate(flag2 = ifelse(SEX == "M", 1, 0))

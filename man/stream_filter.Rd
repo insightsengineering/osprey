@@ -14,11 +14,11 @@ stream_filter(
 )
 }
 \arguments{
-\item{slref}{The subject level data frame (typically \code{ASL.sas7bdat} on \code{BCE})}
+\item{slref}{The subject level data frame (typically \code{ADSL})}
 
-\item{anl}{The analysis data frame (e.g. \code{ATE.sas7bdat} on \code{BCE})}
+\item{anl}{The analysis data frame (typically \code{ADTTE})}
 
-\item{filters}{The name of the filters dataset (typically \verb{__filters.sas7bdat} on \code{BCE})}
+\item{filters}{The name of the filters dataset}
 
 \item{suffix}{The suffix to apply in quotes (e.g. \code{"ITT_PFSINV"})}
 
@@ -34,8 +34,8 @@ One of \code{slref} or \code{anl} need to be specified. The conversion from \cod
 cases. In case of failure a sensible error message should be returned.
 }
 \examples{
-ASL <- rADSL
-ATE <- rADTTE
+ADSL <- rADSL
+ADTTE <- rADTTE
 filters <- as.data.frame(rbind(
   c(ID = "IT", FLTTARGET = "SLREF", FLTWHERE = "where 1 eq 1"),
   c(ID = "BIO", FLTTARGET = "SLREF", FLTWHERE = "where BMRKR1 ge 4.3"),
@@ -45,8 +45,8 @@ filters <- as.data.frame(rbind(
 ))
 
 ANL <- stream_filter(
-  slref = ASL,
-  anl = ATE,
+  slref = ADSL,
+  anl = ADTTE,
   suffix = "IT_PFS_BIO",
   filters = filters
 )

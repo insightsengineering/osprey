@@ -65,16 +65,16 @@ patient bar plot with markers of events and patient level annotation
 library(dplyr)
 library(nestcolor)
 
-ASL <- rADSL[1:20, ]
-ARS <- filter(rADRS, PARAMCD == "OVRINV")
-ANL <- left_join(ASL, ARS, by = c("STUDYID", "USUBJID"), multiple = "all")
-anno_txt <- ASL[, c("ARMCD", "SEX")]
+ADSL <- rADSL[1:20, ]
+ADRS <- filter(rADRS, PARAMCD == "OVRINV")
+ANL <- left_join(ADSL, ADRS, by = c("STUDYID", "USUBJID"), multiple = "all")
+anno_txt <- ADSL[, c("ARMCD", "SEX")]
 
 g_swimlane(
-  bar_id = ASL$USUBJID,
-  bar_length = as.integer(ASL$TRTEDTM - ASL$TRTSDTM),
-  sort_by = ASL$ARM,
-  col_by = ASL$ARM,
+  bar_id = ADSL$USUBJID,
+  bar_length = as.integer(ADSL$TRTEDTM - ADSL$TRTSDTM),
+  sort_by = ADSL$ARM,
+  col_by = ADSL$ARM,
   marker_id = ANL$USUBJID,
   marker_pos = ANL$ADY,
   marker_shape = ANL$AVALC,
@@ -92,29 +92,29 @@ g_swimlane(
 library(dplyr)
 library(nestcolor)
 
-ASL <- rADSL[1:20, ]
-ARS <- rADRS
+ADSL <- rADSL[1:20, ]
+ADRS <- rADRS
 
 anno_txt_vars <- c("ARMCD", "SEX", "COUNTRY")
-anno_txt <- ASL[, anno_txt_vars]
+anno_txt <- ADSL[, anno_txt_vars]
 
-# markers from ARS
-ARS <- dplyr::filter(ARS, PARAMCD == "OVRINV") \%>\% select(USUBJID, ADY, AVALC)
+# markers from ADRS
+ADRS <- dplyr::filter(ADRS, PARAMCD == "OVRINV") \%>\% select(USUBJID, ADY, AVALC)
 
-# markers from ASL - discontinuation
-ADS <- ASL \%>\%
+# markers from ADSL - discontinuation
+ADS <- ADSL \%>\%
   dplyr::filter(EOSSTT == "Discontinued" | DCSREAS != "") \%>\%
   select(USUBJID, EOSDY, DCSREAS) \%>\%
   dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
 
-# combine ARS with ADS records as one data for markers and join with ASL
-ANL <- inner_join(ASL, rbind(ARS, ADS), by = "USUBJID", multiple = "all")
+# combine ADRS with ADS records as one data for markers and join with ADSL
+ANL <- inner_join(ADSL, rbind(ADRS, ADS), by = "USUBJID", multiple = "all")
 
 g_swimlane(
-  bar_id = sub(".*-", "", ASL$USUBJID),
-  bar_length = as.integer(ASL$TRTEDTM - ASL$TRTSDTM),
+  bar_id = sub(".*-", "", ADSL$USUBJID),
+  bar_length = as.integer(ADSL$TRTEDTM - ADSL$TRTSDTM),
   sort_by = NULL,
-  col_by = ASL$ARMCD,
+  col_by = ADSL$ARMCD,
   marker_id = sub(".*-", "", ANL$USUBJID),
   marker_pos = ANL$ADY,
   marker_shape = ANL$AVALC,

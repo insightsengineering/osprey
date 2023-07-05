@@ -3,19 +3,19 @@
 #' One of `slref` or `anl` need to be specified. The conversion from `SAS` code in filters dataset may not work in all
 #' cases. In case of failure a sensible error message should be returned.
 #'
-#' @param slref The subject level data frame (typically `ASL.sas7bdat` on `BCE`)
-#' @param anl The analysis data frame (e.g. `ATE.sas7bdat` on `BCE`)
+#' @param slref The subject level data frame (typically `ADSL`)
+#' @param anl The analysis data frame (typically `ADTTE`)
 #' @param suffix The suffix to apply in quotes (e.g. `"ITT_PFSINV"`)
 #' @param slref_keep Variables to keep from `slref` (e.g. `c("REGION", "SEX")`)
 #' @param usubjid The unique subject identifier variable in quotes (e.g. `"USUBJID"`)
-#' @param filters The name of the filters dataset (typically `__filters.sas7bdat` on `BCE`)
+#' @param filters The name of the filters dataset
 #'
 #' @return \code{dataframe} object
 #' @author Iain Bennett
 #' @export
 #' @examples
-#' ASL <- rADSL
-#' ATE <- rADTTE
+#' ADSL <- rADSL
+#' ADTTE <- rADTTE
 #' filters <- as.data.frame(rbind(
 #'   c(ID = "IT", FLTTARGET = "SLREF", FLTWHERE = "where 1 eq 1"),
 #'   c(ID = "BIO", FLTTARGET = "SLREF", FLTWHERE = "where BMRKR1 ge 4.3"),
@@ -25,8 +25,8 @@
 #' ))
 #'
 #' ANL <- stream_filter(
-#'   slref = ASL,
-#'   anl = ATE,
+#'   slref = ADSL,
+#'   anl = ADTTE,
 #'   suffix = "IT_PFS_BIO",
 #'   filters = filters
 #' )
