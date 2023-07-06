@@ -1,11 +1,11 @@
-rADSL <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adsl
-rADTTE <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adtte
-rADRS <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adrs
-rADEX <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adex
-rADAE <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adae
-rADTR <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adtr
-rADCM <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adcm
-rADLB <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adlb
+rADSL <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adsl # nolint
+rADTTE <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adtte # nolint
+rADRS <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adrs # nolint
+rADEX <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adex # nolint
+rADAE <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adae # nolint
+rADTR <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adtr # nolint
+rADCM <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adcm # nolint
+rADLB <- scda::synthetic_cdisc_data("rcd_2023_03_17")$adlb # nolint
 
 usethis::use_data(rADSL)
 usethis::use_data(rADTTE)
