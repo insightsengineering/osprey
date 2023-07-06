@@ -55,18 +55,18 @@
 #'   group_by(USUBJID) %>%
 #'   slice(which.min(PCHG))
 #'
-#' TR_SL <- ADSL %>%
-#'   inner_join(ADTR, "USUBJID")
+#' TR_SL <- inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all")
 #'
 #' SUB_ADRS <- ADRS %>%
-#'   filter(PARAMCD == "BESRSPI" | PARAMCD == "OBJRSPI") %>%
+#'   filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") %>%
 #'   select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) %>%
 #'   spread(PARAMCD, AVALC)
 #'
 #' ANL <- TR_SL %>%
-#'   left_join(SUB_ADRS, "USUBJID")
+#'   left_join(SUB_ADRS, by = "USUBJID", multiple = "all") %>%
+#'   mutate(TRTDURD = as.integer(TRTEDTM - TRTSDTM) + 1)
 #'
-#' anno_txt_vars <- c("TRTDURD", "BESRSPI", "OBJRSPI", "SEX", "BMK2")
+#' anno_txt_vars <- c("TRTDURD", "BESRSPI", "INVET", "SEX", "BMRKR2")
 #'
 #' g_waterfall(
 #'   bar_height = ANL$PCHG,
@@ -86,7 +86,7 @@
 #' )
 #'
 #' # Example 2 facetting
-#' anno_txt_vars <- c("BESRSPI", "OBJRSPI")
+#' anno_txt_vars <- c("BESRSPI", "INVET")
 #'
 #' g_waterfall(
 #'   bar_id = sub(".*-", "", ANL$USUBJID),
@@ -127,6 +127,7 @@
 #'   y_label = "Best % Change from Baseline",
 #'   title = "Waterfall Plot"
 #' )
+#'
 g_waterfall <- function(bar_id,
                         bar_height,
                         sort_by = NULL,
@@ -231,7 +232,7 @@ g_waterfall <- function(bar_id,
           axis.title.x = element_blank()
         ) +
         ylab(y_label)
-    } else if (all(is.na(bar_height))) {
+    } else if (all(is.na(bar_data$bar_height))) {
       ybreaks <- seq(ytick_at * -2, ytick_at * 2, by = ytick_at)
 
       p <- ggplot(data = bar_data, aes(x = bar_id, y = bar_height)) +
@@ -248,7 +249,7 @@ g_waterfall <- function(bar_id,
           axis.title.x = element_blank()
         ) +
         ylab(y_label)
-    } else if (max(bar_height, na.rm = TRUE) <= gap_point) {
+    } else if (max(bar_data$bar_height, na.rm = TRUE) <= gap_point) {
       ybreaks <- seq(
         ytick_at * floor(min(bar_data$bar_height, na.rm = TRUE) / ytick_at),
         ytick_at * ceiling(max(bar_data$bar_height, na.rm = TRUE) / ytick_at),

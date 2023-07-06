@@ -1,18 +1,3 @@
-#' Meddra data
-#'
-#' @description Meddra data
-#' @docType data
-#'
-#' @usage data(meddra)
-#'
-#' @keywords datasets
-#'
-#' @source internal
-#' @name meddra
-#' @keywords internal
-#'
-"meddra"
-
 #' Random adverse events
 #'
 #' @description Random adverse events
@@ -25,6 +10,45 @@
 #' @source internal
 #' @name rADAE
 "rADAE"
+
+#' Random Concomitant Medications
+#'
+#' @description Random Concomitant Medications
+#' @docType data
+#'
+#' @usage data(rADCM)
+#'
+#' @keywords datasets internal
+#'
+#' @source internal
+#' @name rADCM
+"rADCM"
+
+#' Random response
+#'
+#' @description Random Exposure
+#' @docType data
+#'
+#' @usage data(rADEX)
+#'
+#' @keywords datasets internal
+#'
+#' @source internal
+#' @name rADEX
+"rADEX"
+
+#' Random lab analysis
+#'
+#' @description Random lab analysis
+#' @docType data
+#'
+#' @usage data(rADLB)
+#'
+#' @keywords datasets internal
+#'
+#' @source internal
+#' @name rADLB
+"rADLB"
 
 #' Random response
 #'

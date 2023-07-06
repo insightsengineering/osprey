@@ -2,7 +2,7 @@
 #'
 #' Description of this plot
 #'
-#' @param anl The analysis data frame (e.g. `ATE.sas7bdat` on `BCE`)
+#' @param anl The analysis data frame
 #' @param byvar Analysis dataset
 #' @param days Variable with time in days
 #' @param mes_value Variable with measurement
@@ -20,12 +20,12 @@
 #' library(dplyr)
 #' library(nestcolor)
 #'
-#' ADSL <- rADSL
-#' ADRS <- rADRS
-#' ANL <- left_join(ADSL, ADRS)
+#' ADSL <- rADSL[1:15, ]
+#' ADTR <- rADTR
+#' ANL <- left_join(ADSL, ADTR)
 #'
 #' ANL %>%
-#'   dplyr::filter(PARAMCD == "OVRINV") %>%
+#'   dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") %>%
 #'   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 spiderplot_simple <- function(anl,
                               byvar = "USUBJID",

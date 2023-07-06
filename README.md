@@ -43,8 +43,6 @@ remotes::install_github("insightsengineering/osprey@*release")
 
 A stable release of all `NEST` packages from June 2022 is also available [here](https://github.com/insightsengineering/depository#readme).
 
-In order to run many of the examples you will also need to install the [`scda`](https://github.com/insightsengineering/scda) package.
-
 ## Stargazers and Forkers
 
 ### Stargazers over time

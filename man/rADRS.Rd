@@ -5,7 +5,7 @@
 \alias{rADRS}
 \title{Random response}
 \format{
-An object of class \code{data.frame} with 300 rows and 34 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 3200 rows and 65 columns.
 }
 \source{
 internal

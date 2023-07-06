@@ -38,13 +38,9 @@ Imports:
 Suggests:
     knitr,
     nestcolor (>= 0.1.0),
-    scda (>= 0.1.5),
-    scda.2022 (>= 0.1.3),
     tern (>= 0.7.10),
     testthat (>= 2.0)
 Remotes:
-    insightsengineering/scda.2022@*release,
-    insightsengineering/scda@*release,
     insightsengineering/tern@*release
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8

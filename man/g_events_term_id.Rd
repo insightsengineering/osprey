@@ -89,13 +89,12 @@ and reference arms, and can be used for events data such as Adverse Events.
 there is no equivalent STREAM output
 }
 \examples{
-library(scda)
 library(dplyr)
 library(grid)
 library(nestcolor)
 
-ADSL <- synthetic_cdisc_data("latest")$adsl
-ADAE <- synthetic_cdisc_data("latest")$adae
+ADSL <- rADSL
+ADAE <- rADAE
 
 # add additional dummy causality flags
 ADAE <- ADAE \%>\%

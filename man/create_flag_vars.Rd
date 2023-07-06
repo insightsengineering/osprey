@@ -54,10 +54,9 @@ create \code{AE} overview flags
 in this function, all flags are expressions calls, for simpler usage.
 }
 \examples{
-library(scda)
 library(dplyr)
 
-ADAE <- synthetic_cdisc_data("latest")$adae
+ADAE <- rADAE
 
 # add additional dummy causality flags
 ADAE <- ADAE \%>\%

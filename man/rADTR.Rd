@@ -5,7 +5,7 @@
 \alias{rADTR}
 \title{Random data \code{rADTR}}
 \format{
-An object of class \code{data.frame} with 250 rows and 44 columns.
+An object of class \code{data.frame} with 2800 rows and 76 columns.
 }
 \source{
 internal
