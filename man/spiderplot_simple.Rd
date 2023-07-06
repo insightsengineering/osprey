@@ -14,7 +14,7 @@ spiderplot_simple(
 )
 }
 \arguments{
-\item{anl}{The analysis data frame (typically \code{ADTTE})}
+\item{anl}{The analysis data frame}
 
 \item{byvar}{Analysis dataset}
 
@@ -37,11 +37,11 @@ library(dplyr)
 library(nestcolor)
 
 ADSL <- rADSL[1:15, ]
-ADRS <- rADRS
-ANL <- left_join(ADSL, ADRS)
+ADTR <- rADTR
+ANL <- left_join(ADSL, ADTR)
 
 ANL \%>\%
-  dplyr::filter(PARAMCD == "OVRINV") \%>\%
+  dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") \%>\%
   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 }
 \author{

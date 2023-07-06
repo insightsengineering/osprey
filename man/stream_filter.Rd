@@ -16,7 +16,7 @@ stream_filter(
 \arguments{
 \item{slref}{The subject level data frame (typically \code{ADSL})}
 
-\item{anl}{The analysis data frame (typically \code{ADTTE})}
+\item{anl}{The analysis data frame}
 
 \item{filters}{The name of the filters dataset}
 

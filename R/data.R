@@ -1,18 +1,3 @@
-#' Meddra data
-#'
-#' @description Meddra data
-#' @docType data
-#'
-#' @usage data(meddra)
-#'
-#' @keywords datasets
-#'
-#' @source internal
-#' @name meddra
-#' @keywords internal
-#'
-"meddra"
-
 #' Random adverse events
 #'
 #' @description Random adverse events

@@ -4,7 +4,7 @@
 #' cases. In case of failure a sensible error message should be returned.
 #'
 #' @param slref The subject level data frame (typically `ADSL`)
-#' @param anl The analysis data frame (typically `ADTTE`)
+#' @param anl The analysis data frame
 #' @param suffix The suffix to apply in quotes (e.g. `"ITT_PFSINV"`)
 #' @param slref_keep Variables to keep from `slref` (e.g. `c("REGION", "SEX")`)
 #' @param usubjid The unique subject identifier variable in quotes (e.g. `"USUBJID"`)
