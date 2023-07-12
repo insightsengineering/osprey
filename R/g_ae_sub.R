@@ -33,7 +33,7 @@
 #' @examples
 #' library(grid)
 #' ADAE <- rADAE
-#' ADSL <- rADAE
+#' ADSL <- rADSL
 #'
 #' id <- ADAE$USUBJID
 #' arm <- ADAE$ACTARMCD
