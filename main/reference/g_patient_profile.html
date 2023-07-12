@@ -22,7 +22,7 @@ The plot output will not include domains with data unspecified"><!-- mathjax -->
     
     <a class="navbar-brand me-2" href="../index.html">osprey</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.15.9009</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.15.9011</small>
 
     <div style="width: 140px; margin-left: 0.5rem;"> <small class="nav-text text-muted me-auto">part of</small> <img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/nest.png?raw=true" alt="NEST" style="height: 30px;"><a href="https://pharmaverse.org/" class="external-link"><img src="https://github.com/insightsengineering/hex-stickers/blob/main/PNG/pharmaverse.png?raw=true" alt="pharmaverse" style="height: 28px;"></a> </div>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -164,14 +164,9 @@ specified</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scda</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/insightsengineering/nestcolor/" class="external-link">nestcolor</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">cached_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scda/man/synthetic_cdisc_data.html" class="external-link">synthetic_cdisc_data</a></span><span class="op">(</span><span class="st">"latest"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ADSL</span></span></span>
-<span class="r-in"><span><span class="va">rADSL</span> <span class="op">&lt;-</span> <span class="va">cached_data</span><span class="op">$</span><span class="va">adsl</span></span></span>
 <span class="r-in"><span><span class="va">ADSL</span> <span class="op">&lt;-</span> <span class="va">rADSL</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">USUBJID</span> <span class="op">==</span> <span class="va">rADSL</span><span class="op">$</span><span class="va">USUBJID</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span></span>
@@ -183,7 +178,6 @@ specified</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ADEX</span></span></span>
-<span class="r-in"><span><span class="va">rADEX</span> <span class="op">&lt;-</span> <span class="va">cached_data</span><span class="op">$</span><span class="va">adex</span></span></span>
 <span class="r-in"><span><span class="va">ADEX</span> <span class="op">&lt;-</span> <span class="va">rADEX</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">ASTDTM</span>, <span class="va">PARCAT2</span>, <span class="va">AVAL</span>, <span class="va">AVALU</span>, <span class="va">PARAMCD</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ADEX</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADEX</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -203,25 +197,21 @@ specified</p></li>
 <span class="r-in"><span>  <span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ADAE</span></span></span>
-<span class="r-in"><span><span class="va">rADAE</span> <span class="op">&lt;-</span> <span class="va">cached_data</span><span class="op">$</span><span class="va">adae</span></span></span>
 <span class="r-in"><span><span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="va">rADAE</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">AESOC</span>, <span class="va">AEDECOD</span>, <span class="va">AESER</span>, <span class="va">AETOXGR</span>, <span class="va">AEREL</span>, <span class="va">ASTDY</span>, <span class="va">AENDY</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ADAE</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADAE</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ADRS</span></span></span>
-<span class="r-in"><span><span class="va">rADRS</span> <span class="op">&lt;-</span> <span class="va">cached_data</span><span class="op">$</span><span class="va">adrs</span></span></span>
 <span class="r-in"><span><span class="va">ADRS</span> <span class="op">&lt;-</span> <span class="va">rADRS</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">PARAMCD</span>, <span class="va">PARAM</span>, <span class="va">AVALC</span>, <span class="va">AVAL</span>, <span class="va">ADY</span>, <span class="va">ADTM</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ADRS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADRS</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ADCM</span></span></span>
-<span class="r-in"><span><span class="va">rADCM</span> <span class="op">&lt;-</span> <span class="va">cached_data</span><span class="op">$</span><span class="va">adcm</span></span></span>
 <span class="r-in"><span><span class="va">ADCM</span> <span class="op">&lt;-</span> <span class="va">rADCM</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">ASTDTM</span>, <span class="va">AENDTM</span>, <span class="va">CMDECOD</span>, <span class="va">ASTDY</span>, <span class="va">AENDY</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ADCM</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">ADSL</span>, <span class="va">ADCM</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"USUBJID"</span>, <span class="st">"STUDYID"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ADLB</span></span></span>
-<span class="r-in"><span><span class="va">rADLB</span> <span class="op">&lt;-</span> <span class="va">cached_data</span><span class="op">$</span><span class="va">adlb</span></span></span>
 <span class="r-in"><span><span class="va">ADLB</span> <span class="op">&lt;-</span> <span class="va">rADLB</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="va">USUBJID</span>, <span class="va">STUDYID</span>, <span class="va">LBSEQ</span>, <span class="va">PARAMCD</span>, <span class="va">BASETYPE</span>, <span class="va">ADTM</span>,</span></span>

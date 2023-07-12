@@ -82,9 +82,6 @@
     <loc>https://insightsengineering.github.io/osprey/main/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://insightsengineering.github.io/osprey/main/reference/meddra.html</loc>
-  </url>
-  <url>
     <loc>https://insightsengineering.github.io/osprey/main/reference/osprey.html</loc>
   </url>
   <url>
@@ -92,6 +89,15 @@
   </url>
   <url>
     <loc>https://insightsengineering.github.io/osprey/main/reference/rADAE.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/osprey/main/reference/rADCM.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/osprey/main/reference/rADEX.html</loc>
+  </url>
+  <url>
+    <loc>https://insightsengineering.github.io/osprey/main/reference/rADLB.html</loc>
   </url>
   <url>
     <loc>https://insightsengineering.github.io/osprey/main/reference/rADRS.html</loc>
