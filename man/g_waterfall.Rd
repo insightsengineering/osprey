@@ -78,10 +78,10 @@ g_waterfall(
 )
 
 # Example 1
-ADSL <- rADSL[1:15, ]
-ADRS <- rADRS \%>\%
+ADSL <- osprey::rADSL[1:15, ]
+ADRS <- osprey::rADRS \%>\%
   filter(USUBJID \%in\% ADSL$USUBJID)
-ADTR <- rADTR \%>\%
+ADTR <- osprey::rADTR \%>\%
   filter(USUBJID \%in\% ADSL$USUBJID) \%>\%
   select(USUBJID, PCHG) \%>\%
   group_by(USUBJID) \%>\%

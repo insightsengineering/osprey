@@ -33,10 +33,10 @@
 #' @examples
 #' library(dplyr)
 #'
-#' ADSL <- rADSL %>% slice(1:30)
-#' ADEX <- rADEX %>% filter(USUBJID %in% ADSL$USUBJID)
-#' ADAE <- rADAE %>% filter(USUBJID %in% ADSL$USUBJID)
-#' ADCM <- rADCM %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADSL <- osprey::rADSL %>% slice(1:30)
+#' ADEX <- osprey::rADEX %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADAE <- osprey::rADAE %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADCM <- osprey::rADCM %>% filter(USUBJID %in% ADSL$USUBJID)
 #' # function to derive AVISIT from ADEX
 #' add_visit <- function(data_need_visit) {
 #'   visit_dates <- ADEX %>%

@@ -61,8 +61,8 @@
 #' library(nestcolor)
 #'
 #' # Note: CRP is being used in place of Bilirubin here because this is the only available data
-#' adsl <- rADSL
-#' adlb <- rADLB %>% mutate(ANRHI = 50)
+#' adsl <- osprey::rADSL
+#' adlb <- osprey::rADLB %>% mutate(ANRHI = 50)
 #'
 #' # Example 1, - Hy's law template (3 and 2 X ULN)
 #' g_hy_law(

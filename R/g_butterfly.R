@@ -44,10 +44,10 @@
 #' library(dplyr)
 #' library(nestcolor)
 #'
-#' ADSL <- rADSL %>%
+#' ADSL <- osprey::rADSL %>%
 #'   select(USUBJID, STUDYID, SEX, ARM, RACE) %>%
 #'   dplyr::filter(SEX %in% c("F", "M"))
-#' ADAE <- rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
+#' ADAE <- osprey::rADAE %>% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 #'
 #' ANL <- left_join(ADAE, ADSL, by = c("STUDYID", "USUBJID"))
 #' ANL <- ANL %>%
