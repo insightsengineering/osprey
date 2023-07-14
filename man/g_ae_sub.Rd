@@ -78,8 +78,8 @@ there is no equivalent STREAM output
 }
 \examples{
 library(grid)
-ADAE <- rADAE
-ADSL <- rADSL
+ADAE <- osprey::rADAE
+ADSL <- osprey::rADSL
 
 id <- ADAE$USUBJID
 arm <- ADAE$ACTARMCD
@@ -135,8 +135,8 @@ grid::grid.newpage()
 # Example 3: preprocess data to only include treatment and control arm patients
 trt <- "ARM A"
 ref <- "ARM C"
-ADAE <- rADAE
-ADSL <- rADSL \%>\% filter(ACTARMCD \%in\% c(trt, ref))
+ADAE <- osprey::rADAE
+ADSL <- osprey::rADSL \%>\% filter(ACTARMCD \%in\% c(trt, ref))
 id <- ADAE$USUBJID
 arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)

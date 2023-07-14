@@ -11,7 +11,7 @@ An object of class \code{data.frame} with 2800 rows and 76 columns.
 internal
 }
 \usage{
-data(rADTR)
+rADTR
 }
 \description{
 Random data \code{rADTR}
