@@ -323,6 +323,7 @@ grob_part <- function(gplot_grob, part) {
     ))
   }
   grob <- gplot_grob$grobs[[index]]
+
   return(grob)
 }
 
