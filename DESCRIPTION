@@ -40,8 +40,6 @@ Suggests:
     nestcolor (>= 0.1.0),
     tern (>= 0.7.10),
     testthat (>= 2.0)
-Remotes:
-    insightsengineering/tern@*release
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
