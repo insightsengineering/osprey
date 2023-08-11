@@ -1,5 +1,7 @@
 # osprey 0.1.16
 
+### Miscellaneous
+
 * Removed `scda` package dependency from examples.
 * Updated deprecated argument specification in calls to `guides`.
 
