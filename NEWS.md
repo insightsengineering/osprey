@@ -1,4 +1,4 @@
-# osprey 0.1.15.9015
+# osprey 0.1.16
 
 * Removed `scda` package dependency from examples.
 * Updated deprecated argument specification in calls to `guides`.
@@ -7,13 +7,13 @@
 
 ### Enhancements
 
-* Implemented `nestcolor` with slight refactoring to `g_events_term_id`, `g_heat_bygrade`, `g_patient_profile`, 
+* Implemented `nestcolor` with slight refactoring to `g_events_term_id`, `g_heat_bygrade`, `g_patient_profile`,
   `g_swimlane`, and `g_waterfall`. Added `nestcolor` in examples without custom color manuals.
 * Updated installation instructions in the `README`.
 
 ### Fixes
 
-* Fixed a failure in `g_patient_profile` example. 
+* Fixed a failure in `g_patient_profile` example.
 
 # osprey 0.1.14
 
