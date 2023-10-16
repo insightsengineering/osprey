@@ -18,13 +18,20 @@
 #' @examples
 #' \dontrun{
 #' library(ggplot2)
-#' g <- with(iris, {
-#'   list(
-#'     ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
-#'     ggplotGrob(qplot(Sepal.Length, Petal.Length, col = Species)),
-#'     ggplotGrob(qplot(Sepal.Length, Petal.Width, col = Species))
+#' g <- #'   list(
+#'   ggplotGrob(
+#'     ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+#'       geom_point()
+#'   ),
+#'   ggplotGrob(
+#'     ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+#'       geom_point()
+#'   ),
+#'   ggplotGrob(
+#'     ggplot(iris, aes(x = Sepal.Length, y = Petal.Width, color = Species)) +
+#'       geom_point()
 #'   )
-#' })
+#' )
 #'
 #' # output to pdf
 #' g %>% as_pdf("~/example_aspdf1.pdf")
@@ -99,13 +106,20 @@ paper_size <- function(pagesize) {
 #' library(ggplot2)
 #' library(tern)
 #'
-#' g <- with(iris, {
-#'   list(
-#'     ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
-#'     ggplotGrob(qplot(Sepal.Length, Petal.Length, col = Species)),
-#'     ggplotGrob(qplot(Sepal.Length, Petal.Width, col = Species))
+#' g <- #'   list(
+#'   ggplotGrob(
+#'     ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+#'       geom_point()
+#'   ),
+#'   ggplotGrob(
+#'     ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+#'       geom_point()
+#'   ),
+#'   ggplotGrob(
+#'     ggplot(iris, aes(x = Sepal.Length, y = Petal.Width, color = Species)) +
+#'       geom_point()
 #'   )
-#' })
+#' )
 #'
 #' grobs2pdf(
 #'   grobs = g,
