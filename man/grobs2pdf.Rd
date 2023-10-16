@@ -49,13 +49,20 @@ full path to program and the output for easy tracking and archiving.
 library(ggplot2)
 library(tern)
 
-g <- with(iris, {
-  list(
-    ggplotGrob(qplot(Sepal.Length, Sepal.Width, col = Species)),
-    ggplotGrob(qplot(Sepal.Length, Petal.Length, col = Species)),
-    ggplotGrob(qplot(Sepal.Length, Petal.Width, col = Species))
+g <- #'   list(
+  ggplotGrob(
+    ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+      geom_point()
+  ),
+  ggplotGrob(
+    ggplot(iris, aes(x = Sepal.Length, y = Petal.Length, color = Species)) +
+      geom_point()
+  ),
+  ggplotGrob(
+    ggplot(iris, aes(x = Sepal.Length, y = Petal.Width, color = Species)) +
+      geom_point()
   )
-})
+)
 
 grobs2pdf(
   grobs = g,
