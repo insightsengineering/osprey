@@ -43,3 +43,4 @@ SECURITY.md
 coverage.*
 ^\.pre-commit-config\.yaml$
 data-raw/data.R
+^pkgdown$
