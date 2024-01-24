@@ -20,8 +20,8 @@
 #' library(dplyr)
 #' library(nestcolor)
 #'
-#' ADSL <- osprey::rADSL[1:15, ]
-#' ADTR <- osprey::rADTR
+#' ADSL <- rADSL[1:15, ]
+#' ADTR <- rADTR
 #' ANL <- left_join(ADSL, ADTR)
 #'
 #' ANL %>%
@@ -47,13 +47,13 @@ spiderplot_simple <- function(anl,
   # plotr
   ggplot(
     data = anl,
-    mapping = aes_string(x = days, y = mes_value, group = byvar, colour = group_col),
+    mapping = aes(x = !!days, y = !!mes_value, group = !!byvar, colour = !!group_col),
     size = 2,
     alpha = 1
   ) +
     geom_point(size = 3) +
-    geom_line(size = 2, alpha = 0.7) +
-    geom_text(aes_string(x = days, y = mes_value, label = byvar), data = last_obs, hjust = 0) +
+    geom_line(linewidth = 2, alpha = 0.7) +
+    geom_text(aes(x = !!days, y = !!mes_value, label = !!byvar), data = last_obs, hjust = 0) +
     geom_hline(aes(yintercept = 0), linetype = "dotted", color = "black") +
     xlab("Time (Days)") +
     ylab("Change(%) from Baseline")

@@ -19,7 +19,6 @@ Will convert all unquoted values to upper case (assumed to be variable names)
 All quoted values will be returned with single quotes - may fail if have quotes within quotes
 }
 \examples{
-
 stream_filter_convwhere(x = "where X in (1 2 3 4) and Y gt 4 ")
 stream_filter_convwhere(x = "where X = \"fred\" and Y gt 4 ")
 }

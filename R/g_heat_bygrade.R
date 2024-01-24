@@ -33,10 +33,10 @@
 #' @examples
 #' library(dplyr)
 #'
-#' ADSL <- osprey::rADSL %>% slice(1:30)
-#' ADEX <- osprey::rADEX %>% filter(USUBJID %in% ADSL$USUBJID)
-#' ADAE <- osprey::rADAE %>% filter(USUBJID %in% ADSL$USUBJID)
-#' ADCM <- osprey::rADCM %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADSL <- rADSL %>% slice(1:30)
+#' ADEX <- rADEX %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADAE <- rADAE %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADCM <- rADCM %>% filter(USUBJID %in% ADSL$USUBJID)
 #' # function to derive AVISIT from ADEX
 #' add_visit <- function(data_need_visit) {
 #'   visit_dates <- ADEX %>%
@@ -48,9 +48,9 @@
 #'     rename(this_vis = ASTDTM)
 #'   data_visit <- data_need_visit %>%
 #'     select(USUBJID, ASTDTM) %>%
-#'     left_join(visit_dates, by = "USUBJID") %>%
+#'     left_join(visit_dates, by = "USUBJID", relationship = "many-to-many") %>%
 #'     filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) %>%
-#'     left_join(data_need_visit)
+#'     left_join(data_need_visit, relationship = "many-to-many")
 #'   return(data_visit)
 #' }
 #' # add AVISIT in ADAE and ADCM
@@ -273,7 +273,7 @@ g_heat_bygrade <- function(id_var,
         xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels))
       ),
       arrow = arrow(length = grid::unit(0.1, "cm")),
-      size = .5,
+      linewidth = .5,
       color = "black"
     ) +
     # plot ongoing
@@ -286,7 +286,7 @@ g_heat_bygrade <- function(id_var,
         yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels)))
       ),
       arrow = arrow(length = grid::unit(0.1, "cm")),
-      size = .5,
+      linewidth = .5,
       color = "black"
     )
   if (!is.null(conmed_data) && !is.null(conmed_var)) {

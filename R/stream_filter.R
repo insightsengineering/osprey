@@ -14,8 +14,8 @@
 #' @author Iain Bennett
 #' @export
 #' @examples
-#' ADSL <- osprey::rADSL
-#' ADTTE <- osprey::rADTTE
+#' ADSL <- rADSL
+#' ADTTE <- rADTTE
 #' filters <- as.data.frame(rbind(
 #'   c(ID = "IT", FLTTARGET = "SLREF", FLTWHERE = "where 1 eq 1"),
 #'   c(ID = "BIO", FLTTARGET = "SLREF", FLTWHERE = "where BMRKR1 ge 4.3"),
@@ -91,7 +91,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
     new_df <- NULL
 
     new_df <- try(
-      filter_(this_df, this_rclause),
+      eval(parse(text = sprintf("dplyr::filter(this_df, %s)", this_rclause))),
       silent = TRUE
     )
 
@@ -134,7 +134,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
   }
 
   # keep these variables only
-  asl_out <- transmute_(asl_out, paste(slref_keep, collapse = ","))
+  asl_out <- eval(parse(text = sprintf("dplyr::transmute(asl_out, %s)", paste(slref_keep, collapse = ","))))
 
   # use inner join to apply both slref and anl restrictions
   rc <- inner_join(asl_out, anl_out, by = usubjid)
@@ -187,7 +187,6 @@ stream_filter_index <- function(string1, string2) {
 #' @export
 #'
 #' @examples
-#'
 #' stream_filter_convwhere(x = "where X in (1 2 3 4) and Y gt 4 ")
 #' stream_filter_convwhere(x = "where X = \"fred\" and Y gt 4 ")
 stream_filter_convwhere <- function(x) {

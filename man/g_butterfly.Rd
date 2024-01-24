@@ -75,10 +75,10 @@ there is no equivalent STREAM output
 library(dplyr)
 library(nestcolor)
 
-ADSL <- osprey::rADSL \%>\%
+ADSL <- rADSL \%>\%
   select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\%
   dplyr::filter(SEX \%in\% c("F", "M"))
-ADAE <- osprey::rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
+ADAE <- rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(ADAE, ADSL, by = c("STUDYID", "USUBJID"))
 ANL <- ANL \%>\%

@@ -104,7 +104,7 @@ adverse events (\code{ADAE}), response (\code{ADRS}), concomitant medications
 library(dplyr)
 
 # ADSL
-ADSL <- osprey::rADSL \%>\%
+ADSL <- rADSL \%>\%
   filter(USUBJID == rADSL$USUBJID[1]) \%>\%
   mutate(
     TRTSDT = as.Date(TRTSDTM),
@@ -116,7 +116,7 @@ ADSL <- osprey::rADSL \%>\%
 
 
 # Example 1 Exposure "ADEX"
-ADEX <- osprey::rADEX \%>\%
+ADEX <- rADEX \%>\%
   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 ADEX <- ADEX \%>\%
@@ -170,7 +170,7 @@ p1
 # If AENDY and ASTDY occur on the same day only AENDY will be shown.
 
 # Adverse Event ADAE
-ADAE <- osprey::rADAE \%>\%
+ADAE <- rADAE \%>\%
   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
@@ -206,7 +206,7 @@ p2 <- patient_domain_profile(
 p2
 
 # Example 3 Tumor Response "ADRS"
-ADRS <- osprey::rADRS \%>\%
+ADRS <- rADRS \%>\%
   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 p3 <- patient_domain_profile(
@@ -245,7 +245,7 @@ p3 <- patient_domain_profile(
 p3
 
 # Example 4 Concomitant Med "ADCM"
-ADCM <- osprey::rADCM \%>\%
+ADCM <- rADCM \%>\%
   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 p4 <- patient_domain_profile(
@@ -268,7 +268,7 @@ p4 <- patient_domain_profile(
 p4
 
 # Example 5 Laboratory "ADLB"
-ADLB <- osprey::rADLB \%>\%
+ADLB <- rADLB \%>\%
   select(
     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE,
     ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND

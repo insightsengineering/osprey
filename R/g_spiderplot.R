@@ -46,8 +46,8 @@
 #' library(dplyr)
 #' library(nestcolor)
 #'
-#' ADTR <- osprey::rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
-#' ADSL <- osprey::rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)
+#' ADTR <- rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
+#' ADSL <- rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)
 #' ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
 #' ANL <- ANL %>%
 #'   dplyr::filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
@@ -159,22 +159,22 @@ g_spiderplot <- function(marker_x,
   dat <- dat %>% as.data.frame()
 
   # plot spider plot----------------- this section can be condensed later
-  pl <- ggplot(data = dat, aes_string(x = "x", y = "y", group = "group")) +
+  pl <- ggplot(data = dat, aes(x = x, y = y, group = group)) +
     xlab(x_label) +
     ylab(y_label) +
     theme(legend.position = "top", legend.title = element_blank())
 
-  pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", size = 1)
+  pl <- pl + geom_hline(yintercept = 0, linetype = "solid", color = "gray", linewidth = 1)
 
 
   pl <- pl +
     geom_line(
       mapping = if (!is.null(line_colby)) {
-        aes_string(color = "l_col")
+        aes(color = l_col)
       } else {
         NULL
       },
-      size = 1,
+      linewidth = 1,
       alpha = 0.5,
       show.legend = show_legend
     )
@@ -183,14 +183,14 @@ g_spiderplot <- function(marker_x,
   if (!is.null(marker_shape)) {
     pl <- pl +
       geom_point(mapping = if (!is.null(line_colby)) {
-        aes_string(shape = "sh", color = "l_col")
+        aes(shape = sh, color = l_col)
       } else {
-        aes_string(shape = "sh")
+        aes(shape = sh)
       }, size = marker_size, show.legend = show_legend)
   } else if (is.null(marker_shape)) {
     pl <- pl +
       geom_point(mapping = if (!is.null(line_colby)) {
-        aes_string(color = "l_col")
+        aes(color = l_col)
       } else {
         NULL
       }, size = 3, show.legend = show_legend)
@@ -202,7 +202,7 @@ g_spiderplot <- function(marker_x,
       pl <- pl +
         geom_text(
           data = dat,
-          aes_string(x = "x", y = "y", label = "lab"), hjust = -0.3,
+          aes(x = x, y = y, label = lab), hjust = -0.3,
           size = 4,
           show.legend = FALSE
         )
@@ -216,9 +216,9 @@ g_spiderplot <- function(marker_x,
       pl <- pl +
         geom_segment(
           data = dat_arrow,
-          mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+          mapping = aes(x = x, y = y, xend = x, yend = y),
           arrow = arrow(length = grid::unit(0.15, "inches"), ends = "first", type = "closed"),
-          size = 0.4,
+          linewidth = 0.4,
           color = "black",
           show.legend = FALSE
         )
@@ -228,7 +228,7 @@ g_spiderplot <- function(marker_x,
       pl <- pl +
         geom_text(
           data = dat,
-          aes_string(x = "x", y = "y", label = "lab"),
+          aes(x = x, y = y, label = lab),
           hjust = -0.45,
           size = 4,
           show.legend = FALSE
@@ -242,9 +242,9 @@ g_spiderplot <- function(marker_x,
       pl <- pl +
         geom_segment(
           data = dat_arrow,
-          mapping = aes_string(x = "x", y = "y", xend = "x", yend = "y"),
+          mapping = aes(x = x, y = y, xend = x, yend = y),
           arrow = arrow(length = grid::unit(0.15, "inches"), ends = "first", type = "closed"),
-          size = 0.4,
+          linewidth = 0.4,
           color = "black",
           show.legend = FALSE
         )

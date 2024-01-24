@@ -47,9 +47,8 @@ full path to program and the output for easy tracking and archiving.
 \examples{
 \dontrun{
 library(ggplot2)
-library(tern)
 
-g <- #'   list(
+g <- list(
   ggplotGrob(
     ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
       geom_point()

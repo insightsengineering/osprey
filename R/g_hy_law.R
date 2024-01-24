@@ -61,8 +61,8 @@
 #' library(nestcolor)
 #'
 #' # Note: CRP is being used in place of Bilirubin here because this is the only available data
-#' adsl <- osprey::rADSL
-#' adlb <- osprey::rADLB %>% mutate(ANRHI = 50)
+#' adsl <- rADSL
+#' adlb <- rADLB %>% mutate(ANRHI = 50)
 #'
 #' # Example 1, - Hy's law template (3 and 2 X ULN)
 #' g_hy_law(
@@ -161,22 +161,22 @@ g_hy_law <- function(id,
     ) +
     geom_segment(
       aes(x = log10(folds[1]), y = log10(0), xend = log10(folds[1]), yend = log10(75)),
-      size = 0.25,
+      linewidth = 0.25,
       color = "grey"
     ) +
     geom_segment(
       aes(x = log10(0), y = log10(folds[2]), xend = log10(65), yend = log10(folds[2])),
-      size = 0.25,
+      linewidth = 0.25,
       color = "grey"
     ) +
     geom_segment(
       aes(x = log10(1), y = log10(0), xend = log10(1), yend = log10(1)),
-      size = 0.25,
+      linewidth = 0.25,
       color = "black"
     ) +
     geom_segment(
       aes(x = log10(0), y = log10(1), xend = log10(1), yend = log10(1)),
-      size = 0.25,
+      linewidth = 0.25,
       color = "black"
     ) +
     annotate("text", label = paste0(folds[1], "XULN"), x = log10(folds[1]), y = log10(90)) +

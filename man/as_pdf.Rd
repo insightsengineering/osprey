@@ -25,7 +25,8 @@ This is an utility function to output a decorated grob (\code{gTree}) object
 \examples{
 \dontrun{
 library(ggplot2)
-g <- #'   list(
+
+g <- list(
   ggplotGrob(
     ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
       geom_point()
@@ -41,7 +42,7 @@ g <- #'   list(
 )
 
 # output to pdf
-g \%>\% as_pdf("~/example_aspdf1.pdf")
+as_pdf(g, "~/example_aspdf1.pdf")
 }
 }
 \seealso{

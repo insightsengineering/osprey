@@ -56,7 +56,7 @@ in this function, all flags are expressions calls, for simpler usage.
 \examples{
 library(dplyr)
 
-ADAE <- osprey::rADAE
+ADAE <- rADAE
 
 # add additional dummy causality flags
 ADAE <- ADAE \%>\%

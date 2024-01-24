@@ -36,8 +36,8 @@ Description of this plot
 library(dplyr)
 library(nestcolor)
 
-ADSL <- osprey::rADSL[1:15, ]
-ADTR <- osprey::rADTR
+ADSL <- rADSL[1:15, ]
+ADTR <- rADTR
 ANL <- left_join(ADSL, ADTR)
 
 ANL \%>\%

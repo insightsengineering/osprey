@@ -44,8 +44,8 @@
 #' library(grid)
 #' library(nestcolor)
 #'
-#' ADSL <- osprey::rADSL
-#' ADAE <- osprey::rADAE
+#' ADSL <- rADSL
+#' ADAE <- rADAE
 #'
 #' # add additional dummy causality flags
 #' ADAE <- ADAE %>%
@@ -409,7 +409,7 @@ g_events_term_id <- function(term,
 #' @examples
 #' library(dplyr)
 #'
-#' ADAE <- osprey::rADAE
+#' ADAE <- rADAE
 #'
 #' # add additional dummy causality flags
 #' ADAE <- ADAE %>%

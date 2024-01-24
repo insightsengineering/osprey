@@ -93,8 +93,8 @@ library(dplyr)
 library(grid)
 library(nestcolor)
 
-ADSL <- osprey::rADSL
-ADAE <- osprey::rADAE
+ADSL <- rADSL
+ADAE <- rADAE
 
 # add additional dummy causality flags
 ADAE <- ADAE \%>\%
