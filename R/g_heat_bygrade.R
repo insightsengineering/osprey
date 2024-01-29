@@ -165,14 +165,17 @@ g_heat_bygrade <- function(id_var,
   )
   stopifnot(
     "invalid argument: please specify conmed_color_opt for all unique conmed_var" =
-      is.null(conmed_data) || is.null(conmed_color_opt) ||
+      is.null(conmed_data) ||
+        is.null(conmed_color_opt) || # nolint indentation_linter
         length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]]))
   )
 
-  if (!((is.null(conmed_data) || id_var %in% names(conmed_data)) &&
-    id_var %in% names(exp_data) &&
-    id_var %in% names(anno_data) &&
-    id_var %in% names(heat_data))) {
+  if (
+    !(
+      (is.null(conmed_data) || id_var %in% names(conmed_data)) &&
+        id_var %in% names(exp_data) && id_var %in% names(anno_data) && id_var %in% names(heat_data)
+    )
+  ) {
     stop(
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
@@ -181,9 +184,12 @@ g_heat_bygrade <- function(id_var,
       )
     )
   }
-  if (!((is.null(conmed_data) || visit_var %in% names(conmed_data)) &&
-    visit_var %in% names(exp_data) &&
-    visit_var %in% names(heat_data))) {
+  if (
+    !(
+      (is.null(conmed_data) || visit_var %in% names(conmed_data)) &&
+        visit_var %in% names(exp_data) && visit_var %in% names(heat_data)
+    )
+  ) {
     stop(
       paste(
         "exp_data, heat_data, and conmed_data (if plotting conmed) must include a column named",

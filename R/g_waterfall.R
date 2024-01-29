@@ -311,7 +311,7 @@ g_waterfall <- function(bar_id,
         ylabels <- c(ylabel1, ylabel2)
       }
 
-      p <- ggplot(data = bar_data, aes(x = bar_id, y = new_bar_height)) +
+      p <- ggplot(data = bar_data, aes(x = bar_id, y = .data$new_bar_height)) +
         geom_col(position = "identity", aes(fill = col_by)) +
         geom_rect(aes(xmin = 0.5, xmax = length(bar_id), ymin = gap_point, ymax = gap_point + 3), fill = "white") +
         scale_y_continuous(breaks = ybreaks, labels = ylabels) +
