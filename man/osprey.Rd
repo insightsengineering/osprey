@@ -2,9 +2,37 @@
 % Please edit documentation in R/osprey.R
 \docType{package}
 \name{osprey}
+\alias{osprey-package}
 \alias{osprey}
 \title{osprey: R package to create TLGs}
 \description{
 R package to create TLGs
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/insightsengineering/osprey}
+  \item Report bugs at \url{https://github.com/insightsengineering/osprey/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Nina Qi \email{qit3@gene.com}
+
+Authors:
+\itemize{
+  \item Dawid Kaledkowski \email{dawid.kaledkowski@roche.com}
+  \item Chendi Liao \email{chendi.liao@roche.com}
+  \item Liming Li \email{liming.li@roche.com}
+}
+
+Other contributors:
+\itemize{
+  \item F. Hoffmann-La Roche AG [copyright holder, funder]
+  \item Molly He [contributor]
+  \item Carolyn Zhang [contributor]
+  \item Tina Cho [contributor]
+}
+
 }
 \keyword{internal}
