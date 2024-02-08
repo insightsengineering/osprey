@@ -11,7 +11,8 @@ R package to create TLGs
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/insightsengineering/osprey}
+  \item \url{https://insightsengineering.github.io/osprey/}
+  \item \url{https://github.com/insightsengineering/osprey/}
   \item Report bugs at \url{https://github.com/insightsengineering/osprey/issues}
 }
 

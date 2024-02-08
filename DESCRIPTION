@@ -15,7 +15,8 @@ Authors@R: c(
   )
 Description: Community effort to collect TLG code and create a catalogue.
 License: Apache License 2.0 | file LICENSE
-URL: https://github.com/insightsengineering/osprey
+URL: https://insightsengineering.github.io/osprey/,
+    https://github.com/insightsengineering/osprey/
 BugReports: https://github.com/insightsengineering/osprey/issues
 Depends:
     dplyr (>= 0.8.0),
