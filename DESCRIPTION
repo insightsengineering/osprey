@@ -1,8 +1,8 @@
 Type: Package
 Package: osprey
 Title: R Package to Create TLGs
-Version: 0.1.16.9003
-Date: 2023-12-13
+Version: 0.1.16.9006
+Date: 2024-02-09
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = "aut"),
@@ -15,7 +15,8 @@ Authors@R: c(
   )
 Description: Community effort to collect TLG code and create a catalogue.
 License: Apache License 2.0 | file LICENSE
-URL: https://github.com/insightsengineering/osprey
+URL: https://insightsengineering.github.io/osprey/,
+    https://github.com/insightsengineering/osprey/
 BugReports: https://github.com/insightsengineering/osprey/issues
 Depends:
     dplyr (>= 0.8.0),
