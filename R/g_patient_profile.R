@@ -70,7 +70,7 @@
 #' library(dplyr)
 #'
 #' # ADSL
-#' ADSL <- rADSL %>%
+#' ADSL <- osprey::rADSL %>%
 #'   filter(USUBJID == rADSL$USUBJID[1]) %>%
 #'   mutate(
 #'     TRTSDT = as.Date(TRTSDTM),
@@ -82,7 +82,7 @@
 #'
 #'
 #' # Example 1 Exposure "ADEX"
-#' ADEX <- rADEX %>%
+#' ADEX <- osprey::rADEX %>%
 #'   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 #' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 #' ADEX <- ADEX %>%
@@ -136,7 +136,7 @@
 #' # If AENDY and ASTDY occur on the same day only AENDY will be shown.
 #'
 #' # Adverse Event ADAE
-#' ADAE <- rADAE %>%
+#' ADAE <- osprey::rADAE %>%
 #'   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 #' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 #'
@@ -172,7 +172,7 @@
 #' p2
 #'
 #' # Example 3 Tumor Response "ADRS"
-#' ADRS <- rADRS %>%
+#' ADRS <- osprey::rADRS %>%
 #'   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #' p3 <- patient_domain_profile(
@@ -211,7 +211,7 @@
 #' p3
 #'
 #' # Example 4 Concomitant Med "ADCM"
-#' ADCM <- rADCM %>%
+#' ADCM <- osprey::rADCM %>%
 #'   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 #' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 #' p4 <- patient_domain_profile(
@@ -234,7 +234,7 @@
 #' p4
 #'
 #' # Example 5 Laboratory "ADLB"
-#' ADLB <- rADLB %>%
+#' ADLB <- osprey::rADLB %>%
 #'   select(
 #'     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE,
 #'     ADTM, ADY, ATPTN, AVISITN, LBTESTCD, ANRIND
@@ -618,7 +618,7 @@ patient_domain_profile <- function(domain = NULL,
 #' library(nestcolor)
 #'
 #' # ADSL
-#' ADSL <- rADSL %>%
+#' ADSL <- osprey::rADSL %>%
 #'   filter(USUBJID == rADSL$USUBJID[1]) %>%
 #'   mutate(
 #'     TRTSDT = as.Date(TRTSDTM),
@@ -629,7 +629,7 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #'
 #' # ADEX
-#' ADEX <- rADEX %>%
+#' ADEX <- osprey::rADEX %>%
 #'   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 #' ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 #'
@@ -648,22 +648,22 @@ patient_domain_profile <- function(domain = NULL,
 #'   ))
 #'
 #' # ADAE
-#' ADAE <- rADAE %>%
+#' ADAE <- osprey::rADAE %>%
 #'   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 #' ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADRS
-#' ADRS <- rADRS %>%
+#' ADRS <- osprey::rADRS %>%
 #'   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 #' ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADCM
-#' ADCM <- rADCM %>%
+#' ADCM <- osprey::rADCM %>%
 #'   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 #' ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 #'
 #' # ADLB
-#' ADLB <- rADLB %>%
+#' ADLB <- osprey::rADLB %>%
 #'   select(
 #'     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
 #'     ADY, ATPTN, AVISITN, LBTESTCD, ANRIND

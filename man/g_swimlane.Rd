@@ -65,7 +65,7 @@ patient bar plot with markers of events and patient level annotation
 library(dplyr)
 library(nestcolor)
 
-ADSL <- rADSL[1:20, ]
+ADSL <- osprey::rADSL[1:20, ]
 ADRS <- filter(rADRS, PARAMCD == "OVRINV")
 ANL <- left_join(ADSL, ADRS, by = c("STUDYID", "USUBJID"), multiple = "all")
 anno_txt <- ADSL[, c("ARMCD", "SEX")]
@@ -92,8 +92,8 @@ g_swimlane(
 library(dplyr)
 library(nestcolor)
 
-ADSL <- rADSL[1:20, ]
-ADRS <- rADRS
+ADSL <- osprey::rADSL[1:20, ]
+ADRS <- osprey::rADRS
 
 anno_txt_vars <- c("ARMCD", "SEX", "COUNTRY")
 anno_txt <- ADSL[, anno_txt_vars]
