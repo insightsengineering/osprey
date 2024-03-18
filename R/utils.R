@@ -18,7 +18,8 @@
 #' @examples
 #' \dontrun{
 #' library(ggplot2)
-#' g <- #'   list(
+#'
+#' g <- list(
 #'   ggplotGrob(
 #'     ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 #'       geom_point()
@@ -34,7 +35,7 @@
 #' )
 #'
 #' # output to pdf
-#' g %>% as_pdf("~/example_aspdf1.pdf")
+#' as_pdf(g, "~/example_aspdf1.pdf")
 #' }
 as_pdf <- function(grobs,
                    outpath,
@@ -104,9 +105,8 @@ paper_size <- function(pagesize) {
 #' @examples
 #' \dontrun{
 #' library(ggplot2)
-#' library(tern)
 #'
-#' g <- #'   list(
+#' g <- list(
 #'   ggplotGrob(
 #'     ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 #'       geom_point()
@@ -213,27 +213,6 @@ grobs2pdf <- function(grobs,
   )
 }
 
-#' Extract specific part of a `ggplot` or grob
-#'
-#' @param gplot_grob `ggplot` or grob object
-#' @param part name of the part to be extracted. `NA` will return `zeroGrob()`
-#'
-grob_part <- function(gplot_grob, part) {
-  if (is.na(part)) {
-    return(zeroGrob())
-  }
-  stopifnot(length(part) == 1 && is.character(part))
-  index <- match(part, gplot_grob$layout$name)
-  if (is.na(index)) {
-    stop(c(
-      part, " not in plot object. Allowed parts are ",
-      paste(gplot_grob$layout$name, collapse = ", ")
-    ))
-  }
-  grob <- gplot_grob$grobs[[index]]
-  return(grob)
-}
-
 #' Add padding to grob
 #' @param grob grob object
 #' @param pad_v padding to add vertically
@@ -261,7 +240,7 @@ theme_osprey <- function(axis_side = "left", fontsize = 4) {
   theme(
     panel.background = element_rect(fill = "white", colour = "white"),
     panel.grid.major.y = element_line(colour = "grey50", linetype = 2),
-    panel.border = element_rect(colour = "black", fill = NA, size = 1),
+    panel.border = element_rect(colour = "black", fill = NA, linewidth = 1),
     axis.title = element_blank(),
     legend.title = element_blank(),
     legend.position = "bottom",
@@ -355,7 +334,7 @@ grob_parts <- function(gplot, parts) {
   } else if (is(gplot, "grob")) {
     gplot_grob <- gplot
   }
-  ret <- lapply(parts, grob_part, gplot = gplot_grob)
+  ret <- lapply(parts, grob_part, gplot_grob = gplot_grob)
   names(ret) <- parts
   return(ret)
 }
@@ -369,7 +348,7 @@ theme_osprey <- function(axis_side = "left", fontsize = 4, blank = FALSE) {
   theme(
     panel.background = element_rect(fill = "white", colour = "white"),
     panel.grid.major.y = if (blank) element_blank() else element_line(colour = "grey50", linetype = 2),
-    panel.border = if (blank) element_blank() else element_rect(colour = "black", fill = NA, size = 1),
+    panel.border = if (blank) element_blank() else element_rect(colour = "black", fill = NA, linewidth = 1),
     axis.title = element_blank(),
     legend.title = element_blank(),
     legend.position = "bottom",

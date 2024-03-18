@@ -48,9 +48,9 @@
 #'     rename(this_vis = ASTDTM)
 #'   data_visit <- data_need_visit %>%
 #'     select(USUBJID, ASTDTM) %>%
-#'     left_join(visit_dates, by = "USUBJID") %>%
+#'     left_join(visit_dates, by = "USUBJID", relationship = "many-to-many") %>%
 #'     filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) %>%
-#'     left_join(data_need_visit)
+#'     left_join(data_need_visit, relationship = "many-to-many")
 #'   return(data_visit)
 #' }
 #' # add AVISIT in ADAE and ADCM
@@ -165,14 +165,17 @@ g_heat_bygrade <- function(id_var,
   )
   stopifnot(
     "invalid argument: please specify conmed_color_opt for all unique conmed_var" =
-      is.null(conmed_data) || is.null(conmed_color_opt) ||
+      is.null(conmed_data) ||
+        is.null(conmed_color_opt) || # nolint indentation_linter
         length(conmed_color_opt) == length(unique(conmed_data[[conmed_var]]))
   )
 
-  if (!((is.null(conmed_data) || id_var %in% names(conmed_data)) &&
-    id_var %in% names(exp_data) &&
-    id_var %in% names(anno_data) &&
-    id_var %in% names(heat_data))) {
+  if (
+    !(
+      (is.null(conmed_data) || id_var %in% names(conmed_data)) &&
+        id_var %in% names(exp_data) && id_var %in% names(anno_data) && id_var %in% names(heat_data)
+    )
+  ) {
     stop(
       paste(
         "exp_data, anno_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
@@ -181,9 +184,12 @@ g_heat_bygrade <- function(id_var,
       )
     )
   }
-  if (!((is.null(conmed_data) || visit_var %in% names(conmed_data)) &&
-    visit_var %in% names(exp_data) &&
-    visit_var %in% names(heat_data))) {
+  if (
+    !(
+      (is.null(conmed_data) || visit_var %in% names(conmed_data)) &&
+        visit_var %in% names(exp_data) && visit_var %in% names(heat_data)
+    )
+  ) {
     stop(
       paste(
         "exp_data, heat_data, and conmed_data (if plotting conmed) must include a column named",
@@ -273,7 +279,7 @@ g_heat_bygrade <- function(id_var,
         xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels))
       ),
       arrow = arrow(length = grid::unit(0.1, "cm")),
-      size = .5,
+      linewidth = .5,
       color = "black"
     ) +
     # plot ongoing
@@ -286,7 +292,7 @@ g_heat_bygrade <- function(id_var,
         yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels)))
       ),
       arrow = arrow(length = grid::unit(0.1, "cm")),
-      size = .5,
+      linewidth = .5,
       color = "black"
     )
   if (!is.null(conmed_data) && !is.null(conmed_var)) {

@@ -79,9 +79,9 @@ add_visit <- function(data_need_visit) {
     rename(this_vis = ASTDTM)
   data_visit <- data_need_visit \%>\%
     select(USUBJID, ASTDTM) \%>\%
-    left_join(visit_dates, by = "USUBJID") \%>\%
+    left_join(visit_dates, by = "USUBJID", relationship = "many-to-many") \%>\%
     filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) \%>\%
-    left_join(data_need_visit)
+    left_join(data_need_visit, relationship = "many-to-many")
   return(data_visit)
 }
 # add AVISIT in ADAE and ADCM
