@@ -311,7 +311,7 @@ g_events_term_id <- function(term,
   p1_parts <- ggplotGrob(p1)
   p2_parts <- ggplotGrob(p2)
 
-  mylegend <- grob_part(grob_part(p1_parts, "guide-box"), "guides")
+  mylegend <- grob_part(grob_part(p1_parts, "guide-box-bottom"), "guides")
   axis <- grob_part(p1_parts, axis_name)
 
   less_risk <- grid::textGrob(
