@@ -213,27 +213,6 @@ grobs2pdf <- function(grobs,
   )
 }
 
-#' Extract specific part of a `ggplot` or grob
-#'
-#' @param gplot_grob `ggplot` or grob object
-#' @param part name of the part to be extracted. `NA` will return `zeroGrob()`
-#'
-grob_part <- function(gplot_grob, part) {
-  if (is.na(part)) {
-    return(zeroGrob())
-  }
-  stopifnot(length(part) == 1 && is.character(part))
-  index <- match(part, gplot_grob$layout$name)
-  if (is.na(index)) {
-    stop(c(
-      part, " not in plot object. Allowed parts are ",
-      paste(gplot_grob$layout$name, collapse = ", ")
-    ))
-  }
-  grob <- gplot_grob$grobs[[index]]
-  return(grob)
-}
-
 #' Add padding to grob
 #' @param grob grob object
 #' @param pad_v padding to add vertically

@@ -1,5 +1,7 @@
 # osprey 0.1.16.9006
 
+* Remove duplicated `grob_part` function.
+
 # osprey 0.1.16
 
 ### Miscellaneous

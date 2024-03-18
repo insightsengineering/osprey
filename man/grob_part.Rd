@@ -5,8 +5,6 @@
 \title{Extract specific part of a \code{ggplot} or grob}
 \usage{
 grob_part(gplot_grob, part)
-
-grob_part(gplot_grob, part)
 }
 \arguments{
 \item{gplot_grob}{\code{ggplot} or grob object}
@@ -14,8 +12,6 @@ grob_part(gplot_grob, part)
 \item{part}{name of the part to be extracted. \code{NA} will return \code{zeroGrob()}}
 }
 \description{
-Extract specific part of a \code{ggplot} or grob
-
 Extract specific part of a \code{ggplot} or grob
 }
 \keyword{internal}
