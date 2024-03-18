@@ -125,7 +125,7 @@ g_butterfly <- function(category,
   stopifnot(
     "invalid arguments: check that the length of block_color is equal as other inputs" =
       is.null(facet_rows) ||
-        (length(facet_rows) == length(category)) || # nolint indentation_linter
+        (length(facet_rows) == length(category)) || # nolint: indentation_linter.
         (is.data.frame(facet_rows) && nrow(facet_rows) == length(category))
   )
   checkmate::assert_string(x_label)
