@@ -5,7 +5,6 @@
 #' @import dplyr ggplot2
 #' @importFrom rlang .data :=
 #' @importFrom methods is
-#' @docType package
-#' @name osprey
+#'
 #' @keywords internal
-NULL
+"_PACKAGE"

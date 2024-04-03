@@ -78,6 +78,7 @@ The plot output will not include domains with data unspecified
 \examples{
 library(dplyr)
 library(nestcolor)
+
 # ADSL
 ADSL <- osprey::rADSL \%>\%
   filter(USUBJID == rADSL$USUBJID[1]) \%>\%

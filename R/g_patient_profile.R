@@ -356,8 +356,11 @@ patient_domain_profile <- function(domain = NULL,
           yend = line_end,
           color = line_col
         ),
-        lineend = "round", linejoin = "round",
-        size = line_width, arrow = NULL, show.legend = NA,
+        lineend = "round",
+        linejoin = "round",
+        linewidth = line_width,
+        arrow = NULL,
+        show.legend = NA,
         na.rm = TRUE
       ) +
       scale_y_continuous(limits = xlim, breaks = xtick_at, expand = c(0, 0)) +
@@ -371,8 +374,10 @@ patient_domain_profile <- function(domain = NULL,
           yend = line_max,
           color = line_col
         ),
-        lineend = "round", linejoin = "round",
-        size = line_width, show.legend = FALSE,
+        lineend = "round",
+        linejoin = "round",
+        linewidth = line_width,
+        show.legend = FALSE,
         arrow = arrow(length = grid::unit(arrow_size, "inches")),
         na.rm = TRUE
       )
@@ -611,6 +616,7 @@ patient_domain_profile <- function(domain = NULL,
 #' @examples
 #' library(dplyr)
 #' library(nestcolor)
+#'
 #' # ADSL
 #' ADSL <- osprey::rADSL %>%
 #'   filter(USUBJID == rADSL$USUBJID[1]) %>%
