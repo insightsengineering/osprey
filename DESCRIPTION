@@ -20,7 +20,7 @@ URL: https://insightsengineering.github.io/osprey/,
 BugReports: https://github.com/insightsengineering/osprey/issues
 Depends:
     dplyr (>= 0.8.0),
-    ggplot2 (>= 2.0.0),
+    ggplot2 (>= 3.5.0),
     R (>= 3.6)
 Imports:
     checkmate (>= 2.1.0),
