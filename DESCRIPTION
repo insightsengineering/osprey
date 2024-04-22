@@ -29,7 +29,7 @@ Imports:
     grDevices,
     grid,
     gridExtra,
-    gtable,
+    gtable (>= 0.3.4),
     methods,
     rlang (>= 1.1.0),
     stats,
