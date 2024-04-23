@@ -1,8 +1,8 @@
 Type: Package
 Package: osprey
 Title: R Package to Create TLGs
-Version: 0.1.16.9007
-Date: 2024-03-18
+Version: 0.1.16.9008
+Date: 2024-04-23
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = "aut"),
@@ -41,13 +41,13 @@ Suggests:
     nestcolor (>= 0.1.0),
     tern (>= 0.7.10),
     testthat (>= 2.0)
-Config/Needs/website: insightsengineering/nesttemplate
-Config/Needs/verdepcheck:
-    tidyverse/dplyr, tidyverse/ggplot2, mllg/checkmate, wilkelab/cowplot,
-    AndriSignorell/DescTools, baptiste/gridextra, r-lib/gtable,
-    r-lib/rlang, tidyverse/stringr, tidyverse/tibble, tidyverse/tidyr,
-    yihui/knitr, insightsengineering/nestcolor, insightsengineering/tern,
+Config/Needs/verdepcheck: tidyverse/dplyr, tidyverse/ggplot2,
+    mllg/checkmate, wilkelab/cowplot, AndriSignorell/DescTools,
+    baptiste/gridextra, r-lib/gtable, r-lib/rlang, tidyverse/stringr,
+    tidyverse/tibble, tidyverse/tidyr, yihui/knitr,
+    insightsengineering/nestcolor, insightsengineering/tern,
     r-lib/testthat
+Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
 Language: en-US
 LazyData: true
