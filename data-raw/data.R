@@ -1,25 +1,24 @@
 ## code to prepare `data` for testing examples
-library(scda)
-rADAE <- synthetic_cdisc_data("latest")$adae # nolint
+rADAE <- random.cdisc.data::cadae # nolint
 usethis::use_data(rADAE)
 
-rADCM <- synthetic_cdisc_data("latest")$adcm # nolint
+rADCM <- random.cdisc.data::cadcm # nolint
 usethis::use_data(rADCM)
 
-rADEX <- synthetic_cdisc_data("latest")$adex # nolint
+rADEX <- random.cdisc.data::cadex # nolint
 usethis::use_data(rADEX)
 
-rADLB <- synthetic_cdisc_data("latest")$adlb # nolint
+rADLB <- random.cdisc.data::cadlb # nolint
 usethis::use_data(rADLB)
 
-rADRS <- synthetic_cdisc_data("latest")$adrs # nolint
+rADRS <- random.cdisc.data::cadrs # nolint
 usethis::use_data(rADRS)
 
-rADSL <- synthetic_cdisc_data("latest")$adsl # nolint
+rADSL <- random.cdisc.data::cadsl # nolint
 usethis::use_data(rADSL)
 
-rADTR <- synthetic_cdisc_data("latest")$adtr # nolint
+rADTR <- random.cdisc.data::cadtr # nolint
 usethis::use_data(rADTR)
 
-rADTTE <- synthetic_cdisc_data("latest")$adtte # nolint
+rADTTE <- random.cdisc.data::cadtte # nolint
 usethis::use_data(rADTTE)
