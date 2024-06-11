@@ -25,7 +25,7 @@ Depends:
 Imports:
     checkmate (>= 2.1.0),
     cowplot,
-    DescTools (>= 0.99.38),
+    DescTools (>= 0.99.53),
     grDevices,
     grid,
     gridExtra,
@@ -39,13 +39,14 @@ Imports:
 Suggests:
     knitr (>= 1.42),
     nestcolor (>= 0.1.0),
+    rmarkdown (>= 2.23),
     tern (>= 0.7.10),
     testthat (>= 2.0)
 Config/Needs/verdepcheck: tidyverse/dplyr, tidyverse/ggplot2,
     mllg/checkmate, wilkelab/cowplot, AndriSignorell/DescTools,
     baptiste/gridextra, r-lib/gtable, r-lib/rlang, tidyverse/stringr,
     tidyverse/tibble, tidyverse/tidyr, yihui/knitr,
-    insightsengineering/nestcolor, insightsengineering/tern,
+    insightsengineering/nestcolor, rstudio/rmarkdown, insightsengineering/tern,
     r-lib/testthat
 Config/Needs/website: insightsengineering/nesttemplate
 Encoding: UTF-8
