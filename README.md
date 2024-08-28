@@ -1,7 +1,7 @@
 # osprey
 
 <!-- start badges -->
-[![Check 🛠](https://github.com/insightsengineering/osprey/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/osprey/main/unit-test-report/)
+[![Check 🛠](https://github.com/insightsengineering/osprey/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/osprey/)
 [![Docs 📚](https://github.com/insightsengineering/osprey/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/osprey/)
 [![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/osprey/_xml_coverage_reports/data/main/badge.svg)](https://insightsengineering.github.io/osprey/main/coverage-report/)
 
