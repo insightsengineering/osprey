@@ -19,7 +19,7 @@
 [![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/osprey?color=red\&label=open%20issues)](https://github.com/insightsengineering/osprey/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 <!-- end badges -->
 
-`osprey` is an R package for community contributed analysis functions to create TLGs (tables, listing and graphs) for the analysis of clinical trials data. These functions can be used stand alone to generate static analysis, but are also called by the [teal.osprey](https://insightsengineering.github.io/teal.osprey/) package which provides  modules to be used inside [`teal`](https://insightsengineering.github.io/teal/) applications.
+`osprey` is an R package for community contributed analysis functions to create TLGs (tables, listing and graphs) for the analysis of clinical trials data. These functions can be used stand alone to generate static analysis, but are also called by the [teal.osprey](https://insightsengineering.github.io/teal.osprey/) package which provides modules to be used inside [`teal`](https://insightsengineering.github.io/teal/) applications.
 
 The package provides:
 
