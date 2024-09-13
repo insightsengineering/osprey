@@ -1,7 +1,7 @@
 # osprey
 
 <!-- start badges -->
-[![Check 🛠](https://github.com/insightsengineering/osprey/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/osprey/main/unit-test-report/)
+[![Check 🛠](https://github.com/insightsengineering/osprey/actions/workflows/check.yaml/badge.svg)](https://insightsengineering.github.io/osprey/)
 [![Docs 📚](https://github.com/insightsengineering/osprey/actions/workflows/docs.yaml/badge.svg)](https://insightsengineering.github.io/osprey/)
 [![Code Coverage 📔](https://raw.githubusercontent.com/insightsengineering/osprey/_xml_coverage_reports/data/main/badge.svg)](https://insightsengineering.github.io/osprey/main/coverage-report/)
 
@@ -19,28 +19,28 @@
 [![Open Issues](https://img.shields.io/github/issues-raw/insightsengineering/osprey?color=red\&label=open%20issues)](https://github.com/insightsengineering/osprey/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 <!-- end badges -->
 
-`osprey` is an R package for community contributed analysis functions to create TLGs (tables, listing and graphs) for the analysis of clinical trials data. These functions can be used stand alone to generate static analysis, but are also called by the [teal.osprey](https://insightsengineering.github.io/teal.osprey/) package which provides `teal` modules to be used inside `teal` applications.
+`osprey` is an R package for community contributed analysis functions to create TLGs (tables, listing and graphs) for the analysis of clinical trials data. These functions can be used stand alone to generate static analysis, but are also called by the [teal.osprey](https://insightsengineering.github.io/teal.osprey/) package which provides modules to be used inside [`teal`](https://insightsengineering.github.io/teal/) applications.
 
 The package provides:
 
 <!-- markdownlint-disable MD007 MD030 -->
-- waterfall plots (`g_waterfall`)
-- swim lane plots (`g_swimlane`)
-- spider plots (`g_spiderplot`)
-- butterfly plots (`g_butterfly`)
+- waterfall plots ([`g_waterfall`](https://insightsengineering.github.io/osprey/latest-tag/reference/g_waterfall.html))
+- swim lane plots ([`g_swimlane`](https://insightsengineering.github.io/osprey/latest-tag/reference/g_swimlane.html))
+- spider plots ([`g_spiderplot`](https://insightsengineering.github.io/osprey/latest-tag/reference/g_spiderplot.html))
+- butterfly plots ([`g_butterfly`](https://insightsengineering.github.io/osprey/latest-tag/reference/g_butterfly.html))
 - and many more
 <!-- markdownlint-enable MD007 MD030 -->
 
 ## Installation
 
-From July 2023 `insightsengineering` packages are available on [r-universe](https://r-universe.dev/).
-
 ```r
 # stable versions
-install.packages('osprey', repos = c('https://insightsengineering.r-universe.dev', 'https://cloud.r-project.org'))
+# install.packages("pak")
+pak::pkg_install("insightsengineering/osprey@*release")
 
 # beta versions
-install.packages('osprey', repos = c('https://pharmaverse.r-universe.dev', 'https://cloud.r-project.org'))
+# install.packages("pak")
+pak::pkg_install("insightsengineering/osprey")
 ```
 
 ## Stargazers and Forkers

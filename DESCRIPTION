@@ -1,8 +1,8 @@
 Type: Package
 Package: osprey
 Title: R Package to Create TLGs
-Version: 0.1.16.9012
-Date: 2024-08-19
+Version: 0.1.16.9014
+Date: 2024-09-10
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = "aut"),
@@ -44,7 +44,7 @@ Suggests:
     testthat (>= 2.0)
 Config/Needs/verdepcheck: tidyverse/dplyr, tidyverse/ggplot2,
     mllg/checkmate, wilkelab/cowplot, AndriSignorell/DescTools,
-    baptiste/gridextra, r-lib/gtable, r-lib/rlang, tidyverse/stringr,
+    baptiste/gridExtra, r-lib/gtable, r-lib/rlang, tidyverse/stringr,
     tidyverse/tibble, tidyverse/tidyr, yihui/knitr,
     insightsengineering/nestcolor, rstudio/rmarkdown,
     insightsengineering/tern, r-lib/testthat
