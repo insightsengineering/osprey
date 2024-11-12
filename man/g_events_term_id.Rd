@@ -89,6 +89,7 @@ and reference arms, and can be used for events data such as Adverse Events.
 there is no equivalent STREAM output
 }
 \examples{
+\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 library(grid)
 library(nestcolor)
@@ -157,6 +158,7 @@ g_events_term_id(
   arm_N,
   fontsize = 3
 )
+\dontshow{\}) # examplesIf}
 }
 \author{
 Liming Li (Lil128) \email{liming.li@roche.com}

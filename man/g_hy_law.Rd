@@ -87,6 +87,7 @@ associations is recommended.
 There is no equivalent STREAM output.
 }
 \examples{
+\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 library(nestcolor)
 
@@ -131,6 +132,7 @@ g_hy_law(
   xlab = "Maximum Alanine Aminotransferase (/ULN)",
   ylab = "Maximum Total Bilirubin (/ULN)"
 )
+\dontshow{\}) # examplesIf}
 }
 \author{
 Katie Withycombe (withycok) \email{katie.withycombe@roche.com}

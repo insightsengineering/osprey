@@ -72,6 +72,7 @@ maximum count.
 there is no equivalent STREAM output
 }
 \examples{
+\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 library(nestcolor)
 
@@ -117,6 +118,7 @@ g_butterfly(
   sort_by = "count",
   show_legend = TRUE
 )
+\dontshow{\}) # examplesIf}
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

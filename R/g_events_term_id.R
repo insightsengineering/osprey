@@ -39,7 +39,7 @@
 #' @author Liming Li (Lil128) \email{liming.li@roche.com}
 #' @author Molly He (hey59) \email{hey59@gene.com}
 #'
-#' @examples
+#' @examplesIf require("nestcolor")
 #' library(dplyr)
 #' library(grid)
 #' library(nestcolor)

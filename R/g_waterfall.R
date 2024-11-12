@@ -35,7 +35,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf require("nestcolor")
 #' library(tidyr)
 #' library(dplyr)
 #' library(nestcolor)
