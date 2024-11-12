@@ -33,6 +33,7 @@ spiderplot_simple(
 Description of this plot
 }
 \examples{
+\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 library(nestcolor)
 
@@ -43,6 +44,7 @@ ANL <- left_join(ADSL, ADTR)
 ANL \%>\%
   dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") \%>\%
   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
+\dontshow{\}) # examplesIf}
 }
 \author{
 Mika Maekinen

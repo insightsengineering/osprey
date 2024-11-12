@@ -16,7 +16,7 @@
 #'
 #' @author Mika Maekinen
 #'
-#' @examples
+#' @examplesIf require("nestcolor")
 #' library(dplyr)
 #' library(nestcolor)
 #'

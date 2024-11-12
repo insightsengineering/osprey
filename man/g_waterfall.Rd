@@ -68,6 +68,7 @@ Waterfall plot is often used in Early Development (ED) to present each individua
 response to a particular drug based on a parameter.
 }
 \examples{
+\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(tidyr)
 library(dplyr)
 library(nestcolor)
@@ -159,7 +160,7 @@ g_waterfall(
   y_label = "Best \% Change from Baseline",
   title = "Waterfall Plot"
 )
-
+\dontshow{\}) # examplesIf}
 }
 \author{
 Xuefeng Hou (houx14) \email{houx14@gene.com}

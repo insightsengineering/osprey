@@ -40,7 +40,7 @@
 #' @template author_zhanc107
 #' @template author_qit3
 #'
-#' @examples
+#' @examplesIf require("nestcolor")
 #' library(dplyr)
 #' library(nestcolor)
 #'

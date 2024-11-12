@@ -81,6 +81,7 @@ patient plot of an endpoint over time by group.
 there is no equivalent STREAM output
 }
 \examples{
+\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # simple example
 library(dplyr)
 library(nestcolor)
@@ -129,6 +130,7 @@ g_spiderplot(
   y_label = "Change from Baseline",
   show_legend = TRUE
 )
+\dontshow{\}) # examplesIf}
 }
 \author{
 Carolyn Zhang (zhanc107) \email{carolyn.zhang@duke.edu}

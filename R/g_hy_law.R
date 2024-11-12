@@ -56,7 +56,7 @@
 #' @template author_frankla4
 #' @template author_holmesw
 #'
-#' @examples
+#' @examplesIf require("nestcolor")
 #' library(dplyr)
 #' library(nestcolor)
 #'

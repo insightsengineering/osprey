@@ -613,7 +613,7 @@ patient_domain_profile <- function(domain = NULL,
 #'
 #' @seealso \code{\link{patient_domain_profile}}
 #'
-#' @examples
+#' @examplesIf require("nestcolor")
 #' library(dplyr)
 #' library(nestcolor)
 #'

@@ -61,6 +61,7 @@ plot object
 patient bar plot with markers of events and patient level annotation
 }
 \examples{
+\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Example 1
 library(dplyr)
 library(nestcolor)
@@ -136,6 +137,7 @@ g_swimlane(
   xlab = "Time from First Treatment (Day)",
   title = "Swimlane Plot"
 )
+\dontshow{\}) # examplesIf}
 }
 \author{
 Ting Qi (qit3) \email{qit3@gene.com}

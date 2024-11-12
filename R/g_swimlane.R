@@ -24,7 +24,7 @@
 #'
 #' @export
 #'
-#' @examples
+#' @examplesIf require("nestcolor")
 #' # Example 1
 #' library(dplyr)
 #' library(nestcolor)

@@ -41,7 +41,7 @@
 #'
 #' @template author_zhanc107
 #'
-#' @examples
+#' @examplesIf require("nestcolor")
 #' # simple example
 #' library(dplyr)
 #' library(nestcolor)

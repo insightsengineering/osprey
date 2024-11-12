@@ -76,6 +76,7 @@ function assembles all requested domain plots into one patient profile.
 The plot output will not include domains with data unspecified
 }
 \examples{
+\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(dplyr)
 library(nestcolor)
 
@@ -189,6 +190,7 @@ g_patient_profile(
   xlab = "Study Day",
   title = paste("Patient Profile: ", ADSL$USUBJID)
 )
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link{patient_domain_profile}}
