@@ -1,4 +1,4 @@
-# osprey 0.1.16.9016
+# osprey 0.1.16.9017
 
 * Remove duplicated `grob_part` function.
 * Replaced all usage of `synthetic_cdisc_data` with `random.cdisc.data`
