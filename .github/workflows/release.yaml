@@ -17,9 +17,6 @@ jobs:
     with:
       default-landing-page: latest-tag
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/nestcolor
-        insightsengineering/tern
   validation:
     name: R Package Validation report 📃
     needs: release
@@ -28,9 +25,6 @@ jobs:
       REPO_GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
     with:
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/nestcolor
-        insightsengineering/tern
   release:
     name: Create release 🎉
     uses: insightsengineering/r.pkg.template/.github/workflows/release.yaml@main
@@ -54,9 +48,6 @@ jobs:
         checking Rd line widths .* NOTE
         checking top-level files .* NOTE
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/nestcolor
-        insightsengineering/tern
   coverage:
     name: Coverage 📔
     needs: [release, docs]
@@ -67,9 +58,6 @@ jobs:
       additional-env-vars: |
         NOT_CRAN=true
       deps-installation-method: setup-r-dependencies
-      lookup-refs: |
-        insightsengineering/nestcolor
-        insightsengineering/tern
   wasm:
     name: Build WASM packages 🧑‍🏭
     needs: release
