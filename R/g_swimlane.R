@@ -196,7 +196,7 @@ g_swimlane <- function(bar_id,
         legend.title = element_text(size = 8),
         legend.text = element_text(size = 8),
         legend.key = element_rect(fill = NA),
-        legend.key.size = grid::unit(1, "line"),
+        legend.key.width = grid::unit(1, "line"),
         legend.spacing.y = grid::unit(0, "cm"),
         legend.key.height = grid::unit(1, "line")
       )
