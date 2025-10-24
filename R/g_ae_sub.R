@@ -339,7 +339,7 @@ g_ae_sub <- function(id,
     ) +
     geom_errorbarh(
       aes(xmin = .data$lower, xmax = .data$upper, y = .data$level),
-      height = 0.3
+      width = 0.3
     ) +
     mytheme +
     theme(

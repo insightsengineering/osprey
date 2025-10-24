@@ -302,7 +302,7 @@ g_events_term_id <- function(term,
     geom_point(mapping = aes(y = term, x = .data$riskdiff), size = fontsize * 0.7) +
     geom_vline(data = NULL, xintercept = 0, linetype = 2) +
     mytheme +
-    geom_errorbarh(mapping = aes(xmax = .data$upper_ci, xmin = .data$lower_ci, y = term), height = 0.4) +
+    geom_errorbarh(mapping = aes(xmax = .data$upper_ci, xmin = .data$lower_ci, y = term), width = 0.4) +
     y_axis +
     ggtitle("Risk Difference")
 
