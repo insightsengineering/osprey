@@ -325,6 +325,15 @@ g_ae_sub <- function(id,
   if (xmax <= 0) {
     xmax <- max(abs(df_risk$upper), abs(df_risk$lower), na.rm = TRUE)
   }
+  
+  # Determine the correct parameter name for geom_errorbarh based on ggplot2 version
+  # In ggplot2 >= 4.0.0, the parameter is 'width', in earlier versions it's 'height'
+  errorbar_param_name <- if (utils::packageVersion("ggplot2") >= "4.0.0") "width" else "height"
+  errorbar_params <- list(
+    aes(xmin = .data$lower, xmax = .data$upper, y = .data$level)
+  )
+  errorbar_params[[errorbar_param_name]] <- 0.3
+  
   p1 <-
     ggplot(df_risk) +
     geom_point(
@@ -337,10 +346,7 @@ g_ae_sub <- function(id,
       linetype = 1,
       color = "grey"
     ) +
-    geom_errorbarh(
-      aes(xmin = .data$lower, xmax = .data$upper, y = .data$level),
-      width = 0.3
-    ) +
+    do.call(geom_errorbarh, errorbar_params) +
     mytheme +
     theme(
       axis.ticks.x = element_line(),
