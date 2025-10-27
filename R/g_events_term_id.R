@@ -305,7 +305,7 @@ g_events_term_id <- function(term,
     mapping = aes(xmax = .data$upper_ci, xmin = .data$lower_ci, y = term)
   )
   errorbar_params[[errorbar_param_name]] <- 0.4
-  
+
   p2 <- ggplot(df_ci) +
     geom_point(mapping = aes(y = term, x = .data$riskdiff), size = fontsize * 0.7) +
     geom_vline(data = NULL, xintercept = 0, linetype = 2) +
