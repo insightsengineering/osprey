@@ -33,7 +33,7 @@ spiderplot_simple(
 Description of this plot
 }
 \examples{
-\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("nestcolor")) withAutoprint(\{ # examplesIf}
 library(dplyr)
 library(nestcolor)
 

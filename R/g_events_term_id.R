@@ -298,11 +298,19 @@ g_events_term_id <- function(term,
     scale_shape_manual(values = shape, labels = labels) +
     y_axis
 
+  # Determine the correct parameter name for geom_errorbarh based on ggplot2 version
+  # In ggplot2 >= 4.0.0, the parameter is 'width', in earlier versions it's 'height'
+  errorbar_param_name <- if (utils::packageVersion("ggplot2") >= "4.0.0") "width" else "height"
+  errorbar_params <- list(
+    mapping = aes(xmax = .data$upper_ci, xmin = .data$lower_ci, y = term)
+  )
+  errorbar_params[[errorbar_param_name]] <- 0.4
+
   p2 <- ggplot(df_ci) +
     geom_point(mapping = aes(y = term, x = .data$riskdiff), size = fontsize * 0.7) +
     geom_vline(data = NULL, xintercept = 0, linetype = 2) +
     mytheme +
-    geom_errorbarh(mapping = aes(xmax = .data$upper_ci, xmin = .data$lower_ci, y = term), height = 0.4) +
+    do.call(geom_errorbarh, errorbar_params) +
     y_axis +
     ggtitle("Risk Difference")
 

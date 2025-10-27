@@ -76,7 +76,7 @@ function assembles all requested domain plots into one patient profile.
 The plot output will not include domains with data unspecified
 }
 \examples{
-\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("nestcolor")) withAutoprint(\{ # examplesIf}
 library(dplyr)
 library(nestcolor)
 
