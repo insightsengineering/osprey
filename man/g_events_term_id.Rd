@@ -89,7 +89,7 @@ and reference arms, and can be used for events data such as Adverse Events.
 there is no equivalent STREAM output
 }
 \examples{
-\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("nestcolor")) withAutoprint(\{ # examplesIf}
 library(dplyr)
 library(grid)
 library(nestcolor)

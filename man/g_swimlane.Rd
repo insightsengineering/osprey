@@ -61,7 +61,7 @@ plot object
 patient bar plot with markers of events and patient level annotation
 }
 \examples{
-\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("nestcolor")) withAutoprint(\{ # examplesIf}
 # Example 1
 library(dplyr)
 library(nestcolor)

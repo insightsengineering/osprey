@@ -72,7 +72,7 @@ maximum count.
 there is no equivalent STREAM output
 }
 \examples{
-\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("nestcolor")) withAutoprint(\{ # examplesIf}
 library(dplyr)
 library(nestcolor)
 

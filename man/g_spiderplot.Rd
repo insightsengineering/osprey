@@ -81,7 +81,7 @@ patient plot of an endpoint over time by group.
 there is no equivalent STREAM output
 }
 \examples{
-\dontshow{if (require("nestcolor")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("nestcolor")) withAutoprint(\{ # examplesIf}
 # simple example
 library(dplyr)
 library(nestcolor)
