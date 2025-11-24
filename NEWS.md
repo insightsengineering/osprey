@@ -1,4 +1,6 @@
-# osprey 0.1.17.9001
+# osprey 0.1.18
+
+* Update to keep compatibility with ggplot2 4.0.
 
 # osprey 0.1.17
 
