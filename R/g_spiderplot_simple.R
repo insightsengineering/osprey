@@ -47,13 +47,16 @@ spiderplot_simple <- function(anl,
   # plotr
   ggplot(
     data = anl,
-    mapping = aes(x = !!days, y = !!mes_value, group = !!byvar, colour = !!group_col),
-    size = 2,
-    alpha = 1
+    mapping = aes(x = .data[[days]],
+                  y = .data[[mes_value]],
+                  group = .data[[byvar]],
+                  colour = .data[[group_col]]),
   ) +
     geom_point(size = 3) +
     geom_line(linewidth = 2, alpha = 0.7) +
-    geom_text(aes(x = !!days, y = !!mes_value, label = !!byvar), data = last_obs, hjust = 0) +
+    geom_text(aes(x = .data[[days]],
+                  y = .data[[mes_value]],
+                  label = .data[[byvar]]), data = last_obs, hjust = 0) +
     geom_hline(aes(yintercept = 0), linetype = "dotted", color = "black") +
     xlab("Time (Days)") +
     ylab("Change(%) from Baseline")

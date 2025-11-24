@@ -159,23 +159,23 @@ g_hy_law <- function(id,
       legend.title = element_blank(),
       panel.grid = element_blank()
     ) +
-    geom_segment(
-      aes(x = log10(folds[1]), y = log10(0), xend = log10(folds[1]), yend = log10(75)),
+    annotate(geom = "segment",
+      x = log10(folds[1]), y = log10(0), xend = log10(folds[1]), yend = log10(75),
       linewidth = 0.25,
       color = "grey"
     ) +
-    geom_segment(
-      aes(x = log10(0), y = log10(folds[2]), xend = log10(65), yend = log10(folds[2])),
+    annotate(geom = "segment",
+      x = log10(0), y = log10(folds[2]), xend = log10(65), yend = log10(folds[2]),
       linewidth = 0.25,
       color = "grey"
     ) +
-    geom_segment(
-      aes(x = log10(1), y = log10(0), xend = log10(1), yend = log10(1)),
+    annotate(geom = "segment",
+      x = log10(1), y = log10(0), xend = log10(1), yend = log10(1),
       linewidth = 0.25,
       color = "black"
     ) +
-    geom_segment(
-      aes(x = log10(0), y = log10(1), xend = log10(1), yend = log10(1)),
+    annotate(geom = "segment",
+      x = log10(0), y = log10(1), xend = log10(1), yend = log10(1),
       linewidth = 0.25,
       color = "black"
     ) +
