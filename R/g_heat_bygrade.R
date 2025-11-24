@@ -253,7 +253,7 @@ g_heat_bygrade <- function(id_var,
   levels(anl_data$heat_color_max)[levels(anl_data$heat_color_max) == "0"] <- "No Event"
   p <- ggplot(
     data = anl_data,
-    aes(x = !!sym(visit_var), y = factor(!!sym(id_var), levels = c(rev(subj_levels), "")))
+    aes(x = .data[[visit_var]], y = factor(.data[[id_var]], levels = c(rev(subj_levels), "")))
   ) +
     geom_tile(aes(fill = .data$heat_color_max)) +
     scale_y_discrete(drop = FALSE) +
@@ -273,10 +273,10 @@ g_heat_bygrade <- function(id_var,
     geom_segment(
       data = ex_red,
       aes(
-        y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))) + 0.3,
-        x = as.numeric(factor(!!sym(visit_var), levels = visit_levels)),
-        yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))) - 0.3,
-        xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels))
+        y = as.numeric(factor(.data[[id_var]], levels = rev(subj_levels))) + 0.3,
+        x = as.numeric(factor(.data[[visit_var]], levels = visit_levels)),
+        yend = as.numeric(factor(.data[[id_var]], levels = rev(subj_levels))) - 0.3,
+        xend = as.numeric(factor(.data[[visit_var]], levels = visit_levels))
       ),
       arrow = arrow(length = grid::unit(0.1, "cm")),
       linewidth = .5,
@@ -286,10 +286,10 @@ g_heat_bygrade <- function(id_var,
     geom_segment(
       data = exp_lst,
       aes(
-        x = as.numeric(factor(!!sym(visit_var), levels = visit_levels)) + 0.5,
-        xend = as.numeric(factor(!!sym(visit_var), levels = visit_levels)) + 0.65,
-        y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))),
-        yend = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels)))
+        x = as.numeric(factor(.data[[visit_var]], levels = visit_levels)) + 0.5,
+        xend = as.numeric(factor(.data[[visit_var]], levels = visit_levels)) + 0.65,
+        y = as.numeric(factor(.data[[id_var]], levels = rev(subj_levels))),
+        yend = as.numeric(factor(.data[[id_var]], levels = rev(subj_levels)))
       ),
       arrow = arrow(length = grid::unit(0.1, "cm")),
       linewidth = .5,
@@ -301,7 +301,7 @@ g_heat_bygrade <- function(id_var,
         data = conmed_data,
         aes(
           x = .data$conmed_x,
-          y = as.numeric(factor(!!sym(id_var), levels = rev(subj_levels))),
+          y = as.numeric(factor(.data[[id_var]], levels = rev(subj_levels))),
           shape = .data[[conmed_var]],
           color = .data[[conmed_var]]
         ),
