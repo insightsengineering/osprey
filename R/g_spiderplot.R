@@ -288,7 +288,7 @@ g_spiderplot <- function(marker_x,
       dplyr::filter(!grepl("white", .data$color_opt)) %>%
       droplevels()
 
-    dat_col[1:len, 1]
+    dat_col[seq_len(len), 1]
   }
 
   # remove marker from color legend
@@ -308,7 +308,7 @@ g_spiderplot <- function(marker_x,
     symbol_val <- rep(symbol_val, ceiling(len / 26))
 
     pl <- pl + scale_shape_manual(
-      values = symbol_val[1:len]
+      values = symbol_val[seq_len(len)]
     )
   }
 
