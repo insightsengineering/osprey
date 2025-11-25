@@ -114,7 +114,6 @@ ADSL <- osprey::rADSL \%>\%
   select(USUBJID, STUDYID, TRTSDT, max_day)
 
 
-
 # Example 1 Exposure "ADEX"
 ADEX <- osprey::rADEX \%>\%
   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
