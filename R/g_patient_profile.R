@@ -955,5 +955,5 @@ domain_check <- function(domain, name) {
       select <- FALSE
     }
   }
-  return(select)
+  select
 }
