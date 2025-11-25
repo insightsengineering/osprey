@@ -72,7 +72,7 @@ paper_size <- function(pagesize) {
     paper_width <- 11
     paper_height <- 8.5
   }
-  return(c(paper_width, paper_height))
+  c(paper_width, paper_height)
 }
 
 #' Decorate grob (`gTree`) objects then outputs as `IDM` compatible PDF
@@ -317,7 +317,7 @@ grob_part <- function(gplot_grob, part) {
   }
   grob <- gplot_grob$grobs[[index]]
 
-  return(grob)
+  grob
 }
 
 #' Extract specific parts of a `ggplot` or grob
@@ -336,7 +336,7 @@ grob_parts <- function(gplot, parts) {
   }
   ret <- lapply(parts, grob_part, gplot_grob = gplot_grob)
   names(ret) <- parts
-  return(ret)
+  ret
 }
 
 

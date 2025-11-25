@@ -80,7 +80,6 @@
 #'   select(USUBJID, STUDYID, TRTSDT, max_day)
 #'
 #'
-#'
 #' # Example 1 Exposure "ADEX"
 #' ADEX <- osprey::rADEX %>%
 #'   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
@@ -956,5 +955,5 @@ domain_check <- function(domain, name) {
       select <- FALSE
     }
   }
-  return(select)
+  select
 }

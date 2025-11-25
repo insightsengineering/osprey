@@ -169,8 +169,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
 #' stream_filter_index(AEACN, "DRUG MODIFIED")
 stream_filter_index <- function(string1, string2) {
   rc <- regexpr(string2, string1, fixed = TRUE)
-  rc <- ifelse(rc == -1, FALSE, TRUE)
-  return(rc)
+  rc != -1L
 }
 
 
@@ -293,5 +292,5 @@ stream_filter_convwhere <- function(x) {
       this_rclause <- paste0(left_str, " %in% c(", all_items, right_str)
     }
   }
-  return(this_rclause)
+  this_rclause
 }
