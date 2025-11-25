@@ -21,7 +21,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/insightsengineering/osprey/blob/v0.1.18-rc1/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/insightsengineering/osprey/blob/v0.1.18-rc2/DESCRIPTION)
 
 Qi N, Kaledkowski D, Liao C, Li L (2025). *osprey: R Package to Create
 TLGs*. R package version 0.1.18,
