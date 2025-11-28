@@ -1,8 +1,8 @@
-pandoc: 3.6.3
-pkgdown: 2.1.1
+pandoc: 3.7.0.2
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-02-24T16:45Z
+last_built: 2025-11-28T08:27Z
 urls:
   reference: https://insightsengineering.github.io/osprey/latest-tag/reference
   article: https://insightsengineering.github.io/osprey/latest-tag/articles
