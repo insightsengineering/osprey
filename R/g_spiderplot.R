@@ -208,7 +208,7 @@ g_spiderplot <- function(marker_x,
         )
     } else if (is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
       dat_arrow <- dat %>%
-        dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
+        dplyr::filter(.data$id %in% datalabel_txt$mrkr_ann) %>%
         group_by(.data$id) %>%
         dplyr::filter(.data$x == last(.data$x))
       pl <- pl +
@@ -235,7 +235,7 @@ g_spiderplot <- function(marker_x,
         )
 
       dat_arrow <- dat %>%
-        dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
+        dplyr::filter(.data$id %in% datalabel_txt$mrkr_ann) %>%
         group_by(.data$id) %>%
         dplyr::filter(.data$x == last(.data$x))
 
@@ -344,3 +344,7 @@ g_spiderplot <- function(marker_x,
   grid::grid.draw(pl)
   invisible(pl)
 }
+
+
+# To avoid a note
+utils::globalVariables('id')
