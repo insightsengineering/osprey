@@ -920,18 +920,18 @@ g_patient_profile <- function(ex = NULL,
   plot_list <- plot_list[select]
   # distribute space by number of levels in each domain
   var_list <- list(ex$var, ae$var, rs$var, cm$var, lb$var)
-  browser()
   var_list <- var_list |>
     lapply(unique) |>
-    lapply(length) |>
-    unlist() |>
+    lengths() |>
     cbind(.data, select) |>
     as.data.frame() |>
     # keep the selected domains
     dplyr::filter(select == TRUE) |>
-    dplyr::mutate(nline_dat = ifelse(. <= 10 & . > 0, 10, .)) |>
-    # relative height
-    dplyr::mutate(sbplt_ht = unlist(nline_dat) / sum(unlist(nline_dat)))
+    dplyr::mutate(
+      nline_dat = ifelse(V1 <= 10 & V1 > 0, 10, V1),
+      # relative height
+      sbplt_ht = unlist(nline_dat) / sum(unlist(nline_dat))
+    )
 
   cowplot::plot_grid(
     plotlist = plot_list,
