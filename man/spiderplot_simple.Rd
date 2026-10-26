@@ -41,8 +41,8 @@ ADSL <- osprey::rADSL[1:15, ]
 ADTR <- osprey::rADTR
 ANL <- left_join(ADSL, ADTR)
 
-ANL \%>\%
-  dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") \%>\%
+ANL |>
+  dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") |>
   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 \dontshow{\}) # examplesIf}
 }
