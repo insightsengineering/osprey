@@ -344,7 +344,3 @@ g_spiderplot <- function(marker_x,
   grid::grid.draw(pl)
   invisible(pl)
 }
-
-
-# To avoid a note
-utils::globalVariables('id')
