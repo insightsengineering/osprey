@@ -228,7 +228,7 @@ grob_add_padding <- function(grob, pad_v = grid::unit(5, "pt"), pad_h = grid::un
   # same effect can be achieved by modifying pad_v and pad_h
   ret <- gtable::gtable_add_grob(ret, grob, t = 2, b = 2, l = 2, r = 2, z = 1, name = "panel")
   ret <- gtable::gtable_add_grob(ret, grid::rectGrob(), t = 1, b = 3, l = 1, r = 3, z = 0, name = "background")
-  return(ret)
+  ret
 }
 
 #' this theme is used across many figures. can be safely removed if update the theme in each function

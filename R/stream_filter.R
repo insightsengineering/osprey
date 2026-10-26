@@ -150,7 +150,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
   cat(paste0("\n", nrow(rc), " of ", nrow(anl), " observations selected from ANL\n"))
 
   # return the filtered dataset
-  return(rc)
+  rc
 }
 
 #' Replicates the use of index function in `SAS` for logic options
