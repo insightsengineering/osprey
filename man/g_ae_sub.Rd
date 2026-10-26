@@ -136,7 +136,7 @@ grid::grid.newpage()
 trt <- "ARM A"
 ref <- "ARM C"
 ADAE <- osprey::rADAE
-ADSL <- osprey::rADSL \%>\% filter(ACTARMCD \%in\% c(trt, ref))
+ADSL <- osprey::rADSL |> filter(ACTARMCD \%in\% c(trt, ref))
 id <- ADAE$USUBJID
 arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)

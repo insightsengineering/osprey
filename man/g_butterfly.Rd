@@ -76,14 +76,14 @@ there is no equivalent STREAM output
 library(dplyr)
 library(nestcolor)
 
-ADSL <- osprey::rADSL \%>\%
-  select(USUBJID, STUDYID, SEX, ARM, RACE) \%>\%
+ADSL <- osprey::rADSL |>
+  select(USUBJID, STUDYID, SEX, ARM, RACE) |>
   dplyr::filter(SEX \%in\% c("F", "M"))
-ADAE <- osprey::rADAE \%>\% select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
+ADAE <- osprey::rADAE |> select(USUBJID, STUDYID, AEBODSYS, AETOXGR)
 
 ANL <- left_join(ADAE, ADSL, by = c("STUDYID", "USUBJID"))
-ANL <- ANL \%>\%
-  dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) \%>\%
+ANL <- ANL |>
+  dplyr::mutate(flag1 = ifelse(RACE == "ASIAN", 1, 0)) |>
   dplyr::mutate(flag2 = ifelse(SEX == "M", 1, 0))
 ANL <- na.omit(ANL)
 # Example 1, # of AEs

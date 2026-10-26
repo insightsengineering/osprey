@@ -86,14 +86,14 @@ there is no equivalent STREAM output
 library(dplyr)
 library(nestcolor)
 
-ADTR <- osprey::rADTR \%>\% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
-ADSL <- osprey::rADSL \%>\% select(STUDYID, USUBJID, RACE, SEX, ARM)
+ADTR <- osprey::rADTR |> select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
+ADSL <- osprey::rADSL |> select(STUDYID, USUBJID, RACE, SEX, ARM)
 ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
-ANL <- ANL \%>\%
-  dplyr::filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") \%>\%
-  dplyr::filter(RACE \%in\% c("WHITE", "ASIAN")) \%>\%
-  group_by(USUBJID) \%>\%
-  dplyr::arrange(ADY) \%>\%
+ANL <- ANL |>
+  dplyr::filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") |>
+  dplyr::filter(RACE \%in\% c("WHITE", "ASIAN")) |>
+  group_by(USUBJID) |>
+  dplyr::arrange(ADY) |>
   dplyr::mutate(
     CHG = ifelse(AVISIT == "Screening", 0, CHG),
     PCHG = ifelse(AVISIT == "Screening", 0, PCHG)

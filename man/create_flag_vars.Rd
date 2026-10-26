@@ -59,8 +59,8 @@ library(dplyr)
 ADAE <- osprey::rADAE
 
 # add additional dummy causality flags
-ADAE <- ADAE \%>\%
-  mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) \%>\%
+ADAE <- ADAE |>
+  mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) |>
   mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo"))
 attr(ADAE[["AEREL1"]], "label") <- "AE related to A: Drug X"
 attr(ADAE[["AEREL2"]], "label") <- "AE related to B: Placebo"

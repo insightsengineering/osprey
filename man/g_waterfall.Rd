@@ -80,23 +80,23 @@ g_waterfall(
 
 # Example 1
 ADSL <- osprey::rADSL[1:15, ]
-ADRS <- osprey::rADRS \%>\%
+ADRS <- osprey::rADRS |>
   filter(USUBJID \%in\% ADSL$USUBJID)
-ADTR <- osprey::rADTR \%>\%
-  filter(USUBJID \%in\% ADSL$USUBJID) \%>\%
-  select(USUBJID, PCHG) \%>\%
-  group_by(USUBJID) \%>\%
+ADTR <- osprey::rADTR |>
+  filter(USUBJID \%in\% ADSL$USUBJID) |>
+  select(USUBJID, PCHG) |>
+  group_by(USUBJID) |>
   slice(which.min(PCHG))
 
 TR_SL <- inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all")
 
-SUB_ADRS <- ADRS \%>\%
-  filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") \%>\%
-  select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) \%>\%
+SUB_ADRS <- ADRS |>
+  filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") |>
+  select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) |>
   spread(PARAMCD, AVALC)
 
-ANL <- TR_SL \%>\%
-  left_join(SUB_ADRS, by = "USUBJID", multiple = "all") \%>\%
+ANL <- TR_SL |>
+  left_join(SUB_ADRS, by = "USUBJID", multiple = "all") |>
   mutate(TRTDURD = as.integer(TRTEDTM - TRTSDTM) + 1)
 
 anno_txt_vars <- c("TRTDURD", "BESRSPI", "INVET", "SEX", "BMRKR2")
