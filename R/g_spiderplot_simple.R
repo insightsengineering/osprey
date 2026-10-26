@@ -24,8 +24,8 @@
 #' ADTR <- osprey::rADTR
 #' ANL <- left_join(ADSL, ADTR)
 #'
-#' ANL %>%
-#'   dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") %>%
+#' ANL |>
+#'   dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") |>
 #'   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 spiderplot_simple <- function(anl,
                               byvar = "USUBJID",
@@ -34,14 +34,14 @@ spiderplot_simple <- function(anl,
                               group_col = "USUBJID",
                               baseday = 0) {
   ### remove patients without post baseline measurement
-  anl <- anl %>%
-    group_by(!!byvar) %>%
-    dplyr::mutate(morebase = ifelse(max(!!days, na.rm = TRUE) > baseday, TRUE, FALSE)) %>%
-    dplyr::filter(.data$morebase == TRUE) %>%
+  anl <- anl |>
+    group_by(!!byvar) |>
+    dplyr::mutate(morebase = ifelse(max(!!days, na.rm = TRUE) > baseday, TRUE, FALSE)) |>
+    dplyr::filter(.data$morebase == TRUE) |>
     ungroup()
   ### find the last measurement
-  last_obs <- anl %>%
-    group_by(!!as.symbol(byvar)) %>%
+  last_obs <- anl |>
+    group_by(!!as.symbol(byvar)) |>
     slice(which.max(!!as.symbol(days)))
 
   # plotr

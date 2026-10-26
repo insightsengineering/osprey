@@ -47,23 +47,23 @@
 #'
 #' # Example 1
 #' ADSL <- osprey::rADSL[1:15, ]
-#' ADRS <- osprey::rADRS %>%
+#' ADRS <- osprey::rADRS |>
 #'   filter(USUBJID %in% ADSL$USUBJID)
-#' ADTR <- osprey::rADTR %>%
-#'   filter(USUBJID %in% ADSL$USUBJID) %>%
-#'   select(USUBJID, PCHG) %>%
-#'   group_by(USUBJID) %>%
+#' ADTR <- osprey::rADTR |>
+#'   filter(USUBJID %in% ADSL$USUBJID) |>
+#'   select(USUBJID, PCHG) |>
+#'   group_by(USUBJID) |>
 #'   slice(which.min(PCHG))
 #'
 #' TR_SL <- inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all")
 #'
-#' SUB_ADRS <- ADRS %>%
-#'   filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") %>%
-#'   select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) %>%
+#' SUB_ADRS <- ADRS |>
+#'   filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") |>
+#'   select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) |>
 #'   spread(PARAMCD, AVALC)
 #'
-#' ANL <- TR_SL %>%
-#'   left_join(SUB_ADRS, by = "USUBJID", multiple = "all") %>%
+#' ANL <- TR_SL |>
+#'   left_join(SUB_ADRS, by = "USUBJID", multiple = "all") |>
 #'   mutate(TRTDURD = as.integer(TRTEDTM - TRTSDTM) + 1)
 #'
 #' anno_txt_vars <- c("TRTDURD", "BESRSPI", "INVET", "SEX", "BMRKR2")
@@ -208,7 +208,7 @@ g_waterfall <- function(bar_id,
 
     # bar_id has already been sorted based on bar_height so keeping the 1st entry is equivalent to keeping
     # the best % change from baseline
-    bar_data <- bar_data %>% distinct(bar_id, .keep_all = TRUE)
+    bar_data <- bar_data |> distinct(bar_id, .keep_all = TRUE)
 
     # plot bar plot
     if (is.null(gap_point)) {
@@ -401,7 +401,7 @@ g_waterfall <- function(bar_id,
 
       # bar_id has already been sorted based on bar_height so keeping the 1st entry is equivalent to keeping
       # the best % change from baseline
-      t_anno <- t_anno %>% distinct(bar_id, .keep_all = TRUE)
+      t_anno <- t_anno |> distinct(bar_id, .keep_all = TRUE)
       t_anno <- t_anno[order(t_anno$bar_id), ]
       t_anno <- t_anno[, -c(1, 2, 3)]
 
