@@ -920,7 +920,7 @@ g_patient_profile <- function(ex = NULL,
   plot_list <- plot_list[select]
   # distribute space by number of levels in each domain
   var_list <- list(ex$var, ae$var, rs$var, cm$var, lb$var)
-  V1 <- NULL # to avoid comment "Undefined global functions or variables"
+  V1 <- NULL # to avoid comment "Undefined global functions or variables" # nolint: object_name_linter
   var_list <- var_list |>
     lapply(unique) |>
     lengths() |>
