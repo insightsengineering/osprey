@@ -1,5 +1,13 @@
 # osprey 0.1.18.9000
 
+### Fixes
+
+* Fix note about undeclared variable.
+
+### Miscellaneous
+
+* Increased R version for using base pipe `|>`
+
 # osprey 0.1.18
 
 * Refactor to keep compatibility with ggplot2 4.0.

@@ -33,47 +33,47 @@
 #' @examples
 #' library(dplyr)
 #'
-#' ADSL <- osprey::rADSL %>% slice(1:30)
-#' ADEX <- osprey::rADEX %>% filter(USUBJID %in% ADSL$USUBJID)
-#' ADAE <- osprey::rADAE %>% filter(USUBJID %in% ADSL$USUBJID)
-#' ADCM <- osprey::rADCM %>% filter(USUBJID %in% ADSL$USUBJID)
+#' ADSL <- osprey::rADSL |> slice(1:30)
+#' ADEX <- osprey::rADEX |> filter(USUBJID %in% ADSL$USUBJID)
+#' ADAE <- osprey::rADAE |> filter(USUBJID %in% ADSL$USUBJID)
+#' ADCM <- osprey::rADCM |> filter(USUBJID %in% ADSL$USUBJID)
 #' # function to derive AVISIT from ADEX
 #' add_visit <- function(data_need_visit) {
-#'   visit_dates <- ADEX %>%
-#'     filter(PARAMCD == "DOSE") %>%
-#'     distinct(USUBJID, AVISIT, ASTDTM) %>%
-#'     group_by(USUBJID) %>%
-#'     arrange(ASTDTM) %>%
-#'     mutate(next_vis = lead(ASTDTM), is_last = ifelse(is.na(next_vis), TRUE, FALSE)) %>%
+#'   visit_dates <- ADEX |>
+#'     filter(PARAMCD == "DOSE") |>
+#'     distinct(USUBJID, AVISIT, ASTDTM) |>
+#'     group_by(USUBJID) |>
+#'     arrange(ASTDTM) |>
+#'     mutate(next_vis = lead(ASTDTM), is_last = ifelse(is.na(next_vis), TRUE, FALSE)) |>
 #'     rename(this_vis = ASTDTM)
-#'   data_visit <- data_need_visit %>%
-#'     select(USUBJID, ASTDTM) %>%
-#'     left_join(visit_dates, by = "USUBJID", relationship = "many-to-many") %>%
-#'     filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) %>%
+#'   data_visit <- data_need_visit |>
+#'     select(USUBJID, ASTDTM) |>
+#'     left_join(visit_dates, by = "USUBJID", relationship = "many-to-many") |>
+#'     filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) |>
 #'     left_join(data_need_visit, relationship = "many-to-many")
 #'   return(data_visit)
 #' }
 #' # add AVISIT in ADAE and ADCM
 #' ADAE <- add_visit(ADAE)
 #' ADCM <- add_visit(ADCM)
-#' exp_data <- ADEX %>%
-#'   filter(PARCAT1 == "INDIVIDUAL") %>%
-#'   group_by(USUBJID) %>%
+#' exp_data <- ADEX |>
+#'   filter(PARCAT1 == "INDIVIDUAL") |>
+#'   group_by(USUBJID) |>
 #'   # create a shorter subject identifier
-#'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) %>%
-#'   mutate(ongo_var = (EOSSTT == "ONGOING")) %>%
+#'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) |>
+#'   mutate(ongo_var = (EOSSTT == "ONGOING")) |>
 #'   ungroup()
-#' anno_data <- ADSL %>%
-#'   select(SEX, COUNTRY, USUBJID) %>%
-#'   group_by(USUBJID) %>%
-#'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) %>%
-#'   ungroup() %>%
+#' anno_data <- ADSL |>
+#'   select(SEX, COUNTRY, USUBJID) |>
+#'   group_by(USUBJID) |>
+#'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) |>
+#'   ungroup() |>
 #'   select(-USUBJID)
-#' heat_data <- ADAE %>%
-#'   select(USUBJID, AVISIT, AETOXGR) %>%
-#'   group_by(USUBJID) %>%
-#'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) %>%
-#'   ungroup() %>%
+#' heat_data <- ADAE |>
+#'   select(USUBJID, AVISIT, AETOXGR) |>
+#'   group_by(USUBJID) |>
+#'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) |>
+#'   ungroup() |>
 #'   select(-USUBJID)
 #' heat_color_opt <- c(
 #'   "No Event" = "gray90",
@@ -84,14 +84,14 @@
 #'   "5" = "brown4"
 #' )
 #' cmdecod_label <- attr(ADCM[["CMDECOD"]], "label")
-#' ADCM <- ADCM %>%
+#' ADCM <- ADCM |>
 #'   filter(
 #'     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
-#'   ) %>%
+#'   ) |>
 #'   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
 #' attr(ADCM[["CMDECOD"]], "label") <- cmdecod_label
-#' conmed_data <- ADCM %>%
-#'   group_by(USUBJID) %>%
+#' conmed_data <- ADCM |>
+#'   group_by(USUBJID) |>
 #'   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
 #' # example plotting conmed
 #' g_heat_bygrade(
@@ -199,47 +199,47 @@ g_heat_bygrade <- function(id_var,
     )
   }
 
-  anl_data <- exp_data %>%
-    select(!!id_var, !!sym(visit_var)) %>%
-    left_join(heat_data, by = c(id_var, visit_var)) %>%
-    distinct() %>%
-    mutate(heat_color_num = tidyr::replace_na(as.numeric(.data[[heat_color_var]]), 0)) %>%
-    group_by(!!sym(id_var), !!sym(visit_var)) %>%
-    arrange(!!sym(visit_var)) %>%
-    mutate(heat_color_max = factor(max(.data$heat_color_num), levels = 0:5)) %>%
-    select(-(!!heat_color_var), -"heat_color_num") %>% # nolint
-    distinct() %>%
+  anl_data <- exp_data |>
+    select(!!id_var, !!sym(visit_var)) |>
+    left_join(heat_data, by = c(id_var, visit_var)) |>
+    distinct() |>
+    mutate(heat_color_num = tidyr::replace_na(as.numeric(.data[[heat_color_var]]), 0)) |>
+    group_by(!!sym(id_var), !!sym(visit_var)) |>
+    arrange(!!sym(visit_var)) |>
+    mutate(heat_color_max = factor(max(.data$heat_color_num), levels = 0:5)) |>
+    select(-(!!heat_color_var), -"heat_color_num") |> # nolint
+    distinct() |>
     left_join(anno_data, by = id_var)
 
   # dose reduction data
-  ex_red <- exp_data %>%
-    filter(.data$PARAMCD == "DOSE") %>%
-    group_by(!!sym(id_var)) %>%
-    arrange(.data$ASTDTM) %>%
+  ex_red <- exp_data |>
+    filter(.data$PARAMCD == "DOSE") |>
+    group_by(!!sym(id_var)) |>
+    arrange(.data$ASTDTM) |>
     mutate(
       RANK = order(.data$ASTDTM),
       LASTDOSE = lag(.data$AVAL),
       DOSERED = ifelse(.data$RANK != 1 & .data$AVAL < .data$LASTDOSE, TRUE, FALSE)
-    ) %>%
-    select(!!sym(id_var), !!sym(visit_var), "RANK", "AVAL", "LASTDOSE", "DOSERED") %>%
+    ) |>
+    select(!!sym(id_var), !!sym(visit_var), "RANK", "AVAL", "LASTDOSE", "DOSERED") |>
     filter(.data$DOSERED == TRUE)
   # does ongoing data
-  exp_lst <- exp_data %>%
-    filter(.data$PARAMCD == "DOSE") %>%
-    filter(!!sym(ongo_var) == TRUE) %>%
-    group_by(!!sym(id_var)) %>%
-    arrange(!!sym(visit_var)) %>%
-    slice_tail() %>%
+  exp_lst <- exp_data |>
+    filter(.data$PARAMCD == "DOSE") |>
+    filter(!!sym(ongo_var) == TRUE) |>
+    group_by(!!sym(id_var)) |>
+    arrange(!!sym(visit_var)) |>
+    slice_tail() |>
     select(!!sym(id_var), !!sym(visit_var))
   visit_levels <- unique(anl_data[[visit_var]])
   if (!is.null(conmed_data) && !is.null(conmed_var)) {
-    conmed_data <- conmed_data %>%
-      left_join(anl_data, by = c(id_var, visit_var)) %>%
-      ungroup() %>%
+    conmed_data <- conmed_data |>
+      left_join(anl_data, by = c(id_var, visit_var)) |>
+      ungroup() |>
       mutate(
         conmed_num = as.numeric(.data[[conmed_var]]),
         conmed_num_m = stats::median(unique(.data$conmed_num), na.rm = TRUE)
-      ) %>%
+      ) |>
       mutate(
         distance = (ifelse(
           .data$conmed_num <= .data$conmed_num_m,
@@ -344,9 +344,9 @@ g_heat_bygrade <- function(id_var,
   }
 
   # plot left legend
-  t <- anl_data %>%
-    as.data.frame() %>%
-    select((!!anno_var), (!!id_var)) %>%
+  t <- anl_data |>
+    as.data.frame() |>
+    select((!!anno_var), (!!id_var)) |>
     distinct()
   my_theme <- gridExtra::ttheme_default(
     core = list(

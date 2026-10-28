@@ -62,7 +62,7 @@
 #'
 #' # Note: CRP is being used in place of Bilirubin here because this is the only available data
 #' adsl <- osprey::rADSL
-#' adlb <- osprey::rADLB %>% mutate(ANRHI = 50)
+#' adlb <- osprey::rADLB |> mutate(ANRHI = 50)
 #'
 #' # Example 1, - Hy's law template (3 and 2 X ULN)
 #' g_hy_law(
@@ -126,12 +126,12 @@ g_hy_law <- function(id,
 
   anl <- data.frame(id, term, aval, arm, anrhi)
 
-  anl <- anl %>%
-    dplyr::filter(term %in% term_selected) %>%
-    dplyr::group_by(id, term) %>%
-    dplyr::mutate(MAX = max(aval)) %>%
-    dplyr::slice(1) %>%
-    dplyr::mutate(ULN = .data$MAX / anrhi) %>%
+  anl <- anl |>
+    dplyr::filter(term %in% term_selected) |>
+    dplyr::group_by(id, term) |>
+    dplyr::mutate(MAX = max(aval)) |>
+    dplyr::slice(1) |>
+    dplyr::mutate(ULN = .data$MAX / anrhi) |>
     tidyr::pivot_wider(id_cols = c(id, arm), names_from = term, values_from = "ULN")
 
   p <- ggplot(data = anl) +

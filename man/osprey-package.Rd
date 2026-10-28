@@ -22,6 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Nina Qi \email{qit3@gene.com}
   \item Dawid Kaledkowski \email{dawid.kaledkowski@roche.com}
   \item Chendi Liao \email{chendi.liao@roche.com}
   \item Liming Li \email{liming.li@roche.com}

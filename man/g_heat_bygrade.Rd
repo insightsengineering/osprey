@@ -64,47 +64,47 @@ This function plots heatmap
 \examples{
 library(dplyr)
 
-ADSL <- osprey::rADSL \%>\% slice(1:30)
-ADEX <- osprey::rADEX \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
-ADAE <- osprey::rADAE \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
-ADCM <- osprey::rADCM \%>\% filter(USUBJID \%in\% ADSL$USUBJID)
+ADSL <- osprey::rADSL |> slice(1:30)
+ADEX <- osprey::rADEX |> filter(USUBJID \%in\% ADSL$USUBJID)
+ADAE <- osprey::rADAE |> filter(USUBJID \%in\% ADSL$USUBJID)
+ADCM <- osprey::rADCM |> filter(USUBJID \%in\% ADSL$USUBJID)
 # function to derive AVISIT from ADEX
 add_visit <- function(data_need_visit) {
-  visit_dates <- ADEX \%>\%
-    filter(PARAMCD == "DOSE") \%>\%
-    distinct(USUBJID, AVISIT, ASTDTM) \%>\%
-    group_by(USUBJID) \%>\%
-    arrange(ASTDTM) \%>\%
-    mutate(next_vis = lead(ASTDTM), is_last = ifelse(is.na(next_vis), TRUE, FALSE)) \%>\%
+  visit_dates <- ADEX |>
+    filter(PARAMCD == "DOSE") |>
+    distinct(USUBJID, AVISIT, ASTDTM) |>
+    group_by(USUBJID) |>
+    arrange(ASTDTM) |>
+    mutate(next_vis = lead(ASTDTM), is_last = ifelse(is.na(next_vis), TRUE, FALSE)) |>
     rename(this_vis = ASTDTM)
-  data_visit <- data_need_visit \%>\%
-    select(USUBJID, ASTDTM) \%>\%
-    left_join(visit_dates, by = "USUBJID", relationship = "many-to-many") \%>\%
-    filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) \%>\%
+  data_visit <- data_need_visit |>
+    select(USUBJID, ASTDTM) |>
+    left_join(visit_dates, by = "USUBJID", relationship = "many-to-many") |>
+    filter(ASTDTM > this_vis & (ASTDTM < next_vis | is_last == TRUE)) |>
     left_join(data_need_visit, relationship = "many-to-many")
   return(data_visit)
 }
 # add AVISIT in ADAE and ADCM
 ADAE <- add_visit(ADAE)
 ADCM <- add_visit(ADCM)
-exp_data <- ADEX \%>\%
-  filter(PARCAT1 == "INDIVIDUAL") \%>\%
-  group_by(USUBJID) \%>\%
+exp_data <- ADEX |>
+  filter(PARCAT1 == "INDIVIDUAL") |>
+  group_by(USUBJID) |>
   # create a shorter subject identifier
-  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
-  mutate(ongo_var = (EOSSTT == "ONGOING")) \%>\%
+  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) |>
+  mutate(ongo_var = (EOSSTT == "ONGOING")) |>
   ungroup()
-anno_data <- ADSL \%>\%
-  select(SEX, COUNTRY, USUBJID) \%>\%
-  group_by(USUBJID) \%>\%
-  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
-  ungroup() \%>\%
+anno_data <- ADSL |>
+  select(SEX, COUNTRY, USUBJID) |>
+  group_by(USUBJID) |>
+  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) |>
+  ungroup() |>
   select(-USUBJID)
-heat_data <- ADAE \%>\%
-  select(USUBJID, AVISIT, AETOXGR) \%>\%
-  group_by(USUBJID) \%>\%
-  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) \%>\%
-  ungroup() \%>\%
+heat_data <- ADAE |>
+  select(USUBJID, AVISIT, AETOXGR) |>
+  group_by(USUBJID) |>
+  mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1)) |>
+  ungroup() |>
   select(-USUBJID)
 heat_color_opt <- c(
   "No Event" = "gray90",
@@ -115,14 +115,14 @@ heat_color_opt <- c(
   "5" = "brown4"
 )
 cmdecod_label <- attr(ADCM[["CMDECOD"]], "label")
-ADCM <- ADCM \%>\%
+ADCM <- ADCM |>
   filter(
     CMDECOD == "medname A_1/3" | CMDECOD == "medname A_2/3" | CMDECOD == "medname A_3/3"
-  ) \%>\%
+  ) |>
   mutate(CMDECOD = factor(CMDECOD, levels = unique(CMDECOD)))
 attr(ADCM[["CMDECOD"]], "label") <- cmdecod_label
-conmed_data <- ADCM \%>\%
-  group_by(USUBJID) \%>\%
+conmed_data <- ADCM |>
+  group_by(USUBJID) |>
   mutate(SUBJ = utils::tail(strsplit(USUBJID, "-")[[1]], n = 1))
 # example plotting conmed
 g_heat_bygrade(

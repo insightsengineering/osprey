@@ -50,7 +50,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
 
   # step 1 get a list of filters
 
-  filters_to_apply <- strsplit(suffix, split = "_", fixed = TRUE) %>%
+  filters_to_apply <- strsplit(suffix, split = "_", fixed = TRUE) |>
     unlist()
 
   n_filters <- length(filters_to_apply)
@@ -150,7 +150,7 @@ stream_filter <- function(slref = NULL, anl = NULL, filters, suffix, slref_keep 
   cat(paste0("\n", nrow(rc), " of ", nrow(anl), " observations selected from ANL\n"))
 
   # return the filtered dataset
-  return(rc)
+  rc
 }
 
 #' Replicates the use of index function in `SAS` for logic options
@@ -194,7 +194,7 @@ stream_filter_convwhere <- function(x) {
 
   # convert non quoted values to upper case
 
-  this_rclause_quotes <- strsplit(paste0(" ", this_rclause, " "), split = "'", fixed = TRUE) %>%
+  this_rclause_quotes <- strsplit(paste0(" ", this_rclause, " "), split = "'", fixed = TRUE) |>
     unlist()
 
   inquotes <- rep(c(0, 1), length.out = length(this_rclause_quotes))
@@ -226,7 +226,7 @@ stream_filter_convwhere <- function(x) {
   # if contains an in  statement need to ensure commas exist
   if (grepl(" %in% c", this_rclause, fixed = TRUE)) {
     # get the clause (assume only 1 per filter...)
-    temp1_str <- strsplit(this_rclause, split = " %in% c(", fixed = TRUE) %>%
+    temp1_str <- strsplit(this_rclause, split = " %in% c(", fixed = TRUE) |>
       unlist()
 
     if (length(temp1_str) != 2) {
@@ -236,7 +236,7 @@ stream_filter_convwhere <- function(x) {
       in_right_str <- temp1_str[2]
 
       # find quoted items bracket
-      temp2_str <- strsplit(in_right_str, split = "'", fixed = TRUE) %>%
+      temp2_str <- strsplit(in_right_str, split = "'", fixed = TRUE) |>
         unlist()
       inquotes <- rep(c(0, 1), length.out = length(temp2_str))
 
@@ -249,10 +249,10 @@ stream_filter_convwhere <- function(x) {
 
       temp3_str[right_idxv] <- substr(temp2_str[right_idxv], right_idxc, nchar(temp2_str[right_idxv]))
 
-      right_str <- temp3_str[right_idxv:length(temp3_str)] %>%
+      right_str <- temp3_str[right_idxv:length(temp3_str)] |>
         paste(collapse = "'")
 
-      in_idx <- regexpr(right_str, in_right_str, fixed = TRUE) %>%
+      in_idx <- regexpr(right_str, in_right_str, fixed = TRUE) |>
         as.numeric()
 
       in_str <- substr(in_right_str, 1, in_idx - 1)
@@ -261,7 +261,7 @@ stream_filter_convwhere <- function(x) {
       # need to check the list of in and remove any commas to later replace between each element
       # first get any unquoted spaces or commas and split these
 
-      temp4_str <- strsplit(in_str, split = "'", fixed = TRUE) %>%
+      temp4_str <- strsplit(in_str, split = "'", fixed = TRUE) |>
         unlist()
       inquotes <- rep(c(0, 1), length.out = length(temp4_str))
 
@@ -269,9 +269,9 @@ stream_filter_convwhere <- function(x) {
       quoted_items <- temp4_str[which(inquotes == 1)]
 
       # seperate any items unqouted
-      temp5_str <- strsplit(unquoted, split = ",", fixed = TRUE) %>%
-        unlist() %>%
-        strsplit(split = " ", fixed = TRUE) %>%
+      temp5_str <- strsplit(unquoted, split = ",", fixed = TRUE) |>
+        unlist() |>
+        strsplit(split = " ", fixed = TRUE) |>
         unlist()
 
       unquoted_items <- temp5_str[which(!(temp5_str %in% ""))]
@@ -285,7 +285,7 @@ stream_filter_convwhere <- function(x) {
 
       # now collapse both strings adding commas
 
-      all_items <- c(quoted_items, unquoted_items) %>%
+      all_items <- c(quoted_items, unquoted_items) |>
         paste(collapse = " , ")
 
       # rebuild the complete code piece

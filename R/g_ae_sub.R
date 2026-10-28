@@ -90,7 +90,7 @@
 #' trt <- "ARM A"
 #' ref <- "ARM C"
 #' ADAE <- osprey::rADAE
-#' ADSL <- osprey::rADSL %>% filter(ACTARMCD %in% c(trt, ref))
+#' ADSL <- osprey::rADSL |> filter(ACTARMCD %in% c(trt, ref))
 #' id <- ADAE$USUBJID
 #' arm <- ADAE$ACTARMCD
 #' arm_sl <- as.character(ADSL$ACTARMCD)
@@ -152,8 +152,8 @@ g_ae_sub <- function(id,
       tibble(
         level = stringr::str_replace_all(names(labels), "\\.", "__"),
         label = labels
-      ) %>%
-      bind_rows(c(level = "TOTAL__Total", label = "Overall")) %>%
+      ) |>
+      bind_rows(c(level = "TOTAL__Total", label = "Overall")) |>
       mutate(
         indents = stringr::str_dup(" ", if_else(
           stringr::str_detect(.data$level, "__Total"), 0, indent
@@ -187,14 +187,14 @@ g_ae_sub <- function(id,
   stopifnot(
     "invalid argument: please only include levels in subgroups columns in the nested subgroups_levels" =
       all(unlist(lapply(names(subgroups_levels), function(level_name) {
-        all(names(subgroups_levels[[level_name]]) %in% c("Total", levels(subgroups[, level_name] %>% dplyr::pull())))
+        all(names(subgroups_levels[[level_name]]) %in% c("Total", levels(subgroups[, level_name] |> dplyr::pull())))
       })))
   )
 
   checkmate::assert_flag(arm_n)
 
-  subgroups <- subgroups %>%
-    mutate_all(as.character) %>%
+  subgroups <- subgroups |>
+    mutate_all(as.character) |>
     mutate(TOTAL = "Total")
 
   arms <- c(trt, ref)
@@ -212,19 +212,19 @@ g_ae_sub <- function(id,
   df_ref <- tibble(arm = c(ref, trt))
 
   # a wide data frame contains event counts by arm in each subgroup
-  df <- cbind(id = id, arm = arm, subgroups) %>%
-    filter(arm %in% c(ref, trt)) %>%
-    unique() %>%
+  df <- cbind(id = id, arm = arm, subgroups) |>
+    filter(arm %in% c(ref, trt)) |>
+    unique() |>
     tidyr::pivot_longer(
       names_to = "strata",
       cols = colnames(subgroups),
       values_to = "value"
-    ) %>%
-    group_by(arm, .data$strata, .data$value) %>%
-    summarise(n = n()) %>%
-    full_join(df_ref, by = "arm") %>%
-    tidyr::replace_na(list(n = 0)) %>%
-    ungroup() %>%
+    ) |>
+    group_by(arm, .data$strata, .data$value) |>
+    summarise(n = n()) |>
+    full_join(df_ref, by = "arm") |>
+    tidyr::replace_na(list(n = 0)) |>
+    ungroup() |>
     tidyr::pivot_wider(
       id_cols = c("strata", "value"),
       names_from = "arm",
@@ -234,17 +234,17 @@ g_ae_sub <- function(id,
     )
 
   # a wide data frame contains total counts by arm in each subgroup
-  df_sl <- cbind(arm = arm_sl, subgroups_sl) %>%
-    filter(arm %in% c(ref, trt)) %>%
-    mutate(TOTAL = "Total") %>%
+  df_sl <- cbind(arm = arm_sl, subgroups_sl) |>
+    filter(arm %in% c(ref, trt)) |>
+    mutate(TOTAL = "Total") |>
     tidyr::pivot_longer(
       names_to = "strata",
       cols = c(colnames(subgroups_sl), "TOTAL"),
       values_to = "value"
-    ) %>%
-    group_by(arm, .data$strata, .data$value) %>%
-    summarise(n = n()) %>%
-    ungroup() %>%
+    ) |>
+    group_by(arm, .data$strata, .data$value) |>
+    summarise(n = n()) |>
+    ungroup() |>
     tidyr::pivot_wider(
       id_cols = c("strata", "value"),
       names_from = "arm",
@@ -254,9 +254,9 @@ g_ae_sub <- function(id,
     )
 
   # calculate the risk difference and risk difference CI in each subgroup
-  df <- df %>%
-    left_join(df_sl, by = c("strata", "value")) %>%
-    group_by(.data$strata, .data$value) %>%
+  df <- df |>
+    left_join(df_sl, by = c("strata", "value")) |>
+    group_by(.data$strata, .data$value) |>
     mutate(
       !!r1 := !!x1 / !!n1,
       !!r2 := !!x2 / !!n2,
@@ -271,29 +271,29 @@ g_ae_sub <- function(id,
         method = diff_ci_method
       )[3],
       riskdiff = !!r1 - !!r2
-    ) %>%
+    ) |>
     tidyr::pivot_longer(
       matches("__"),
       names_to = c(".value", "arm"),
       names_sep = "__"
-    ) %>%
-    ungroup() %>%
+    ) |>
+    ungroup() |>
     tidyr::unite("level", "strata", "value", remove = FALSE, sep = "__")
 
   # create label for plotting
-  level_format_df <- df %>%
-    select("strata", "value") %>%
-    unique() %>%
-    group_by(.data$strata) %>%
-    summarise(value = paste(c("Total", .data$value), collapse = ",")) %>%
-    tidyr::separate_rows("value", sep = ",") %>%
-    unique() %>%
-    tidyr::unite("level", "strata", "value", sep = "__", remove = FALSE) %>%
-    mutate(order = if_else(.data$strata == "TOTAL", integer(1), -row_number())) %>%
+  level_format_df <- df |>
+    select("strata", "value") |>
+    unique() |>
+    group_by(.data$strata) |>
+    summarise(value = paste(c("Total", .data$value), collapse = ",")) |>
+    tidyr::separate_rows("value", sep = ",") |>
+    unique() |>
+    tidyr::unite("level", "strata", "value", sep = "__", remove = FALSE) |>
+    mutate(order = if_else(.data$strata == "TOTAL", integer(1), -row_number())) |>
     arrange(order)
 
   if (is.null(subgroups_levels)) {
-    level_format_df <- level_format_df %>%
+    level_format_df <- level_format_df |>
       mutate(label = if_else(
         .data$strata == "TOTAL",
         "Overall",
@@ -303,11 +303,11 @@ g_ae_sub <- function(id,
         ), .data$value))
       ))
   } else {
-    level_format_df <- level_format_df %>%
+    level_format_df <- level_format_df |>
       inner_join(label_df, by = "level")
   }
 
-  df <- df %>%
+  df <- df |>
     semi_join(level_format_df, by = "level")
 
   mytheme <- theme_osprey(fontsize = fontsize, blank = TRUE)
@@ -319,8 +319,8 @@ g_ae_sub <- function(id,
       labels = level_format_df$label
     )
 
-  df_risk <- df %>%
-    select("level", "lower", "upper", "riskdiff") %>%
+  df_risk <- df |>
+    select("level", "lower", "upper", "riskdiff") |>
     unique()
   if (xmax <= 0) {
     xmax <- max(abs(df_risk$upper), abs(df_risk$lower), na.rm = TRUE)
@@ -356,20 +356,20 @@ g_ae_sub <- function(id,
     coord_cartesian(xlim = c(-xmax, xmax))
   p1_grob <- ggplotGrob(p1)
 
-  df_total <- df %>%
-    group_by(.data$level) %>%
-    summarise(n = sum(.data$total)) %>%
+  df_total <- df |>
+    group_by(.data$level) |>
+    summarise(n = sum(.data$total)) |>
     mutate(percent = n / length(arm_sl) * 100)
 
   if (arm_n) {
-    df_byarm <- df %>%
-      group_by(.data$level, .data$arm) %>%
-      summarise(n = sum(.data$total)) %>%
-      tidyr::pivot_wider(names_from = arm, values_from = n) %>%
+    df_byarm <- df |>
+      group_by(.data$level, .data$arm) |>
+      summarise(n = sum(.data$total)) |>
+      tidyr::pivot_wider(names_from = arm, values_from = n) |>
       rename(n_trt = matches(trt), n_ref = matches(ref))
 
-    df_total <- df_total %>%
-      left_join(df_byarm, by = "level") %>%
+    df_total <- df_total |>
+      left_join(df_byarm, by = "level") |>
       mutate(
         percent_trt = .data$n_trt / .data$n * 100,
         percent_ref = .data$n_ref / .data$n * 100
@@ -415,17 +415,17 @@ g_ae_sub <- function(id,
     p2_ref_grob <- ggplotGrob(p2_ref)
   }
 
-  df_ci <- df %>%
+  df_ci <- df |>
     tidyr::pivot_wider(
       names_from = "arm",
       values_from = "risk",
       id_cols = c("level", "lower", "upper", "riskdiff")
-    ) %>%
+    ) |>
     tidyr::pivot_longer(
       names_to = "x",
       values_to = "v",
       cols = c("lower", "upper", "riskdiff", matches(trt), matches(ref))
-    ) %>%
+    ) |>
     mutate(vlabel = sprintf("%.2f", .data$v))
 
 

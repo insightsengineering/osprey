@@ -48,8 +48,8 @@
 #' ADAE <- osprey::rADAE
 #'
 #' # add additional dummy causality flags
-#' ADAE <- ADAE %>%
-#'   mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) %>%
+#' ADAE <- ADAE |>
+#'   mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) |>
 #'   mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo"))
 #' attr(ADAE[["AEREL1"]], "label") <- "AE related to A: Drug X"
 #' attr(ADAE[["AEREL2"]], "label") <- "AE related to B: Placebo"
@@ -132,7 +132,7 @@ g_events_term_id <- function(term,
     term <- lapply(term, function(x) {
       term_levels[x]
     })
-    df <- tibble::tibble(id, arm, term) %>%
+    df <- tibble::tibble(id, arm, term) |>
       tidyr::unnest(term)
   } else {
     term_levels <- `if`(is.factor(term), levels(term), unique(term))
@@ -163,33 +163,33 @@ g_events_term_id <- function(term,
   df_n <- data.frame(arm_N)
   names(df_n) <- c("arm", "total")
   df_n <- df_n[df_n$arm %in% arms, ]
-  ref_total <- df_n %>%
-    filter(arm == ref) %>%
-    select("total") %>%
+  ref_total <- df_n |>
+    filter(arm == ref) |>
+    select("total") |>
     pull()
-  trt_total <- df_n %>%
-    filter(arm == trt) %>%
-    select("total") %>%
+  trt_total <- df_n |>
+    filter(arm == trt) |>
+    select("total") |>
     pull()
 
   # create full cartesian of (arms) X (term levels) with 0 count to have full list of all possible combination
   # this is done in order to secure further calls
   df_full <- cbind(expand.grid(arm = arms, term = term_levels), N = 0)
 
-  df_reshaped <- df %>%
-    distinct() %>%
-    filter(arm %in% arms) %>%
-    group_by(arm, term) %>%
-    summarise(N = n()) %>%
-    ungroup() %>%
-    rbind(df_full) %>%
-    group_by(arm, term) %>%
-    summarise(N = sum(.data$N)) %>%
-    mutate(arm = ifelse(arm == trt, "trt_count", "ref_count")) %>%
+  df_reshaped <- df |>
+    distinct() |>
+    filter(arm %in% arms) |>
+    group_by(arm, term) |>
+    summarise(N = n()) |>
+    ungroup() |>
+    rbind(df_full) |>
+    group_by(arm, term) |>
+    summarise(N = sum(.data$N)) |>
+    mutate(arm = ifelse(arm == trt, "trt_count", "ref_count")) |>
     tidyr::pivot_wider(names_from = arm, values_from = "N", values_fill = list(N = 0))
 
-  df_ci <- df_reshaped %>%
-    group_by(term) %>%
+  df_ci <- df_reshaped |>
+    group_by(term) |>
     do(
       data.frame(
         t(c(
@@ -204,34 +204,34 @@ g_events_term_id <- function(term,
           meanrisk = (.data$trt_count + .data$ref_count) / (trt_total + ref_total)
         ))
       )
-    ) %>%
-    ungroup() %>%
+    ) |>
+    ungroup() |>
     rename(riskdiff = "est", lower_ci = "lwr.ci", upper_ci = "upr.ci")
 
-  df_risk <- df_reshaped %>%
-    group_by(term) %>%
+  df_risk <- df_reshaped |>
+    group_by(term) |>
     do(
       data.frame(
         risk = c(.data$trt_count / trt_total, .data$ref_count / ref_total),
         arm = c(trt, ref)
       )
-    ) %>%
+    ) |>
     ungroup()
 
   names(color) <- arms
   names(shape) <- arms
 
   # if diff_range specified, limit terms
-  terms_needed <- df_ci %>%
+  terms_needed <- df_ci |>
     filter(
       .data$riskdiff > diff_range[1] &
         .data$riskdiff < diff_range[2] &
         .data$meanrisk > rate_range[1] &
         .data$meanrisk < rate_range[2]
-    ) %>%
-    select(term) %>%
-    distinct() %>%
-    pull() %>%
+    ) |>
+    select(term) |>
+    distinct() |>
+    pull() |>
     as.character()
 
   if (length(terms_needed) == 0) {
@@ -246,10 +246,10 @@ g_events_term_id <- function(term,
   if (sort_by == "term") {
     terms_needed <- sort(terms_needed, decreasing = TRUE)
   } else {
-    terms_needed <- df_ci %>%
-      arrange(.data[[sort_by]]) %>%
-      filter(term %in% terms_needed) %>%
-      select(term) %>%
+    terms_needed <- df_ci |>
+      arrange(.data[[sort_by]]) |>
+      filter(term %in% terms_needed) |>
+      select(term) |>
       pull()
   }
 
@@ -257,11 +257,11 @@ g_events_term_id <- function(term,
     terms_needed <- rev(terms_needed)
   }
 
-  df_ci <- df_ci %>%
-    filter(term %in% terms_needed) %>%
+  df_ci <- df_ci |>
+    filter(term %in% terms_needed) |>
     mutate(term = factor(term, terms_needed))
-  df_risk <- df_risk %>%
-    filter(term %in% terms_needed) %>%
+  df_risk <- df_risk |>
+    filter(term %in% terms_needed) |>
     mutate(term = factor(term, terms_needed))
   terms_label <- vapply(
     lapply(terms_needed, strwrap, width = 30),
@@ -420,8 +420,8 @@ g_events_term_id <- function(term,
 #' ADAE <- osprey::rADAE
 #'
 #' # add additional dummy causality flags
-#' ADAE <- ADAE %>%
-#'   mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) %>%
+#' ADAE <- ADAE |>
+#'   mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) |>
 #'   mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo"))
 #' attr(ADAE[["AEREL1"]], "label") <- "AE related to A: Drug X"
 #' attr(ADAE[["AEREL2"]], "label") <- "AE related to B: Placebo"

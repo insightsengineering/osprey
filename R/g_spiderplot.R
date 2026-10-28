@@ -46,14 +46,14 @@
 #' library(dplyr)
 #' library(nestcolor)
 #'
-#' ADTR <- osprey::rADTR %>% select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
-#' ADSL <- osprey::rADSL %>% select(STUDYID, USUBJID, RACE, SEX, ARM)
+#' ADTR <- osprey::rADTR |> select(STUDYID, USUBJID, ADY, AVISIT, CHG, PCHG, PARAMCD)
+#' ADSL <- osprey::rADSL |> select(STUDYID, USUBJID, RACE, SEX, ARM)
 #' ANL <- left_join(ADTR, ADSL, by = c("STUDYID", "USUBJID"))
-#' ANL <- ANL %>%
-#'   dplyr::filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") %>%
-#'   dplyr::filter(RACE %in% c("WHITE", "ASIAN")) %>%
-#'   group_by(USUBJID) %>%
-#'   dplyr::arrange(ADY) %>%
+#' ANL <- ANL |>
+#'   dplyr::filter(PARAMCD == "SLDINV" & AVISIT != "POST-BASELINE MINIMUM") |>
+#'   dplyr::filter(RACE %in% c("WHITE", "ASIAN")) |>
+#'   group_by(USUBJID) |>
+#'   dplyr::arrange(ADY) |>
 #'   dplyr::mutate(
 #'     CHG = ifelse(AVISIT == "Screening", 0, CHG),
 #'     PCHG = ifelse(AVISIT == "Screening", 0, PCHG)
@@ -145,8 +145,8 @@ g_spiderplot <- function(marker_x,
   if (!is.null(datalabel_txt$txt_ann)) {
     dat$lbl_all <- datalabel_txt$txt_ann
 
-    dat <- dat %>%
-      group_by(.data$lbl_all) %>%
+    dat <- dat |>
+      group_by(.data$lbl_all) |>
       dplyr::mutate(lab = ifelse(.data$x == last(.data$x), as.character(.data$lbl_all), " "))
   }
   if (!is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
@@ -156,7 +156,7 @@ g_spiderplot <- function(marker_x,
     dat$id <- datalabel_txt$mrkr_all
   }
 
-  dat <- dat %>% as.data.frame()
+  dat <- as.data.frame(dat)
 
   # plot spider plot----------------- this section can be condensed later
   pl <- ggplot(data = dat, aes(x = .data$x, y = .data$y, group = .data$group)) +
@@ -207,9 +207,9 @@ g_spiderplot <- function(marker_x,
           show.legend = FALSE
         )
     } else if (is.null(datalabel_txt$txt_ann) && !is.null(datalabel_txt$mrkr_all) && !is.null(datalabel_txt$mrkr_ann)) {
-      dat_arrow <- dat %>%
-        dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
-        group_by(.data$id) %>%
+      dat_arrow <- dat |>
+        dplyr::filter(.data$id %in% datalabel_txt$mrkr_ann) |>
+        group_by(.data$id) |>
         dplyr::filter(.data$x == last(.data$x))
       pl <- pl +
         geom_segment(
@@ -234,9 +234,9 @@ g_spiderplot <- function(marker_x,
           show.legend = FALSE
         )
 
-      dat_arrow <- dat %>%
-        dplyr::filter(id %in% datalabel_txt$mrkr_ann) %>%
-        group_by(.data$id) %>%
+      dat_arrow <- dat |>
+        dplyr::filter(.data$id %in% datalabel_txt$mrkr_ann) |>
+        group_by(.data$id) |>
         dplyr::filter(.data$x == last(.data$x))
 
       pl <- pl +
@@ -284,8 +284,8 @@ g_spiderplot <- function(marker_x,
   # simple function to call a vector of color values
   call_color <- function(len) {
     dat_col <- data.frame(color_opt = grDevices::colors())
-    dat_col <- dat_col %>%
-      dplyr::filter(!grepl("white", .data$color_opt)) %>%
+    dat_col <- dat_col |>
+      dplyr::filter(!grepl("white", .data$color_opt)) |>
       droplevels()
 
     dat_col[seq_len(len), 1]

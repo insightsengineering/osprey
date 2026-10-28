@@ -63,12 +63,12 @@
 #' anno_txt <- ADSL[, anno_txt_vars]
 #'
 #' # markers from ADRS
-#' ADRS <- dplyr::filter(ADRS, PARAMCD == "OVRINV") %>% select(USUBJID, ADY, AVALC)
+#' ADRS <- dplyr::filter(ADRS, PARAMCD == "OVRINV") |> select(USUBJID, ADY, AVALC)
 #'
 #' # markers from ADSL - discontinuation
-#' ADS <- ADSL %>%
-#'   dplyr::filter(EOSSTT == "Discontinued" | DCSREAS != "") %>%
-#'   select(USUBJID, EOSDY, DCSREAS) %>%
+#' ADS <- ADSL |>
+#'   dplyr::filter(EOSSTT == "Discontinued" | DCSREAS != "") |>
+#'   select(USUBJID, EOSDY, DCSREAS) |>
 #'   dplyr::rename(ADY = EOSDY, AVALC = DCSREAS)
 #'
 #' # combine ADRS with ADS records as one data for markers and join with ADSL
@@ -234,7 +234,7 @@ g_swimlane <- function(bar_id,
 
     if (is.null(marker_color_opt)) {
       if (!is.null(getOption("ggplot2.discrete.colour"))) {
-        marker_color_opt <- getOption("ggplot2.discrete.colour")[-seq_len(length(unique(col_by)))]
+        marker_color_opt <- getOption("ggplot2.discrete.colour")[-seq_along(unique(col_by))]
       } else {
         marker_color_opt <- c("x" = "black")
       }
