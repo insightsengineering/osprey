@@ -66,7 +66,7 @@ ANL <- left_join(ADSL, ADTR)
 #> EOSSTT, EOTSTT, EOSDT, EOSDY, DCSREAS, DTHDT, DTHCAUS, DTHCAT, LDDTHELD,
 #> LDDTHGR1, LSTALVDT, DTHADY, ADTHAUT)`
 
-ANL %>%
-  dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") %>%
+ANL |>
+  dplyr::filter(ANL01FL == "Y" & PARAMCD == "SLDINV") |>
   spiderplot_simple(group_col = "SEX", days = "ADY", mes_value = "AVAL")
 ```

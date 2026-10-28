@@ -29,7 +29,7 @@ g_waterfall(
 
 - bar_id:
 
-  (`vector`)  
+  (`vector`)\
   contains IDs to identify each bar
 
 - bar_height:
@@ -38,19 +38,19 @@ g_waterfall(
 
 - sort_by:
 
-  (`vector`)  
+  (`vector`)\
   used to sort bars, default is `NULL` in which case bars are ordered by
   decreasing height
 
 - col_by:
 
-  (`vector`)  
+  (`vector`)\
   used to color bars, default is `NULL` in which case bar_id is taken if
   the argument `bar_color_opt` is provided
 
 - bar_color_opt:
 
-  (`vector`)  
+  (`vector`)\
   aesthetic values to map color values (named vector to map color values
   to each name). If not `NULL`, please make sure this contains all
   possible values for `col_by` values, otherwise default `ggplot` color
@@ -59,50 +59,50 @@ g_waterfall(
 
 - anno_txt:
 
-  (`dataframe`)  
+  (`dataframe`)\
   contains subject-level variables to be displayed as annotation below
   the waterfall plot, default is `NULL`
 
 - href_line:
 
-  (`numeric vector`)  
+  (`numeric vector`)\
   to plot horizontal reference lines, default is `NULL`
 
 - facet_by:
 
-  (`vector`)  
+  (`vector`)\
   to facet plot and annotation table, default is `NULL`
 
 - show_datavalue:
 
-  (`boolean`)  
+  (`boolean`)\
   controls whether value of bar height is shown, default is `TRUE`
 
 - add_label:
 
-  (`vector`)  
+  (`vector`)\
   of one subject-level variable to be added to each bar except for
   bar_height, default is `NULL`
 
 - gap_point:
 
-  (`numeric`)  
+  (`numeric`)\
   value for adding bar break when some bars are significantly higher
   than others, default is `NULL`
 
 - ytick_at:
 
-  (`numeric`)  
+  (`numeric`)\
   optional bar height axis interval, default is 20
 
 - y_label:
 
-  (`string`)  
+  (`string`)\
   label for bar height axis, default is "Best % Change from Baseline"
 
 - title:
 
-  (`string`)  
+  (`string`)\
   displayed as plot title, default is "Waterfall Plot"
 
 ## Value
@@ -130,23 +130,23 @@ g_waterfall(
 
 # Example 1
 ADSL <- osprey::rADSL[1:15, ]
-ADRS <- osprey::rADRS %>%
+ADRS <- osprey::rADRS |>
   filter(USUBJID %in% ADSL$USUBJID)
-ADTR <- osprey::rADTR %>%
-  filter(USUBJID %in% ADSL$USUBJID) %>%
-  select(USUBJID, PCHG) %>%
-  group_by(USUBJID) %>%
+ADTR <- osprey::rADTR |>
+  filter(USUBJID %in% ADSL$USUBJID) |>
+  select(USUBJID, PCHG) |>
+  group_by(USUBJID) |>
   slice(which.min(PCHG))
 
 TR_SL <- inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all")
 
-SUB_ADRS <- ADRS %>%
-  filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") %>%
-  select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) %>%
+SUB_ADRS <- ADRS |>
+  filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") |>
+  select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) |>
   spread(PARAMCD, AVALC)
 
-ANL <- TR_SL %>%
-  left_join(SUB_ADRS, by = "USUBJID", multiple = "all") %>%
+ANL <- TR_SL |>
+  left_join(SUB_ADRS, by = "USUBJID", multiple = "all") |>
   mutate(TRTDURD = as.integer(TRTEDTM - TRTSDTM) + 1)
 
 anno_txt_vars <- c("TRTDURD", "BESRSPI", "INVET", "SEX", "BMRKR2")

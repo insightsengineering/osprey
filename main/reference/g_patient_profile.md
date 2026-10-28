@@ -123,60 +123,60 @@ library(dplyr)
 library(nestcolor)
 
 # ADSL
-ADSL <- osprey::rADSL %>%
-  filter(USUBJID == rADSL$USUBJID[1]) %>%
+ADSL <- osprey::rADSL |>
+  filter(USUBJID == rADSL$USUBJID[1]) |>
   mutate(
     TRTSDT = as.Date(TRTSDTM),
     max_date = max(as.Date(LSTALVDT), as.Date(DTHDT), na.rm = TRUE),
     max_day = as.numeric(as.Date(max_date) - as.Date(TRTSDT)) + 1
-  ) %>%
+  ) |>
   select(USUBJID, STUDYID, TRTSDT, max_day)
 
 
 # ADEX
-ADEX <- osprey::rADEX %>%
+ADEX <- osprey::rADEX |>
   select(USUBJID, STUDYID, ASTDTM, PARCAT2, AVAL, AVALU, PARAMCD)
 ADEX <- left_join(ADSL, ADEX, by = c("USUBJID", "STUDYID"))
 
-ADEX <- ADEX %>%
-  filter(PARAMCD == "DOSE") %>%
-  arrange(PARCAT2, PARAMCD) %>%
-  mutate(diff = c(0, diff(AVAL, lag = 1))) %>%
+ADEX <- ADEX |>
+  filter(PARAMCD == "DOSE") |>
+  arrange(PARCAT2, PARAMCD) |>
+  mutate(diff = c(0, diff(AVAL, lag = 1))) |>
   mutate(Modification = case_when(
     diff < 0 ~ "Decrease",
     diff > 0 ~ "Increase",
     diff == 0 ~ "None"
-  )) %>%
+  )) |>
   mutate(ASTDT_dur = as.numeric(
     as.Date(substr(as.character(ASTDTM), 1, 10)) -
       as.Date(TRTSDT) + 1
   ))
 
 # ADAE
-ADAE <- osprey::rADAE %>%
+ADAE <- osprey::rADAE |>
   select(USUBJID, STUDYID, AESOC, AEDECOD, AESER, AETOXGR, AEREL, ASTDY, AENDY)
 ADAE <- left_join(ADSL, ADAE, by = c("USUBJID", "STUDYID"))
 
 # ADRS
-ADRS <- osprey::rADRS %>%
+ADRS <- osprey::rADRS |>
   select(USUBJID, STUDYID, PARAMCD, PARAM, AVALC, AVAL, ADY, ADTM)
 ADRS <- left_join(ADSL, ADRS, by = c("USUBJID", "STUDYID"))
 
 # ADCM
-ADCM <- osprey::rADCM %>%
+ADCM <- osprey::rADCM |>
   select(USUBJID, STUDYID, ASTDTM, AENDTM, CMDECOD, ASTDY, AENDY)
 ADCM <- left_join(ADSL, ADCM, by = c("USUBJID", "STUDYID"))
 
 # ADLB
-ADLB <- osprey::rADLB %>%
+ADLB <- osprey::rADLB |>
   select(
     USUBJID, STUDYID, LBSEQ, PARAMCD, BASETYPE, ADTM,
     ADY, ATPTN, AVISITN, LBTESTCD, ANRIND
   )
 ADLB <- left_join(ADSL, ADLB, by = c("USUBJID", "STUDYID"))
 
-ADLB <- ADLB %>%
-  group_by(USUBJID) %>%
+ADLB <- ADLB |>
+  group_by(USUBJID) |>
   mutate(ANRIND = factor(ANRIND, levels = c("LOW", "NORMAL", "HIGH")))
 
 # Example Patient Profile plot 5 domains

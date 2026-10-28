@@ -34,26 +34,26 @@ g_events_term_id(
 
 - term:
 
-  `character` or `factor` vector, or `data.frame`  
+  `character` or `factor` vector, or `data.frame`\
   Represents events information. `term` can be a `data.frame` produced
   by `create_flag_vars`, with each column being a `logical` event
   indicator
 
 - id:
 
-  (`vector`)  
+  (`vector`)\
   contains subject identifier. Length of `id` must be the same as the
   length or number of rows of `terms`. Usually it is `ADAE$USUBJID`.
 
 - arm:
 
-  (`factor`)  
+  (`factor`)\
   vector that contains arm information in analysis data. For example,
   `ADAE$ACTARMCD`.
 
 - arm_N:
 
-  (`numeric` vector)  
+  (`numeric` vector)\
   Contains information of the number of patients in the levels of `arm`.
   This is useful if there are patients that have no adverse events can
   be accounted for with this argument.
@@ -89,12 +89,12 @@ g_events_term_id(
 
 - conf_level:
 
-  (`numeric`)  
+  (`numeric`)\
   the confidence interval level, default is 0.95.
 
 - diff_ci_method:
 
-  (`character`)  
+  (`character`)\
   the method used to calculate confidence interval. Default is `"wald"`.
   Possible choices are methods supported in
   [`BinomDiffCI`](https://andrisignorell.github.io/DescTools/reference/BinomDiffCI.html).
@@ -117,14 +117,14 @@ g_events_term_id(
 
 - fontsize:
 
-  (`numeric`)  
+  (`numeric`)\
   font size for the plot. It is the size used in `ggplot2` with default
   unit "mm", if you want "points" you will need to divide the point
   number by `ggplot2:::.pt`.
 
 - draw:
 
-  (`logical`)  
+  (`logical`)\
   whether to draw the plot.
 
 ## Value
@@ -152,8 +152,8 @@ ADSL <- osprey::rADSL
 ADAE <- osprey::rADAE
 
 # add additional dummy causality flags
-ADAE <- ADAE %>%
-  mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) %>%
+ADAE <- ADAE |>
+  mutate(AEREL1 = (AEREL == "Y" & ACTARM == "A: Drug X")) |>
   mutate(AEREL2 = (AEREL == "Y" & ACTARM == "B: Placebo"))
 attr(ADAE[["AEREL1"]], "label") <- "AE related to A: Drug X"
 attr(ADAE[["AEREL2"]], "label") <- "AE related to B: Placebo"

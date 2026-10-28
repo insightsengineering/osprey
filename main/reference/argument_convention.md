@@ -7,32 +7,32 @@ that are used repeatedly to express an analysis.
 
 - arm:
 
-  (`factor`)  
+  (`factor`)\
   vector that contains arm information in analysis data. For example,
   `ADAE$ACTARMCD`.
 
 - conf_level:
 
-  (`numeric`)  
+  (`numeric`)\
   the confidence interval level, default is 0.95.
 
 - diff_ci_method:
 
-  (`character`)  
+  (`character`)\
   the method used to calculate confidence interval. Default is `"wald"`.
   Possible choices are methods supported in
   [`BinomDiffCI`](https://andrisignorell.github.io/DescTools/reference/BinomDiffCI.html).
 
 - fontsize:
 
-  (`numeric`)  
+  (`numeric`)\
   font size for the plot. It is the size used in `ggplot2` with default
   unit "mm", if you want "points" you will need to divide the point
   number by `ggplot2:::.pt`.
 
 - draw:
 
-  (`logical`)  
+  (`logical`)\
   whether to draw the plot.
 
 ## Details

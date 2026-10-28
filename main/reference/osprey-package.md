@@ -18,6 +18,8 @@ Useful links:
 
 Authors:
 
+- Nina Qi <qit3@gene.com>
+
 - Dawid Kaledkowski <dawid.kaledkowski@roche.com>
 
 - Chendi Liao <chendi.liao@roche.com>

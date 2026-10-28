@@ -29,52 +29,52 @@ g_ae_sub(
 
 - id:
 
-  (`vector`)  
+  (`vector`)\
   contains subject identifier. Usually it is `ADAE$USUBJID`.
 
 - arm:
 
-  (`factor`)  
+  (`factor`)\
   vector that contains arm information in analysis data. For example,
   `ADAE$ACTARMCD`.
 
 - arm_sl:
 
-  (`vector`)  
+  (`vector`)\
   contains the subject level treatment variable. For example,
   `ADSL$ACTARM`.
 
 - subgroups:
 
-  (`data.frame`)  
+  (`data.frame`)\
   Variables to conduct analysis.
 
 - subgroups_sl:
 
-  (`data.frame`)  
+  (`data.frame`)\
   Subject level variables to conduct analysis. Usually from `ADSL`.
 
 - trt:
 
-  (`character`)  
+  (`character`)\
   indicates the name of the treatment arm. Default is the second level
   of `arm`.
 
 - ref:
 
-  (`character`)  
+  (`character`)\
   indicates the name of the reference arm. Default is the first level of
   `arm`.
 
 - indent:
 
-  (`numeric`)  
+  (`numeric`)\
   non-negative integer where 0 means that the subgroup levels should not
   be indented
 
 - subgroups_levels:
 
-  (`list`)  
+  (`list`)\
   A nested named list of variables to conduct analysis. The names of the
   nested lists are used to show as the label. The children lists should
   start with "Total" = variable label, followed by labels for each level
@@ -82,38 +82,38 @@ g_ae_sub(
 
 - xmax:
 
-  (`numeric`)  
+  (`numeric`)\
   maximum range for the x-axis. x-axis range will be automatically
   assigned based on risk output when `xmax` is less than or equal to 0.
   `xmax` is 0 by default
 
 - conf_level:
 
-  (`numeric`)  
+  (`numeric`)\
   the confidence interval level, default is 0.95.
 
 - diff_ci_method:
 
-  (`character`)  
+  (`character`)\
   the method used to calculate confidence interval. Default is `"wald"`.
   Possible choices are methods supported in
   [`BinomDiffCI`](https://andrisignorell.github.io/DescTools/reference/BinomDiffCI.html).
 
 - fontsize:
 
-  (`numeric`)  
+  (`numeric`)\
   font size for the plot. It is the size used in `ggplot2` with default
   unit "mm", if you want "points" you will need to divide the point
   number by `ggplot2:::.pt`.
 
 - arm_n:
 
-  (`logical`)  
+  (`logical`)\
   whether to display the N in each arm.
 
 - draw:
 
-  (`logical`)  
+  (`logical`)\
   whether to draw the plot.
 
 ## Value
@@ -192,7 +192,7 @@ grid::grid.newpage()
 trt <- "ARM A"
 ref <- "ARM C"
 ADAE <- osprey::rADAE
-ADSL <- osprey::rADSL %>% filter(ACTARMCD %in% c(trt, ref))
+ADSL <- osprey::rADSL |> filter(ACTARMCD %in% c(trt, ref))
 id <- ADAE$USUBJID
 arm <- ADAE$ACTARMCD
 arm_sl <- as.character(ADSL$ACTARMCD)
