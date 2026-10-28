@@ -1,8 +1,8 @@
 Type: Package
 Package: osprey
 Title: R Package to Create TLGs
-Version: 0.1.18.9000
-Date: 2025-11-28
+Version: 0.1.18.9001
+Date: 2026-10-28
 Authors@R: c(
     person("Nina", "Qi", , "qit3@gene.com", role = c("aut", "cre")),
     person("Dawid", "Kaledkowski", , "dawid.kaledkowski@roche.com", role = "aut"),
@@ -49,8 +49,8 @@ Config/Needs/verdepcheck: tidyverse/dplyr, tidyverse/ggplot2,
     insightsengineering/nestcolor, rstudio/rmarkdown,
     insightsengineering/tern, r-lib/testthat
 Config/Needs/website: insightsengineering/nesttemplate
+Config/roxygen2/version: 8.1.1
 Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.1.1
