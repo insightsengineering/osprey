@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE coverage SYSTEM "https://raw.githubusercontent.com/cobertura/cobertura/master/cobertura/src/site/htdocs/xml/coverage-04.dtd">
-<coverage line-rate="0" branch-rate="0" lines-covered="0" lines-valid="2402" branches-covered="0" branches-valid="0" complexity="0" version="3.6.5" timestamp="2025-11-27 10:01:24.049911">
+<coverage line-rate="0" branch-rate="0" lines-covered="0" lines-valid="2404" branches-covered="0" branches-valid="0" complexity="0" version="3.6.5" timestamp="2026-10-28 08:09:34.698664">
   <sources>
     <source>/__w/osprey/osprey/osprey</source>
   </sources>
@@ -2620,25 +2620,27 @@
                 <line number="928" hits="0" branch="false"/>
                 <line number="930" hits="0" branch="false"/>
                 <line number="931" hits="0" branch="false"/>
-                <line number="933" hits="0" branch="false"/>
+                <line number="932" hits="0" branch="false"/>
+                <line number="934" hits="0" branch="false"/>
                 <line number="935" hits="0" branch="false"/>
-                <line number="936" hits="0" branch="false"/>
                 <line number="937" hits="0" branch="false"/>
                 <line number="938" hits="0" branch="false"/>
                 <line number="939" hits="0" branch="false"/>
                 <line number="940" hits="0" branch="false"/>
                 <line number="941" hits="0" branch="false"/>
+                <line number="942" hits="0" branch="false"/>
+                <line number="943" hits="0" branch="false"/>
               </lines>
             </method>
             <method name="domain_check" signature="" line-rate="0" branch-rate="0" complexity="0">
               <lines>
-                <line number="949" hits="0" branch="false"/>
-                <line number="950" hits="0" branch="false"/>
+                <line number="951" hits="0" branch="false"/>
                 <line number="952" hits="0" branch="false"/>
-                <line number="953" hits="0" branch="false"/>
                 <line number="954" hits="0" branch="false"/>
                 <line number="955" hits="0" branch="false"/>
-                <line number="958" hits="0" branch="false"/>
+                <line number="956" hits="0" branch="false"/>
+                <line number="957" hits="0" branch="false"/>
+                <line number="960" hits="0" branch="false"/>
               </lines>
             </method>
           </methods>
@@ -3018,21 +3020,23 @@
             <line number="928" hits="0" branch="false"/>
             <line number="930" hits="0" branch="false"/>
             <line number="931" hits="0" branch="false"/>
-            <line number="933" hits="0" branch="false"/>
+            <line number="932" hits="0" branch="false"/>
+            <line number="934" hits="0" branch="false"/>
             <line number="935" hits="0" branch="false"/>
-            <line number="936" hits="0" branch="false"/>
             <line number="937" hits="0" branch="false"/>
             <line number="938" hits="0" branch="false"/>
             <line number="939" hits="0" branch="false"/>
             <line number="940" hits="0" branch="false"/>
             <line number="941" hits="0" branch="false"/>
-            <line number="949" hits="0" branch="false"/>
-            <line number="950" hits="0" branch="false"/>
+            <line number="942" hits="0" branch="false"/>
+            <line number="943" hits="0" branch="false"/>
+            <line number="951" hits="0" branch="false"/>
             <line number="952" hits="0" branch="false"/>
-            <line number="953" hits="0" branch="false"/>
             <line number="954" hits="0" branch="false"/>
             <line number="955" hits="0" branch="false"/>
-            <line number="958" hits="0" branch="false"/>
+            <line number="956" hits="0" branch="false"/>
+            <line number="957" hits="0" branch="false"/>
+            <line number="960" hits="0" branch="false"/>
           </lines>
         </class>
         <class name="g_spiderplot_simple.R" filename="R/g_spiderplot_simple.R" line-rate="0" branch-rate="0" complexity="0">
