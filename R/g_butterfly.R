@@ -254,7 +254,7 @@ g_butterfly <- function(category,
       geom_text(data = counts_l, aes(y = -.data$label_ypos, label = .data$n_i), hjust = -0.9) +
       geom_text(data = total_text_ann_r, aes(y = .data$label_ypos, label = .data$n), fontface = "bold", hjust = -1) +
       geom_text(
-        data = total_text_ann_l, aes(y = -.data$label_ypos - 0.4, label = "n"),
+        data = total_text_ann_l, aes(y = -.data$label_ypos - 0.4, label = .data$n),
         fontface = "bold", hjust = 0.9
       ) +
       geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
@@ -266,9 +266,9 @@ g_butterfly <- function(category,
       geom_bar(data = counts_r, aes(y = .data$n_i), stat = "identity") +
       geom_bar(data = counts_l, aes(y = -.data$n_i), stat = "identity") +
       geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
-      geom_text(data = total_text_ann_r, aes(y = .data$label_ypos, label = "n"), fontface = "bold", hjust = -1) +
+      geom_text(data = total_text_ann_r, aes(y = .data$label_ypos, label = .data$n), fontface = "bold", hjust = -1) +
       geom_text(
-        data = total_text_ann_l, aes(y = -.data$label_ypos - 0.4, label = "n"),
+        data = total_text_ann_l, aes(y = -.data$label_ypos - 0.4, label = .data$n),
         fontface = "bold", hjust = 0.9
       ) +
       coord_flip() +
