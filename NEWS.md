@@ -3,6 +3,7 @@
 ### Fixes
 
 * Fix note about undeclared variable.
+* `g_butterfly()` now shows the total counts and other label fixes (#159). 
 
 ### Miscellaneous
 

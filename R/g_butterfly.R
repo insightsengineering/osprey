@@ -6,6 +6,8 @@
 #' to a variable of choice and sorted according to either alphabetical order or the
 #' maximum count.
 #'
+#' The plot shows AE count by subcategory and for each category the total is shown
+#'
 #' @param category vector of y values
 #' @param right_flag vector of \code{logical} of the same length as \code{category}.
 #'   used to filter \code{category} for the right side of the barplot.
@@ -196,13 +198,14 @@ g_butterfly <- function(category,
     dplyr::filter(.data$r_flag == 1) |>
     dplyr::group_by_at(setdiff(groups, "bar_color")) |>
     dplyr::summarize(n = get_counts(.data, block_count)) |>
-    dplyr::left_join(total_label_pos_r, by = setdiff(groups, "bar_color"))
-
+    dplyr::left_join(total_label_pos_r, by = setdiff(groups, "bar_color")) |>
+    dplyr::mutate(position = "right")
   total_text_ann_l <- dat |>
     dplyr::filter(.data$l_flag == 1) |>
     dplyr::group_by_at(setdiff(groups, "bar_color")) |>
     dplyr::summarize(n = get_counts(.data, block_count)) |>
-    dplyr::left_join(total_label_pos_l, by = setdiff(groups, "bar_color"))
+    dplyr::left_join(total_label_pos_l, by = setdiff(groups, "bar_color")) |>
+    dplyr::mutate(position = "left")
 
 
   if (sort_by == "alphabetical") {
@@ -246,41 +249,47 @@ g_butterfly <- function(category,
   }
 
   # plot butterfly plot --------------------
+  counts_r$position <- "right"
+  counts_l$position <- "left"
+  counts_lr <- rbind(counts_l, counts_r)
+  total_text_ann_lr <- rbind(total_text_ann_l, total_text_ann_r)
   if (!is.null(block_color)) {
-    pl <- ggplot(NULL, aes(x = .data$y)) +
-      geom_bar(data = counts_r, aes(y = .data$n_i, fill = .data$bar_color), stat = "identity") +
-      geom_bar(data = counts_l, aes(y = -.data$n_i, fill = .data$bar_color), stat = "identity") +
-      geom_text(data = counts_r, aes(y = .data$label_ypos, label = .data$n_i), hjust = 0.9) +
-      geom_text(data = counts_l, aes(y = -.data$label_ypos, label = .data$n_i), hjust = -0.9) +
-      geom_text(data = total_text_ann_r, aes(y = .data$label_ypos, label = .data$n), fontface = "bold", hjust = -1) +
-      geom_text(
-        data = total_text_ann_l, aes(y = -.data$label_ypos - 0.4, label = "n"),
-        fontface = "bold", hjust = 0.9
+    pl <- ggplot() +
+      geom_col(
+        data = counts_lr,
+        aes(y = .data$y, x = .data$n_i * dplyr::if_else(.data$position == "left", 1, -1), fill = .data$bar_color)
       ) +
-      geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
-      coord_flip() +
-      scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
-      labs(x = y_label, y = block_count, fill = legend_label)
+      geom_text(
+        data = counts_lr,
+        aes(y = .data$y, x = .data$n_i * dplyr::if_else(.data$position == "left", 1, -1), label = .data$n_i),
+        position = position_stack(vjust = 0.5)
+      ) +
+      geom_text(
+        data = total_text_ann_lr,
+        aes(
+          y = .data$y, x = .data$n * dplyr::if_else(.data$position == "left", 1, -1),
+          label = .data$n, hjust = 1 * dplyr::if_else(.data$position == "left", 0, 1)
+        )
+      )
   } else {
-    pl <- ggplot(NULL, aes(x = .data$y)) +
-      geom_bar(data = counts_r, aes(y = .data$n_i), stat = "identity") +
-      geom_bar(data = counts_l, aes(y = -.data$n_i), stat = "identity") +
-      geom_hline(yintercept = 0, colour = "black", lwd = 0.4) +
-      geom_text(data = total_text_ann_r, aes(y = .data$label_ypos, label = "n"), fontface = "bold", hjust = -1) +
+    pl <- ggplot() +
+      geom_col(data = counts_lr, aes(y = .data$y, x = .data$n_i * dplyr::if_else(.data$position == "left", 1, -1))) +
       geom_text(
-        data = total_text_ann_l, aes(y = -.data$label_ypos - 0.4, label = "n"),
-        fontface = "bold", hjust = 0.9
-      ) +
-      coord_flip() +
-      scale_y_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
-      labs(x = y_label, y = block_count, fill = legend_label)
+        data = total_text_ann_lr,
+        aes(
+          y = .data$y, x = .data$n * dplyr::if_else(.data$position == "left", 1, -1),
+          label = .data$n, hjust = 1 * dplyr::if_else(.data$position == "left", 0, 1)
+        )
+      )
   }
 
   if (!is.null(facet_rows)) {
     pl <- pl + facet_wrap(~f_rows, ncol = 1)
   }
-
   pl <- pl +
+    geom_vline(xintercept = 0, colour = "black", lwd = 0.4) +
+    scale_x_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
+    labs(y = y_label, x = block_count, fill = legend_label) +
     theme_bw() +
     theme(
       strip.background = element_rect(colour = "white", fill = "white"),
@@ -294,7 +303,7 @@ g_butterfly <- function(category,
       plot.margin = grid::unit(c(1.5, 1, 1, 1), "cm"),
       legend.position = if (show_legend) "right" else "none"
     ) +
-    scale_x_discrete(limits = levels(counts_r$y))
+    scale_y_discrete(limits = levels(counts_r$y))
 
   # labs pl <- pl + labs(title = stringr::str_wrap(g2, width = 30))
   g_0 <- ggplotGrob(pl)
