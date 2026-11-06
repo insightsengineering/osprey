@@ -6,6 +6,8 @@
 #' to a variable of choice and sorted according to either alphabetical order or the
 #' maximum count.
 #'
+#' The plot shows AE count by subcategory and for each category the total is shown
+#'
 #' @param category vector of y values
 #' @param right_flag vector of \code{logical} of the same length as \code{category}.
 #'   used to filter \code{category} for the right side of the barplot.
