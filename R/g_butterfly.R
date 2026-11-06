@@ -289,7 +289,7 @@ g_butterfly <- function(category,
   pl <- pl +
     geom_vline(xintercept = 0, colour = "black", lwd = 0.4) +
     scale_x_continuous(labels = abs, limits = (max_c * 1.2) * c(-1, 1)) +
-    labs(x = y_label, y = block_count, fill = legend_label) +
+    labs(y = y_label, x = block_count, fill = legend_label) +
     theme_bw() +
     theme(
       strip.background = element_rect(colour = "white", fill = "white"),
