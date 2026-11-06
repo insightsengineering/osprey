@@ -69,7 +69,7 @@ to a variable of choice and sorted according to either alphabetical order or the
 maximum count.
 }
 \details{
-The plot shows AE count by subcategory and for each category the total is shown.
+The plot shows AE count by subcategory and for each category the total is shown
 
 there is no equivalent STREAM output
 }
