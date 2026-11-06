@@ -97,6 +97,9 @@ g_butterfly(
 
 ## Details
 
+The plot shows AE count by subcategory and for each category the total
+is shown
+
 there is no equivalent STREAM output
 
 ## Author

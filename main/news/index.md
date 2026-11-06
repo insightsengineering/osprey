@@ -1,10 +1,13 @@
 # Changelog
 
-## osprey 0.1.18.9001
+## osprey 0.1.18.9002
 
 #### Fixes
 
 - Fix note about undeclared variable.
+- [`g_butterfly()`](https://insightsengineering.github.io/osprey/reference/g_butterfly.md)
+  now shows the total counts and other label fixes
+  ([\#159](https://github.com/insightsengineering/osprey/issues/159)).
 
 #### Miscellaneous
 
