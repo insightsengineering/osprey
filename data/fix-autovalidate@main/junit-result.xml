@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="g_ae_sub" timestamp="2026-11-26T23:44:23Z" hostname="7bd8f9339d68" tests="2" skipped="0" failures="0" errors="0" time="2.242">
-    <testcase time="1.564" classname="g_ae_sub" name="g_ae_sub_produces_the_expected_plot_With_arm_n_FALSE"/>
-    <testcase time="0.678" classname="g_ae_sub" name="g_ae_sub_produces_the_expected_plot_With_arm_n_TRUE"/>
+  <testsuite name="g_ae_sub" timestamp="2026-11-26T23:44:23Z" hostname="ea50f4f5daaa" tests="2" skipped="0" failures="0" errors="0" time="2.369">
+    <testcase time="1.64" classname="g_ae_sub" name="g_ae_sub_produces_the_expected_plot_With_arm_n_FALSE"/>
+    <testcase time="0.729" classname="g_ae_sub" name="g_ae_sub_produces_the_expected_plot_With_arm_n_TRUE"/>
   </testsuite>
-  <testsuite name="g_butterfly" timestamp="2026-11-26T23:44:25Z" hostname="7bd8f9339d68" tests="4" skipped="0" failures="0" errors="0" time="2.19">
-    <testcase time="0.504" classname="g_butterfly" name="tests_for_g_butterfly_works_with_standard_parameters"/>
-    <testcase time="0.534" classname="g_butterfly" name="tests_for_g_butterfly_works_with_alphabetical_sorting"/>
-    <testcase time="0.808" classname="g_butterfly" name="tests_for_g_butterfly_works_with_facet_rows"/>
-    <testcase time="0.344" classname="g_butterfly" name="tests_for_g_butterfly_works_with_left_sorting_and_no_block_color"/>
+  <testsuite name="g_butterfly" timestamp="2026-11-26T23:44:26Z" hostname="ea50f4f5daaa" tests="4" skipped="0" failures="0" errors="0" time="2.394">
+    <testcase time="0.542" classname="g_butterfly" name="tests_for_g_butterfly_works_with_standard_parameters"/>
+    <testcase time="0.581" classname="g_butterfly" name="tests_for_g_butterfly_works_with_alphabetical_sorting"/>
+    <testcase time="0.905" classname="g_butterfly" name="tests_for_g_butterfly_works_with_facet_rows"/>
+    <testcase time="0.366" classname="g_butterfly" name="tests_for_g_butterfly_works_with_left_sorting_and_no_block_color"/>
   </testsuite>
-  <testsuite name="g_swimlane" timestamp="2026-11-26T23:44:27Z" hostname="7bd8f9339d68" tests="12" skipped="0" failures="0" errors="0" time="1.9">
-    <testcase time="0.646" classname="g_swimlane" name="test_for_swimlane_works_with_default_arguments"/>
-    <testcase time="0.495" classname="g_swimlane" name="test_for_swimlane_works_without_setting_col_by_or_sort_by"/>
-    <testcase time="0.136" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
+  <testsuite name="g_swimlane" timestamp="2026-11-26T23:44:28Z" hostname="ea50f4f5daaa" tests="12" skipped="0" failures="0" errors="0" time="2.05">
+    <testcase time="0.688000000000001" classname="g_swimlane" name="test_for_swimlane_works_with_default_arguments"/>
+    <testcase time="0.532" classname="g_swimlane" name="test_for_swimlane_works_without_setting_col_by_or_sort_by"/>
+    <testcase time="0.146" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
       <system-out>No shared levels found between `names(values)` of the manual scale and the data's colour values.
 Backtrace:
      x
@@ -42,7 +42,7 @@ Backtrace:
  23.                                     \-ggplot2:::limits(...)
  24.                                       \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.0409999999999995" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
+    <testcase time="0.0439999999999996" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
       <system-out>No shared levels found between `names(values)` of the manual scale and the data's colour values.
 Backtrace:
      x
@@ -69,7 +69,7 @@ Backtrace:
  21.                                 \-ggplot2:::limits(...)
  22.                                   \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.0860000000000003" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
+    <testcase time="0.0920000000000005" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
       <system-out>No shared levels found between `names(values)` of the manual scale and the data's colour values.
 Backtrace:
      x
@@ -98,7 +98,7 @@ Backtrace:
  23.                                     \-ggplot2:::limits(...)
  24.                                       \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.0380000000000003" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
+    <testcase time="0.0419999999999998" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
       <system-out>No shared levels found between `names(values)` of the manual scale and the data's colour values.
 Backtrace:
      x
@@ -125,7 +125,7 @@ Backtrace:
  21.                                 \-ggplot2:::limits(...)
  22.                                   \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.127" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
+    <testcase time="0.138" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
       <system-out>No shared levels found between `names(values)` of the manual scale and the data's colour values.
 Backtrace:
      x
@@ -157,7 +157,7 @@ Backtrace:
  26.                                       \-ggplot2:::limits(...)
  27.                                         \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.04" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
+    <testcase time="0.0430000000000001" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color">
       <system-out>No shared levels found between `names(values)` of the manual scale and the data's colour values.
 Backtrace:
      x
@@ -187,14 +187,14 @@ Backtrace:
  24.                                   \-ggplot2:::limits(...)
  25.                                     \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.255" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color"/>
+    <testcase time="0.287" classname="g_swimlane" name="test_for_swimlane_works_with_defined_marker_color"/>
     <testcase time="0.0190000000000001" classname="g_swimlane" name="input_validation_tests_for_g_swimlane_fails_if_marker_id_does_not_follow_assumption_on_bar_id"/>
-    <testcase time="0.00800000000000001" classname="g_swimlane" name="input_validation_tests_for_g_swimlane_fails_if_xref_line_is_not_of_the_expected_type"/>
+    <testcase time="0.00999999999999979" classname="g_swimlane" name="input_validation_tests_for_g_swimlane_fails_if_xref_line_is_not_of_the_expected_type"/>
     <testcase time="0.00899999999999945" classname="g_swimlane" name="input_validation_tests_for_g_swimlane_fails_if_marker_color_does_not_have_the_expected_length"/>
   </testsuite>
-  <testsuite name="g_term_id" timestamp="2026-11-26T23:44:29Z" hostname="7bd8f9339d68" tests="6" skipped="0" failures="0" errors="0" time="1.19">
-    <testcase time="0.401000000000001" classname="g_term_id" name="tests_for_g_events_term_id_works_with_standard_parameters"/>
-    <testcase time="0.103" classname="g_term_id" name="tests_for_g_events_term_id_works_with_sorting_by_riskdiff">
+  <testsuite name="g_term_id" timestamp="2026-11-26T23:44:30Z" hostname="ea50f4f5daaa" tests="6" skipped="0" failures="0" errors="0" time="1.264">
+    <testcase time="0.423" classname="g_term_id" name="tests_for_g_events_term_id_works_with_standard_parameters"/>
+    <testcase time="0.111000000000001" classname="g_term_id" name="tests_for_g_events_term_id_works_with_sorting_by_riskdiff">
       <system-out>`geom_errorbarh()` was deprecated in ggplot2 4.0.0.
 i Please use the `orientation` argument of `geom_errorbar()` instead.
 Backtrace:
@@ -204,8 +204,8 @@ Backtrace:
  3.   \-ggplot2 (local) `&lt;fn&gt;`(mapping = `&lt;ggplt2::&gt;`, width = 0.4)
  4.     \-ggplot2:::deprecate_soft0(...)</system-out>
     </testcase>
-    <testcase time="0.281000000000001" classname="g_term_id" name="tests_for_g_events_term_id_works_with_sorting_by_riskdiff"/>
-    <testcase time="0.109999999999999" classname="g_term_id" name="tests_for_g_events_term_id_works_with_sorting_by_meanrisk">
+    <testcase time="0.299999999999999" classname="g_term_id" name="tests_for_g_events_term_id_works_with_sorting_by_riskdiff"/>
+    <testcase time="0.112" classname="g_term_id" name="tests_for_g_events_term_id_works_with_sorting_by_meanrisk">
       <system-out>`geom_errorbarh()` was deprecated in ggplot2 4.0.0.
 i Please use the `orientation` argument of `geom_errorbar()` instead.
 Backtrace:
@@ -215,13 +215,13 @@ Backtrace:
  3.   \-ggplot2 (local) `&lt;fn&gt;`(mapping = `&lt;ggplt2::&gt;`, width = 0.4)
  4.     \-ggplot2:::deprecate_soft0(...)</system-out>
     </testcase>
-    <testcase time="0.279999999999999" classname="g_term_id" name="tests_for_g_events_term_id_works_with_sorting_by_meanrisk"/>
-    <testcase time="0.0150000000000006" classname="g_term_id" name="tests_for_create_flags_var_works_with_default_arguments"/>
+    <testcase time="0.302000000000001" classname="g_term_id" name="tests_for_g_events_term_id_works_with_sorting_by_meanrisk"/>
+    <testcase time="0.016" classname="g_term_id" name="tests_for_create_flags_var_works_with_default_arguments"/>
   </testsuite>
-  <testsuite name="g_waterfall" timestamp="2026-11-26T23:44:30Z" hostname="7bd8f9339d68" tests="11" skipped="0" failures="0" errors="0" time="3.995">
-    <testcase time="0.752000000000001" classname="g_waterfall" name="tests_for_g_waterfall_works_without_bar_colour"/>
-    <testcase time="0.407" classname="g_waterfall" name="tests_for_g_waterfall_works_with_color_bar_opt"/>
-    <testcase time="0.223999999999998" classname="g_waterfall" name="tests_for_g_waterfall_works_with_NA_bar_height">
+  <testsuite name="g_waterfall" timestamp="2026-11-26T23:44:31Z" hostname="ea50f4f5daaa" tests="11" skipped="0" failures="0" errors="0" time="4.372">
+    <testcase time="0.754" classname="g_waterfall" name="tests_for_g_waterfall_works_without_bar_colour"/>
+    <testcase time="0.470000000000001" classname="g_waterfall" name="tests_for_g_waterfall_works_with_color_bar_opt"/>
+    <testcase time="0.247" classname="g_waterfall" name="tests_for_g_waterfall_works_with_NA_bar_height">
       <system-out>Removed 15 rows containing missing values or values outside the scale range (`geom_col()`).
 Backtrace:
      x
@@ -245,7 +245,7 @@ Backtrace:
  18.                     \-ggplot2::remove_missing(...)
  19.                       \-cli::cli_warn(msg)</system-out>
     </testcase>
-    <testcase time="0.032" classname="g_waterfall" name="tests_for_g_waterfall_works_with_NA_bar_height">
+    <testcase time="0.0359999999999996" classname="g_waterfall" name="tests_for_g_waterfall_works_with_NA_bar_height">
       <system-out>Removed 15 rows containing missing values or values outside the scale range (`geom_text()`).
 Backtrace:
      x
@@ -269,16 +269,16 @@ Backtrace:
  18.                     \-ggplot2::remove_missing(...)
  19.                       \-cli::cli_warn(msg)</system-out>
     </testcase>
-    <testcase time="0.211" classname="g_waterfall" name="tests_for_g_waterfall_works_with_NA_bar_height"/>
-    <testcase time="0.418000000000001" classname="g_waterfall" name="tests_for_g_waterfall_works_with_gap_point_above_bar_height"/>
-    <testcase time="0.446" classname="g_waterfall" name="tests_for_g_waterfall_works_with_gap_point_below_bar_height"/>
-    <testcase time="0.423" classname="g_waterfall" name="tests_for_g_waterfall_works_without_sorting"/>
-    <testcase time="1.042" classname="g_waterfall" name="tests_for_g_waterfall_works_without_faceting"/>
-    <testcase time="0.0310000000000006" classname="g_waterfall" name="g_waterfall_input_verification_fails_if_bar_height_or_bad_id_have_wrong_dimensions"/>
-    <testcase time="0.00899999999999856" classname="g_waterfall" name="g_waterfall_input_verification_fails_if_bar_height_or_bad_id_are_NULL"/>
+    <testcase time="0.250999999999999" classname="g_waterfall" name="tests_for_g_waterfall_works_with_NA_bar_height"/>
+    <testcase time="0.476000000000001" classname="g_waterfall" name="tests_for_g_waterfall_works_with_gap_point_above_bar_height"/>
+    <testcase time="0.507999999999999" classname="g_waterfall" name="tests_for_g_waterfall_works_with_gap_point_below_bar_height"/>
+    <testcase time="0.483000000000001" classname="g_waterfall" name="tests_for_g_waterfall_works_without_sorting"/>
+    <testcase time="1.106" classname="g_waterfall" name="tests_for_g_waterfall_works_without_faceting"/>
+    <testcase time="0.032" classname="g_waterfall" name="g_waterfall_input_verification_fails_if_bar_height_or_bad_id_have_wrong_dimensions"/>
+    <testcase time="0.00900000000000034" classname="g_waterfall" name="g_waterfall_input_verification_fails_if_bar_height_or_bad_id_are_NULL"/>
   </testsuite>
-  <testsuite name="heat_by_grade" timestamp="2026-11-26T23:44:34Z" hostname="7bd8f9339d68" tests="3" skipped="0" failures="0" errors="0" time="0.74">
-    <testcase time="0.167000000000002" classname="heat_by_grade" name="tests_for_g_heat_bygrade_it_works_with_concomitand_medicine">
+  <testsuite name="heat_by_grade" timestamp="2026-11-26T23:44:36Z" hostname="ea50f4f5daaa" tests="3" skipped="0" failures="0" errors="0" time="0.815">
+    <testcase time="0.174999999999999" classname="heat_by_grade" name="tests_for_g_heat_bygrade_it_works_with_concomitand_medicine">
       <system-out>Detected an unexpected many-to-many relationship between `x` and `y`.
 i Row 1 of `x` matches multiple rows in `y`.
 i Row 1 of `y` matches multiple rows in `x`.
@@ -315,28 +315,28 @@ Backtrace:
  28.     \-dplyr:::warn_join(...)
  29.       \-dplyr:::warn_dplyr(...)</system-out>
     </testcase>
-    <testcase time="0.562999999999999" classname="heat_by_grade" name="tests_for_g_heat_bygrade_it_works_with_concomitand_medicine"/>
+    <testcase time="0.630000000000001" classname="heat_by_grade" name="tests_for_g_heat_bygrade_it_works_with_concomitand_medicine"/>
     <testcase time="0.00999999999999979" classname="heat_by_grade" name="tests_for_g_heat_bygrade_it_fails_if_data_does_not_meet_assumptions"/>
   </testsuite>
-  <testsuite name="hy_law" timestamp="2026-11-26T23:44:35Z" hostname="7bd8f9339d68" tests="1" skipped="0" failures="0" errors="0" time="0.517">
-    <testcase time="0.517000000000001" classname="hy_law" name="tests_for_g_hy_law_works_with_default_arguments"/>
+  <testsuite name="hy_law" timestamp="2026-11-26T23:44:37Z" hostname="ea50f4f5daaa" tests="1" skipped="0" failures="0" errors="0" time="0.563">
+    <testcase time="0.563000000000001" classname="hy_law" name="tests_for_g_hy_law_works_with_default_arguments"/>
   </testsuite>
-  <testsuite name="patient_profile" timestamp="2026-11-26T23:44:36Z" hostname="7bd8f9339d68" tests="7" skipped="2" failures="0" errors="0" time="2.891">
-    <testcase time="0.129999999999999" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_default_parameters"/>
-    <testcase time="0.140000000000001" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_the_adverse_event_domain"/>
-    <testcase time="0.109" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_tumr_reponse_domain"/>
-    <testcase time="0.135" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_concomitant_medicine_domain"/>
-    <testcase time="0.109" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_laboratory_domain"/>
-    <testcase time="1.556" classname="patient_profile" name="tests_for_g_patient_profile_works_with_all_domains">
+  <testsuite name="patient_profile" timestamp="2026-11-26T23:44:37Z" hostname="ea50f4f5daaa" tests="7" skipped="2" failures="0" errors="0" time="3.067">
+    <testcase time="0.138" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_default_parameters"/>
+    <testcase time="0.147" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_the_adverse_event_domain"/>
+    <testcase time="0.116999999999999" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_tumr_reponse_domain"/>
+    <testcase time="0.145" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_concomitant_medicine_domain"/>
+    <testcase time="0.120000000000001" classname="patient_profile" name="tests_for_patient_profile_domain_works_with_laboratory_domain"/>
+    <testcase time="1.648" classname="patient_profile" name="tests_for_g_patient_profile_works_with_all_domains">
       <skipped message="Reason: empty test ('test-patient_profile.R:269:3')"/>
     </testcase>
-    <testcase time="0.712" classname="patient_profile" name="tests_for_g_patient_profile_works_with_only_ADEdomain">
+    <testcase time="0.751999999999999" classname="patient_profile" name="tests_for_g_patient_profile_works_with_only_ADEdomain">
       <skipped message="Reason: empty test ('test-patient_profile.R:301:3')"/>
     </testcase>
   </testsuite>
-  <testsuite name="spiderplot" timestamp="2026-11-26T23:44:38Z" hostname="7bd8f9339d68" tests="23" skipped="0" failures="0" errors="0" time="6.005">
-    <testcase time="0.724999999999998" classname="spiderplot" name="tests_for_g_spiderplot_works_with_default_arguments"/>
-    <testcase time="0.286000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_line_color_mapping">
+  <testsuite name="spiderplot" timestamp="2026-11-26T23:44:40Z" hostname="ea50f4f5daaa" tests="23" skipped="0" failures="0" errors="0" time="6.423">
+    <testcase time="0.780000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_default_arguments"/>
+    <testcase time="0.286999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_line_color_mapping">
       <system-out>Removed 564 rows containing missing values or values outside the scale range (`geom_line()`).
 Backtrace:
      x
@@ -361,7 +361,7 @@ Backtrace:
  19.                   \-ggplot2 (local) handle_na(..., self = self)
  20.                     \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.0330000000000013" classname="spiderplot" name="tests_for_g_spiderplot_works_with_line_color_mapping">
+    <testcase time="0.0339999999999989" classname="spiderplot" name="tests_for_g_spiderplot_works_with_line_color_mapping">
       <system-out>Removed 568 rows containing missing values or values outside the scale range (`geom_point()`).
 Backtrace:
      x
@@ -387,8 +387,8 @@ Backtrace:
  20.                     \-ggplot2::remove_missing(...)
  21.                       \-cli::cli_warn(msg)</system-out>
     </testcase>
-    <testcase time="0.254999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_line_color_mapping"/>
-    <testcase time="0.306999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_full_faceting">
+    <testcase time="0.280999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_line_color_mapping"/>
+    <testcase time="0.315000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_full_faceting">
       <system-out>Removed 564 rows containing missing values or values outside the scale range (`geom_line()`).
 Backtrace:
      x
@@ -413,7 +413,7 @@ Backtrace:
  19.                   \-ggplot2 (local) handle_na(..., self = self)
  20.                     \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.0549999999999997" classname="spiderplot" name="tests_for_g_spiderplot_works_with_full_faceting">
+    <testcase time="0.0629999999999988" classname="spiderplot" name="tests_for_g_spiderplot_works_with_full_faceting">
       <system-out>Removed 568 rows containing missing values or values outside the scale range (`geom_point()`).
 Backtrace:
      x
@@ -439,8 +439,8 @@ Backtrace:
  20.                     \-ggplot2::remove_missing(...)
  21.                       \-cli::cli_warn(msg)</system-out>
     </testcase>
-    <testcase time="0.718" classname="spiderplot" name="tests_for_g_spiderplot_works_with_full_faceting"/>
-    <testcase time="0.291" classname="spiderplot" name="tests_for_g_spiderplot_works_with_row_faceting">
+    <testcase time="0.772000000000002" classname="spiderplot" name="tests_for_g_spiderplot_works_with_full_faceting"/>
+    <testcase time="0.300999999999998" classname="spiderplot" name="tests_for_g_spiderplot_works_with_row_faceting">
       <system-out>Removed 564 rows containing missing values or values outside the scale range (`geom_line()`).
 Backtrace:
      x
@@ -465,7 +465,7 @@ Backtrace:
  19.                   \-ggplot2 (local) handle_na(..., self = self)
  20.                     \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.0430000000000028" classname="spiderplot" name="tests_for_g_spiderplot_works_with_row_faceting">
+    <testcase time="0.0480000000000018" classname="spiderplot" name="tests_for_g_spiderplot_works_with_row_faceting">
       <system-out>Removed 568 rows containing missing values or values outside the scale range (`geom_point()`).
 Backtrace:
      x
@@ -491,8 +491,8 @@ Backtrace:
  20.                     \-ggplot2::remove_missing(...)
  21.                       \-cli::cli_warn(msg)</system-out>
     </testcase>
-    <testcase time="0.565999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_row_faceting"/>
-    <testcase time="0.289999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_col_faceting">
+    <testcase time="0.605999999999998" classname="spiderplot" name="tests_for_g_spiderplot_works_with_row_faceting"/>
+    <testcase time="0.295000000000002" classname="spiderplot" name="tests_for_g_spiderplot_works_with_col_faceting">
       <system-out>Removed 564 rows containing missing values or values outside the scale range (`geom_line()`).
 Backtrace:
      x
@@ -517,7 +517,7 @@ Backtrace:
  19.                   \-ggplot2 (local) handle_na(..., self = self)
  20.                     \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.324999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_col_faceting">
+    <testcase time="0.283999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_col_faceting">
       <system-out>Removed 568 rows containing missing values or values outside the scale range (`geom_point()`).
 Backtrace:
      x
@@ -543,8 +543,8 @@ Backtrace:
  20.                     \-ggplot2::remove_missing(...)
  21.                       \-cli::cli_warn(msg)</system-out>
     </testcase>
-    <testcase time="0.242000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_col_faceting"/>
-    <testcase time="0.218" classname="spiderplot" name="tests_for_g_spiderplot_works_with_NULL_market_shape">
+    <testcase time="0.280000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_col_faceting"/>
+    <testcase time="0.236000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_NULL_market_shape">
       <system-out>Removed 564 rows containing missing values or values outside the scale range (`geom_line()`).
 Backtrace:
      x
@@ -569,7 +569,7 @@ Backtrace:
  19.                   \-ggplot2 (local) handle_na(..., self = self)
  20.                     \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.0279999999999987" classname="spiderplot" name="tests_for_g_spiderplot_works_with_NULL_market_shape">
+    <testcase time="0.032" classname="spiderplot" name="tests_for_g_spiderplot_works_with_NULL_market_shape">
       <system-out>Removed 564 rows containing missing values or values outside the scale range (`geom_point()`).
 Backtrace:
      x
@@ -595,8 +595,8 @@ Backtrace:
  20.                     \-ggplot2::remove_missing(...)
  21.                       \-cli::cli_warn(msg)</system-out>
     </testcase>
-    <testcase time="0.126000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_NULL_market_shape"/>
-    <testcase time="0.219000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_defined_market_shape_opt">
+    <testcase time="0.141999999999999" classname="spiderplot" name="tests_for_g_spiderplot_works_with_NULL_market_shape"/>
+    <testcase time="0.241" classname="spiderplot" name="tests_for_g_spiderplot_works_with_defined_market_shape_opt">
       <system-out>Removed 564 rows containing missing values or values outside the scale range (`geom_line()`).
 Backtrace:
      x
@@ -621,7 +621,7 @@ Backtrace:
  19.                   \-ggplot2 (local) handle_na(..., self = self)
  20.                     \-cli::cli_warn(...)</system-out>
     </testcase>
-    <testcase time="0.0329999999999977" classname="spiderplot" name="tests_for_g_spiderplot_works_with_defined_market_shape_opt">
+    <testcase time="0.0360000000000014" classname="spiderplot" name="tests_for_g_spiderplot_works_with_defined_market_shape_opt">
       <system-out>Removed 564 rows containing missing values or values outside the scale range (`geom_point()`).
 Backtrace:
      x
@@ -647,23 +647,23 @@ Backtrace:
  20.                     \-ggplot2::remove_missing(...)
  21.                       \-cli::cli_warn(msg)</system-out>
     </testcase>
-    <testcase time="0.152000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_defined_market_shape_opt"/>
-    <testcase time="0.506" classname="spiderplot" name="tests_for_g_spiderplot_works_with_defined_txt_mrkr_all"/>
-    <testcase time="0.544" classname="spiderplot" name="tests_for_g_spiderplot_works_with_full_defined_datalabel_txt"/>
-    <testcase time="0.0350000000000001" classname="spiderplot" name="input_validation_tests_for_g_spiderplot_fails_if_assumptions_on_marker_x_marker_y_and_marker_id_are_not_valid"/>
-    <testcase time="0.00799999999999912" classname="spiderplot" name="input_validation_tests_for_g_spiderplot_fails_if_assumptions_on_marker_x_marker_y_and_marker_id_are_not_valid"/>
+    <testcase time="0.168999999999997" classname="spiderplot" name="tests_for_g_spiderplot_works_with_defined_market_shape_opt"/>
+    <testcase time="0.568000000000001" classname="spiderplot" name="tests_for_g_spiderplot_works_with_defined_txt_mrkr_all"/>
+    <testcase time="0.605" classname="spiderplot" name="tests_for_g_spiderplot_works_with_full_defined_datalabel_txt"/>
+    <testcase time="0.0380000000000003" classname="spiderplot" name="input_validation_tests_for_g_spiderplot_fails_if_assumptions_on_marker_x_marker_y_and_marker_id_are_not_valid"/>
+    <testcase time="0.00999999999999801" classname="spiderplot" name="input_validation_tests_for_g_spiderplot_fails_if_assumptions_on_marker_x_marker_y_and_marker_id_are_not_valid"/>
   </testsuite>
-  <testsuite name="spiderplot_simple" timestamp="2026-11-26T23:44:44Z" hostname="7bd8f9339d68" tests="1" skipped="0" failures="0" errors="0" time="0.06">
-    <testcase time="0.0599999999999987" classname="spiderplot_simple" name="test_for_spiderplot_simple"/>
+  <testsuite name="spiderplot_simple" timestamp="2026-11-26T23:44:47Z" hostname="ea50f4f5daaa" tests="1" skipped="0" failures="0" errors="0" time="0.064">
+    <testcase time="0.0640000000000001" classname="spiderplot_simple" name="test_for_spiderplot_simple"/>
   </testsuite>
-  <testsuite name="stream_filter" timestamp="2026-11-26T23:44:44Z" hostname="7bd8f9339d68" tests="4" skipped="0" failures="0" errors="0" time="0.046">
-    <testcase time="0.0310000000000024" classname="stream_filter" name="test_for_stream_filter"/>
-    <testcase time="0.00599999999999667" classname="stream_filter" name="test_for_stream_filter_index"/>
+  <testsuite name="stream_filter" timestamp="2026-11-26T23:44:47Z" hostname="ea50f4f5daaa" tests="4" skipped="0" failures="0" errors="0" time="0.045">
+    <testcase time="0.0289999999999999" classname="stream_filter" name="test_for_stream_filter"/>
+    <testcase time="0.00700000000000145" classname="stream_filter" name="test_for_stream_filter_index"/>
     <testcase time="0.00300000000000011" classname="stream_filter" name="test_for_stream_filter_index"/>
     <testcase time="0.00600000000000023" classname="stream_filter" name="test_for_stream_filter_convwhere"/>
   </testsuite>
-  <testsuite name="utils" timestamp="2026-11-26T23:44:45Z" hostname="7bd8f9339d68" tests="2" skipped="0" failures="0" errors="0" time="0.835">
-    <testcase time="0.236000000000001" classname="utils" name="Check_as_pdf_to_transform_plots_to_pdf"/>
-    <testcase time="0.599" classname="utils" name="Check_grobs2pdf_function_to_transform_plots_to_pdf"/>
+  <testsuite name="utils" timestamp="2026-11-26T23:44:47Z" hostname="ea50f4f5daaa" tests="2" skipped="0" failures="0" errors="0" time="0.927">
+    <testcase time="0.262" classname="utils" name="Check_as_pdf_to_transform_plots_to_pdf"/>
+    <testcase time="0.664999999999999" classname="utils" name="Check_grobs2pdf_function_to_transform_plots_to_pdf"/>
   </testsuite>
 </testsuites>
