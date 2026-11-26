@@ -10,9 +10,9 @@ describe("tests for g_waterfall", {
     dplyr::group_by(USUBJID) |>
     dplyr::slice(which.min(PCHG))
 
-  TR_SL <- dplyr::inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all")
+  TR_SL <- dplyr::inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all") # nolint: object_name_linter,
 
-  SUB_ADRS <- ADRS |>
+  SUB_ADRS <- ADRS |> # nolint: object_name_linter,
     dplyr::filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") |>
     dplyr::select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) |>
     tidyr::spread(PARAMCD, AVALC)
@@ -171,9 +171,9 @@ describe("g_waterfall input verification", {
     dplyr::group_by(USUBJID) |>
     dplyr::slice(which.min(PCHG))
 
-  TR_SL <- dplyr::inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all")
+  TR_SL <- dplyr::inner_join(ADSL, ADTR, by = "USUBJID", multiple = "all") # nolint: object_name_linter,
 
-  SUB_ADRS <- ADRS |>
+  SUB_ADRS <- ADRS |> # nolint: object_name_linter,
     dplyr::filter(PARAMCD == "BESRSPI" | PARAMCD == "INVET") |>
     dplyr::select(USUBJID, PARAMCD, AVALC, AVISIT, ADY) |>
     tidyr::spread(PARAMCD, AVALC)

@@ -11,7 +11,7 @@ describe("tests for g_events_term_id", {
   term <- ADAE$AEDECOD
   id <- ADAE$USUBJID
   arm <- ADAE$ACTARMCD
-  arm_N <- table(ADSL$ACTARMCD)
+  arm_N <- table(ADSL$ACTARMCD) # nolint: object_name_linter,
   ref <- "ARM A"
   trt <- "ARM C"
 

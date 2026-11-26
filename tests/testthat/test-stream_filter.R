@@ -18,7 +18,7 @@ test_that("test for stream_filter", {
 })
 
 test_that("test for stream_filter_index", {
-  AEACN <- c("DRUG MODIFIED", "DRUG STOPPED", "DOSE/DRUG MODIFIED")
+  AEACN <- c("DRUG MODIFIED", "DRUG STOPPED", "DOSE/DRUG MODIFIED") # nolint: object_name_linter,
   index <- stream_filter_index(AEACN, "DRUG MODIFIED")
   expect_true(is.logical(index))
   expect_identical(length(index), length(AEACN))
