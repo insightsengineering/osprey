@@ -1,4 +1,3 @@
-
 describe("g_ae_sub produces the expected plot", {
   ADAE <- osprey::rADAE
   ADSL <- osprey::rADSL

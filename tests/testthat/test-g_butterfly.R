@@ -26,7 +26,7 @@ describe("tests for g_butterfly", {
       show_legend = TRUE
     )
 
-  expect_s3_class(p1, c("gtable", "gTree", "grob"))
+    expect_s3_class(p1, c("gtable", "gTree", "grob"))
   })
 
   it("works with alphabetical sorting", {
