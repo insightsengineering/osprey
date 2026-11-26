@@ -68,7 +68,7 @@ describe("test for swimlane", {
     )
 
     expect_s3_class(p1, c("gtable", "gTree", "grob"))
-  })  
+  })
 })
 
 describe("input validation tests for g_swimlane", {
